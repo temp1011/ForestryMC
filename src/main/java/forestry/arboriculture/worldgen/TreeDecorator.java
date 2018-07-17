@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,12 +38,13 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.commands.TreeGenHelper;
-import forestry.core.config.Config;
 import forestry.core.utils.BlockUtil;
+import forestry.core.worldgen.WorldgenTypes;
 
 public class TreeDecorator {
 	private static final List<IAlleleTreeSpecies> SPECIES = new ArrayList<>();
@@ -55,7 +58,7 @@ public class TreeDecorator {
 	}
 
 	public static void decorateTrees(World world, Random rand, int worldX, int worldZ) {
-		if (!Config.isValidTreeDim(world.provider.getDimension()) || Config.generateTreesAmount == 0) {
+		if (!WorldgenTypes.TREES.isValidDim(world)) {
 			return;
 		}
 		if (biomeCache.isEmpty()) {
@@ -67,14 +70,14 @@ public class TreeDecorator {
 
 			BlockPos pos = new BlockPos(x, 0, z);
 			Biome biome = world.getBiome(pos);
-			if (!Config.isValidTreeBiome(biome)) {
+			if (!WorldgenTypes.TREES.isValidBiome(biome)) {
 				continue;
 			}
 
 			Set<ITree> trees = biomeCache.computeIfAbsent(biome.getRegistryName(), k -> new HashSet<>());
 			for (ITree tree : trees) {
 				IAlleleTreeSpecies species = tree.getGenome().getPrimary();
-				if (species.getRarity() * Config.generateTreesAmount >= rand.nextFloat()) {
+				if (species.getRarity() * WorldgenTypes.TREES.getFrequency() >= rand.nextFloat()) {
 					pos = getValidPos(world, x, z, tree);
 
 					if (pos == null) {
@@ -132,9 +135,10 @@ public class TreeDecorator {
 
 	private static void generateBiomeCache(World world, Random rand) {
 		for (IAlleleTreeSpecies species : getSpecies()) {
-			IAllele[] template = TreeManager.treeRoot.getTemplate(species);
-			ITreeGenome genome = TreeManager.treeRoot.templateAsGenome(template);
-			ITree tree = TreeManager.treeRoot.getTree(world, genome);
+			ITreeRoot treeRoot = Preconditions.checkNotNull(TreeManager.treeRoot);
+			IAllele[] template = treeRoot.getTemplate(species);
+			ITreeGenome genome = treeRoot.templateAsGenome(template);
+			ITree tree = treeRoot.getTree(world, genome);
 			IGrowthProvider growthProvider = species.getGrowthProvider();
 			for (Biome biome : Biome.REGISTRY) {
 				Set<ITree> trees = biomeCache.computeIfAbsent(biome.getRegistryName(), k -> new HashSet<>());

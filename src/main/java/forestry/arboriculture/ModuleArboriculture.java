@@ -109,6 +109,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.VillagerTradeLists;
+import forestry.core.worldgen.WorldgenTypes;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -180,7 +181,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(this);
 		
-		if (Config.generateTrees) {
+		if (WorldgenTypes.TREES.isEnabled()) {
 			MinecraftForge.TERRAIN_GEN_BUS.register(new TreeDecorator());
 		}
 
@@ -549,12 +550,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 				IMCUtil.logInvalidIMCMessage(message);
 			}
 			return true;
-		} else if (message.key.equals("blacklist-trees-dimension")) {
-			int[] dims = message.getNBTValue().getIntArray("dimensions");
-			for(int dim : dims) {
-				Config.blacklistTreeDim(dim);
-			}
-			return true;
 		}
 		return false;
 	}
@@ -599,7 +594,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 	@Override
 	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-		if (Config.generateTrees) {
+		if (WorldgenTypes.TREES.isValidDim(world)) {
 			TreeDecorator.decorateTrees(world, rand, chunkX, chunkZ);
 		}
 	}

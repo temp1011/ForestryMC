@@ -68,7 +68,7 @@ public class WorldGenerator implements IWorldGenerator {
 	}
 
 	private void generateWorld(Random random, int chunkX, int chunkZ, World world) {
-		if (!Config.isValidOreDim(world.provider.getDimension())) {
+		if (!WorldgenTypes.ORE.isValidDim(world)) {
 			return;
 		}
 
@@ -87,11 +87,12 @@ public class WorldGenerator implements IWorldGenerator {
 		int x = chunkX << 4;
 		int y = chunkZ << 4;
 
+		float frequency = WorldgenTypes.ORE.getFrequency();
 		// / APATITE
 		if (Config.generateApatiteOre) {
 			final int lowest = Math.round(world.getActualHeight() * 0.22f); // 56
 			final int range = Math.round(world.getActualHeight() * 0.72f); // 184
-			if (random.nextFloat() < 0.8f) {
+			if (random.nextFloat() < 0.8f * frequency) {
 				int randPosX = x + random.nextInt(16);
 				int randPosY = random.nextInt(range) + lowest;
 				int randPosZ = y + random.nextInt(16);
@@ -101,7 +102,7 @@ public class WorldGenerator implements IWorldGenerator {
 
 		// / COPPER
 		if (Config.generateCopperOre) {
-			for (int i = 0; i < 20; i++) {
+			for (int i = 0; i < 20 * frequency; i++) {
 				final int lowest = Math.round(world.getActualHeight() / 8f); // 32
 				final int range = Math.round(world.getActualHeight() * 0.297f); // 76
 				int randPosX = x + random.nextInt(16);
@@ -113,7 +114,7 @@ public class WorldGenerator implements IWorldGenerator {
 
 		// / TIN
 		if (Config.generateTinOre) {
-			for (int i = 0; i < 18; i++) {
+			for (int i = 0; i < 18 * frequency; i++) {
 				final int lowest = Math.round(world.getActualHeight() / 16f); // 16
 				final int range = Math.round(world.getActualHeight() * 0.297f); // 76
 				int randPosX = x + random.nextInt(16);

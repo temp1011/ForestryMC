@@ -32,8 +32,9 @@ import forestry.apiculture.ModuleApiculture;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.utils.Log;
+import forestry.core.worldgen.WorldgenTypes;
 
-public abstract class HiveDecorator {
+public class HiveDecorator {
 
 	@Nullable
 	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0]);
@@ -47,6 +48,9 @@ public abstract class HiveDecorator {
 	}
 
 	public static void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
+		if(!WorldgenTypes.BEEHIVES.isValidDim(world.provider.getDimension())) {
+			return;
+		}
 		List<Hive> hives = ModuleApiculture.getHiveRegistry().getHives();
 
 		if (Config.generateBeehivesDebug) {
@@ -69,10 +73,13 @@ public abstract class HiveDecorator {
 				return;
 			}
 			Biome biome = world.getBiome(pos);
+			if(!WorldgenTypes.BEEHIVES.isValidBiome(biome)) {
+				return;
+			}
 			EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
 
 			for (Hive hive : hives) {
-				if (hive.genChance() * Config.getBeehivesAmount() >= rand.nextFloat() * 100.0f) {
+				if (hive.genChance() * WorldgenTypes.BEEHIVES.getFrequency() >= rand.nextFloat() * 100.0f) {
 					if (hive.isGoodBiome(biome) && hive.isGoodHumidity(humidity)) {
 						if (tryGenHive(world, rand, x, z, hive)) {
 							return;

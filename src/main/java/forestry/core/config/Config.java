@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 
 import javax.annotation.Nullable;
@@ -25,16 +26,11 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Property;
 
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 
 import forestry.Forestry;
@@ -42,6 +38,7 @@ import forestry.apiculture.HiveConfig;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
+import forestry.core.worldgen.WorldgenTypes;
 import forestry.mail.gui.GuiMailboxInfo;
 
 public class Config {
@@ -84,18 +81,9 @@ public class Config {
 	public static boolean generateApatiteOre = true;
 	public static boolean generateCopperOre = true;
 	public static boolean generateTinOre = true;
-	public static Set<Integer> blacklistedOreDims = new HashSet<>();
-	public static Set<Integer> whitelistedOreDims = new HashSet<>();
-	private static float generateBeehivesAmount = 1.0f;
 	public static boolean generateBeehivesDebug = false;
 	public static boolean logHivePlacement = false;
 	public static boolean enableVillagers = true;
-	public static boolean generateTrees = true;
-	public static float generateTreesAmount = 1.0F;
-	public static Set<Integer> blacklistedTreeDims = new HashSet<>();
-	public static Set<Integer> whitelistedTreeDims = new HashSet<>();
-	public static Set<BiomeDictionary.Type> blacklistedTreeTypes = new HashSet<>();
-	public static Set<Biome> blacklistedTreeBiomes = new HashSet<>();
 
 	// Retrogen
 	public static boolean doRetrogen = false;
@@ -165,10 +153,6 @@ public class Config {
 		return craftingBronzeEnabled;
 	}
 
-	public static double getBeehivesAmount() {
-		return generateBeehivesAmount;
-	}
-
 	public static boolean isExUtilEnderLilyEnabled() {
 		return enableExUtilEnderLily;
 	}
@@ -179,43 +163,6 @@ public class Config {
 
 	public static boolean isMagicalCropsSupportEnabled() {
 		return enableMagicalCropsSupport;
-	}
-
-	public static void blacklistTreeDim(int dimID) {
-		blacklistedTreeDims.add(dimID);
-	}
-
-	public static void whitelistTreeDim(int dimID) {
-		whitelistedTreeDims.add(dimID);
-	}
-
-	public static void blacklistOreDim(int dimID) {
-		blacklistedOreDims.add(dimID);
-	}
-
-	public static void whitelistOreDim(int dimID) {
-		whitelistedOreDims.add(dimID);
-	}
-
-	public static boolean isValidOreDim(int dimID) {        //blacklist has priority
-		if (blacklistedOreDims.isEmpty() || !blacklistedOreDims.contains(dimID)) {
-			return whitelistedOreDims.isEmpty() || whitelistedOreDims.contains(dimID);
-		}
-		return false;
-	}
-
-	public static boolean isValidTreeDim(int dimID) {        //blacklist has priority
-		if (blacklistedTreeDims.isEmpty() || !blacklistedTreeDims.contains(dimID)) {
-			return whitelistedTreeDims.isEmpty() || whitelistedTreeDims.contains(dimID);
-		}
-		return false;
-	}
-
-	public static boolean isValidTreeBiome(Biome biome) {
-		if (blacklistedTreeBiomes.contains(biome)) {
-			return false;
-		}
-		return !BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTreeTypes::contains);
 	}
 
 	public static void load(Side side) {
@@ -240,7 +187,7 @@ public class Config {
 	}
 
 	private static void loadConfigCommon(Side side) {
-
+		Preconditions.checkNotNull(configCommon);
 		gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", new String[]{"OP, EASY, NORMAL, HARD"});
 
 		boolean recreate = configCommon.getBooleanLocalized("difficulty", "recreate.definitions", true);
@@ -278,7 +225,9 @@ public class Config {
 			Log.info("Enabled retrogen.");
 		}
 
-		generateBeehivesAmount = configCommon.getFloatLocalized("world.generate.beehives", "amount", generateBeehivesAmount, 0.0f, 10.0f);
+		// Worldgen
+		WorldgenTypes.load(configCommon);
+
 		generateBeehivesDebug = configCommon.getBooleanLocalized("world.generate.beehives", "debug", generateBeehivesDebug);
 
 		HiveConfig.parse(configCommon);
@@ -286,34 +235,8 @@ public class Config {
 		generateApatiteOre = configCommon.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
 		generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
 		generateTinOre = configCommon.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
-		for (int dimId : configCommon.get("world.generate.ore", "dimBlacklist", new int[0]).getIntList()) {
-			blacklistedOreDims.add(dimId);
-		}
-		for (int dimId : configCommon.get("world.generate.ore", "dimWhitelist", new int[0]).getIntList()) {
-			whitelistedOreDims.add(dimId);
-		}
 
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
-
-		generateTrees = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
-
-		generateTreesAmount = configCommon.getFloatLocalized("world.generate.trees", "treeFrequency", generateTreesAmount, 0.0F, 10.0F);
-
-		for (int dimId : configCommon.get("world.generate.trees", "dimBlacklist", new int[0]).getIntList()) {
-			blacklistedTreeDims.add(dimId);
-		}
-		for (int dimId : configCommon.get("world.generate.trees", "dimWhitelist", new int[0]).getIntList()) {
-			whitelistedTreeDims.add(dimId);
-		}
-		for (String entry : configCommon.get("world.generate.trees", "biomeblacklist", new String[0]).getStringList()) {
-			BiomeDictionary.Type type = BiomeDictionary.Type.getType(entry);
-			Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(entry));
-			if (type != null) {
-				blacklistedTreeTypes.add(type);
-			} else if (biome != null) {
-				blacklistedTreeBiomes.add(biome);
-			}
-		}
 
 
 		craftingBronzeEnabled = configCommon.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);
@@ -394,6 +317,7 @@ public class Config {
 	}
 
 	private static void loadConfigFluids() {
+		Preconditions.checkNotNull(configFluid);
 		for (Fluids fluid : Fluids.values()) {
 			String fluidName = Translator.translateToLocal("fluid." + fluid.getTag());
 

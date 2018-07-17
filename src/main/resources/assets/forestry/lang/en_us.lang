@@ -1698,6 +1698,7 @@ for.config.performance.backpacks.resupply=Backpack Resupply
 for.config.performance.backpacks.resupply.comment=Enable backpack resupply. You may want to set this to false on busy servers.
 
 for.config.world.generate=World Generation
+for.config.world.generate.category_comment= Adjusts world generation.
 
 for.config.world.generate.retrogen.normal=Retrogen
 for.config.world.generate.retrogen.normal.comment=Creates Forestry world generation in chunks that were created before the mod was added.
@@ -1719,7 +1720,7 @@ for.config.world.generate.beehives.debug=Debug Beehive Generation
 for.config.world.generate.beehives.debug.comment=Force Forestry to generate a beehive at every possible location. (This will break your world. Only useful to developers)
 for.config.world.generate.beehives.dimBlacklist=Beehive Generation Dimension Blacklist
 for.config.world.generate.beehives.dimBlacklist.comment=Disables the generation of all hives in the specified dimensions. Enter one dimension id per line.
-for.config.world.generate.beehives.blacklist.category_comment=Disables the generation of a specific hive in a specific biome or in a biome with a specific biome type. Just add the registry name of the biome or the name of the biome type to the property of the hive. Every biome type / registry name has to be in a seperate line. The global type can be used to blacklist a biome from all hive generation.
+for.config.world.generate.beehives.blacklist.category_comment=Disables the generation of a specific hive in a specific biome or in a biome with a specific biome type. Just add the registry name of the biome or the name of the biome type to the property of the hive. Every biome type / registry name has to be in a seperate line.
 
 for.config.world.generate.villagers=Generate Villagers
 for.config.world.generate.villagers.comment=Generates Forestry villagers and their houses.

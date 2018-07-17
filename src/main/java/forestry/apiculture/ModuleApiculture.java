@@ -132,6 +132,7 @@ import forestry.core.utils.IMCUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.VillagerTradeLists;
+import forestry.core.worldgen.WorldgenTypes;
 import forestry.food.ModuleFood;
 import forestry.food.items.ItemRegistryFood;
 import forestry.modules.BlankForestryModule;
@@ -944,14 +945,14 @@ public class ModuleApiculture extends BlankForestryModule {
 		if (!world.provider.getDimensionType().equals(DimensionType.THE_END)) {
 			return;
 		}
-		if (Config.getBeehivesAmount() > 0.0) {
+		if (WorldgenTypes.BEEHIVES.isEnabled()) {
 			HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
 		}
 	}
 
 	@Override
 	public void decorateBiome(World world, Random rand, BlockPos pos) {
-		if (Config.getBeehivesAmount() > 0.0) {
+		if (WorldgenTypes.BEEHIVES.isEnabled()) {
 			int chunkX = pos.getX() >> 4;
 			int chunkZ = pos.getZ() >> 4;
 			HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
@@ -960,7 +961,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	@Override
 	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-		if (Config.getBeehivesAmount() > 0.0) {
+		if (WorldgenTypes.BEEHIVES.isEnabled()) {
 			HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
 		}
 	}
@@ -969,21 +970,11 @@ public class ModuleApiculture extends BlankForestryModule {
 	public boolean processIMCMessage(IMCMessage message) {
 		if (message.key.equals("add-candle-lighting-id")) {
 			ItemStack value = message.getItemStackValue();
-			if (value != null) {
-				BlockCandle.addItemToLightingList(value.getItem());
-			} else {
-				IMCUtil.logInvalidIMCMessage(message);
-			}
+			BlockCandle.addItemToLightingList(value.getItem());
 			return true;
 		} else if (message.key.equals("add-alveary-slab") && message.isStringMessage()) {
 			String messageString = String.format("Received a '%s' request from mod '%s'. This IMC message has been replaced with the oreDictionary for 'slabWood'. Please contact the author and report this issue.", message.key, message.getSender());
 			Log.warning(messageString);
-			return true;
-		} else if (message.key.equals("blacklist-hives-dimension")) {
-			int[] dims = message.getNBTValue().getIntArray("dimensions");
-			for (int dim : dims) {
-				HiveConfig.addBlacklistedDim(dim);
-			}
 			return true;
 		} else if (message.key.equals("add-plantable-flower")) {
 			return addPlantableFlower(message);

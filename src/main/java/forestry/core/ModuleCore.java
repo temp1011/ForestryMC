@@ -14,7 +14,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -73,8 +75,11 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
+import forestry.core.utils.IMCUtil;
+import forestry.core.utils.Log;
 import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.World2ObjectMap;
+import forestry.core.worldgen.WorldgenTypes;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -478,12 +483,19 @@ public class ModuleCore extends BlankForestryModule {
 
 	@Override
 	public boolean processIMCMessage(IMCMessage message) {
-		if (message.key.equals("blacklist-ores-dimension")) {
-			int[] dims = message.getNBTValue().getIntArray("dimensions");
-			for (int dim : dims) {
-				Config.blacklistOreDim(dim);
+		if(message.key.startsWith("blacklist")) {
+			String[] tokens = message.key.split("-");
+			try {
+				WorldgenTypes worldgenType = Enum.valueOf(WorldgenTypes.class, tokens[1]);
+				if(tokens[2].equals("dimension")) {
+					int[] dims = message.getNBTValue().getIntArray("dimensions");
+					Arrays.stream(dims).forEach(worldgenType::blacklistDim);
+					return true;
+				}
+			} catch(Exception e) {
+				IMCUtil.logInvalidIMCMessage(message);
+				Log.error("Error processing IMC message from {}", message.getSender(), e);
 			}
-			return true;
 		}
 		return false;
 	}
