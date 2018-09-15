@@ -36,6 +36,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.ModuleCharcoal;
+import forestry.core.config.Config;
 
 public class BlockWoodPile extends Block implements IItemModelRegister, IStateMapperRegister {
 
@@ -173,6 +174,9 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		if (!Config.enableParticleFX) {
+			return;
+		}
 		if (state.getValue(IS_ACTIVE)) {
 			if (rand.nextDouble() < 0.1D) {
 				world.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + rand.nextFloat(), rand.nextFloat() * 0.7F + 0.3F, false);
