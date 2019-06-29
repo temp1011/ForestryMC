@@ -1,0 +1,52 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ ******************************************************************************/
+package forestry.core;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.entity.player.PlayerEntity;
+
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+
+import net.minecraftforge.api.distmarker.Dist;
+
+import net.minecraftforge.api.distmarker.OnlyIn;
+import forestry.core.utils.GeneticsUtil;
+
+@OnlyIn(Dist.CLIENT)
+public class TickHandlerCoreClient {
+
+	private boolean hasNaturalistEye;
+
+	@SubscribeEvent
+	public void onClientTick(TickEvent.ClientTickEvent event) {
+		if (event.phase == Phase.END) {
+			Minecraft minecraft = Minecraft.getInstance();
+			if (minecraft != null) {
+				PlayerEntity player = minecraft.player;
+				if (player != null) {
+					boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
+					if (this.hasNaturalistEye != hasNaturalistEye) {
+						this.hasNaturalistEye = hasNaturalistEye;
+						WorldRenderer renderGlobal = minecraft.renderGlobal;
+						if (renderGlobal != null) {
+							renderGlobal.markBlockRangeForRenderUpdate(
+								(int) player.posX - 32, (int) player.posY - 32, (int) player.posZ - 32,
+								(int) player.posX + 32, (int) player.posY + 32, (int) player.posZ + 32);
+						}
+					}
+				}
+			}
+		}
+	}
+}
