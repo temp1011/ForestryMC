@@ -10,20 +10,23 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+import org.apache.commons.lang3.tuple.Pair;
+
+import net.minecraft.network.PacketBuffer;
 
 import io.netty.buffer.Unpooled;
 
 public abstract class ForestryPacket implements IForestryPacket {
 	@Override
-	public final IForestryPacket getPacket() {
+	public final Pair<PacketBuffer, Integer> getPacketData() {
 		PacketBufferForestry data = new PacketBufferForestry(Unpooled.buffer());
 
 		IPacketId id = getPacketId();
+		int ordinal = id.ordinal();
 		data.writeByte(id.ordinal());
 		writeData(data);
 
-		return data;
+		return Pair.of(data, ordinal);
 	}
 
 	protected abstract void writeData(PacketBufferForestry data);

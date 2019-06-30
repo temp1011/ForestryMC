@@ -29,7 +29,7 @@ import forestry.core.network.PacketIdClient;
 import forestry.core.tiles.IActivatable;
 import forestry.core.tiles.TileUtil;
 
-public class PacketActiveUpdate {//extends ForestryPacket implements IForestryPacketClient {
+public class PacketActiveUpdate extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos pos;
 	private final boolean active;
 
@@ -43,7 +43,8 @@ public class PacketActiveUpdate {//extends ForestryPacket implements IForestryPa
 		return PacketIdClient.TILE_FORESTRY_ACTIVE;
 	}
 
-	protected void encode(PacketBufferForestry data) {
+	@Override
+	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
 		data.writeBoolean(active);
 	}

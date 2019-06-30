@@ -28,6 +28,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -50,7 +51,8 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.gui.GuiHandler;
 import forestry.core.multiblock.MultiblockEventHandler;
-import forestry.core.network.PacketHandler;
+import forestry.core.network.NetworkHandler;
+import forestry.core.network.PacketHandlerServer;
 import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.modules.ForestryModules;
@@ -106,11 +108,12 @@ public class Forestry {
 		ModuleManager moduleManager = ModuleManager.getInstance();
 		ForestryAPI.moduleManager = moduleManager;
 		moduleManager.registerContainers(new ForestryModules(), new ForestryCompatPlugins());
-
+		NetworkHandler networkHandler = new NetworkHandler();
+		DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler())
 		// Register the setup method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		// Register the enqueueIMC method for modloading
-		//FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
+//		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
 		// Register the processIMC method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMCMessages);
 		// Register the doClientStuff method for modloading
@@ -120,15 +123,15 @@ public class Forestry {
 	}
 
 	@Nullable
-	private static PacketHandler packetHandler;
+	private static PacketHandlerServer packetHandler;
 
-	public static PacketHandler getPacketHandler() {
+	public static PacketHandlerServer getPacketHandler() {
 		Preconditions.checkNotNull(packetHandler);
 		return packetHandler;
 	}
 
 	public void setup(FMLCommonSetupEvent event) {
-		packetHandler = new PacketHandler();
+		packetHandler = new PacketHandlerServer();
 
 		// Register event handler
 		EventHandlerCore eventHandlerCore = new EventHandlerCore();

@@ -14,7 +14,7 @@ package forestry.core.network;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.climatology.network.packets.PacketSelectClimateTargeted;
+//import forestry.climatology.network.packets.PacketSelectClimateTargeted;
 import forestry.core.network.packets.PacketActiveUpdate;
 import forestry.core.network.packets.PacketChipsetClick;
 import forestry.core.network.packets.PacketClimateListenerUpdate;
@@ -46,7 +46,7 @@ public class PacketRegistryCore implements IPacketRegistry {
 		PacketIdServer.PIPETTE_CLICK.setPacketHandler(new PacketPipetteClick.Handler());
 		PacketIdServer.CHIPSET_CLICK.setPacketHandler(new PacketChipsetClick.Handler());
 		PacketIdServer.SOLDERING_IRON_CLICK.setPacketHandler(new PacketSolderingIronClick.Handler());
-		PacketIdServer.SELECT_CLIMATE_TARGETED.setPacketHandler(new PacketSelectClimateTargeted.Handler());
+//		PacketIdServer.SELECT_CLIMATE_TARGETED.setPacketHandler(new PacketSelectClimateTargeted.Handler());
 		PacketIdServer.CLIMATE_LISTENER_UPDATE_REQUEST.setPacketHandler(new PacketClimateListenerUpdateRequest.Handler());
 		PacketIdServer.CLIMATE_LISTENER_UPDATE_REQUEST_ENTITY.setPacketHandler(new PacketClimateListenerUpdateEntityRequest.Handler());
 	}

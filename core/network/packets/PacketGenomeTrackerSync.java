@@ -46,14 +46,14 @@ public class PacketGenomeTrackerSync extends ForestryPacket implements IForestry
 
 	@Override
 	protected void writeData(PacketBufferForestry data) {
-		data.writeCompoundNBT(nbt);
+		data.writeCompoundTag(nbt);
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-			CompoundNBT nbt = data.readCompoundNBT();
+			CompoundNBT nbt = data.readCompoundTag();
 			if (nbt != null) {
 				String type = nbt.getString(BreedingTracker.TYPE_KEY);
 
