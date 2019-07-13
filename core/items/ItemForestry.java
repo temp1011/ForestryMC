@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.oredict.OreDictionary;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,12 +31,13 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemForestry extends Item implements IItemModelRegister {
-	public ItemForestry() {
-		setCreativeTab(CreativeTabForestry.tabForestry);
+	public ItemForestry(Item.Properties properties) {
+		//TODO - do the below at registration
+		super(properties.group(CreativeTabForestry.tabForestry));
 	}
 
-	public ItemForestry(ItemGroup creativeTab) {
-		setCreativeTab(creativeTab);
+	public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {
+		super(properties.group(creativeTab));
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -54,8 +54,9 @@ public class ItemForestry extends Item implements IItemModelRegister {
 		return new ItemStack(this, amount);
 	}
 
+	//TODO - figure out how tags fit into this
 	public ItemStack getWildcard() {
-		return new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE);
+		return new ItemStack(this, 1);
 	}
 
 	@Override

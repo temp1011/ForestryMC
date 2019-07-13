@@ -19,20 +19,22 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ItemStackUtil;
-import forestry.worktable.inventory.CraftingInventoryForestry;
+//import forestry.worktable.inventory.CraftingInventoryForestry;
 
 public abstract class RecipeUtil {
 
@@ -47,15 +49,15 @@ public abstract class RecipeUtil {
 			return;
 		}
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(FluidRegistry.WATER, 1));
+//		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(FluidRegistry.WATER, 1));
 
-		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.JUICE.getFluid(1));
-		}
-
-		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.FOR_HONEY.getFluid(1));
-		}
+//		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
+//			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.JUICE.getFluid(1));
+//		}
+//
+//		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
+//			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.FOR_HONEY.getFluid(1));
+//		}
 	}
 
 	public static void addFermenterRecipes(String resource, int fermentationValue, Fluids output) {
@@ -67,52 +69,52 @@ public abstract class RecipeUtil {
 			return;
 		}
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(FluidRegistry.WATER, 1));
-
-		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.JUICE.getFluid(1));
-		}
-
-		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.FOR_HONEY.getFluid(1));
-		}
+//		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(FluidRegistry.WATER, 1));
+//
+//		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
+//			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.JUICE.getFluid(1));
+//		}
+//
+//		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
+//			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.FOR_HONEY.getFluid(1));
+//		}
 	}
 
-	@Nullable
-	public static CraftingInventoryForestry getCraftRecipe(CraftingInventory originalCrafting, NonNullList<ItemStack> availableItems, World world, IRecipe recipe) {
-		if (!recipe.matches(originalCrafting, world)) {
-			return null;
-		}
-
-		ItemStack expectedOutput = recipe.getCraftingResult(originalCrafting);
-		if (expectedOutput.isEmpty()) {
-			return null;
-		}
-
-		CraftingInventoryForestry crafting = new CraftingInventoryForestry();
-		NonNullList<ItemStack> stockCopy = ItemStackUtil.condenseStacks(availableItems);
-
-		for (int slot = 0; slot < originalCrafting.getSizeInventory(); slot++) {
-			ItemStack stackInSlot = originalCrafting.getStackInSlot(slot);
-			if (!stackInSlot.isEmpty()) {
-				ItemStack equivalent = getCraftingEquivalent(stockCopy, originalCrafting, slot, world, recipe, expectedOutput);
-				if (equivalent.isEmpty()) {
-					return null;
-				} else {
-					crafting.setInventorySlotContents(slot, equivalent);
-				}
-			}
-		}
-
-		if (recipe.matches(crafting, world)) {
-			ItemStack output = recipe.getCraftingResult(crafting);
-			if (ItemStack.areItemStacksEqual(output, expectedOutput)) {
-				return crafting;
-			}
-		}
-
-		return null;
-	}
+//	@Nullable
+//	public static CraftingInventoryForestry getCraftRecipe(CraftingInventory originalCrafting, NonNullList<ItemStack> availableItems, World world, IRecipe recipe) {
+//		if (!recipe.matches(originalCrafting, world)) {
+//			return null;
+//		}
+//
+//		ItemStack expectedOutput = recipe.getCraftingResult(originalCrafting);
+//		if (expectedOutput.isEmpty()) {
+//			return null;
+//		}
+//
+//		CraftingInventoryForestry crafting = new CraftingInventoryForestry();
+//		NonNullList<ItemStack> stockCopy = ItemStackUtil.condenseStacks(availableItems);
+//
+//		for (int slot = 0; slot < originalCrafting.getSizeInventory(); slot++) {
+//			ItemStack stackInSlot = originalCrafting.getStackInSlot(slot);
+//			if (!stackInSlot.isEmpty()) {
+//				ItemStack equivalent = getCraftingEquivalent(stockCopy, originalCrafting, slot, world, recipe, expectedOutput);
+//				if (equivalent.isEmpty()) {
+//					return null;
+//				} else {
+//					crafting.setInventorySlotContents(slot, equivalent);
+//				}
+//			}
+//		}
+//
+//		if (recipe.matches(crafting, world)) {
+//			ItemStack output = recipe.getCraftingResult(crafting);
+//			if (ItemStack.areItemStacksEqual(output, expectedOutput)) {
+//				return crafting;
+//			}
+//		}
+//
+//		return null;
+//	}
 
 	private static ItemStack getCraftingEquivalent(NonNullList<ItemStack> stockCopy, CraftingInventory crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput) {
 		ItemStack originalStack = crafting.getStackInSlot(slot);
@@ -124,7 +126,7 @@ public abstract class RecipeUtil {
 					ItemStack output = recipe.getCraftingResult(crafting);
 					if (ItemStack.areItemStacksEqual(output, expectedOutput)) {
 						crafting.setInventorySlotContents(slot, originalStack);
-						return stockStack.splitStack(1);
+						return stockStack.split(1);
 					}
 				}
 			}
@@ -133,16 +135,17 @@ public abstract class RecipeUtil {
 		return ItemStack.EMPTY;
 	}
 
-	public static List<IRecipe> findMatchingRecipes(CraftingInventory inventory, World world) {
-		return ForgeRegistries.RECIPES.getValuesCollection().stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
+	public static List<IRecipe> findMatchingRecipes(CraftingInventory inventory, World world) {	//TODO - is the stream() needed anymore?
+		return world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, inventory, world).stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
 	}
 
+	//TODO - smelting needs to be json now?
 	public static void addSmelting(ItemStack res, Item prod, float xp) {
 		addSmelting(res, new ItemStack(prod), xp);
 	}
 
 	public static void addSmelting(ItemStack res, ItemStack prod, float xp) {
-		GameRegistry.addSmelting(res, prod, xp);
+//		GameRegistry.addSmelting(res, prod, xp);
 	}
 
 	@Nullable

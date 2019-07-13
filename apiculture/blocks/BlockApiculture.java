@@ -12,13 +12,13 @@ package forestry.apiculture.blocks;
 
 import net.minecraft.block.material.Material;
 
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.core.blocks.BlockBase;
 
 public class BlockApiculture extends BlockBase<BlockTypeApiculture> {
 	public BlockApiculture(BlockTypeApiculture type) {
 		super(type, Material.WOOD);
-		setCreativeTab(Tabs.tabApiculture);
+		setCreativeTab(ItemGroups.tabApiculture);
 		setHarvestLevel("axe", 0);
 	}
 }

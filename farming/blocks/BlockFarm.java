@@ -44,7 +44,7 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
@@ -67,7 +67,7 @@ public class BlockFarm extends BlockStructure {
 		setHardness(1.0f);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(blockState.getBaseState().with(META, EnumFarmBlockType.PLAIN));
-		setCreativeTab(Tabs.tabAgriculture);
+		setCreativeTab(ItemGroups.tabAgriculture);
 	}
 
 

@@ -8,11 +8,11 @@ package forestry.api.lepidopterology;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.passive.IAnimal;
 
 import forestry.api.genetics.IIndividual;
 
-public interface IEntityButterfly extends IAnimal {
+//TODO - figure out how IAnimal works now, might want to make abstract and extend AnimalEntity
+public interface IEntityButterfly {
 
 	void changeExhaustion(int change);
 

@@ -15,9 +15,13 @@ import java.util.List;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 
@@ -30,9 +34,10 @@ import forestry.core.items.ItemForestry;
 import forestry.core.utils.Translator;
 
 public abstract class ItemGE extends ItemForestry {
-	protected ItemGE(CreativeTabs creativeTab) {
-		super(creativeTab);
-		setHasSubtypes(true);
+	protected ItemGE(ItemGroup creativeTab) {
+		super((new Item.Properties()).group(creativeTab));
+		//TODO - properties
+//		setHasSubtypes(true);
 	}
 
 	@Nullable
@@ -50,10 +55,11 @@ public abstract class ItemGE extends ItemForestry {
 		return false;
 	}
 
-	@Override
-	public boolean getShareTag() {
-		return true;
-	}
+	//TODO - what is this now
+//	@Override
+//	public boolean getShareTag() {
+//		return true;
+//	}
 
 	@Override
 	public boolean hasEffect(ItemStack stack) {
@@ -77,10 +83,10 @@ public abstract class ItemGE extends ItemForestry {
 			if (Screen.hasShiftDown()) {
 				individual.addTooltip(list);
 			} else {
-				list.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
+				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle((new Style()).setItalic(true)));
 			}
 		} else {
-			list.add("<" + Translator.translateToLocal("for.gui.unknown") + ">");
+			list.add(new TranslationTextComponent("for.gui.unknown",  "< %s >"));
 		}
 	}
 

@@ -18,14 +18,16 @@ import java.util.TreeSet;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
+//import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+
+import com.mojang.brigadier.Command;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public abstract class SubCommand implements IForestryCommand {
+public abstract class SubCommand<S> implements IForestryCommand<S> {
 
 	public enum PermLevel {
 
@@ -133,7 +135,7 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	@Override
-	public int compareTo(ICommand command) {
+	public int compareTo(Command command) {
 		return this.getName().compareTo(command.getName());
 	}
 

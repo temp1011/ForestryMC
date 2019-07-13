@@ -12,6 +12,7 @@ package forestry.core.items;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -23,8 +24,8 @@ import forestry.core.gui.GuiHandler;
 import forestry.core.gui.IGuiHandlerItem;
 
 public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerItem {
-	public ItemWithGui() {
-		setMaxStackSize(1);
+	public ItemWithGui(Item.Properties properties) {
+		super(properties.maxStackSize(1));
 	}
 
 	@Override

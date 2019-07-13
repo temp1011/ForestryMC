@@ -51,7 +51,7 @@ public class RenderAnalyzer extends TileEntityRenderer<TileAnalyzer> {
 	 * @param analyzer If it null its render the item else it render the tile entity.
 	 */
 	@Override
-	public void render(TileAnalyzer analyzer, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileAnalyzer analyzer, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (analyzer != null) {
 			World worldObj = analyzer.getWorldObj();
 			if (worldObj.isBlockLoaded(analyzer.getPos())) {
@@ -76,14 +76,14 @@ public class RenderAnalyzer extends TileEntityRenderer<TileAnalyzer> {
 		float renderScale = 1.0f;
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y, (float) z);
-		GlStateManager.translate(0.5f, 0.2f, 0.5f);
-		GlStateManager.scale(renderScale, renderScale, renderScale);
+		GlStateManager.translatef((float) x, (float) y, (float) z);
+		GlStateManager.translatef(0.5f, 0.2f, 0.5f);
+		GlStateManager.scalef(renderScale, renderScale, renderScale);
 		dummyItem.setItem(itemstack);
 
 		if (world.getGameTime() != lastTick) {
 			lastTick = world.getGameTime();
-			dummyItem.onUpdate();
+			dummyItem.tick();	//TODO - correct?
 		}
 		EntityRendererManager rendermanager = Minecraft.getInstance().getRenderManager();
 

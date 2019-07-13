@@ -40,6 +40,7 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
+import forestry.core.TickHandlerCoreServer;
 import forestry.core.advancements.AdvancementManager;
 import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateRoot;
@@ -57,11 +58,11 @@ import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
-import forestry.plugins.ForestryCompatPlugins;
-import forestry.plugins.PluginBuildCraftFuels;
-import forestry.plugins.PluginIC2;
-import forestry.plugins.PluginNatura;
-import forestry.plugins.PluginTechReborn;
+//import forestry.plugins.ForestryCompatPlugins;
+//import forestry.plugins.PluginBuildCraftFuels;
+//import forestry.plugins.PluginIC2;
+//import forestry.plugins.PluginNatura;
+//import forestry.plugins.PluginTechReborn;
 
 /**
  * Forestry Minecraft Mod
@@ -107,9 +108,9 @@ public class Forestry {
 		FluidRegistry.enableUniversalBucket();
 		ModuleManager moduleManager = ModuleManager.getInstance();
 		ForestryAPI.moduleManager = moduleManager;
-		moduleManager.registerContainers(new ForestryModules(), new ForestryCompatPlugins());
+//		moduleManager.registerContainers(new ForestryModules(), new ForestryCompatPlugins());
 		NetworkHandler networkHandler = new NetworkHandler();
-		DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler())
+		DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
 		// Register the setup method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		// Register the enqueueIMC method for modloading
@@ -117,8 +118,8 @@ public class Forestry {
 		// Register the processIMC method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMCMessages);
 		// Register the doClientStuff method for modloading
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-
+//		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+		FMLJavaModLoadingContext.get().getModEventBus().register(TickHandlerCoreServer.class);	//TODO - correct?
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 

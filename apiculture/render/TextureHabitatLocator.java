@@ -14,10 +14,11 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+
+import com.mojang.blaze3d.platform.TextureUtil;
 
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -100,15 +101,16 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		this.angleDelta += angleChange * 0.1D;
 		this.angleDelta *= 0.8D;
 		this.currentAngle += this.angleDelta;
-
-		int i = (int) ((this.currentAngle / (Math.PI * 2D) + 1.0d) * this.framesTextureData.size()) % this.framesTextureData.size();
+			//TODO - check it is frames and not interpolatedframedata
+		int i = (int) ((this.currentAngle / (Math.PI * 2D) + 1.0d) * this.frames.length) % this.frames.length;
 		while (i < 0) {
-			i = (i + this.framesTextureData.size()) % this.framesTextureData.size();
+			i = (i + this.frames.length) % this.frames.length;
 		}
 
 		if (i != this.frameCounter) {
 			this.frameCounter = i;
-			TextureUtil.uploadTextureMipmap(this.framesTextureData.get(this.frameCounter), this.width, this.height, this.originX, this.originY, false, false);
+			//TODO - check
+			this.frames[this.frameCounter].uploadTextureSub(0, this.x, this.y, false);
 		}
 
 	}

@@ -14,31 +14,35 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.PlayerEntitySP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ITextureManager;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.gui.ContainerHabitatLocator;
 import forestry.apiculture.gui.GuiHabitatLocator;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.apiculture.render.TextureHabitatLocator;
+import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.items.ItemWithGui;
 import forestry.core.utils.Translator;
 
@@ -48,8 +52,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	private final HabitatLocatorLogic locatorLogic;
 
 	public ItemHabitatLocator() {
-		setCreativeTab(Tabs.tabApiculture);
-		setMaxStackSize(1);
+		super((new Item.Properties()).group(ItemGroups.tabApiculture).maxStackSize(1));
 		locatorLogic = new HabitatLocatorLogic();
 	}
 
@@ -58,7 +61,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	}
 
 	@Override
-	public void onUpdate(ItemStack p_77663_1_, World world, Entity player, int p_77663_4_, boolean p_77663_5_) {
+	public void inventoryTick(ItemStack p_77663_1_, World world, Entity player, int p_77663_4_, boolean p_77663_5_) {
 		if (!world.isRemote) {
 			locatorLogic.onUpdate(world, player);
 		}
@@ -74,20 +77,28 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
 
 		Minecraft minecraft = Minecraft.getInstance();
 		if (world != null && minecraft.player != null) {
-			PlayerEntitySP player = minecraft.player;
+			ClientPlayerEntity player = minecraft.player;
 			Biome currentBiome = player.world.getBiome(player.getPosition());
 
 			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.getPosition());
-			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getRainfall());
+			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getDownfall());
 
-			list.add(Translator.translateToLocal("for.gui.currentBiome") + ": " + currentBiome.getBiomeName());
-			list.add(Translator.translateToLocal("for.gui.temperature") + ": " + AlleleManager.climateHelper.toDisplay(temperature));
-			list.add(Translator.translateToLocal("for.gui.humidity") + ": " + AlleleManager.climateHelper.toDisplay(humidity));
+			list.add(new TranslationTextComponent("for.gui.currentBiome")
+					.appendSibling(new StringTextComponent(": "))
+					.appendSibling(new TranslationTextComponent(currentBiome.getTranslationKey())));
+
+			list.add(new TranslationTextComponent("for.gui.temperature")
+					.appendSibling(new StringTextComponent(": "))
+					.appendSibling(AlleleManager.climateHelper.toDisplay(temperature)));
+
+			list.add(new TranslationTextComponent("for.gui.humidity")
+					.appendSibling(new StringTextComponent(": "))
+					.appendSibling(AlleleManager.climateHelper.toDisplay(humidity)));
 		}
 	}
 

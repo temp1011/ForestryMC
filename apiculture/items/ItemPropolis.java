@@ -12,12 +12,12 @@ package forestry.apiculture.items;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemOverlay;
 
 public class ItemPropolis extends ItemOverlay {
 	public ItemPropolis() {
-		super(Tabs.tabApiculture, EnumPropolis.VALUES);
+		super(ItemGroups.tabApiculture, EnumPropolis.VALUES);
 	}
 
 	public ItemStack get(EnumPropolis propolis, int amount) {

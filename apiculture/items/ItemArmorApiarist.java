@@ -34,7 +34,6 @@ import forestry.api.apiculture.ApicultureCapabilities;
 import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
@@ -46,7 +45,7 @@ public class ItemArmorApiarist extends ArmorItem implements IItemModelRegister {
 
 	public ItemArmorApiarist(EquipmentSlotType equipmentSlotIn) {
 		super(APIARIST_ARMOR, 0, equipmentSlotIn);
-//		setCreativeTab(Tabs.tabApiculture);
+//		setCreativeTab(ItemGroups.tabApiculture);
 	}
 
 	@Override

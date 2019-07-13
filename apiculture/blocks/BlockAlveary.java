@@ -32,7 +32,6 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.BlockStateContainer;
 
 import net.minecraftforge.client.model.ModelLoader;
 
@@ -44,7 +43,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.core.IModelManager;
 import forestry.core.models.IStateMapperRegister;
-import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.multiblock.IAlvearyControllerInternal;
 import forestry.apiculture.multiblock.TileAlveary;
@@ -114,7 +112,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 		}
 		setDefaultState(defaultState);
 
-//		setCreativeTab(Tabs.tabApiculture);
+//		setCreativeTab(ItemGroups.tabApiculture);
 //		setHarvestLevel("axe", 0);
 	}
 

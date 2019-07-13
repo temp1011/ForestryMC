@@ -21,14 +21,14 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import forestry.api.apiculture.ApicultureCapabilities;
 import forestry.api.apiculture.IHiveTile;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemForestry;
 import forestry.core.render.ParticleRender;
 import forestry.core.tiles.TileUtil;
 
 public class ItemSmoker extends ItemForestry {
 	public ItemSmoker() {
-		super(Tabs.tabApiculture);
+		super(ItemGroups.tabApiculture);
 		setMaxStackSize(1);
 	}
 

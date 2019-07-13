@@ -25,7 +25,7 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.core.config.Config;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
@@ -34,7 +34,7 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 	public ItemHoneyComb() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
-		setCreativeTab(Tabs.tabApiculture);
+		setCreativeTab(ItemGroups.tabApiculture);
 	}
 
 	@Override

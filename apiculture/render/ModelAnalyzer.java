@@ -11,9 +11,10 @@
 package forestry.apiculture.render;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
 import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -25,12 +26,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.render.ForestryResource;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelAnalyzer extends ModelBase {
+public class ModelAnalyzer extends Model {
 
-	private final ModelRenderer pedestal;
-	private final ModelRenderer cover;
-	private final ModelRenderer tower1;
-	private final ModelRenderer tower2;
+	private final RendererModel pedestal;
+	private final RendererModel cover;
+	private final RendererModel tower1;
+	private final RendererModel tower2;
 
 	private final ResourceLocation[] textures;
 
@@ -42,19 +43,19 @@ public class ModelAnalyzer extends ModelBase {
 			new ForestryResource(gfxBase + "tower2.png"),
 		};
 
-		pedestal = new ModelRenderer(this, 0, 0);
+		pedestal = new RendererModel(this, 0, 0);
 		pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
 		pedestal.setRotationPoint(8, 8, 8);
 
-		cover = new ModelRenderer(this, 0, 0);
+		cover = new RendererModel(this, 0, 0);
 		cover.addBox(-8F, -8F, -8F, 16, 1, 16);
 		cover.setRotationPoint(8, 8, 8);
 
-		tower1 = new ModelRenderer(this, 0, 0);
+		tower1 = new RendererModel(this, 0, 0);
 		tower1.addBox(-8, -7, -7, 2, 14, 14);
 		tower1.setRotationPoint(8, 8, 8);
 
-		tower2 = new ModelRenderer(this, 0, 0);
+		tower2 = new RendererModel(this, 0, 0);
 		tower2.addBox(6, -7, -7, 2, 14, 14);
 		tower2.setRotationPoint(8, 8, 8);
 
@@ -64,7 +65,7 @@ public class ModelAnalyzer extends ModelBase {
 
 		GlStateManager.pushMatrix();
 
-		GlStateManager.translate(posX, posY, posZ);
+		GlStateManager.translatef(posX, posY, posZ);
 		float[] angle = {0, 0, 0};
 
 		switch (orientation) {

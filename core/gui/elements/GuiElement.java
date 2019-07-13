@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.ScaledResolution;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 
@@ -118,17 +118,18 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 			return;
 		}
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(getX(), getY(), 0.0F);
+		GlStateManager.translatef(getX(), getY(), 0.0F);
 		if (isCropped()) {
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			Minecraft mc = Minecraft.getInstance();
-			ScaledResolution res = new ScaledResolution(mc);
-			double scaleWidth = mc.displayWidth / res.getScaledWidth_double();
-			double scaleHeight = mc.displayHeight / res.getScaledHeight_double();
+			//TODO - resolution stuff again, check gameSettings.guiscale too
+			MainWindow window = mc.mainWindow;
+			double scaleWidth = ((double) window.getWidth()) / window.getScaledWidth();
+			double scaleHeight = ((double) window.getHeight()) / window.getScaledHeight();
 			IGuiElement cropRelative = cropElement != null ? cropElement : this;
 			int posX = cropRelative.getAbsoluteX();
 			int posY = cropRelative.getAbsoluteY();
-			GL11.glScissor((int) ((posX + cropX) * scaleWidth), (int) (mc.displayHeight - ((posY + cropY + cropHeight) * scaleHeight)), (int) (cropWidth * scaleWidth), (int) (cropHeight * scaleHeight));
+			GL11.glScissor((int) ((posX + cropX) * scaleWidth), (int) (window.getHeight() - ((posY + cropY + cropHeight) * scaleHeight)), (int) (cropWidth * scaleWidth), (int) (cropHeight * scaleHeight));
 		}
 
 		drawElement(mouseX, mouseY);

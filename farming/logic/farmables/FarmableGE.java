@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -22,21 +23,23 @@ import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.arboriculture.ModuleArboriculture;
+//import forestry.arboriculture.ModuleArboriculture;
 import forestry.farming.logic.crops.CropDestroy;
 
 public class FarmableGE implements IFarmable {
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
-		return ModuleArboriculture.getBlocks().saplingGE == blockState.getBlock();
+		return false;
+//	TODO	return ModuleArboriculture.getBlocks().saplingGE == blockState.getBlock();
 	}
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		Block block = blockState.getBlock();
 
-		if (!block.isWood(world, pos)) {
+		//TODO - check
+		if (!block.getTags().contains(new ResourceLocation("forge", "wood"))) {
 			return null;
 		}
 

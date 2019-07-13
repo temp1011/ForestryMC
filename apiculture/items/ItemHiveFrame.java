@@ -27,7 +27,7 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IHiveFrame;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.Translator;
 
@@ -38,7 +38,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 	public ItemHiveFrame(int maxDamage, float geneticDecay) {
 		setMaxStackSize(1);
 		setMaxDamage(maxDamage);
-		setCreativeTab(Tabs.tabApiculture);
+		setCreativeTab(ItemGroups.tabApiculture);
 
 		this.beeModifier = new HiveFrameBeeModifier(geneticDecay);
 	}

@@ -19,16 +19,16 @@ import java.util.function.BooleanSupplier;
 
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.common.crafting.IConditionFactory;
-import net.minecraftforge.common.crafting.JsonContext;
+import net.minecraftforge.common.crafting.IConditionSerializer;
 
 import forestry.api.core.ForestryAPI;
 
 @SuppressWarnings("unused")
-public class DisableRecipe implements IConditionFactory {
+public class DisableRecipe implements IConditionSerializer
+{
 
 	@Override
-	public BooleanSupplier parse(JsonContext context, JsonObject json) {
+	public BooleanSupplier parse(JsonObject json) {
 		String module = json.get("module").getAsString();
 		JsonElement conElement = json.get("container");
 		String container = conElement == null ? "forestry" : conElement.getAsString();

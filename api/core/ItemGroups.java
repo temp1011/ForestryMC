@@ -10,7 +10,7 @@ import net.minecraft.item.ItemGroup;
 /**
  * References to the specialised tabs added by Forestry to creative inventory.
  */
-public class Tabs {
+public class ItemGroups {
 
 	public static ItemGroup tabAgriculture;
 	public static ItemGroup tabApiculture;

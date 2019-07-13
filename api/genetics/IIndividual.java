@@ -7,6 +7,8 @@ package forestry.api.genetics;
 
 import java.util.List;
 
+import net.minecraft.util.text.ITextComponent;
+
 import forestry.api.core.INbtWritable;
 
 /**
@@ -29,7 +31,7 @@ public interface IIndividual extends INbtWritable {
 	/**
 	 * Adds some information about the individual to the list.
 	 */
-	void addTooltip(List<String> list);
+	void addTooltip(List<ITextComponent> list);
 
 	/**
 	 * Call to mark the IIndividual as analyzed.

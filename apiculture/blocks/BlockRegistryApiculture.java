@@ -15,7 +15,7 @@ import java.util.Map;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.apiculture.items.ItemBlockCandle;
 import forestry.apiculture.items.ItemBlockHoneyComb;
 import forestry.core.blocks.BlockBase;
@@ -41,7 +41,7 @@ public class BlockRegistryApiculture extends BlockRegistry {
 
 		beeChest = new BlockBase<>(BlockTypeApicultureTesr.APIARIST_CHEST, Material.WOOD);
 		registerBlock(beeChest, new ItemBlockForestry<>(beeChest), "bee_chest");
-		beeChest.setCreativeTab(Tabs.tabApiculture);
+		beeChest.setCreativeTab(ItemGroups.tabApiculture);
 		beeChest.setHarvestLevel("axe", 0);
 
 		beehives = new BlockBeeHives();

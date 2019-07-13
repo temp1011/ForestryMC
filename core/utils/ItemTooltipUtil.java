@@ -8,6 +8,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -17,14 +21,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 public class ItemTooltipUtil {
 	@OnlyIn(Dist.CLIENT)
-	public static void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+	public static void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		String unlocalizedName = stack.getTranslationKey();
 		String tooltipKey = unlocalizedName + ".tooltip";
 		if (Translator.canTranslateToLocal(tooltipKey)) {
 			String tooltipInfo = Translator.translateToLocal(tooltipKey);
 			Minecraft minecraft = Minecraft.getInstance();
 			List<String> tooltipInfoWrapped = minecraft.fontRenderer.listFormattedStringToWidth(tooltipInfo, 150);
-			tooltip.addAll(tooltipInfoWrapped);
+			tooltipInfoWrapped.forEach(s -> tooltip.add(new StringTextComponent(s)));
 		}
 	}
 
@@ -34,23 +38,27 @@ public class ItemTooltipUtil {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static List<String> getInformation(ItemStack stack) {
+	public static List<ITextComponent> getInformation(ItemStack stack) {
 		Minecraft minecraft = Minecraft.getInstance();
 		boolean advancedTooltips = minecraft.gameSettings.advancedItemTooltips;
 		return getInformation(stack, minecraft.player, advancedTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static List<String> getInformation(ItemStack stack, PlayerEntity player, ITooltipFlag flag) {
+	public static List<ITextComponent> getInformation(ItemStack stack, PlayerEntity player, ITooltipFlag flag) {
 		if (stack.isEmpty()) {
 			return Collections.emptyList();
 		}
-		List<String> tooltip = stack.getTooltip(player, flag);
+		List<ITextComponent> tooltip = stack.getTooltip(player, flag);
 		for (int i = 0; i < tooltip.size(); ++i) {
+			//TODO - can tis be simplified (and is it correct?)
+			ITextComponent component = tooltip.get(i);
 			if (i == 0) {
-				tooltip.set(i, stack.getRarity().color + tooltip.get(i));
+				component.getStyle().setColor(stack.getRarity().color);
+				tooltip.set(i, component);
 			} else {
-				tooltip.set(i, TextFormatting.GRAY + tooltip.get(i));
+				component.getStyle().setColor(TextFormatting.GRAY);
+				tooltip.set(i, component);
 			}
 		}
 		return tooltip;

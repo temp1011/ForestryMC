@@ -12,11 +12,12 @@ package forestry.apiculture.items;
 
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.DispenserBlock;
+import net.minecraft.entity.item.minecart.MinecartEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.dispenser.IDispenseItemBehavior;
-import net.minecraft.entity.item.MinecartEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.MinecartItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
@@ -30,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.apiculture.entities.MinecartEntityApiary;
@@ -42,36 +44,43 @@ public class ItemMinecartBeehouse extends MinecartItem implements IItemModelRegi
 	private static final IDispenseItemBehavior dispenserMinecartBehavior = (source, stack) -> stack;
 
 	public ItemMinecartBeehouse() {
-		super(MinecartEntity.Type.CHEST);
-		setMaxDamage(0);
-		setHasSubtypes(true);
+		super(MinecartEntity.Type.CHEST, (new Item.Properties()).maxDamage(0));
+//		setHasSubtypes(true);
+
+		//TODO - needs AT
 		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, dispenserMinecartBehavior);
 	}
 
 	@Override
-	public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
-		if (!AbstractRailBlock.isRailBlock(worldIn.getBlockState(pos))) {
+	public ActionResultType onItemUse(ItemUseContext context) {
+		World world = context.getWorld();
+		BlockPos pos = context.getPos();
+		PlayerEntity player = context.getPlayer();
+
+
+		if (!AbstractRailBlock.isRail(world.getBlockState(pos))) {
 			return ActionResultType.PASS;
 		}
 
-		ItemStack stack = player.getHeldItem(hand);
+		ItemStack stack = player.getHeldItem(context.getHand());
 
-		if (!worldIn.isRemote) {
-			MinecartEntityBeeHousingBase MinecartEntity;
+		if (!context.getWorld().isRemote) {
+			MinecartEntityBeeHousingBase minecart;
 
-			if (stack.getItemDamage() == 0) {
-				MinecartEntity = new MinecartEntityBeehouse(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+			//TODO flatten
+			if (true){//stack.getItem() == 0) {
+				minecart = new MinecartEntityBeehouse(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 			} else {
-				MinecartEntity = new MinecartEntityApiary(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+				minecart = new MinecartEntityApiary(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 			}
 
-			MinecartEntity.getOwnerHandler().setOwner(player.getGameProfile());
+			minecart.getOwnerHandler().setOwner(player.getGameProfile());
 
 			if (stack.hasDisplayName()) {
-				MinecartEntity.setCustomNameTag(stack.getDisplayName());
+				minecart.setCustomName(stack.getDisplayName());
 			}
 
-			worldIn.spawnEntity(MinecartEntity);
+			world.addEntity(minecart);
 		}
 
 		stack.shrink(1);
@@ -80,11 +89,11 @@ public class ItemMinecartBeehouse extends MinecartItem implements IItemModelRegi
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		if (stack.getItemDamage() >= definition.length || stack.getItemDamage() < 0) {
+//		if (stack.getItemDamage() >= definition.length || stack.getItemDamage() < 0) {
 			return "item.forestry.unknown";
-		} else {
-			return "item.for." + definition[stack.getItemDamage()];
-		}
+//		} else {
+//			return "item.for." + definition[stack.getItemDamage()];
+//		}
 	}
 
 	/* MODELS */
@@ -97,19 +106,21 @@ public class ItemMinecartBeehouse extends MinecartItem implements IItemModelRegi
 	}
 
 	@Override
-	public void getSubItems(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
 			for (int i = 0; i < definition.length; i++) {
-				subItems.add(new ItemStack(this, 1, i));
+				subItems.add(new ItemStack(this, 1)); //TODO
 			}
 		}
 	}
 
+	//TODO
 	public ItemStack getBeeHouseMinecart() {
-		return new ItemStack(this, 1, 0);
+		return new ItemStack(this, 1);
 	}
 
+	//TODO
 	public ItemStack getApiaryMinecart() {
-		return new ItemStack(this, 1, 1);
+		return new ItemStack(this, 1);
 	}
 }

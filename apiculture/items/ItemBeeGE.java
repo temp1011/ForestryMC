@@ -14,14 +14,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 
@@ -33,7 +35,7 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
@@ -50,10 +52,11 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	private final EnumBeeType type;
 
 	public ItemBeeGE(EnumBeeType type) {
-		super(Tabs.tabApiculture);
+		super(ItemGroups.tabApiculture);
 		this.type = type;
 		if (type != EnumBeeType.DRONE) {
-			setMaxStackSize(1);
+			//TODO - item properties
+//			setMaxStackSize(1);
 		}
 	}
 
@@ -72,26 +75,27 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		return BeeGenome.getSpecies(itemStack);
 	}
 
+	//TODO - pretty sure this is still translating on the server atm
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
+	public ITextComponent getDisplayName(ItemStack itemstack) {
 		if (itemstack.getTag() == null) {
-			return super.getItemStackDisplayName(itemstack);
+			return super.getDisplayName(itemstack);
 		}
 
 		IBee individual = getIndividual(itemstack);
 		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
 		if (Translator.canTranslateToLocal(customBeeKey)) {
-			return Translator.translateToLocal(customBeeKey);
+			return new TranslationTextComponent(customBeeKey);
 		}
 		String beeGrammar = Translator.translateToLocal("for.bees.grammar." + type.getName());
 		String beeSpecies = individual.getDisplayName();
 		String beeType = Translator.translateToLocal("for.bees.grammar." + type.getName() + ".type");
-		return beeGrammar.replaceAll("%SPECIES", beeSpecies).replaceAll("%TYPE", beeType);
+		return new TranslationTextComponent(beeGrammar.replaceAll("%SPECIES", beeSpecies).replaceAll("%TYPE", beeType));
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		if (itemstack.getTag() == null) {
 			return;
 		}
@@ -99,9 +103,9 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		if (type != EnumBeeType.DRONE) {
 			IBee individual = getIndividual(itemstack);
 			if (individual.isNatural()) {
-				list.add(TextFormatting.YELLOW + TextFormatting.ITALIC.toString() + Translator.translateToLocal("for.bees.stock.pristine"));
+				list.add(new TranslationTextComponent("for.bees.stock.pristine").setStyle((new Style()).setColor(TextFormatting.YELLOW).setItalic(true)));
 			} else {
-				list.add(TextFormatting.YELLOW + Translator.translateToLocal("for.bees.stock.ignoble"));
+				list.add(new TranslationTextComponent("for.bees.stock.ignoble").setStyle((new Style()).setColor(TextFormatting.YELLOW)));
 			}
 		}
 
@@ -152,20 +156,21 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 				((IAlleleBeeSpecies) allele).registerModels(item, manager);
 			}
 		}
-		manager.registerItemModel(item, new BeeMeshDefinition());
+		//TODO - flatten or something custom rendering I think
+//		manager.registerItemModel(item, new BeeMeshDefinition(?));
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	private class BeeMeshDefinition implements ItemMeshDefinition {
-		@Override
-		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			if (!stack.hasTag()) { // villager trade wildcard bees
-				return DefaultBeeModelProvider.instance.getModel(type);
-			}
-			IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
-			return species.getModel(type);
-		}
-	}
+//	@OnlyIn(Dist.CLIENT)
+//	private class BeeMeshDefinition implements ItemMeshDefinition {
+//		@Override
+//		public ModelResourceLocation getModelLocation(ItemStack stack) {
+//			if (!stack.hasTag()) { // villager trade wildcard bees
+//				return DefaultBeeModelProvider.instance.getModel(type);
+//			}
+//			IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
+//			return species.getModel(type);
+//		}
+//	}
 
 	public final EnumBeeType getType() {
 		return type;

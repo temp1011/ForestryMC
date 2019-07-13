@@ -12,12 +12,12 @@ package forestry.apiculture.items;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemOverlay;
 
 public class ItemPollenCluster extends ItemOverlay {
 	public ItemPollenCluster() {
-		super(Tabs.tabApiculture, EnumPollenCluster.VALUES);
+		super(ItemGroups.tabApiculture, EnumPollenCluster.VALUES);
 	}
 
 	public ItemStack get(EnumPollenCluster pollenCluster, int amount) {

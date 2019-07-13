@@ -15,9 +15,9 @@ import java.util.Locale;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.oredict.OreDictionary;
+//import net.minecraftforge.oredict.OreDictionary;
 
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
@@ -34,7 +34,8 @@ public abstract class ItemRegistry {
 			Log.error("Name must be lowercase");
 		}
 
-		item.setTranslationKey("for." + name);
+		//TODO - now done by name??
+//		item.setTranslationKey("for." + name);
 		item.setRegistryName(name);
 
 
@@ -44,12 +45,14 @@ public abstract class ItemRegistry {
 	}
 
 	protected static void registerOreDict(String oreDictName, ItemStack itemStack) {
-		OreDictionary.registerOre(oreDictName, itemStack);
+//		OreDictionary.registerOre(oreDictName, itemStack);
 	}
+	//TODO tags
 
 	public static ItemStack createItemForOreName(String oreName, String registryName) {
 		ItemStack oreItem = new ItemStack(registerItem(new ItemForestry(), registryName));
-		OreDictionary.registerOre(oreName, oreItem);
+//		OreDictionary.registerOre(oreName, oreItem);
+		//TODO - tags
 		return oreItem;
 	}
 }

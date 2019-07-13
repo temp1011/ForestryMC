@@ -24,13 +24,14 @@ import net.minecraft.util.JSONUtils;
 
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientFactory;
+import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.JsonContext;
 
 @SuppressWarnings("unused")
-public class FallbackIngredientFactory implements IIngredientFactory {
+public class FallbackIngredientFactory implements IIngredientSerializer {
 	@Nonnull
 	@Override
-	public Ingredient parse(JsonContext context, JsonObject json) {
+	public Ingredient parse(JsonObject json) {
 		Ingredient ret;
 		try {
 			JsonArray arr = JSONUtils.getJsonArray(json, "primary");

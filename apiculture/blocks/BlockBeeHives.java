@@ -30,7 +30,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.BlockStateContainer;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -44,7 +43,7 @@ import forestry.api.apiculture.IHiveTile;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileHive;
@@ -58,7 +57,7 @@ public class BlockBeeHives extends ContainerBlock implements IItemModelRegister,
 		super(Block.Properties.create(new MaterialBeehive(true))
 				.lightValue((int) (0.4f * 15))	//TODO - correct?
 				.hardnessAndResistance(2.5f));
-		setCreativeTab(Tabs.tabApiculture);
+		setCreativeTab(ItemGroups.tabApiculture);
 		setHarvestLevel("scoop", 0);
 		setDefaultState(this.getStateContainer().getBaseState().with(HIVE_TYPES, HiveType.FOREST));
 	}

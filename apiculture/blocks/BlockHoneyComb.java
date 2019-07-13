@@ -9,7 +9,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.EnumProperty;
 import net.minecraft.block.BlockStateContainer;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.ItemGroup;
@@ -29,8 +28,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
+import forestry.api.core.ItemGroups;
 import forestry.core.models.IStateMapperRegister;
-import forestry.api.core.Tabs;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.blocks.IColoredBlock;
@@ -58,7 +57,7 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 	public BlockHoneyComb(int minMeta) {
 		super(Material.CLOTH);	//Material.WOOL?
 		setHardness(1F);
-		setCreativeTab(Tabs.tabApiculture);
+		setCreativeTab(ItemGroups.tabApiculture);
 		setDefaultState(this.getStateContainer().getBaseState().with(getVariant(), getVariant().getAllowedValues().iterator().next()));
 		this.minMeta = minMeta;
 	}

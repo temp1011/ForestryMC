@@ -15,7 +15,6 @@ import java.util.Random;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -32,7 +31,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.config.Constants;
@@ -42,7 +41,7 @@ public class BlockStump extends TorchBlock implements IItemModelRegister {
 	public BlockStump() {
 		this.setHardness(0.0F);
 		this.setSoundType(SoundType.WOOD);
-		setCreativeTab(Tabs.tabApiculture);
+		setCreativeTab(ItemGroups.tabApiculture);
 	}
 
 	@OnlyIn(Dist.CLIENT)

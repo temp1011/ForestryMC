@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.common.config.Property;
 
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -80,8 +82,8 @@ public class Config {
 	public static boolean generateApatiteOre = true;
 	public static boolean generateCopperOre = true;
 	public static boolean generateTinOre = true;
-	public static Set<Integer> blacklistedOreDims = new HashSet<>();
-	public static Set<Integer> whitelistedOreDims = new HashSet<>();
+	public static Set<ResourceLocation> blacklistedOreDims = new HashSet<>();
+	public static Set<ResourceLocation> whitelistedOreDims = new HashSet<>();
 	private static float generateBeehivesAmount = 1.0f;
 	public static boolean generateBeehivesDebug = false;
 	public static boolean logHivePlacement = false;
@@ -177,15 +179,15 @@ public class Config {
 		return enableMagicalCropsSupport;
 	}
 
-	public static void blacklistOreDim(int dimID) {
+	public static void blacklistOreDim(ResourceLocation dimID) {
 		blacklistedOreDims.add(dimID);
 	}
 
-	public static void whitelistOreDim(int dimID) {
+	public static void whitelistOreDim(ResourceLocation dimID) {
 		whitelistedOreDims.add(dimID);
 	}
 
-	public static boolean isValidOreDim(int dimID) {        //blacklist has priority
+	public static boolean isValidOreDim(ResourceLocation dimID) {        //blacklist has priority
 		if (blacklistedOreDims.isEmpty() || !blacklistedOreDims.contains(dimID)) {
 			return whitelistedOreDims.isEmpty() || whitelistedOreDims.contains(dimID);
 		}
@@ -256,11 +258,11 @@ public class Config {
 		generateApatiteOre = configCommon.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
 		generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
 		generateTinOre = configCommon.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
-		for (int dimId : configCommon.get("world.generate.ore", "dimBlacklist", new int[0]).getIntList()) {
-			blacklistedOreDims.add(dimId);
+		for (String dimId : configCommon.get("world.generate.ore", "dimBlacklist", new int[0]).getIntList()) {
+			blacklistedOreDims.add(new ResourceLocation(dimId));
 		}
-		for (int dimId : configCommon.get("world.generate.ore", "dimWhitelist", new int[0]).getIntList()) {
-			whitelistedOreDims.add(dimId);
+		for (String dimId : configCommon.get("world.generate.ore", "dimWhitelist", new int[0]).getIntList()) {
+			whitelistedOreDims.add(new ResourceLocation(dimId));
 		}
 
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);

@@ -26,16 +26,17 @@ import net.minecraft.util.JSONUtils;
 
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientFactory;
+import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.JsonContext;
 
 /**
  * For ingredients where one or more must be enabled but there may be ingredients which aren't available
  */
 @SuppressWarnings("unused")
-public class MultipleNullableIngredientFactory implements IIngredientFactory {
+public class MultipleNullableIngredientFactory implements IIngredientSerializer {
 	@Nonnull
 	@Override
-	public Ingredient parse(JsonContext context, JsonObject json) {
+	public Ingredient parse(JsonObject json) {
 		JsonArray values = JSONUtils.getJsonArray(json, "values");
 		if (values.size() == 0) {
 			throw new JsonParseException("No ingredients given for the recipe!");

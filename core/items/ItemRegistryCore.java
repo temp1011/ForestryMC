@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.utils.OreDictUtil;
@@ -192,7 +192,7 @@ public class ItemRegistryCore extends ItemRegistry {
 		// / BEE RESOURCES
 		beeswax = registerItem(new ItemForestry(), "beeswax");
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			beeswax.setCreativeTab(Tabs.tabApiculture);
+			beeswax.setCreativeTab(ItemGroups.tabApiculture);
 		}
 		OreDictionary.registerOre(OreDictUtil.ITEM_BEESWAX, beeswax);
 

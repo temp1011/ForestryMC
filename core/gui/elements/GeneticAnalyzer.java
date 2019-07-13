@@ -72,7 +72,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		scrollBar = new ScrollBarElement(width - 10 - (rightBoarder ? 6 : 0), 12, SCROLLBAR_BACKGROUND, false, SCROLLBAR_SLIDER);
 		scrollBar.hide();
 		add(scrollBar);
-		//Side Tabs
+		//Side ItemGroups
 		tabs = new GeneticAnalyzerTabs(0, 5, this);
 		add(tabs);
 		//Selection Bar at the bottom

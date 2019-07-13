@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 
@@ -32,6 +31,7 @@ public interface IModelManager {
 
 	ModelResourceLocation getModelLocation(String modID, String identifier);
 
-	void registerItemModel(Item item, ItemMeshDefinition definition);
+	//TODO - itemmeshdefinition doesn't exist any more
+//	void registerItemModel(Item item, ItemMeshDefinition definition);
 
 }

@@ -26,7 +26,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.core.Tabs;
+
+import forestry.api.core.ItemGroups;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
@@ -34,7 +35,7 @@ import forestry.core.utils.Translator;
 
 public class ItemAlyzer extends ItemWithGui {
 	public ItemAlyzer() {
-		setCreativeTab(Tabs.tabApiculture);
+		setCreativeTab(ItemGroups.tabApiculture);
 	}
 
 	@Override

@@ -24,7 +24,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Tuple;
 
-import net.minecraftforge.fml.common.Optional;
+//import net.minecraftforge.fml.common.Optional;
 
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -43,7 +43,7 @@ import forestry.apiculture.inventory.InventoryApiary;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.core.config.Constants;
 
-import buildcraft.api.statements.ITriggerExternal;
+//import buildcraft.api.statements.ITriggerExternal;
 
 public class TileApiary extends TileBeeHousingBase implements IApiary {
 	private final IBeeModifier beeModifier = new ApiaryBeeModifier();
@@ -87,14 +87,14 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	}
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-		super.addExternalTriggers(triggers, side, tile);
-		triggers.add(ApicultureTriggers.missingQueen);
-		triggers.add(ApicultureTriggers.missingDrone);
-		triggers.add(ApicultureTriggers.noFrames);
-	}
+//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+//	@Override
+//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+//		super.addExternalTriggers(triggers, side, tile);
+//		triggers.add(ApicultureTriggers.missingQueen);
+//		triggers.add(ApicultureTriggers.missingDrone);
+//		triggers.add(ApicultureTriggers.noFrames);
+//	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)

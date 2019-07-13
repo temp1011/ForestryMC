@@ -8,10 +8,10 @@ import java.util.Deque;
 import java.util.List;
 import java.util.ListIterator;
 
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.ScaledResolution;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 
@@ -240,8 +240,9 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 		List<String> lines = getTooltip(mouseX, mouseY);
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();
-			ScaledResolution scaledresolution = new ScaledResolution(getMinecraft());
-			GuiUtils.drawHoveringText(lines, mouseX - getX(), mouseY - getY(), scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), -1, getFontRenderer());
+			//TODO test
+			MainWindow window = Minecraft.getInstance().mainWindow;
+			GuiUtils.drawHoveringText(lines, mouseX - getX(), mouseY - getY(), window.getScaledWidth(), window.getScaledHeight(), -1, getFontRenderer());
 			GlStateManager.popMatrix();
 		}
 	}

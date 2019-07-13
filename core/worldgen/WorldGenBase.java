@@ -11,6 +11,7 @@
 package forestry.core.worldgen;
 
 import java.util.Random;
+import java.util.function.Function;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

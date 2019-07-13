@@ -12,13 +12,14 @@ package forestry.core.commands;
 
 import java.util.SortedSet;
 
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
+
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.context.CommandContext;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface IForestryCommand extends ICommand {
+public interface IForestryCommand<S> extends Command<S> {
 
 	String getFullCommandString();
 
@@ -26,5 +27,5 @@ public interface IForestryCommand extends ICommand {
 
 	SortedSet<SubCommand> getChildren();
 
-	void printHelp(ICommandSender sender);
+	void printHelp(CommandContext<S> sender);
 }

@@ -21,7 +21,7 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.apiculture.genetics.Bee;
@@ -38,19 +38,19 @@ public class CreativeTabForestry extends ItemGroup {
 
 	static {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
-			Tabs.tabAgriculture = new CreativeTabForestry(1, "agriculture");
+			ItemGroups.tabAgriculture = new CreativeTabForestry(1, "agriculture");
 		}
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			Tabs.tabApiculture = new CreativeTabForestry(2, "apiculture");
+			ItemGroups.tabApiculture = new CreativeTabForestry(2, "apiculture");
 		}
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			Tabs.tabArboriculture = new CreativeTabForestry(3, "arboriculture");
+			ItemGroups.tabArboriculture = new CreativeTabForestry(3, "arboriculture");
 		}
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-			Tabs.tabLepidopterology = new CreativeTabForestry(4, "lepidopterology");
+			ItemGroups.tabLepidopterology = new CreativeTabForestry(4, "lepidopterology");
 		}
 	}
 

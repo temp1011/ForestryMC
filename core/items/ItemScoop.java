@@ -13,14 +13,14 @@ package forestry.core.items;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.core.IToolScoop;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 
 public class ItemScoop extends ItemForestryTool implements IToolScoop {
 	public ItemScoop() {
 		super(ItemStack.EMPTY);
 		setEfficiencyOnProperMaterial(2.0f);
 		setMaxDamage(10);
-		setCreativeTab(Tabs.tabApiculture);
+		setCreativeTab(ItemGroups.tabApiculture);
 		setMaxStackSize(1);
 	}
 }

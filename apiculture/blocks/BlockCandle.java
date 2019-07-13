@@ -32,7 +32,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.EnumProperty;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
@@ -47,7 +46,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.tiles.TileUtil;
@@ -108,7 +107,7 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 	public BlockCandle() {
 		this.setHardness(0.0F);
 		this.setSoundType(SoundType.WOOD);
-		setCreativeTab(Tabs.tabApiculture);
+		setCreativeTab(ItemGroups.tabApiculture);
 		setDefaultState(this.blockState.getBaseState().with(FACING, Direction.UP).with(STATE, State.OFF));
 	}
 

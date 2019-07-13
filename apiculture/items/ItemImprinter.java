@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.apiculture.gui.ContainerImprinter;
 import forestry.apiculture.gui.GuiImprinter;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
@@ -27,7 +27,7 @@ import forestry.core.items.ItemWithGui;
 
 public class ItemImprinter extends ItemWithGui {
 	public ItemImprinter() {
-		setCreativeTab(Tabs.tabApiculture);
+		setCreativeTab(ItemGroups.tabApiculture);
 	}
 
 	@Override
