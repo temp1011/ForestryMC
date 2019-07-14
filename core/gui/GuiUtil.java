@@ -14,9 +14,9 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.ScaledResolution;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.item.ItemStack;
@@ -44,7 +44,7 @@ public class GuiUtil {
 			font = fontRenderer;
 		}
 
-		ItemRenderer itemRender = Minecraft.getInstance().getRenderItem();
+		ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
 		itemRender.renderItemAndEffectIntoGUI(stack, xPos, yPos);
 		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, null);
 	}
@@ -54,10 +54,10 @@ public class GuiUtil {
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();
 			if (provider == null || provider.isRelativeToGui()) {
-				GlStateManager.translate(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
+				GlStateManager.translatef(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
 			}
-			ScaledResolution scaledresolution = new ScaledResolution(gui.getMC());
-			GuiUtils.drawHoveringText(lines, mouseX, mouseY, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), -1, gui.getMC().fontRenderer);
+			MainWindow window = Minecraft.getInstance().mainWindow;	//TODO - more resolution stuff to check
+			GuiUtils.drawHoveringText(lines, mouseX, mouseY, window.getScaledWidth(), window.getScaledHeight(), -1, gui.getMC().fontRenderer);
 			GlStateManager.popMatrix();
 		}
 	}

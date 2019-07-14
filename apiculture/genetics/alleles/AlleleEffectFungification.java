@@ -6,9 +6,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MushroomBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.passive.MooshroomEntity;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleType;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -108,12 +110,12 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		}
 		World world = cow.world;
 		cow.setDead();
-		MooshroomEntity mooshroom = new MooshroomEntity(world);
+		MooshroomEntity mooshroom = new MooshroomEntity(EntityType.MOOSHROOM, world);
 		mooshroom.setLocationAndAngles(cow.posX, cow.posY, cow.posZ, cow.rotationYaw, cow.rotationPitch);
 		mooshroom.setHealth(cow.getHealth());
 		mooshroom.renderYawOffset = cow.renderYawOffset;
-		world.spawnEntity(mooshroom);
-		world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, cow.posX, cow.posY + cow.height / 2.0F, cow.posZ, 0.0D, 0.0D, 0.0D);
+		world.addEntity(mooshroom);
+		world.addParticle(ParticleTypes.EXPLOSION, cow.posX, cow.posY + cow.height / 2.0F, cow.posZ, 0.0D, 0.0D, 0.0D);
 		return true;
 	}
 }

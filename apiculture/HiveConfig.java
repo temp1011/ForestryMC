@@ -10,8 +10,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.core.config.LocalizedConfiguration;

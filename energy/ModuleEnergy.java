@@ -14,8 +14,6 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraftforge.fml.common.SidedProxy;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
@@ -28,7 +26,8 @@ import forestry.modules.ForestryModuleUids;
 public class ModuleEnergy extends BlankForestryModule {
 
 	@SuppressWarnings("NullableProblems")
-	@SidedProxy(clientSide = "forestry.energy.proxy.ProxyEnergyClient", serverSide = "forestry.energy.proxy.ProxyEnergy")
+//	@SidedProxy(clientSide = "forestry.energy.proxy.ProxyEnergyClient", serverSide = "forestry.energy.proxy.ProxyEnergy")
+	//TODO - DistExecutor
 	public static ProxyEnergy proxy;
 
 	@Nullable

@@ -15,22 +15,25 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
@@ -54,13 +57,13 @@ public class ModuleFluids extends BlankForestryModule {
 	private static void createFluid(Fluids fluidDefinition) {
 		if (fluidDefinition.getFluid() == null && Config.isFluidEnabled(fluidDefinition)) {
 			String fluidName = fluidDefinition.getTag();
-			if (!FluidRegistry.isFluidRegistered(fluidName)) {
+			if (false){//!FluidRegistry.isFluidRegistered(fluidName)) { TODO fluids
 				ResourceLocation[] resources = fluidDefinition.getResources();
 				Fluid fluid = new Fluid(fluidName, resources[0], fluidDefinition.flowTextureExists() ? resources[1] : resources[0]);
 				fluid.setDensity(fluidDefinition.getDensity());
 				fluid.setViscosity(fluidDefinition.getViscosity());
 				fluid.setTemperature(fluidDefinition.getTemperature());
-				FluidRegistry.registerFluid(fluid);
+//				FluidRegistry.registerFluid(fluid);
 				createBlock(fluidDefinition);
 			}
 		}
@@ -76,17 +79,17 @@ public class ModuleFluids extends BlankForestryModule {
 				fluidBlock = forestryFluid.makeBlock();
 				if (fluidBlock != null) {
 					String name = "fluid." + forestryFluid.getTag();
-					fluidBlock.setTranslationKey("forestry." + name);
+//					fluidBlock.setTranslationKey("forestry." + name); TODO done by registry name?
 					fluidBlock.setRegistryName(name);
 					ForgeRegistries.BLOCKS.register(fluidBlock);
 
-					BlockItem itemBlock = new BlockItem(fluidBlock);
+					BlockItem itemBlock = new BlockItem(fluidBlock, new Item.Properties());
 					itemBlock.setRegistryName(name);
 					ForgeRegistries.ITEMS.register(itemBlock);
 
 					Proxies.render.registerFluidStateMapper(fluidBlock, forestryFluid);
 					if (forestryFluid.getOtherContainers().isEmpty()) {
-						FluidRegistry.addBucketForFluid(fluid);
+//						FluidRegistry.addBucketForFluid(fluid);
 					}
 				}
 			} else {
@@ -144,6 +147,7 @@ public class ModuleFluids extends BlankForestryModule {
 		}
 	}
 
+	//TODO - register event handler
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void registerTextures(TextureStitchEvent.Pre event) {
@@ -151,8 +155,9 @@ public class ModuleFluids extends BlankForestryModule {
 		for (Fluids fluids : Fluids.values()) {
 			Fluid fluid = fluids.getFluid();
 			if (fluid != null) {
-				map.registerSprite(fluid.getStill());
-				map.registerSprite(fluid.getFlowing());
+				//TODO fluid textures
+//				map.registerSprite(fluid.getStill());
+//				map.registerSprite(fluid.getFlowing());
 			}
 		}
 	}

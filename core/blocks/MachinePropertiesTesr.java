@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -13,12 +14,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ForgeHooksClient;
 
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+
 import forestry.core.tiles.TileForestry;
 
 public class MachinePropertiesTesr<T extends TileForestry> extends MachineProperties<T> implements IMachinePropertiesTesr<T> {
 	@Nullable
 	@OnlyIn(Dist.CLIENT)
-	private TileEntitySpecialRenderer<? super T> renderer;
+	private TileEntityRenderer<? super T> renderer;
 
 	private final String particleTextureLocation;
 	private final boolean isFullCube;
@@ -44,7 +47,7 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void setRenderer(TileEntitySpecialRenderer<? super T> renderer) {
+	public void setRenderer(TileEntityRenderer<? super T> renderer) {
 		this.renderer = renderer;
 	}
 
@@ -53,11 +56,12 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	public void registerTileEntity() {
 		super.registerTileEntity();
 		Block block = getBlock();
-		if (FMLCommonHandler.instance().getSide() == Dist.CLIENT && renderer != null && block != null) {
+		if (FMLEnvironment.dist == Dist.CLIENT && renderer != null && block != null) {
 			ClientRegistry.bindTileEntitySpecialRenderer(getTeClass(), renderer);
 			Item item = Item.getItemFromBlock(block);
 			if (item != Items.AIR) {
-				ForgeHooksClient.registerTESRItemStack(item, 0, getTeClass());
+				//TODO - how to register
+//				ForgeHooksClient.registerTESRItemStack(item, 0, getTeClass());
 			}
 		}
 	}

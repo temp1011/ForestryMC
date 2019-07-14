@@ -10,32 +10,26 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Collection;
 
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import net.minecraftforge.fml.common.Optional;
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
@@ -54,9 +48,10 @@ import forestry.factory.gui.ContainerFermenter;
 import forestry.factory.gui.GuiFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.recipes.FermenterRecipeManager;
-import forestry.factory.triggers.FactoryTriggers;
 
-import buildcraft.api.statements.ITriggerExternal;
+//import net.minecraftforge.fml.common.Optional;
+
+//import buildcraft.api.statements.ITriggerExternal;
 
 public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank resourceTank;
@@ -87,30 +82,30 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
+	public CompoundNBT writeToNBT(CompoundNBT compoundNBT) {
+		compoundNBT = super.writeToNBT(compoundNBT);
 
-		CompoundNBT.setInteger("FermentationTime", fermentationTime);
-		CompoundNBT.setInteger("FermentationTotalTime", fermentationTotalTime);
-		CompoundNBT.setInteger("FuelBurnTime", fuelBurnTime);
-		CompoundNBT.setInteger("FuelTotalTime", fuelTotalTime);
-		CompoundNBT.setInteger("FuelCurrentFerment", fuelCurrentFerment);
+		compoundNBT.putInt("FermentationTime", fermentationTime);
+		compoundNBT.putInt("FermentationTotalTime", fermentationTotalTime);
+		compoundNBT.putInt("FuelBurnTime", fuelBurnTime);
+		compoundNBT.putInt("FuelTotalTime", fuelTotalTime);
+		compoundNBT.putInt("FuelCurrentFerment", fuelCurrentFerment);
 
-		tankManager.writeToNBT(CompoundNBT);
-		return CompoundNBT;
+		tankManager.writeToNBT(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
+	public void readFromNBT(CompoundNBT compoundNBT) {
+		super.readFromNBT(compoundNBT);
 
-		fermentationTime = CompoundNBT.getInteger("FermentationTime");
-		fermentationTotalTime = CompoundNBT.getInteger("FermentationTotalTime");
-		fuelBurnTime = CompoundNBT.getInteger("FuelBurnTime");
-		fuelTotalTime = CompoundNBT.getInteger("FuelTotalTime");
-		fuelCurrentFerment = CompoundNBT.getInteger("FuelCurrentFerment");
+		fermentationTime = compoundNBT.getInt("FermentationTime");
+		fermentationTotalTime = compoundNBT.getInt("FermentationTotalTime");
+		fuelBurnTime = compoundNBT.getInt("FuelBurnTime");
+		fuelTotalTime = compoundNBT.getInt("FuelTotalTime");
+		fuelCurrentFerment = compoundNBT.getInt("FuelCurrentFerment");
 
-		tankManager.readFromNBT(CompoundNBT);
+		tankManager.readFromNBT(compoundNBT);
 	}
 
 	@Override
@@ -316,13 +311,13 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-		super.addExternalTriggers(triggers, side, tile);
-		triggers.add(FactoryTriggers.lowResource25);
-		triggers.add(FactoryTriggers.lowResource10);
-	}
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+	//		super.addExternalTriggers(triggers, side, tile);
+	//		triggers.add(FactoryTriggers.lowResource25);
+	//		triggers.add(FactoryTriggers.lowResource10);
+	//	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
@@ -336,15 +331,9 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
 		return super.getCapability(capability, facing);
 	}
