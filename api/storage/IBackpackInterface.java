@@ -11,7 +11,6 @@ import java.util.function.Predicate;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;

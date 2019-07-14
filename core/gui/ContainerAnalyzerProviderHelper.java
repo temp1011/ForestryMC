@@ -17,7 +17,7 @@ import forestry.core.gui.slots.SlotAnalyzer;
 import forestry.core.gui.slots.SlotLockable;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.GeneticsUtil;
-import forestry.database.inventory.InventoryDatabaseAnalyzer;
+//import forestry.database.inventory.InventoryDatabaseAnalyzer;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
@@ -41,7 +41,7 @@ public class ContainerAnalyzerProviderHelper {
 			}
 			analyzerIndex = i;
 			alyzerInventory = new ItemInventoryAlyzer(playerInventory.player, stack);
-			Slot slot = container.getSlotFromInventory(playerInventory, i);
+			Slot slot = container.getSlot(i);	//TODO - probably not right
 			if (slot instanceof SlotLockable) {
 				SlotLockable lockable = (SlotLockable) slot;
 				lockable.lock();
@@ -52,7 +52,7 @@ public class ContainerAnalyzerProviderHelper {
 		this.alyzerInventory = alyzerInventory;
 
 		if (alyzerInventory != null) {
-			container.addSlotToContainer(new SlotAnalyzer(alyzerInventory, ItemInventoryAlyzer.SLOT_ENERGY, -110, 20));
+			container.addSlot(new SlotAnalyzer(alyzerInventory, ItemInventoryAlyzer.SLOT_ENERGY, -110, 20));
 		}
 	}
 
@@ -61,7 +61,7 @@ public class ContainerAnalyzerProviderHelper {
 		if (alyzerInventory == null) {
 			return null;
 		}
-		return container.getSlotFromInventory(alyzerInventory, 0);
+		return container.getSlot(0);	//TODO - not sure about this
 	}
 
 	public void analyzeSpecimen(int selectedSlot) {
@@ -92,7 +92,7 @@ public class ContainerAnalyzerProviderHelper {
 		// Analyze if necessary
 		if (individual != null && !individual.isAnalyzed()) {
 			final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
-			ItemStack energyStack = alyzerInventory.getStackInSlot(InventoryDatabaseAnalyzer.SLOT_ENERGY);
+			ItemStack energyStack = ItemStack.EMPTY;//alyzerInventory.getStackInSlot(InventoryDatabaseAnalyzer.SLOT_ENERGY);
 			if (requiresEnergy && !ItemInventoryAlyzer.isAlyzingFuel(energyStack)) {
 				return;
 			}
@@ -105,11 +105,12 @@ public class ContainerAnalyzerProviderHelper {
 				CompoundNBT CompoundNBT = new CompoundNBT();
 				individual.writeToNBT(CompoundNBT);
 				specimen = specimen.copy();
-				specimen.setTagCompound(CompoundNBT);
+				specimen.setTag(CompoundNBT);
 
 				if (requiresEnergy) {
 					// Decrease energy
-					alyzerInventory.decrStackSize(InventoryDatabaseAnalyzer.SLOT_ENERGY, 1);
+					//TODO energy
+//					alyzerInventory.decrStackSize(InventoryDatabaseAnalyzer.SLOT_ENERGY, 1);
 				}
 			}
 			specimenSlot.putStack(specimen);

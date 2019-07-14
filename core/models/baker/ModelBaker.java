@@ -16,11 +16,13 @@ import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.BlockFaceUV;
 import net.minecraft.client.renderer.model.BlockPartFace;
 import net.minecraft.client.renderer.model.FaceBakery;
 import net.minecraft.client.renderer.model.ModelRotation;
+import net.minecraft.client.renderer.texture.MissingTextureSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -32,7 +34,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.models.ModelManager;
 
-import org.lwjgl.util.vector.Vector3f;
 
 /**
  * A model baker to make custom block models with more than one texture layer.
@@ -62,7 +63,7 @@ public final class ModelBaker {
 			World world = Minecraft.getInstance().world;
 			BlockState state = world.getBlockState(pos);
 			for (Direction facing : Direction.VALUES) {
-				if (state.shouldSideBeRendered(world, pos, facing)) {
+				if (state.doesSideBlockRendering(world, pos, facing)) {
 					addFace(facing, textures[facing.ordinal()]);
 				}
 			}
@@ -80,7 +81,7 @@ public final class ModelBaker {
 	}
 
 	public void addFace(Direction facing, TextureAtlasSprite sprite) {
-		if (sprite != Minecraft.getInstance().getTextureMapBlocks().missingImage) {
+		if (!(sprite instanceof MissingTextureSprite)){//sprite != MissingTextureSprite) { TODO - still not sure where this is
 			faces.add(new ModelBakerFace(facing, colorIndex, sprite));
 		}
 	}
@@ -97,7 +98,7 @@ public final class ModelBaker {
 			BlockFaceUV uvFace = new BlockFaceUV(UVS, 0);
 			BlockPartFace partFace = new BlockPartFace(facing, face.colorIndex, "", uvFace);
 			BakedQuad quad = FACE_BAKERY.makeBakedQuad(POS_FROM, POS_TO, partFace, face.spite, facing, modelRotation,
-				null, true, true);
+				null, true);//TODO shading, true);
 
 			currentModel.addQuad(facing, quad);
 		}

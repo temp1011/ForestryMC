@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import net.minecraft.item.Food;
 import net.minecraft.item.UseAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 
 
@@ -23,7 +23,7 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 
-public class ItemForestryFood extends ItemFood implements IItemModelRegister {
+public class ItemForestryFood extends Item/*Food*/ implements IItemModelRegister {
 
 	private boolean isDrink = false;
 
@@ -32,12 +32,20 @@ public class ItemForestryFood extends ItemFood implements IItemModelRegister {
 	}
 
 	public ItemForestryFood(int heal, float saturation) {
-		super(heal, saturation, false);
-		setCreativeTab(CreativeTabForestry.tabForestry);
+		this(heal, saturation, new Item.Properties());
+	}
+
+	public ItemForestryFood(int heal, float saturation, Item.Properties properties) {
+		super(properties
+		.group(CreativeTabForestry.tabForestry)
+		.food((new Food.Builder())
+				.hunger(heal)
+				.saturation(saturation)
+				.build()));
 	}
 
 	@Override
-	public UseAction getItemUseAction(ItemStack itemstack) {
+	public UseAction getUseAction(ItemStack itemstack) {
 		if (isDrink) {
 			return UseAction.DRINK;
 		} else {

@@ -166,7 +166,7 @@ public class BlockBogEarth extends Block implements IItemModelRegister {
 	//		return 0;
 	//	}
 
-	//	public ItemStack get(SoilType soilType, int amount) {
-	//		return new ItemStack(this, amount, soilType.ordinal());
-	//	}
+		public ItemStack get(SoilType soilType, int amount) {	//TODO- check
+			return new ItemStack(this.getStateContainer().getBaseState().with(MATURITY, soilType.ordinal()).getBlock(), amount);
+		}
 }

@@ -20,33 +20,37 @@ import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import forestry.core.items.DrinkProperties;
 import forestry.core.render.ForestryResource;
 
+//TODO - fluids
 public enum Fluids {
 
 	BIO_ETHANOL(new Color(255, 111, 0), 790, 1000) {
 		@Override
 		public Block makeBlock() {
-			return new BlockForestryFluid(this, 300, true);
+			//			return new BlockForestryFluid(this, 300, true);
+			return Blocks.DIRT;
 		}
 	},
 	BIOMASS(new Color(100, 132, 41), 400, 6560) {
 		@Override
 		public Block makeBlock() {
-			return new BlockForestryFluid(this, 100, true);
+			return Blocks.DIRT;
+			//			return new BlockForestryFluid(this, 100, true);
 		}
 	},
 	GLASS(new Color(164, 164, 164), 2400, 10000) {
@@ -57,13 +61,15 @@ public enum Fluids {
 
 		@Override
 		public Block makeBlock() {
-			return new BlockForestryFluid(this, 0, true);
+			return Blocks.DIRT;
+			//			return new BlockForestryFluid(this, 0, true);
 		}
 	},
 	FOR_HONEY(new Color(255, 196, 35), 1420, 75600) {
 		@Override
 		public Block makeBlock() {
-			return new BlockForestryFluid(this);
+			return Blocks.DIRT;
+			//			return new BlockForestryFluid(this);
 		}
 
 		@Override
@@ -79,13 +85,15 @@ public enum Fluids {
 
 		@Override
 		public Block makeBlock() {
-			return new BlockForestryFluid(this);
+			return Blocks.DIRT;
+			//			return new BlockForestryFluid(this);
 		}
 	},
 	JUICE(new Color(168, 201, 114)) {
 		@Override
 		public Block makeBlock() {
-			return new BlockForestryFluid(this);
+			return Blocks.DIRT;
+			//			return new BlockForestryFluid(this);
 		}
 
 		@Override
@@ -96,27 +104,30 @@ public enum Fluids {
 	MILK(new Color(255, 255, 255), 1030, 3000) {
 		@Override
 		public Block makeBlock() {
-			return new BlockForestryFluid(this);
+			return Blocks.DIRT;
+			//			return new BlockForestryFluid(this);
 		}
 
 
 		@Override
 		public List<ItemStack> getOtherContainers() {
 			return Collections.singletonList(
-				new ItemStack(Items.MILK_BUCKET)
+					new ItemStack(Items.MILK_BUCKET)
 			);
 		}
 	},
 	SEED_OIL(new Color(255, 255, 168), 885, 5000) {
 		@Override
 		public Block makeBlock() {
-			return new BlockForestryFluid(this, 2, true);
+			return Blocks.DIRT;
+			//			return new BlockForestryFluid(this, 2, true);
 		}
 	},
 	SHORT_MEAD(new Color(239, 154, 56), 1000, 1200) {
 		@Override
 		public Block makeBlock() {
-			return new BlockForestryFluid(this, 4, true);
+			return Blocks.DIRT;
+			//			return new BlockForestryFluid(this, 4, true);
 		}
 
 		@Override
@@ -175,12 +186,14 @@ public enum Fluids {
 
 	@Nullable
 	public final Fluid getFluid() {
-		return FluidRegistry.getFluid(getTag());
+		return null;
+		//return FluidRegistry.getFluid(getTag());
 	}
 
 	@Nullable
 	public final FluidStack getFluid(int mb) {
-		return FluidRegistry.getFluidStack(getTag(), mb);
+		return null;
+		//return FluidRegistry.getFluidStack(getTag(), mb);
 	}
 
 	public final Color getParticleColor() {
@@ -238,13 +251,13 @@ public enum Fluids {
 	}
 
 	public boolean flowTextureExists() {
-		if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
+		if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
 			return true;
 		}
 		try {
 			ResourceLocation resourceLocation = new ForestryResource("blocks/liquid/" + getTag() + "_flow");
 			Minecraft minecraft = Minecraft.getInstance();
-			if (minecraft != null) {
+			if (minecraft != null) {    //TODO - is it correct
 				IResourceManager resourceManager = minecraft.getResourceManager();
 				return resourceManager.getResource(resourceLocation) != null;
 			}

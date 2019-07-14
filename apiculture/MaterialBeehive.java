@@ -17,12 +17,13 @@ public class MaterialBeehive {
 
 	//TODO - need AT for several material builder methods
 	public static final Material BEEHIVE_WORLD = (new Material.Builder(MaterialColor.STONE)).build();
-	public MaterialBeehive(boolean noHarvest) {
-		super(MaterialColor.STONE);
-		if (noHarvest) {
-			this.setRequiresTool();
-		}
-		setImmovableMobility();
+	public static final Material BEEHIVE_ALVEARY = (new Material.Builder(MaterialColor.STONE)).build();
+	private MaterialBeehive(boolean noHarvest) {
+//		super(MaterialColor.STONE);
+//		if (noHarvest) {
+//			this.setRequiresTool();
+//		}
+//		setImmovableMobility();
 	}
 
 }

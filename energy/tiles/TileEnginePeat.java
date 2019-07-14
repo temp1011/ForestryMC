@@ -27,7 +27,7 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-import net.minecraftforge.fml.common.Optional;
+//import net.minecraftforge.fml.common.Optional;
 
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -49,7 +49,7 @@ import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
 import forestry.factory.triggers.FactoryTriggers;
 
-import buildcraft.api.statements.ITriggerExternal;
+//import buildcraft.api.statements.ITriggerExternal;
 
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private ItemStack fuel = ItemStack.EMPTY;
@@ -126,7 +126,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 			if (isRedstoneActivated()) {
 				currentOutput = determineFuelValue(fuel);
 				energyManager.generateEnergy(currentOutput);
-				world.updateComparatorOutputLevel(pos, getBlockType());
+				world.updateComparatorOutputLevel(pos, getBlockState().getBlock());	//TODO - I thuink
 			}
 		} else if (isRedstoneActivated()) {
 			int fuelSlot = getFuelSlot();
@@ -238,7 +238,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		IItemHandler wasteItemHandler = new InvWrapper(wasteInventory);
 
 		if (!InventoryUtil.moveOneItemToPipe(wasteItemHandler, getTileCache())) {
-			Direction powerSide = world.getBlockState(getPos()).getValue(BlockBase.FACING);
+			Direction powerSide = world.getBlockState(getPos()).get(BlockBase.FACING);
 			Collection<IItemHandler> inventories = inventoryCache.getAdjacentInventoriesOtherThan(powerSide);
 			InventoryUtil.moveItemStack(wasteItemHandler, inventories);
 		}
@@ -272,34 +272,34 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	// / LOADING AND SAVING
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
+	public void readFromNBT(CompoundNBT compoundNBT) {
+		super.readFromNBT(compoundNBT);
 
-		if (CompoundNBT.hasKey("EngineFuelItemStack")) {
-			CompoundNBT fuelItemNbt = CompoundNBT.getCompoundNBT("EngineFuelItemStack");
-			fuel = new ItemStack(fuelItemNbt);
+		if (compoundNBT.contains("EngineFuelItemStack")) {
+			CompoundNBT fuelItemNbt = compoundNBT.getCompound("EngineFuelItemStack");
+			fuel = ItemStack.read(fuelItemNbt);
 		}
 
-		burnTime = CompoundNBT.getInteger("EngineBurnTime");
-		totalBurnTime = CompoundNBT.getInteger("EngineTotalTime");
-		if (CompoundNBT.hasKey("AshProduction")) {
-			ashProduction = CompoundNBT.getInteger("AshProduction");
+		burnTime = compoundNBT.getInt("EngineBurnTime");
+		totalBurnTime = compoundNBT.getInt("EngineTotalTime");
+		if (compoundNBT.contains("AshProduction")) {
+			ashProduction = compoundNBT.getInt("AshProduction");
 		}
 	}
 
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
+	public CompoundNBT writeToNBT(CompoundNBT compoundNBT) {
+		compoundNBT = super.writeToNBT(compoundNBT);
 
 		if (!fuel.isEmpty()) {
-			CompoundNBT.setTag("EngineFuelItemStack", fuel.serializeNBT());
+			compoundNBT.put("EngineFuelItemStack", fuel.serializeNBT());
 		}
 
-		CompoundNBT.setInteger("EngineBurnTime", burnTime);
-		CompoundNBT.setInteger("EngineTotalTime", totalBurnTime);
-		CompoundNBT.setInteger("AshProduction", ashProduction);
-		return CompoundNBT;
+		compoundNBT.putInt("EngineBurnTime", burnTime);
+		compoundNBT.putInt("EngineTotalTime", totalBurnTime);
+		compoundNBT.putInt("AshProduction", ashProduction);
+		return compoundNBT;
 	}
 
 	@Override
@@ -317,13 +317,13 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	}
 
 	/* ITriggerProvider */
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-		super.addExternalTriggers(triggers, side, tile);
-		triggers.add(FactoryTriggers.lowFuel25);
-		triggers.add(FactoryTriggers.lowFuel10);
-	}
+//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+//	@Override
+//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+//		super.addExternalTriggers(triggers, side, tile);
+//		triggers.add(FactoryTriggers.lowFuel25);
+//		triggers.add(FactoryTriggers.lowFuel10);
+//	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)

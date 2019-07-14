@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -27,11 +28,12 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.property.IExtendedBlockState;
+//import net.minecraftforge.common.property.IExtendedBlockState;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -61,11 +63,11 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 	protected IBakedModel bakeModel(BlockState state, K key, B block) {
 		ModelBaker baker = new ModelBaker();
 
-		if (state instanceof IExtendedBlockState) {
-			IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-			IBlockReader world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
-			BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
-		}
+//		if (state instanceof IExtendedBlockState) {
+//			IExtendedBlockState stateExtended = (IExtendedBlockState) state;
+//			IBlockReader world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
+//			BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
+//		}
 
 		bakeBlock(block, key, baker, false);
 
@@ -97,7 +99,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		Preconditions.checkNotNull(state);
 		IBakedModel model = getModel(state);
 		return model.getQuads(state, side, rand);
@@ -129,7 +131,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		if (blockModel != null) {
 			return blockModel.getParticleTexture();
 		}
-		return Minecraft.getInstance().getTextureMapBlocks().getMissingSprite();
+		return Minecraft.getInstance().getTextureMap().getAtlasSprite("error");	//TODO - where is missing texture stored
 	}
 
 	@Override
@@ -160,11 +162,11 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
 	private class DefaultItemOverrideList extends ItemOverrideList {
 		public DefaultItemOverrideList() {
-			super(Collections.emptyList());
+			super();
 		}
 
 		@Override
-		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+		public IBakedModel getModelWithOverrides(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
 			if (world == null) {
 				world = Minecraft.getInstance().world;
 			}

@@ -40,8 +40,8 @@ public class ItemForestryTool extends ItemForestry {
 	private final ItemStack remnants;
 	private float efficiencyOnProperMaterial;
 
-	public ItemForestryTool(ItemStack remnants) {
-		super((new Item.Properties())
+	public ItemForestryTool(ItemStack remnants, Item.Properties properties) {
+		super((properties)
 		.maxStackSize(1)
 		.maxDamage(200));
 		efficiencyOnProperMaterial = 6F;
@@ -49,6 +49,10 @@ public class ItemForestryTool extends ItemForestry {
 		if (!remnants.isEmpty()) {
 			MinecraftForge.EVENT_BUS.register(this);
 		}
+	}
+
+	public ItemForestryTool(ItemStack remnants) {
+		this(remnants, new Item.Properties());
 	}
 
 	public void setEfficiencyOnProperMaterial(float efficiencyOnProperMaterial) {

@@ -13,6 +13,8 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 
@@ -33,8 +35,8 @@ public class ItemTooltipUtil {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static void addShiftInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-		tooltip.add(TextFormatting.ITALIC.toString() + '<' + Translator.translateToLocal("for.gui.tooltip.tmi") + '>');
+	public static void addShiftInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+		tooltip.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle(new Style().setItalic(true)));
 	}
 
 	@OnlyIn(Dist.CLIENT)

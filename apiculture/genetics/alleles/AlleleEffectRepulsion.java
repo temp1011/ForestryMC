@@ -12,7 +12,7 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
-import net.minecraft.entity.ai.goal.GoalSelector.EntityAITaskEntry;
+//import net.minecraft.entity.ai.goal.GoalSelector.EntityAITaskEntry;
 import net.minecraft.entity.monster.MonsterEntity;
 
 import forestry.api.apiculture.IBeeGenome;
@@ -31,8 +31,8 @@ public class AlleleEffectRepulsion extends AlleleEffectThrottled {
 		List<MonsterEntity> mobs = getEntitiesInRange(genome, housing, MonsterEntity.class);
 		for (MonsterEntity mob : mobs) {
 			if (!isMobAvoidingPlayers(mob)) {
-				mob.tasks.addTask(3, new AIAvoidPlayers(mob, 6.0f, 0.25f, 0.3f));
-				mob.tasks.onUpdateTasks();
+				mob.goalSelector.addGoal(3, new AIAvoidPlayers(mob, 6.0f, 0.25f, 0.3f));
+				mob.goalSelector.tick();	//TODO - I think
 			}
 		}
 
@@ -40,12 +40,13 @@ public class AlleleEffectRepulsion extends AlleleEffectThrottled {
 	}
 
 	private boolean isMobAvoidingPlayers(MonsterEntity mob) {
-		for (Object objT : mob.tasks.taskEntries) {
-			EntityAITaskEntry task = (EntityAITaskEntry) objT;
-			if (task.action instanceof AIAvoidPlayers) {
-				return true;
-			}
-		}
+		mob.goalSelector.getRunningGoals().forEach(g ->  {
+			//TODO - hmm
+//			EntityAITaskEntry task = (EntityAITaskEntry) g;
+//			if (g instanceof AIAvoidPlayers) {
+//				return true;
+//			}
+		});
 		return false;
 	}
 }

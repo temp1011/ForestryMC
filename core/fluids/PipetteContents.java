@@ -14,6 +14,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -25,7 +27,7 @@ public class PipetteContents {
 
 	@Nullable
 	public static PipetteContents create(ItemStack itemStack) {
-		FluidStack contents = FluidUtil.getFluidContained(itemStack);
+		FluidStack contents = FluidUtil.getFluidContained(itemStack).orElse(null);
 		if (contents == null) {
 			return null;
 		}
@@ -44,9 +46,9 @@ public class PipetteContents {
 		return contents.amount >= Fluid.BUCKET_VOLUME;
 	}
 
-	public void addTooltip(List<String> list) {
-		String descr = contents.getFluid().getLocalizedName(contents);
-		descr += " (" + contents.amount + " mb)";
+	public void addTooltip(List<ITextComponent> list) {
+		ITextComponent descr = new TranslationTextComponent(contents.getFluid().getUnlocalizedName(contents));
+		descr.appendText(" (" + contents.amount + " mb)");
 
 		list.add(descr);
 	}

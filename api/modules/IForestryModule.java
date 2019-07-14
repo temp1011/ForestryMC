@@ -9,8 +9,9 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
-import net.minecraft.command.ICommand;
 import net.minecraft.util.ResourceLocation;
+
+import com.mojang.brigadier.Command;
 
 /**
  * Defines a Forestry module.
@@ -90,7 +91,7 @@ public interface IForestryModule {
 	}
 
 	@Nullable
-	default ICommand[] getConsoleCommands() {
+	default Command[] getConsoleCommands() {
 		return null;
 	}
 }

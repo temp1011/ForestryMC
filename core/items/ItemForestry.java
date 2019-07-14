@@ -36,6 +36,10 @@ public class ItemForestry extends Item implements IItemModelRegister {
 		super(properties.group(CreativeTabForestry.tabForestry));
 	}
 
+	public ItemForestry() {
+		this(new Item.Properties());
+	}
+
 	public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {
 		super(properties.group(creativeTab));
 	}

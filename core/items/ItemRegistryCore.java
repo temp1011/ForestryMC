@@ -10,9 +10,12 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.oredict.OreDictionary;
+//import net.minecraftforge.oredict.OreDictionary;
+
+import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.ItemGroups;
 import forestry.core.circuits.ItemCircuitBoard;
@@ -97,7 +100,7 @@ public class ItemRegistryCore extends ItemRegistry {
 		fertilizerCompound = registerItem(new ItemFertilizer(), "fertilizer_compound");
 
 		apatite = registerItem(new ItemForestry(), "apatite");
-		OreDictionary.registerOre(OreDictUtil.GEM_APATITE, apatite);
+//		OreDictionary.registerOre(OreDictUtil.GEM_APATITE, apatite);
 
 		researchNote = registerItem(new ItemResearchNote(), "research_note");
 
@@ -121,19 +124,19 @@ public class ItemRegistryCore extends ItemRegistry {
 
 		peat = new ItemForestry() {
 			@Override
-			public int getItemBurnTime(ItemStack itemStack) {
+			public int getBurnTime(ItemStack itemStack) {
 				return 2000;
 			}
 		};
 		registerItem(peat, "peat");
-		OreDictionary.registerOre(OreDictUtil.BRICK_PEAT, peat);
+//		OreDictionary.registerOre(OreDictUtil.BRICK_PEAT, peat);
 
 		ash = registerItem(new ItemForestry(), "ash");
-		OreDictionary.registerOre(OreDictUtil.DUST_ASH, ash);
+//		OreDictionary.registerOre(OreDictUtil.DUST_ASH, ash);
 
 		bituminousPeat = new ItemForestry() {
 			@Override
-			public int getItemBurnTime(ItemStack itemStack) {
+			public int getBurnTime(ItemStack itemStack) {
 				return 4200;
 			}
 		};
@@ -145,8 +148,8 @@ public class ItemRegistryCore extends ItemRegistry {
 
 		circuitboards = registerItem(new ItemCircuitBoard(), "chipsets");
 
-		solderingIron = new ItemSolderingIron();
-		solderingIron.setMaxDamage(5).setFull3D();
+		solderingIron = new ItemSolderingIron((new Item.Properties()).maxDamage(5));
+//		solderingIron.setFull3D(); TODO
 		registerItem(solderingIron, "soldering_iron");
 
 		tubes = registerItem(new ItemElectronTube(), "thermionic_tubes");
@@ -157,19 +160,17 @@ public class ItemRegistryCore extends ItemRegistry {
 		// / CRAFTING CARPENTER
 		stickImpregnated = registerItem(new ItemForestry(), "oak_stick");
 		woodPulp = registerItem(new ItemForestry(), "wood_pulp");
-		OreDictionary.registerOre(OreDictUtil.PULP_WOOD, woodPulp);
+//		OreDictionary.registerOre(OreDictUtil.PULP_WOOD, woodPulp);
 
 		// / RECLAMATION
 		brokenBronzePickaxe = registerItem(new ItemForestry(), "broken_bronze_pickaxe");
 		brokenBronzeShovel = registerItem(new ItemForestry(), "broken_bronze_shovel");
 
 		// / TOOLS
-		bronzePickaxe = new ItemForestryTool(new ItemStack(brokenBronzePickaxe));
-		bronzePickaxe.setHarvestLevel("pickaxe", 3);
+		bronzePickaxe = new ItemForestryTool(new ItemStack(brokenBronzePickaxe), (new Item.Properties()).addToolType(ToolType.PICKAXE, 3));
 		registerItem(bronzePickaxe, "bronze_pickaxe");
 
-		bronzeShovel = new ItemForestryTool(new ItemStack(brokenBronzeShovel));
-		bronzeShovel.setHarvestLevel("shovel", 3);
+		bronzeShovel = new ItemForestryTool(new ItemStack(brokenBronzeShovel), (new Item.Properties()).addToolType(ToolType.SHOVEL, 3));
 		registerItem(bronzeShovel, "bronze_shovel");
 
 		// / ASSEMBLY KITS
@@ -190,20 +191,21 @@ public class ItemRegistryCore extends ItemRegistry {
 		phosphor = registerItem(new ItemForestry(), "phosphor");
 
 		// / BEE RESOURCES
-		beeswax = registerItem(new ItemForestry(), "beeswax");
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			beeswax.setCreativeTab(ItemGroups.tabApiculture);
+			beeswax = registerItem(new ItemForestry(new Item.Properties(), ItemGroups.tabApiculture), "beeswax");
+		} else {
+			beeswax = registerItem(new ItemForestry(), "beeswax");
 		}
-		OreDictionary.registerOre(OreDictUtil.ITEM_BEESWAX, beeswax);
+//		OreDictionary.registerOre(OreDictUtil.ITEM_BEESWAX, beeswax);
 
 		refractoryWax = registerItem(new ItemForestry(), "refractory_wax");
 
 		// FRUITS
 		fruits = registerItem(new ItemFruit(), "fruits");
 		for (ItemFruit.EnumFruit def : ItemFruit.EnumFruit.values()) {
-			ItemStack fruit = new ItemStack(fruits, 1, def.ordinal());
-			OreDictionary.registerOre(def.getOreDict(), fruit);
-			OreDictionary.registerOre(OreDictUtil.FRUIT_FORESTRY, fruit);
+//			ItemStack fruit = new ItemStack(fruits, 1, def.ordinal());
+//			OreDictionary.registerOre(def.getOreDict(), fruit);
+//			OreDictionary.registerOre(OreDictUtil.FRUIT_FORESTRY, fruit);
 		}
 	}
 

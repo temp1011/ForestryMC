@@ -51,20 +51,21 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 		super(new MultiblockLogicFarm());
 	}
 
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
-		return oldState.getBlock() != newState.getBlock();
-	}
+	//TODO don't know
+//	@Override
+//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
+//		return oldState.getBlock() != newState.getBlock();
+//	}
 
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock(), false);
+		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock());	//TODO - removing false OK?
 		markDirty();
 	}
 
 	@Override
 	public void onMachineBroken() {
-		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock(), false);
+		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock());
 		markDirty();
 	}
 
@@ -92,17 +93,17 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	public void setFarmBlockTexture(EnumFarmBlockTexture farmBlockTexture) {
 		if (this.farmBlockTexture != farmBlockTexture) {
 			this.farmBlockTexture = farmBlockTexture;
-			world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			world.markForRerender(getPos());
 		}
 	}
 
-	public EnumFarmBlockTexture getFarmBlockTexture() {
-		return farmBlockTexture;
-	}
-
-	public EnumFarmBlockType getFarmBlockType() {
-		return EnumFarmBlockType.VALUES[getBlockMetadata()];
-	}
+//	public EnumFarmBlockTexture getFarmBlockTexture() {
+//		return farmBlockTexture;
+//	}
+//
+//	public EnumFarmBlockType getFarmBlockType() {
+//		return EnumFarmBlockType.VALUES[getBlockMetadata()];
+//	}
 
 	/* TILEFORESTRY */
 

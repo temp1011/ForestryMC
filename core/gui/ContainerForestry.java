@@ -60,6 +60,11 @@ public abstract class ContainerForestry extends Container {
 	protected void addSlot(PlayerInventory playerInventory, int slot, int x, int y) {
 		super.addSlot(new Slot(playerInventory, slot, x, y));
 	}
+
+	@Override
+	public Slot addSlot(Slot slot) {
+		return super.addSlot(slot);
+	}
 //
 //	@Override
 //	public Slot addSlotToContainer(Slot p_75146_1_) {

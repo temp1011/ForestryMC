@@ -19,24 +19,23 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Blocks;
-import net.minecraft.command.ICommand;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 
+import com.mojang.brigadier.Command;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.InterModComms;
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.modules.ForestryModule;
@@ -52,7 +51,7 @@ import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.commands.CommandListAlleles;
 import forestry.core.commands.CommandModules;
-import forestry.core.commands.RootCommand;
+//import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
@@ -76,9 +75,10 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
+//TODO - register event handlers
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
-	public static final RootCommand rootCommand = new RootCommand();
+//	public static final RootCommand rootCommand = new RootCommand();
 	@Nullable
 	public static ItemRegistryCore items;
 	@Nullable
@@ -137,8 +137,8 @@ public class ModuleCore extends BlankForestryModule {
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new ClimateHandlerServer());
 
-		rootCommand.addChildCommand(new CommandModules());
-		rootCommand.addChildCommand(new CommandListAlleles());
+//		rootCommand.addChildCommand(new CommandModules());
+//		rootCommand.addChildCommand(new CommandListAlleles());
 	}
 
 	@Override
@@ -184,28 +184,28 @@ public class ModuleCore extends BlankForestryModule {
 		crateRegistry.registerCrate(OreDictUtil.CROP_WHEAT);
 		crateRegistry.registerCrate(Items.COOKIE);
 		crateRegistry.registerCrate(OreDictUtil.DUST_REDSTONE);
-		crateRegistry.registerCrate(new ItemStack(Items.DYE, 1, 4));
+		crateRegistry.registerCrate(new ItemStack(Items.LAPIS_LAZULI, 1));    //TODO - I think...
 		crateRegistry.registerCrate("sugarcane");
 		crateRegistry.registerCrate(Items.CLAY_BALL);
 		crateRegistry.registerCrate("dustGlowstone");
 		crateRegistry.registerCrate(Items.APPLE);
 		crateRegistry.registerCrate(new ItemStack(Items.NETHER_WART));
-		crateRegistry.registerCrate(new ItemStack(Items.COAL, 1, 1));
-		crateRegistry.registerCrate(new ItemStack(Items.COAL, 1, 0));
+		crateRegistry.registerCrate(new ItemStack(Items.COAL, 1));
+		crateRegistry.registerCrate(new ItemStack(Items.CHARCOAL, 1));
 		crateRegistry.registerCrate(Items.WHEAT_SEEDS);
 		crateRegistry.registerCrate("cropPotato");
 		crateRegistry.registerCrate("cropCarrot");
 
 		// vanilla blocks
-		crateRegistry.registerCrate(new ItemStack(Blocks.LOG, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.LOG, 1, 1));
-		crateRegistry.registerCrate(new ItemStack(Blocks.LOG, 1, 2));
-		crateRegistry.registerCrate(new ItemStack(Blocks.LOG, 1, 3));
-		crateRegistry.registerCrate(new ItemStack(Blocks.LOG2, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.LOG2, 1, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.OAK_LOG, 1));    //TODO - use tags?
+		crateRegistry.registerCrate(new ItemStack(Blocks.BIRCH_LOG, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.JUNGLE_LOG, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.SPRUCE_LOG, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.ACACIA_LOG, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.DARK_OAK_LOG, 1));
 		crateRegistry.registerCrate("cobblestone");
 		crateRegistry.registerCrate("dirt");
-		crateRegistry.registerCrate(new ItemStack(Blocks.DIRT, 1, 2));
+		crateRegistry.registerCrate(new ItemStack(Blocks.GRASS_BLOCK, 1));
 		crateRegistry.registerCrate("stone");
 		crateRegistry.registerCrate("stoneGranite");
 		crateRegistry.registerCrate("stoneDiorite");
@@ -213,23 +213,23 @@ public class ModuleCore extends BlankForestryModule {
 		crateRegistry.registerCrate("blockPrismarine");
 		crateRegistry.registerCrate("blockPrismarineBrick");
 		crateRegistry.registerCrate("blockPrismarineDark");
-		crateRegistry.registerCrate(Blocks.BRICK_BLOCK);
+		crateRegistry.registerCrate(Blocks.BRICKS);
 		crateRegistry.registerCrate("blockCactus");
-		crateRegistry.registerCrate(new ItemStack(Blocks.SAND, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.SAND, 1, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.SAND, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.RED_SAND, 1));
 		crateRegistry.registerCrate("obsidian");
 		crateRegistry.registerCrate("netherrack");
 		crateRegistry.registerCrate(Blocks.SOUL_SAND);
 		crateRegistry.registerCrate(Blocks.SANDSTONE);
-		crateRegistry.registerCrate(Blocks.NETHER_BRICK);
+		crateRegistry.registerCrate(Blocks.NETHER_BRICKS);
 		crateRegistry.registerCrate(Blocks.MYCELIUM);
 		crateRegistry.registerCrate("gravel");
-		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 0));
-		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 1));
-		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 2));
-		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 3));
-		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 4));
-		crateRegistry.registerCrate(new ItemStack(Blocks.SAPLING, 1, 5));
+		crateRegistry.registerCrate(new ItemStack(Blocks.OAK_SAPLING, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.BIRCH_SAPLING, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.JUNGLE_SAPLING, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.SPRUCE_SAPLING, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.ACACIA_SAPLING, 1));
+		crateRegistry.registerCrate(new ItemStack(Blocks.DARK_OAK_SAPLING, 1));
 	}
 
 	@Override
@@ -245,12 +245,12 @@ public class ModuleCore extends BlankForestryModule {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / CARPENTER
 			// Portable ANALYZER
-			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), ItemStack.EMPTY, items.portableAlyzer.getItemStack(),
-				"X#X", "X#X", "RDR",
-				'#', OreDictUtil.PANE_GLASS,
-				'X', OreDictUtil.INGOT_TIN,
-				'R', OreDictUtil.DUST_REDSTONE,
-				'D', OreDictUtil.GEM_DIAMOND);
+			//			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), ItemStack.EMPTY, items.portableAlyzer.getItemStack(),
+			//				"X#X", "X#X", "RDR",
+			//				'#', OreDictUtil.PANE_GLASS,
+			//				'X', OreDictUtil.INGOT_TIN,
+			//				'R', OreDictUtil.DUST_REDSTONE,
+			//				'D', OreDictUtil.GEM_DIAMOND);
 			// Camouflaged Paneling
 			FluidStack biomass = Fluids.BIOMASS.getFluid(150);
 			if (biomass != null) {
@@ -260,14 +260,14 @@ public class ModuleCore extends BlankForestryModule {
 		// alternate recipes
 		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(
-				items.craftingMaterial.getSilkWisp(), 0.15f
+					items.craftingMaterial.getSilkWisp(), 0.15f
 			));
 		}
 
 		IHygroregulatorManager hygroManager = RecipeManagers.hygroregulatorManager;
 		if (hygroManager != null) {
-			hygroManager.addRecipe(new FluidStack(FluidRegistry.WATER, 1), 1, -0.005f, 0.01f);
-			hygroManager.addRecipe(new FluidStack(FluidRegistry.LAVA, 1), 10, 0.005f, -0.01f);
+			//			hygroManager.addRecipe(new FluidStack(FluidRegistry.WATER, 1), 1, -0.005f, 0.01f);
+			//			hygroManager.addRecipe(new FluidStack(FluidRegistry.LAVA, 1), 10, 0.005f, -0.01f);
 			if (Fluids.ICE.getFluid() != null) {
 				hygroManager.addRecipe(Fluids.ICE.getFluid(1), 10, -0.01f, 0.02f);
 			}
@@ -280,10 +280,10 @@ public class ModuleCore extends BlankForestryModule {
 	}
 
 	@Override
-	public boolean processIMCMessage(IMCMessage message) {
-		if (message.key.equals("blacklist-ores-dimension")) {
-			int[] dims = message.getNBTValue().getIntArray("dimensions");
-			for (int dim : dims) {
+	public boolean processIMCMessage(InterModComms.IMCMessage message) {
+		if (message.getMethod().equals("blacklist-ores-dimension")) {
+			ResourceLocation[] dims = (ResourceLocation[]) message.getMessageSupplier().get();    //TODO - how does IMC work
+			for (ResourceLocation dim : dims) {
 				Config.blacklistOreDim(dim);
 			}
 			return true;
@@ -297,8 +297,8 @@ public class ModuleCore extends BlankForestryModule {
 	}
 
 	@Override
-	public ICommand[] getConsoleCommands() {
-		return new ICommand[]{rootCommand};
+	public Command[] getConsoleCommands() {
+		return new Command[0];//{rootCommand};
 	}
 
 	@Override

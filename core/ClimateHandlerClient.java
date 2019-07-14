@@ -4,12 +4,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
 import forestry.api.climate.IClimateState;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.render.ParticleRender;
@@ -24,9 +26,10 @@ public class ClimateHandlerClient {
 		ClimateHandlerClient.currentState = currentState;
 	}
 
+	//TODO - register event handler
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-		if (event.phase != TickEvent.Phase.END || event.side != Side.CLIENT) {
+		if (event.phase != TickEvent.Phase.END || event.side != LogicalSide.CLIENT) {
 			return;
 		}
 		PlayerEntity player = event.player;

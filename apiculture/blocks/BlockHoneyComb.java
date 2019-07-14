@@ -7,10 +7,9 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.EnumProperty;
-import net.minecraft.block.BlockStateContainer;
+//import net.minecraft.block.BlockStateContainer;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+//import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,6 +18,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.chunk.BlockStateContainer;
 
 import net.minecraftforge.client.model.ModelLoader;
 
@@ -36,7 +36,8 @@ import forestry.core.blocks.IColoredBlock;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 
-public abstract class BlockHoneyComb extends Block implements IItemModelRegister, IBlockWithMeta, IColoredBlock, IStateMapperRegister {
+//TODO - flatten
+public abstract class BlockHoneyComb extends Block implements IItemModelRegister, IBlockWithMeta, IColoredBlock{//{, IStateMapperRegister {
 	public final int minMeta;
 
 	public static final BlockHoneyComb[] create() {
@@ -55,19 +56,20 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 	}
 
 	public BlockHoneyComb(int minMeta) {
-		super(Material.CLOTH);	//Material.WOOL?
-		setHardness(1F);
-		setCreativeTab(ItemGroups.tabApiculture);
+		super(Block.Properties.create(Material.WOOL)	//Material.WOOL?
+		.hardnessAndResistance(1F));
+//		setCreativeTab(ItemGroups.tabApiculture); TODO - done in item
 		setDefaultState(this.getStateContainer().getBaseState().with(getVariant(), getVariant().getAllowedValues().iterator().next()));
 		this.minMeta = minMeta;
 	}
 
 	protected abstract EnumProperty<EnumHoneyComb> getVariant();
 
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, getVariant());
-	}
+//	@Override
+//	protected BlockStateContainer createBlockState() {
+//		new BlockStateContainer()
+//		return new BlockStateContainer(this, getVariant());
+//	}
 
 	@Override
 	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
@@ -98,8 +100,8 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 	}
 
 	public ItemStack get(EnumHoneyComb honeyComb) {
-		return new ItemStack(this, 1, honeyComb.ordinal() - minMeta);
-	}
+		return new ItemStack(this, 1);}//, honeyComb.ordinal() - minMeta);
+//	}
 
 	@Override
 	public String getNameFromMeta(int meta) {
@@ -110,8 +112,9 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public int colorMultiplier(BlockState state, IBlockReader worldIn, BlockPos pos, int tintIndex) {
-		int meta = getMetaFromState(state);
-		EnumHoneyComb honeyComb = EnumHoneyComb.get(minMeta + meta);
+//		int meta = getMetaFromState(state);
+		//TODO - flatten
+		EnumHoneyComb honeyComb = EnumHoneyComb.get(minMeta);
 		if (tintIndex == 1) {
 			return honeyComb.primaryColor;
 		} else {
@@ -119,11 +122,12 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerStateMapper() {
-		ModelLoader.setCustomStateMapper(this, new HoneyCombStateMapper());
-	}
+	//TODO flatten
+//	@OnlyIn(Dist.CLIENT)
+//	@Override
+//	public void registerStateMapper() {
+//		ModelLoader.setCustomStateMapper(this, new HoneyCombStateMapper());
+//	}
 
 	private static class HoneyCombPredicate implements Predicate<EnumHoneyComb> {
 		private final int minMeta;
@@ -140,13 +144,14 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	private static class HoneyCombStateMapper extends StateMapperBase {
-
-		@Override
-		protected ModelResourceLocation getModelResourceLocation(BlockState state) {
-			return new ModelResourceLocation(Constants.MOD_ID + ":bee_combs", "normal");
-		}
-
-	}
+	//TODO flatten
+//	@OnlyIn(Dist.CLIENT)
+//	private static class HoneyCombStateMapper extends StateMapperBase {
+//
+//		@Override
+//		protected ModelResourceLocation getModelResourceLocation(BlockState state) {
+//			return new ModelResourceLocation(Constants.MOD_ID + ":bee_combs", "normal");
+//		}
+//
+//	}
 }

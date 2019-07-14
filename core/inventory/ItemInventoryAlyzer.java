@@ -128,7 +128,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 
 				CompoundNBT CompoundNBT = new CompoundNBT();
 				individual.writeToNBT(CompoundNBT);
-				specimen.setTagCompound(CompoundNBT);
+				specimen.setTag(CompoundNBT);
 
 				if (requiresEnergy) {
 					// Decrease energy
@@ -178,6 +178,6 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		if (!energy.isEmpty()) {
 			amount = energy.getCount();
 		}
-		nbt.setInteger("Charges", amount);
+		nbt.putInt("Charges", amount);
 	}
 }

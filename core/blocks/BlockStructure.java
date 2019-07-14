@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
@@ -17,6 +19,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -110,7 +113,7 @@ public abstract class BlockStructure extends BlockForestry {
 	}
 
 	@Override
-	public void breakBlock(World world, BlockPos pos, BlockState state) {
+	public void harvestBlock(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
 		if (world.isRemote) {
 			return;
 		}
@@ -127,7 +130,7 @@ public abstract class BlockStructure extends BlockForestry {
 			}
 		});
 
-		super.breakBlock(world, pos, state);
+		super.harvestBlock(world, player, pos, state, te, stack);
 	}
 
 }

@@ -9,8 +9,6 @@ import java.util.function.Predicate;
 
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.oredict.OreDictionary;
-
 /**
  * A configurable backpack filter. Useful for implementers of {@link IBackpackDefinition}.
  * Get a new instance from {@link IBackpackInterface#createBackpackFilter()}.

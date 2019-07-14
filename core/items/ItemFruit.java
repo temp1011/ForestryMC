@@ -25,6 +25,7 @@ import forestry.api.core.IModelManager;
 import forestry.core.ModuleCore;
 import forestry.core.utils.OreDictUtil;
 
+//TODO - flatten
 public class ItemFruit extends ItemForestryFood {
 
 	public enum EnumFruit {
@@ -56,19 +57,19 @@ public class ItemFruit extends ItemForestryFood {
 			return getStack(1);
 		}
 
+		//TODO
 		public ItemStack getStack(int qty) {
-			return new ItemStack(ModuleCore.getItems().fruits, qty, ordinal());
+			return new ItemStack(ModuleCore.getItems().fruits, qty);
 		}
 
-		public String getOreDict() {
-			return oreDict;
-		}
+//		public String getOreDict() {
+//			return oreDict;
+//		}
 	}
 
 	public ItemFruit() {
-		super(1, 0.2f);
-		setMaxDamage(0);
-		setHasSubtypes(true);
+		super(1, 0.2f, (new Item.Properties()).maxDamage(0));
+//		setHasSubtypes(true); flatten
 	}
 
 	@Override
@@ -89,21 +90,23 @@ public class ItemFruit extends ItemForestryFood {
 	}
 
 	@Override
-	public void getSubItems(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
-			for (int i = 0; i < EnumFruit.values().length; i++) {
-				subItems.add(new ItemStack(this, 1, i));
-			}
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
+//			for (int i = 0; i < EnumFruit.values().length; i++) {	TODO
+//				subItems.add(new ItemStack(this, 1, i));
+//			}
 		}
 	}
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= EnumFruit.VALUES.length) {
-			return super.getTranslationKey(stack);
-		}
-
-		return super.getTranslationKey(stack) + "." + EnumFruit.VALUES[stack.getItemDamage()].name().toLowerCase(Locale.ENGLISH);
+		//TODO - flatten
+//		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= EnumFruit.VALUES.length) {
+//			return super.getTranslationKey(stack);
+//		}
+//
+//		return super.getTranslationKey(stack) + "." + EnumFruit.VALUES[stack.getItemDamage()].name().toLowerCase(Locale.ENGLISH);
+		return "";
 	}
 
 }
