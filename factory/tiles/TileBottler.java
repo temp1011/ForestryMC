@@ -18,8 +18,8 @@ import java.util.EnumMap;
 
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -27,6 +27,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.Fluid;
@@ -36,11 +38,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
-import net.minecraftforge.fml.common.Optional;
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IErrorLogic;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -58,9 +55,9 @@ import forestry.factory.gui.ContainerBottler;
 import forestry.factory.gui.GuiBottler;
 import forestry.factory.inventory.InventoryBottler;
 import forestry.factory.recipes.BottlerRecipe;
-import forestry.factory.triggers.FactoryTriggers;
+//import forestry.factory.triggers.FactoryTriggers;
 
-import buildcraft.api.statements.ITriggerExternal;
+//import buildcraft.api.statements.ITriggerExternal;
 
 public class TileBottler extends TilePowered implements ISidedInventory, ILiquidTankTile, ISlotPickupWatcher {
 	private static final int TICKS_PER_RECIPE_TIME = 5;
@@ -165,15 +162,17 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		return false;
 	}
 
+	//TODO - a bit ugly atm. Are the new checks worth the perf with the new interface? Can this be written better?
+	//Is there a race condition here?
 	private boolean dumpFluid() {
 		if (!resourceTank.isEmpty()) {
 			for (Direction facing : Direction.VALUES) {
 				if (canDump.get(facing)) {
-					IFluidHandler fluidDestination = FluidUtil.getFluidHandler(world, pos.offset(facing), facing.getOpposite());
-					if (fluidDestination != null) {
-						if (FluidUtil.tryFluidTransfer(fluidDestination, tankManager, Fluid.BUCKET_VOLUME / 20, true) != null) {
-							return true;
-						}
+					LazyOptional<IFluidHandler> fluidDestination = FluidUtil.getFluidHandler(world, pos.offset(facing), facing.getOpposite());
+
+					if (fluidDestination.isPresent()) {
+						fluidDestination.ifPresent(f -> FluidUtil.tryFluidTransfer(f, tankManager, Fluid.BUCKET_VOLUME / 20, true));
+						return true;
 					}
 				}
 			}
@@ -316,7 +315,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		} else {
 			emptyStatus = null;
 		}
-		if (emptyStatus == null || emptyStatus != FillStatus.SUCCESS) {
+		if (emptyStatus != FillStatus.SUCCESS) {
 			checkFillRecipe();
 			if (currentRecipe == null) {
 				return false;
@@ -353,28 +352,24 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		return tankManager;
 	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
 
-
+	//TODO - is this efficient? or even correct?
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).cast();//.cast(tankManager);
 		}
 		return super.getCapability(capability, facing);
 	}
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-		super.addExternalTriggers(triggers, side, tile);
-		triggers.add(FactoryTriggers.lowResource25);
-		triggers.add(FactoryTriggers.lowResource10);
-	}
+//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+//	@Override
+//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+//		super.addExternalTriggers(triggers, side, tile);
+//		triggers.add(FactoryTriggers.lowResource25);
+//		triggers.add(FactoryTriggers.lowResource10);
+//	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)

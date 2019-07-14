@@ -27,20 +27,20 @@ import java.util.Set;
 
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.common.config.Property;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
-import net.minecraftforge.api.distmarker.Dist;
 import forestry.Forestry;
 import forestry.apiculture.HiveConfig;
+import forestry.core.config.forge_old.Property;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.factory.ModuleFactory;
-import forestry.mail.gui.GuiMailboxInfo;
+//import forestry.mail.gui.GuiMailboxInfo;
 
 public class Config {
 
@@ -117,8 +117,8 @@ public class Config {
 
 	// Mail
 	public static boolean mailAlertEnabled = true;
-	public static GuiMailboxInfo.XPosition mailAlertXPosition = GuiMailboxInfo.XPosition.LEFT;
-	public static GuiMailboxInfo.YPosition mailAlertYPosition = GuiMailboxInfo.YPosition.TOP;
+	//	public static GuiMailboxInfo.XPosition mailAlertXPosition = GuiMailboxInfo.XPosition.LEFT;
+	//	public static GuiMailboxInfo.YPosition mailAlertYPosition = GuiMailboxInfo.YPosition.TOP;
 
 	public static boolean craftingStampsEnabled = true;
 	public static final ArrayList<String> collectorStamps = new ArrayList<>();
@@ -194,7 +194,7 @@ public class Config {
 		return false;
 	}
 
-	public static void load(Side side) {
+	public static void load(Dist side) {
 		File configCommonFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_COMMON + ".cfg");
 		configCommon = new LocalizedConfiguration(configCommonFile, "1.3.0");
 		loadConfigCommon(side);
@@ -206,16 +206,16 @@ public class Config {
 		loadHints();
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent    //TODO - register event handler
 	public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
 		if (!event.getModID().equals(Constants.MOD_ID)) {
 			return;
 		}
-		loadConfigCommon(FMLCommonHandler.instance().getSide());
+		loadConfigCommon(FMLEnvironment.dist);    //TODO - correct?
 		loadConfigFluids();
 	}
 
-	private static void loadConfigCommon(Side side) {
+	private static void loadConfigCommon(Dist side) {
 
 		String[] gameModes = new String[]{"EASY", "NORMAL", "HARD", "OP"};
 		gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", gameModes);
@@ -258,10 +258,10 @@ public class Config {
 		generateApatiteOre = configCommon.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
 		generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
 		generateTinOre = configCommon.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
-		for (String dimId : configCommon.get("world.generate.ore", "dimBlacklist", new int[0]).getIntList()) {
+		for (String dimId : configCommon.get("world.generate.ore", "dimBlacklist", new String[0]).getStringList()) {
 			blacklistedOreDims.add(new ResourceLocation(dimId));
 		}
-		for (String dimId : configCommon.get("world.generate.ore", "dimWhitelist", new int[0]).getIntList()) {
+		for (String dimId : configCommon.get("world.generate.ore", "dimWhitelist", new String[0]).getStringList()) {
 			whitelistedOreDims.add(new ResourceLocation(dimId));
 		}
 
@@ -291,10 +291,10 @@ public class Config {
 
 		humusDegradeDelimiter = configCommon.getIntLocalized("tweaks.humus", "degradeDelimiter", humusDegradeDelimiter, 1, 10);
 
-		if (side == Side.CLIENT) {
+		if (side == Dist.CLIENT) {
 			mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui.mail.alert", "enabled", mailAlertEnabled);
-			mailAlertXPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "xPosition", mailAlertXPosition, GuiMailboxInfo.XPosition.values());
-			mailAlertYPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "yPosition", mailAlertYPosition, GuiMailboxInfo.YPosition.values());
+			//			mailAlertXPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "xPosition", mailAlertXPosition, GuiMailboxInfo.XPosition.values());
+			//			mailAlertYPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "yPosition", mailAlertYPosition, GuiMailboxInfo.YPosition.values());
 
 			guiTabSpeed = configCommon.getIntLocalized("tweaks.gui.tabs", "speed", guiTabSpeed, 1, 50);
 			enableHints = configCommon.getBooleanLocalized("tweaks.gui.tabs", "hints", enableHints);

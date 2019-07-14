@@ -15,9 +15,8 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-
+import forestry.core.config.forge_old.Configuration;
+import forestry.core.config.forge_old.Property;
 import forestry.core.utils.Translator;
 
 public class LocalizedConfiguration extends Configuration {

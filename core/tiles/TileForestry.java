@@ -218,11 +218,12 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	/**
 	 * Gets the tile's unlocalized name, based on the block at the location of this entity (client-only).
 	 */
-//	@Override
-//	public String getUnlocalizedTitle() {
-//		String blockUnlocalizedName = getBlockType().getTranslationKey();
-//		return blockUnlocalizedName + '.' + getBlockMetadata() + ".name";
-//	}
+	//TODO - flatten
+	@Override
+	public String getUnlocalizedTitle() {
+		String blockUnlocalizedName = getBlockState().getBlock().getTranslationKey();
+		return blockUnlocalizedName + '.' + 0 + ".name";
+	}
 
 	/* INVENTORY BASICS */
 	public IInventoryAdapter getInternalInventory() {
@@ -359,20 +360,12 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing != null) {
-				SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(getInternalInventory(), facing);
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);
+				return LazyOptional.of(() -> new SidedInvWrapper(getInternalInventory(), facing)).cast();
 			} else {
-				InvWrapper invWrapper = new InvWrapper(getInternalInventory());
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(invWrapper);
+				return LazyOptional.of(() -> new InvWrapper(getInternalInventory())).cast();
 			}
 
 		}
 		return super.getCapability(capability, facing);
 	}
-//
-//	@Override
-//	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-//		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
-//			super.hasCapability(capability, facing);
-//	}
 }

@@ -15,7 +15,9 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.IArmorMaterial;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,28 +26,66 @@ import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.EnumHelper;
 
 
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
+
 import forestry.api.apiculture.ApicultureCapabilities;
 import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
+import forestry.api.core.ItemGroups;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 
 public class ItemArmorApiarist extends ArmorItem implements IItemModelRegister {
 
-	public static final ArmorMaterial APIARIST_ARMOR = EnumHelper.addArmorMaterial("APIARIST_ARMOR", "forestry:textures/items", 5, new int[]{1, 2, 3, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0F)
-		.setRepairItem(ModuleCore.getItems().craftingMaterial.getWovenSilk());
+	public static final class ApiaristArmorMaterial implements IArmorMaterial {
+
+		private static final int[] reductions = new int[]{1, 2, 3, 1};
+
+		@Override
+		public int getDurability(EquipmentSlotType slotIn) {
+			return 5;
+		}
+
+		@Override
+		public int getDamageReductionAmount(EquipmentSlotType slotIn) {
+			return reductions[slotIn.getIndex()];
+		}
+
+		@Override
+		public int getEnchantability() {
+			return 15;
+		}
+
+		@Override
+		public SoundEvent getSoundEvent() {
+			return SoundEvents.ITEM_ARMOR_EQUIP_LEATHER;
+		}
+
+		@Override
+		public Ingredient getRepairMaterial() {
+			return Ingredient.fromStacks(ModuleCore.getItems().craftingMaterial.getWovenSilk());
+		}
+
+		@Override
+		public String getName() {
+			return "APIARIST_ARMOR";
+		}
+
+		@Override
+		public float getToughness() {
+			return 0;
+		}
+	}
 
 	public ItemArmorApiarist(EquipmentSlotType equipmentSlotIn) {
-		super(APIARIST_ARMOR, 0, equipmentSlotIn);
-//		setCreativeTab(ItemGroups.tabApiculture);
+		super(new ApiaristArmorMaterial(), equipmentSlotIn, (new Item.Properties()).group(ItemGroups.tabApiculture));
 	}
 
 	@Override
@@ -64,31 +104,20 @@ public class ItemArmorApiarist extends ArmorItem implements IItemModelRegister {
 	}
 
 	@Override
-	public boolean hasColor(ItemStack itemstack) {
-		return false;
-	}
-
-	@Override
 	@Nullable
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
 		return new ICapabilityProvider() {
-			@Override
-			public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-				if (capability == ArboricultureCapabilities.ARMOR_NATURALIST) {
-					return armorType == EquipmentSlotType.HEAD;
-				}
-				return capability == ApicultureCapabilities.ARMOR_APIARIST;
-			}
 
+			//TODO - null issues
 			@Override
-			public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
+			public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
-					return capability.getDefaultInstance();
+					return LazyOptional.of(() -> capability.getDefaultInstance());
 				} else if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
-					armorType == EquipmentSlotType.HEAD) {
-					return capability.getDefaultInstance();
+					slot == EquipmentSlotType.HEAD) {
+					return LazyOptional.of(() -> capability.getDefaultInstance());
 				}
-				return null;
+				return LazyOptional.empty();
 			}
 		};
 	}

@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -101,10 +100,13 @@ public class ParticleHelper {
 					double py = pos.getY() + (j + 0.5D) / iterations;
 					double pz = pos.getZ() + (k + 0.5D) / iterations;
 
-					DiggingParticle fx = (DiggingParticle) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getStateId(state));
-					if (fx != null) {
-						callback.addDestroyEffects(fx.setBlockPos(pos), world, pos, state);
-					}
+//					DiggingParticle fx = (DiggingParticle) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getStateId(state));
+					//					if (fx != null) {
+//						callback.addDestroyEffects(fx.setBlockPos(pos), world, pos, state);
+//					}
+					//TODO correct?
+					effectRenderer.addBlockDestroyEffects(pos, state);
+
 				}
 			}
 		}
@@ -147,7 +149,7 @@ public class ParticleHelper {
 			BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRendererDispatcher();
 			BlockModelShapes blockModelShapes = blockRendererDispatcher.getBlockModelShapes();
 			TextureAtlasSprite texture = blockModelShapes.getTexture(state);
-			fx.setParticleTexture(texture);
+			fx.setSprite(texture);
 		}
 	}
 }

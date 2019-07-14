@@ -49,9 +49,9 @@ import forestry.energy.gui.GuiGenerator;
 import forestry.energy.inventory.InventoryGenerator;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
-import forestry.plugins.ForestryCompatPlugins;
+//import forestry.plugins.ForestryCompatPlugins;
 
-import ic2.api.energy.prefab.BasicSource;
+//import ic2.api.energy.prefab.BasicSource;
 
 public class TileEuGenerator extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile, IStreamableGui {
 	private static final int maxEnergy = 30000;
@@ -61,8 +61,8 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 
 	private int tickCount = 0;
 
-	@Nullable
-	private BasicSource ic2EnergySource;
+//	@Nullable
+//	private BasicSource ic2EnergySource;
 
 	public TileEuGenerator() {
 		super();//"generator"
@@ -74,33 +74,33 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 
 		tankManager = new TankManager(this, resourceTank);
 
-		if (ModuleHelper.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.INDUSTRIALCRAFT2)) {
-			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
-		}
+//		if (ModuleHelper.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.INDUSTRIALCRAFT2)) {
+//			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
+//		}
 	}
 
 	@Nonnull
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-		if (ic2EnergySource != null) {
-			ic2EnergySource.writeToNBT(CompoundNBT);
-		}
+//		if (ic2EnergySource != null) {
+//			ic2EnergySource.writeToNBT(CompoundNBT);
+//		}
 
-		tankManager.writeToNBT(CompoundNBT);
-		return CompoundNBT;
+		tankManager.writeToNBT(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
-		if (ic2EnergySource != null) {
-			ic2EnergySource.readFromNBT(CompoundNBT);
-		}
+//		if (ic2EnergySource != null) {
+//			ic2EnergySource.readFromNBT(CompoundNBT);
+//		}
 
-		tankManager.readFromNBT(CompoundNBT);
+		tankManager.readFromNBT(compoundNBT);
 	}
 
 	@Override
@@ -114,23 +114,24 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 		super.readData(data);
 		tankManager.readData(data);
 	}
+	//TODO
+//
+//	@Override
+//	public void onChunkUnload() {
+//		if (ic2EnergySource != null) {
+//			ic2EnergySource.onChunkUnload();
+//		}
+//
+//		super.onChunkUnload();
+//	}
 
 	@Override
-	public void onChunkUnload() {
-		if (ic2EnergySource != null) {
-			ic2EnergySource.onChunkUnload();
-		}
+	public void remove() {
+//		if (ic2EnergySource != null) {
+//			ic2EnergySource.invalidate();
+//		}
 
-		super.onChunkUnload();
-	}
-
-	@Override
-	public void invalidate() {
-		if (ic2EnergySource != null) {
-			ic2EnergySource.invalidate();
-		}
-
-		super.invalidate();
+		super.remove();
 	}
 
 	@Override
@@ -142,25 +143,25 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 		IErrorLogic errorLogic = getErrorLogic();
 
 		// No work to be done if IC2 is unavailable.
-		if (errorLogic.setCondition(ic2EnergySource == null, EnumErrorCode.NO_ENERGY_NET)) {
-			return;
-		}
-
-		ic2EnergySource.update();
-
-		if (resourceTank.getFluidAmount() > 0) {
-			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid().getFluid());
-			if (resourceTank.canDrainFluidType(fuel.getFuelConsumed()) && ic2EnergySource.getFreeCapacity() >= fuel.getEu()) {
-				ic2EnergySource.addEnergy(fuel.getEu());
-				this.tickCount++;
-
-				if (tickCount >= fuel.getRate()) {
-					tickCount = 0;
-					resourceTank.drain(fuel.getFuelConsumed().amount, true);
-				}
-			}
-
-		}
+//		if (errorLogic.setCondition(ic2EnergySource == null, EnumErrorCode.NO_ENERGY_NET)) {
+//			return;
+//		}
+//
+//		ic2EnergySource.update();
+//
+//		if (resourceTank.getFluidAmount() > 0) {
+//			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid().getFluid());
+//			if (resourceTank.canDrainFluidType(fuel.getFuelConsumed()) && ic2EnergySource.getFreeCapacity() >= fuel.getEu()) {
+//				ic2EnergySource.addEnergy(fuel.getEu());
+//				this.tickCount++;
+//
+//				if (tickCount >= fuel.getRate()) {
+//					tickCount = 0;
+//					resourceTank.drain(fuel.getFuelConsumed().amount, true);
+//				}
+//			}
+//
+//		}
 
 		boolean hasFuel = resourceTank.getFluidAmount() > 0;
 		errorLogic.setCondition(!hasFuel, EnumErrorCode.NO_FUEL);
@@ -175,11 +176,11 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	public int getStoredScaled(int i) {
-		if (ic2EnergySource == null) {
+//		if (ic2EnergySource == null) {
 			return 0;
-		}
-
-		return (int) (ic2EnergySource.getEnergyStored() * i) / maxEnergy;
+//		}
+//
+//		return (int) (ic2EnergySource.getEnergyStored() * i) / maxEnergy;
 	}
 
 	@Override
@@ -194,16 +195,16 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 
 	@Override
 	public void writeGuiData(PacketBufferForestry data) {
-		if (ic2EnergySource != null) {
-			data.writeDouble(ic2EnergySource.getEnergyStored());
-		}
+//		if (ic2EnergySource != null) {
+//			data.writeDouble(ic2EnergySource.getEnergyStored());
+//		}
 	}
 
 	@Override
 	public void readGuiData(PacketBufferForestry data) {
-		if (ic2EnergySource != null) {
-			ic2EnergySource.setEnergyStored(data.readDouble());
-		}
+//		if (ic2EnergySource != null) {
+//			ic2EnergySource.setEnergyStored(data.readDouble());
+//		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -224,22 +225,15 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing) {
-		if (super.hasCapability(capability, facing)) {
-			return true;
-		}
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
-	}
-
-	@Nullable
-	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-		if (super.hasCapability(capability, facing)) {
-			return super.getCapability(capability, facing);
+		LazyOptional<T> superCap = super.getCapability(capability, facing);
+		if(superCap.isPresent()) {
+			return superCap;
 		}
+
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
-		return null;
+		return LazyOptional.empty();
 	}
 }

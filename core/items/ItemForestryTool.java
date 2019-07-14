@@ -16,6 +16,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -26,9 +28,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.core.ModuleCore;
 import forestry.core.utils.ItemStackUtil;
@@ -38,9 +41,10 @@ public class ItemForestryTool extends ItemForestry {
 	private float efficiencyOnProperMaterial;
 
 	public ItemForestryTool(ItemStack remnants) {
-		this.maxStackSize = 1;
+		super((new Item.Properties())
+		.maxStackSize(1)
+		.maxDamage(200));
 		efficiencyOnProperMaterial = 6F;
-		setMaxDamage(200);
 		this.remnants = remnants;
 		if (!remnants.isEmpty()) {
 			MinecraftForge.EVENT_BUS.register(this);
@@ -62,8 +66,8 @@ public class ItemForestryTool extends ItemForestry {
 
 	@Override
 	public float getDestroySpeed(ItemStack itemstack, BlockState state) {
-		for (String type : getToolClasses(itemstack)) {
-			if (state.getBlock().isToolEffective(type, state)) {
+		for (ToolType type : getToolTypes(itemstack)) {
+			if (state.getBlock().isToolEffective(state, type)) {
 				return efficiencyOnProperMaterial;
 			}
 		}
@@ -75,22 +79,28 @@ public class ItemForestryTool extends ItemForestry {
 	}
 
 	@Override
-	public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+	public ActionResultType onItemUse(ItemUseContext context) {
+		PlayerEntity player = context.getPlayer();
+		Hand hand = context.getHand();
+		BlockPos pos = context.getPos();
+		World world = context.getWorld();
+		Direction facing = context.getFace();
+
 		if (this == ModuleCore.getItems().bronzeShovel) {
 			ItemStack heldItem = player.getHeldItem(hand);
 			if (!player.canPlayerEdit(pos.offset(facing), facing, heldItem)) {
 				return ActionResultType.FAIL;
 			} else {
-				BlockState BlockState = worldIn.getBlockState(pos);
+				BlockState BlockState = world.getBlockState(pos);
 				Block block = BlockState.getBlock();
 
-				if (facing != Direction.DOWN && worldIn.getBlockState(pos.up()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
+				if (facing != Direction.DOWN && world.getBlockState(pos.up()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
 					BlockState BlockState1 = Blocks.GRASS_PATH.getDefaultState();
-					worldIn.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+					world.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
-					if (!worldIn.isRemote) {
-						worldIn.setBlockState(pos, BlockState1, 11);
-						heldItem.damageItem(1, player);
+					if (!world.isRemote) {
+						world.setBlockState(pos, BlockState1, 11);
+						heldItem.damageItem(1, player, this::onBroken);
 					}
 
 					return ActionResultType.SUCCESS;
@@ -102,13 +112,21 @@ public class ItemForestryTool extends ItemForestry {
 		return ActionResultType.PASS;
 	}
 
-	@SubscribeEvent
-	public void onDestroyCurrentItem(PlayerDestroyItemEvent event) {
-		if (event.getOriginal().isEmpty() || event.getOriginal().getItem() != this) {
-			return;
-		}
+//	@SubscribeEvent
+//	public void onDestroyCurrentItem(PlayerDestroyItemEvent event) {
+//		if (event.getOriginal().isEmpty() || event.getOriginal().getItem() != this) {
+//			return;
+//		}
+//
+//		PlayerEntity player = event.getEntityPlayer();
+//		World world = player.world;
+//
+//		if (!world.isRemote && !remnants.isEmpty()) {
+//			ItemStackUtil.dropItemStackAsEntity(remnants.copy(), world, player.posX, player.posY, player.posZ);
+//		}
+//	}
 
-		PlayerEntity player = event.getPlayerEntity();
+	public void onBroken(LivingEntity player) {
 		World world = player.world;
 
 		if (!world.isRemote && !remnants.isEmpty()) {
@@ -116,16 +134,18 @@ public class ItemForestryTool extends ItemForestry {
 		}
 	}
 
+	//TODO - check the consumer is called how I think it is
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
 		if (state.getBlockHardness(worldIn, pos) != 0) {
-			stack.damageItem(1, entityLiving);
+			stack.damageItem(1, entityLiving, this::onBroken);
 		}
 		return true;
 	}
 
-	@Override
-	public boolean isFull3D() {
-		return true;
-	}
+	//TODO - block shape
+//	@Override
+//	public boolean isFull3D() {
+//		return true;
+//	}
 }
