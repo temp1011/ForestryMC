@@ -17,35 +17,33 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
@@ -92,13 +90,9 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	private boolean angry = false;
 	private int calmTime;
 
-	/**
-	 * Hack to make sure that hives glow.
-	 * TODO: remove when Mojang fixes this bug: https://bugs.mojang.com/browse/MC-3329
-	 */
-	private boolean updatedLight;
-
 	public TileHive() {
+		//TODO - need to register types now
+		super(TileEntityType.CHEST);
 		inventory = new HiveBeeHousingInventory(this);
 		beeLogic = new WorldgenBeekeepingLogic(this);
 		errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
@@ -106,16 +100,13 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 		if (Config.generateBeehivesDebug) {
 			return;
 		}
 		tickHelper.onTick();
 
 		if (world.isRemote) {
-			if (!updatedLight && tickHelper.updateOnInterval(100)) {
-				updatedLight = world.checkLightFor(LightType.BLOCK, getPos());
-			}
 			if (active && tickHelper.updateOnInterval(4)) {
 				if (beeLogic.canDoBeeFX()) {
 					beeLogic.doBeeFX();
@@ -133,7 +124,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 							if (!entities.isEmpty()) {
 								Collections.shuffle(entities);
 								LivingEntity entity = entities.get(0);
-								if ((entity instanceof PlayerEntity || !ModuleApiculture.hivesDamageOnlyPlayers) && (!entity.isInsideOfMaterial(Material.WATER) || ModuleApiculture.hivesDamageUnderwater)) {
+								if ((entity instanceof PlayerEntity || !ModuleApiculture.hivesDamageOnlyPlayers) && (!entity.isInWater() || ModuleApiculture.hivesDamageUnderwater)) {
 									attack(entity, 2);
 								}
 							}
@@ -194,19 +185,19 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		contained.readFromNBT(CompoundNBT);
-		beeLogic.readFromNBT(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		contained.readFromNBT(compoundNBT);
+		beeLogic.readFromNBT(compoundNBT);
 	}
 
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		contained.writeToNBT(CompoundNBT);
-		beeLogic.writeToNBT(CompoundNBT);
-		return CompoundNBT;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		contained.writeToNBT(compoundNBT);
+		beeLogic.writeToNBT(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
@@ -282,7 +273,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	@Override
 	public CompoundNBT getUpdateTag() {
 		CompoundNBT nbt = super.getUpdateTag();
-		nbt.setBoolean("active", calmTime == 0);
+		nbt.putBoolean("active", calmTime == 0);
 		beeLogic.writeToNBT(nbt);
 		return nbt;
 	}
@@ -330,7 +321,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 
 	@Override
 	public EnumHumidity getHumidity() {
-		float humidity = getBiome().getRainfall();
+		float humidity = getBiome().getDownfall();
 		return EnumHumidity.getFromValue(humidity);
 	}
 
@@ -391,9 +382,9 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 
 		@Override
 		public boolean apply(@Nullable LivingEntity input) {
-			if (input != null && input.isEntityAlive() && !input.isInvisible()) {
+			if (input != null && input.isAlive() && !input.isInvisible()) {
 				if (input instanceof PlayerEntity) {
-					return EntityPredicates.CAN_AI_TARGET.apply(input);
+					return EntityPredicates.CAN_AI_TARGET.test(input);
 				} else if (hive.isAngry()) {
 					return true;
 				} else if (input instanceof IMob) {
