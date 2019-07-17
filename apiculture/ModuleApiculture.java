@@ -28,7 +28,9 @@ import net.minecraft.block.properties.EnumProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.Potions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -48,10 +50,13 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -162,7 +167,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
-	public static VillagerRegistry.VillagerProfession villagerApiarist;
+	public static VillagerProfession villagerApiarist;
 
 	public static ItemRegistryApiculture getItems() {
 		Preconditions.checkNotNull(items);
@@ -235,7 +240,8 @@ public class ModuleApiculture extends BlankForestryModule {
 		}
 
 		// Commands
-		ModuleCore.rootCommand.addChildCommand(new CommandBee());
+		//TODO - commands
+//		ModuleCore.rootCommand.addChildCommand(new CommandBee());
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			ApicultureFilterRuleType.init();
@@ -334,41 +340,42 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		if (Config.enableVillagers) {
 			// Register villager stuff
-			VillageCreationApiculture villageHandler = new VillageCreationApiculture();
-			VillagerRegistry villagerRegistry = VillagerRegistry.instance();
-			villagerRegistry.registerVillageCreationHandler(villageHandler);
-
-			villagerApiarist = new VillagerRegistry.VillagerProfession(Constants.ID_VILLAGER_APIARIST, Constants.TEXTURE_SKIN_BEEKPEEPER, Constants.TEXTURE_SKIN_ZOMBIE_BEEKPEEPER);
-			IForgeRegistry<VillagerRegistry.VillagerProfession> villagerProfessions = ForgeRegistries.VILLAGER_PROFESSIONS;
-			villagerProfessions.register(villagerApiarist);
-
-			ItemStack wildcardPrincess = new ItemStack(items.beePrincessGE, 1);
-			ItemStack wildcardDrone = new ItemStack(items.beeDroneGE, 1);
-			ItemStack apiary = new ItemStack(blocks.apiary);
-			ItemStack provenFrames = items.frameProven.getItemStack();
-			ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
-			ItemStack endDrone = BeeDefinition.ENDED.getMemberStack(EnumBeeType.DRONE);
-			ItemStack propolis = new ItemStack(items.propolis, 1);
-
-			VillagerRegistry.VillagerCareer apiaristCareer = new VillagerRegistry.VillagerCareer(villagerApiarist, "apiarist");
-			apiaristCareer.addTrade(1,
-				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.WHEAT), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4)),
-				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.CARROT), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4)),
-				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.POTATO), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4))
-			);
-			apiaristCareer.addTrade(2,
-				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 4), new ItemStack(items.smoker), null),
-				new VillagerTradeLists.GiveItemForLogsAndEmeralds(apiary, new VillagerEntity.PriceInfo(1, 1), new VillagerEntity.PriceInfo(16, 32), new VillagerEntity.PriceInfo(1, 2)),
-				new VillagerApiaristTrades.GiveRandomHiveDroneForItems(propolis, null, wildcardDrone, new VillagerEntity.PriceInfo(2, 4))
-			);
-			apiaristCareer.addTrade(3,
-				new VillagerTradeLists.GiveEmeraldForItems(wildcardPrincess, null),
-				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 2), provenFrames, new VillagerEntity.PriceInfo(1, 6))
-			);
-			apiaristCareer.addTrade(4,
-				new VillagerTradeLists.GiveItemForItemAndEmerald(wildcardPrincess, null, new VillagerEntity.PriceInfo(10, 64), monasticDrone, null),
-				new VillagerTradeLists.GiveItemForTwoItems(wildcardPrincess, null, new ItemStack(Items.ENDER_EYE), new VillagerEntity.PriceInfo(12, 16), endDrone, null)
-			);
+			//TODO - villagers
+//			VillageCreationApiculture villageHandler = new VillageCreationApiculture();
+//			VillagerRegistry villagerRegistry = VillagerRegistry.instance();
+//			villagerRegistry.registerVillageCreationHandler(villageHandler);
+//
+//			villagerApiarist = new VillagerProfession(Constants.ID_VILLAGER_APIARIST, Constants.TEXTURE_SKIN_BEEKPEEPER, Constants.TEXTURE_SKIN_ZOMBIE_BEEKPEEPER);
+//			IForgeRegistry<VillagerProfession> villagerProfessions = ForgeRegistries.PROFESSIONS;
+//			villagerProfessions.register(villagerApiarist);
+//
+//			ItemStack wildcardPrincess = new ItemStack(items.beePrincessGE, 1);
+//			ItemStack wildcardDrone = new ItemStack(items.beeDroneGE, 1);
+//			ItemStack apiary = new ItemStack(blocks.apiary);
+//			ItemStack provenFrames = items.frameProven.getItemStack();
+//			ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
+//			ItemStack endDrone = BeeDefinition.ENDED.getMemberStack(EnumBeeType.DRONE);
+//			ItemStack propolis = new ItemStack(items.propolis, 1);
+//
+//			VillagerRegistry.VillagerCareer apiaristCareer = new VillagerRegistry.VillagerCareer(villagerApiarist, "apiarist");
+//			apiaristCareer.addTrade(1,
+//				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.WHEAT), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4)),
+//				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.CARROT), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4)),
+//				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.POTATO), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4))
+//			);
+//			apiaristCareer.addTrade(2,
+//				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 4), new ItemStack(items.smoker), null),
+//				new VillagerTradeLists.GiveItemForLogsAndEmeralds(apiary, new VillagerEntity.PriceInfo(1, 1), new VillagerEntity.PriceInfo(16, 32), new VillagerEntity.PriceInfo(1, 2)),
+//				new VillagerApiaristTrades.GiveRandomHiveDroneForItems(propolis, null, wildcardDrone, new VillagerEntity.PriceInfo(2, 4))
+//			);
+//			apiaristCareer.addTrade(3,
+//				new VillagerTradeLists.GiveEmeraldForItems(wildcardPrincess, null),
+//				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 2), provenFrames, new VillagerEntity.PriceInfo(1, 6))
+//			);
+//			apiaristCareer.addTrade(4,
+//				new VillagerTradeLists.GiveItemForItemAndEmerald(wildcardPrincess, null, new VillagerEntity.PriceInfo(10, 64), monasticDrone, null),
+//				new VillagerTradeLists.GiveItemForTwoItems(wildcardPrincess, null, new ItemStack(Items.ENDER_EYE), new VillagerEntity.PriceInfo(12, 16), endDrone, null)
+//			);
 		}
 
 		blocks.apiary.init();
@@ -391,7 +398,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		flowerRegistry.registerAcceptableFlower(Blocks.CHORUS_PLANT, FlowerManager.FlowerTypeEnd);
 		flowerRegistry.registerAcceptableFlower(Blocks.CHORUS_FLOWER, FlowerManager.FlowerTypeEnd);
 		flowerRegistry.registerAcceptableFlower(Blocks.VINE, FlowerManager.FlowerTypeJungle);
-		flowerRegistry.registerAcceptableFlower(Blocks.TALLGRASS, FlowerManager.FlowerTypeJungle);
+		flowerRegistry.registerAcceptableFlower(Blocks.GRASS, FlowerManager.FlowerTypeJungle);
 		flowerRegistry.registerAcceptableFlower(Blocks.WHEAT, FlowerManager.FlowerTypeWheat);
 		flowerRegistry.registerAcceptableFlower(Blocks.PUMPKIN_STEM, FlowerManager.FlowerTypeGourd);
 		flowerRegistry.registerAcceptableFlower(Blocks.MELON_STEM, FlowerManager.FlowerTypeGourd);
@@ -399,7 +406,8 @@ public class ModuleApiculture extends BlankForestryModule {
 		flowerRegistry.registerAcceptableFlower(Blocks.CACTUS, FlowerManager.FlowerTypeCacti);
 
 		// Register plantable plants
-		for (FlowerBlock.EnumFlowerType flowerType : FlowerBlock.EnumFlowerType.values()) {
+		//TODO - this now uses the BlockTag SMALL_FLOWERS I believe
+		for (FlowerType flowerType : FlowerType.values()) {
 			BlockState blockState;
 			switch (flowerType.getBlockType()) {
 				case RED:
@@ -498,6 +506,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 			lavaIngredients = NonNullList.create();
 			lavaIngredients.add(phosphor);
+			//TODO - sand or red sand?
 			lavaIngredients.add(new ItemStack(Blocks.SAND, 1, 1));
 			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 2000));
 
@@ -535,6 +544,7 @@ public class ModuleApiculture extends BlankForestryModule {
 			// Cocoa combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.COCOA, 1), ImmutableMap.of(
 				coreItems.beeswax.getItemStack(), 1.0f,
+				//TODO - dye meta
 				new ItemStack(Items.DYE, 1, 3), 0.5f
 			));
 
@@ -629,13 +639,13 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		// BREWING RECIPES
 		BrewingRecipeRegistry.addRecipe(
-			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), Potions.AWKWARD),
-			items.pollenCluster.get(EnumPollenCluster.NORMAL, 1),
-			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), Potions.HEALING));
+			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD),
+			Ingredient.fromStacks(items.pollenCluster.get(EnumPollenCluster.NORMAL, 1)),
+			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.HEALING));
 		BrewingRecipeRegistry.addRecipe(
-			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), Potions.AWKWARD),
-			items.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1),
-			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), Potions.REGENERATION));
+			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD),
+			Ingredient.fromStacks(items.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1)),
+			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.REGENERATION));
 
 	}
 
@@ -685,6 +695,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		);
 	}
 
+	//TODO - just done by datapacks now?
 	private static void registerDungeonLoot() {
 		LootTables.register(Constants.VILLAGE_NATURALIST_LOOT_KEY);
 	}
@@ -744,7 +755,7 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
 		boolean hasVillageGenerated) {
-		if (!world.provider.getDimensionType().equals(DimensionType.THE_END)) {
+		if (!world.getDimension().getType().equals(DimensionType.field_223229_c_)) {
 			return;
 		}
 		if (Config.getBeehivesAmount() > 0.0) {
@@ -769,8 +780,8 @@ public class ModuleApiculture extends BlankForestryModule {
 	}
 
 	@Override
-	public boolean processIMCMessage(IMCMessage message) {
-		if (message.key.equals("add-candle-lighting-id")) {
+	public boolean processIMCMessage(InterModComms.IMCMessage message) {
+		if (message.getMethod().equals("add-candle-lighting-id")) {
 			ItemStack value = message.getItemStackValue();
 			if (value != null) {
 				BlockCandle.addItemToLightingList(value.getItem());
@@ -778,26 +789,26 @@ public class ModuleApiculture extends BlankForestryModule {
 				IMCUtil.logInvalidIMCMessage(message);
 			}
 			return true;
-		} else if (message.key.equals("add-alveary-slab") && message.isStringMessage()) {
+		} else if (message.getMethod().equals("add-alveary-slab") && message.isStringMessage()) {
 			String messageString = String.format("Received a '%s' request from mod '%s'. This IMC message has been replaced with the oreDictionary for 'slabWood'. Please contact the author and report this issue.", message.key, message.getSender());
 			Log.warning(messageString);
 			return true;
-		} else if (message.key.equals("blacklist-hives-dimension")) {
+		} else if (message.getMethod().equals("blacklist-hives-dimension")) {
 			int[] dims = message.getNBTValue().getIntArray("dimensions");
 			for (int dim : dims) {
 				HiveConfig.addBlacklistedDim(dim);
 			}
 			return true;
-		} else if (message.key.equals("add-plantable-flower")) {
+		} else if (message.getMethod().equals("add-plantable-flower")) {
 			return addPlantableFlower(message);
-		} else if (message.key.equals("add-acceptable-flower")) {
+		} else if (message.getMethod().equals("add-acceptable-flower")) {
 			return addAcceptableFlower(message);
 		}
 
 		return false;
 	}
 
-	private boolean addPlantableFlower(IMCMessage message) {
+	private boolean addPlantableFlower(InterModComms.IMCMessage message) {
 		try {
 			CompoundNBT tagCompound = message.getNBTValue();
 			BlockState flowerState = NBTUtil.readBlockState(tagCompound);
@@ -816,7 +827,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		}
 	}
 
-	private boolean addAcceptableFlower(IMCMessage message) {
+	private boolean addAcceptableFlower(InterModComms.IMCMessage message) {
 		try {
 			CompoundNBT tagCompound = message.getNBTValue();
 			BlockState flowerState = NBTUtil.readBlockState(tagCompound);
@@ -834,6 +845,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		}
 	}
 
+	//TODO - register event handler
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void textureHook(TextureStitchEvent.Pre event) {
