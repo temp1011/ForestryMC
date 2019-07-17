@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
 public class TankRenderInfo {
-	public static final TankRenderInfo EMPTY = new TankRenderInfo(new FluidStack(FluidRegistry.WATER, 0), EnumTankLevel.EMPTY);
+	public static final TankRenderInfo EMPTY = new TankRenderInfo(null /*TODO fluids - new FluidStack(FluidRegistry.WATER, 0)*/, EnumTankLevel.EMPTY);
 
 	@Nullable
 	private final FluidStack fluidStack;

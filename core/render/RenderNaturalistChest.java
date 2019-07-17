@@ -11,12 +11,13 @@
 package forestry.core.render;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.model.ModelChest;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.model.ChestModel;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
@@ -24,7 +25,7 @@ import forestry.core.tiles.TileNaturalistChest;
 
 public class RenderNaturalistChest extends TileEntityRenderer<TileNaturalistChest> {
 
-	private final ModelChest chestModel = new ModelChest();
+	private final ChestModel chestModel = new ChestModel();
 	private final ResourceLocation texture;
 
 	public RenderNaturalistChest(String textureName) {
@@ -35,13 +36,13 @@ public class RenderNaturalistChest extends TileEntityRenderer<TileNaturalistChes
 	 * @param chest If it null its render the item else it render the tile entity.
 	 */
 	@Override
-	public void render(TileNaturalistChest chest, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileNaturalistChest chest, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (chest != null) {
 			World worldObj = chest.getWorldObj();
 			if (worldObj.isBlockLoaded(chest.getPos())) {
 				BlockState blockState = worldObj.getBlockState(chest.getPos());
 				if (blockState.getBlock() instanceof BlockBase) {
-					Direction facing = blockState.getValue(BlockBase.FACING);
+					Direction facing = blockState.get(BlockBase.FACING);
 					render(facing, chest.prevLidAngle, chest.lidAngle, x, y, z, partialTicks);
 					return;
 				}
@@ -53,10 +54,10 @@ public class RenderNaturalistChest extends TileEntityRenderer<TileNaturalistChes
 	public void render(Direction orientation, float prevLidAngle, float lidAngle, double x, double y, double z, float partialTick) {
 		GlStateManager.pushMatrix();
 		bindTexture(texture);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.translate((float) x, (float) y + 1.0F, (float) z + 1.0F);
-		GlStateManager.scale(1.0F, -1.0F, -1.0F);
-		GlStateManager.translate(0.5F, 0.5F, 0.5F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.translatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
+		GlStateManager.scalef(1.0F, -1.0F, -1.0F);
+		GlStateManager.translatef(0.5F, 0.5F, 0.5F);
 
 		int rotation;
 		switch (orientation) {
@@ -75,13 +76,13 @@ public class RenderNaturalistChest extends TileEntityRenderer<TileNaturalistChes
 				break;
 		}
 
-		GlStateManager.rotate(rotation, 0.0F, 1.0F, 0.0F);
-		GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+		GlStateManager.rotatef(rotation, 0.0F, 1.0F, 0.0F);
+		GlStateManager.translatef(-0.5F, -0.5F, -0.5F);
 
 		float angle = prevLidAngle + (lidAngle - prevLidAngle) * partialTick;
 		angle = 1.0F - angle;
 		angle = 1.0F - angle * angle * angle;
-		chestModel.chestLid.rotateAngleX = -(angle * (float) Math.PI / 2.0F);
+		chestModel.getLid().rotateAngleX = -(angle * (float) Math.PI / 2.0F);
 		chestModel.renderAll();
 
 		GlStateManager.popMatrix();

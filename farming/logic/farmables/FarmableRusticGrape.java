@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.BooleanProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -17,7 +17,7 @@ import forestry.api.farming.IFarmable;
 import forestry.farming.logic.crops.CropDestroy;
 
 public class FarmableRusticGrape implements IFarmable {
-	public static final PropertyBool GRAPES = PropertyBool.create("grapes");
+	public static final BooleanProperty GRAPES = BooleanProperty.create("grapes");
 
 	private final Block cropBlock;
 

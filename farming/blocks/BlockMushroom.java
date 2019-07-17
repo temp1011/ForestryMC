@@ -10,43 +10,47 @@
  ******************************************************************************/
 package forestry.farming.blocks;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.BushBlock;
-import net.minecraft.block.BlockDirt;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.EnumProperty;
-import net.minecraft.block.BlockStateContainer;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 import net.minecraft.world.gen.feature.Feature;
-
+//import net.minecraft.world.gen.feature.WorldGenBigMushroom;
+import net.minecraft.world.storage.loot.LootContext;
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.config.Constants;
 
+//TODO - figure out why this class exists
 public class BlockMushroom extends BushBlock implements IItemModelRegister, IGrowable {
 
 	public static final EnumProperty<MushroomType> VARIANT = EnumProperty.create("mushroom", MushroomType.class);
-	public static final PropertyBool MATURE = PropertyBool.create("mature");
+	public static final BooleanProperty MATURE = BooleanProperty.create("mature");
 
 	public enum MushroomType implements IStringSerializable {
 		BROWN {
@@ -73,38 +77,26 @@ public class BlockMushroom extends BushBlock implements IItemModelRegister, IGro
 	private final Feature[] generators;
 
 	public BlockMushroom() {
-		setHardness(0.0f);
-		this.generators = new Feature[]{new WorldGenBigMushroom(Blocks.BROWN_MUSHROOM_BLOCK), new WorldGenBigMushroom(Blocks.RED_MUSHROOM_BLOCK)};
-		setCreativeTab(null);
-		setDefaultState(this.blockState.getBaseState().with(VARIANT, MushroomType.BROWN).with(MATURE, false));
-		setTickRandomly(true);
-		setSoundType(SoundType.PLANT);
+		super(Block.Properties.create(Material.PLANTS)
+				.hardnessAndResistance(0.0f)
+				.tickRandomly()
+				.sound(SoundType.PLANT));
+		this.generators = new Feature[]{Feature.HUGE_BROWN_MUSHROOM, Feature.HUGE_RED_MUSHROOM};
+		//		setCreativeTab(null); TODO - done in item
+		setDefaultState(this.getStateContainer().getBaseState().with(VARIANT, MushroomType.BROWN).with(MATURE, false));
 	}
 
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, VARIANT, MATURE);
-	}
+	//TODO - idk
+	//	@Override
+	//	protected BlockStateContainer createBlockState() {
+	//		return new BlockStateContainer(this, VARIANT, MATURE);
+	//	}
 
+	//TODO - right method to override?
 	@Override
-	public int getMetaFromState(BlockState state) {
-		return state.getValue(VARIANT).ordinal() | ((state.getValue(MATURE) ? 1 : 0) << 2);
-	}
-
-	@Override
-	public BlockState getStateFromMeta(int meta) {
-		return getDefaultState().with(VARIANT, MushroomType.values()[meta % 2]).with(MATURE, (meta >> 2) == 1);
-	}
-
-	@Override
-	public boolean getTickRandomly() {
-		return true;
-	}
-
-	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
-		MushroomType type = state.getValue(VARIANT);
-		drops.add(type.getDrop());
+	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+		MushroomType type = state.get(VARIANT);
+		return Lists.newArrayList(type.getDrop());
 	}
 
 	@Override
@@ -118,23 +110,24 @@ public class BlockMushroom extends BushBlock implements IItemModelRegister, IGro
 	}
 
 	@Override
-	public boolean canBlockStay(World worldIn, BlockPos pos, BlockState state) {
+	public boolean canBlockStay(BlockState state, World worldIn, BlockPos pos) {
 		if (pos.getY() >= 0 && pos.getY() < 256) {
-			BlockState BlockState = worldIn.getBlockState(pos.down());
-			return BlockState.getBlock() == Blocks.MYCELIUM || (BlockState.getBlock() == Blocks.DIRT && BlockState.getValue(BlockDirt.VARIANT) == BlockDirt.DirtType.PODZOL || worldIn.getLight(pos) < 13 && BlockState.getBlock().canSustainPlant(BlockState, worldIn, pos.down(), net.minecraft.util.Direction.UP, this));
+			BlockState blockState = worldIn.getBlockState(pos.down());
+			Block block = blockState.getBlock();
+			return block == Blocks.MYCELIUM || block == Blocks.PODZOL || worldIn.getLight(pos) < 13 && block.canSustainPlant(blockState, worldIn, pos.down(), net.minecraft.util.Direction.UP, this);
 		} else {
 			return false;
 		}
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, BlockState state, Random rand) {
+	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
 		if (world.isRemote || rand.nextInt(2) != 0) {
 			return;
 		}
 
 		BlockState blockState = world.getBlockState(pos);
-		if (!blockState.getValue(MATURE)) {
+		if (!blockState.get(MATURE)) {
 			world.setBlockState(pos, blockState.with(MATURE, true), Constants.FLAG_BLOCK_SYNC);
 		} else {
 			int lightValue1 = world.getLightFromNeighbors(pos.up());
@@ -145,11 +138,12 @@ public class BlockMushroom extends BushBlock implements IItemModelRegister, IGro
 	}
 
 	public void generateGiantMushroom(World world, BlockPos pos, BlockState state, Random rand) {
-		MushroomType type = state.getValue(VARIANT);
+		MushroomType type = state.get(VARIANT);
 
 		world.setBlockToAir(pos);
+		//TODO - should be .place()
 		if (!generators[type.ordinal()].generate(world, rand, pos)) {
-			world.setBlockState(pos, getStateFromMeta(type.ordinal()), 0);
+			world.setBlockState(pos, this.stateContainer.getBaseState().with(VARIANT, type), 0);
 		}
 	}
 
@@ -158,7 +152,8 @@ public class BlockMushroom extends BushBlock implements IItemModelRegister, IGro
 	}
 
 	@Override
-	public void getSubBlocks(ItemGroup tab, NonNullList<ItemStack> list) {
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
+		//TODO - blockstate into itemstack (or flatten?)
 		list.add(new ItemStack(this, 1, 0));
 		list.add(new ItemStack(this, 1, 1));
 	}
@@ -171,7 +166,7 @@ public class BlockMushroom extends BushBlock implements IItemModelRegister, IGro
 	}
 
 	@Override
-	public boolean canGrow(World worldIn, BlockPos pos, BlockState state, boolean isClient) {
+	public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
 		return true;
 	}
 
@@ -185,13 +180,10 @@ public class BlockMushroom extends BushBlock implements IItemModelRegister, IGro
 		this.grow(worldIn, pos, state, rand);
 	}
 
+	//TODO - getPickBlock doesn't seem to exist
 	@Override
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, World world, BlockPos pos, PlayerEntity player) {
-		return state.getValue(VARIANT).getDrop();
+		return state.get(VARIANT).getDrop();
 	}
 
-	@Override
-	public int damageDropped(BlockState state) {
-		return state.getValue(VARIANT).ordinal();
-	}
 }

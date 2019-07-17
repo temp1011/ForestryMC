@@ -17,7 +17,7 @@ import java.util.Locale;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.model.RendererModel;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -32,10 +32,10 @@ import forestry.core.tiles.TileBase;
 
 public class RenderMachine extends TileEntityRenderer<TileBase> {
 
-	private final ModelRenderer basefront;
-	private final ModelRenderer baseback;
-	private final ModelRenderer resourceTank;
-	private final ModelRenderer productTank;
+	private final RendererModel basefront;
+	private final RendererModel baseback;
+	private final RendererModel resourceTank;
+	private final RendererModel productTank;
 
 	private final ResourceLocation textureBase;
 	private final ResourceLocation textureResourceTank;
@@ -46,25 +46,25 @@ public class RenderMachine extends TileEntityRenderer<TileBase> {
 	public RenderMachine(String baseTexture) {
 		ModelBase model = new RenderModelBase();
 
-		basefront = new ModelRenderer(model, 0, 0);
+		basefront = new RendererModel(model, 0, 0);
 		basefront.addBox(-8F, -8F, -8F, 16, 4, 16);
 		basefront.rotationPointX = 8;
 		basefront.rotationPointY = 8;
 		basefront.rotationPointZ = 8;
 
-		baseback = new ModelRenderer(model, 0, 0);
+		baseback = new RendererModel(model, 0, 0);
 		baseback.addBox(-8F, 4F, -8F, 16, 4, 16);
 		baseback.rotationPointX = 8;
 		baseback.rotationPointY = 8;
 		baseback.rotationPointZ = 8;
 
-		resourceTank = new ModelRenderer(model, 0, 0);
+		resourceTank = new RendererModel(model, 0, 0);
 		resourceTank.addBox(-6F, -8F, -6F, 12, 16, 6);
 		resourceTank.rotationPointX = 8;
 		resourceTank.rotationPointY = 8;
 		resourceTank.rotationPointZ = 8;
 
-		productTank = new ModelRenderer(model, 0, 0);
+		productTank = new RendererModel(model, 0, 0);
 		productTank.addBox(-6F, -8F, 0F, 12, 16, 6);
 		productTank.rotationPointX = 8;
 		productTank.rotationPointY = 8;
@@ -163,7 +163,7 @@ public class RenderMachine extends TileEntityRenderer<TileBase> {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
-	private void renderTank(ModelRenderer tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, float factor) {
+	private void renderTank(RendererModel tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, float factor) {
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(textureBase);
 		tankModel.render(factor);

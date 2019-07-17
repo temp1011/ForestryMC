@@ -14,9 +14,10 @@ import javax.annotation.Nullable;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.storage.MapStorage;
+import net.minecraft.world.storage.DimensionSavedDataManager;
 
 import forestry.api.climate.ClimateCapabilities;
 import forestry.api.climate.IClimateListener;
@@ -38,8 +39,8 @@ public class ClimateRoot implements IClimateRoot {
 	@Override
 	public IClimateListener getListener(World world, BlockPos pos) {
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity != null && tileEntity.hasCapability(ClimateCapabilities.CLIMATE_LISTENER, null)) {
-			return tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER, null);
+		if (tileEntity != null) {
+			return tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER, null).orElse(null);
 		}
 		return null;
 	}
@@ -62,13 +63,9 @@ public class ClimateRoot implements IClimateRoot {
 
 	@Override
 	public IWorldClimateHolder getWorldClimate(World world) {
-		MapStorage storage = world.getPerWorldStorage();
-		WorldClimateHolder holder = (WorldClimateHolder) storage.getOrLoadData(WorldClimateHolder.class, WorldClimateHolder.NAME);
-		if (holder == null) {
-			holder = new WorldClimateHolder(WorldClimateHolder.NAME);
-
-			storage.setData(WorldClimateHolder.NAME, holder);
-		}
+		//TODO - need to make sure this is only called server side...
+		DimensionSavedDataManager storage = ((ServerWorld) world).getSavedData();
+		WorldClimateHolder holder = storage.getOrCreate(() -> new WorldClimateHolder(WorldClimateHolder.NAME), WorldClimateHolder.NAME);
 		holder.setWorld(world);
 		return holder;
 	}

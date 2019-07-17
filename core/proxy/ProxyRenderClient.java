@@ -13,10 +13,8 @@ package forestry.core.proxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -58,7 +56,7 @@ public class ProxyRenderClient extends ProxyRender {
 		TextureMapForestry textureMap = textureManagerForestry.getTextureMap();
 
 		Minecraft minecraft = Minecraft.getInstance();
-		minecraft.renderEngine.loadTickableTexture(TextureManagerForestry.getInstance().getGuiTextureMap(), textureMap);
+		minecraft.getTextureManager().loadTickableTexture(TextureManagerForestry.getInstance().getGuiTextureMap(), textureMap);
 	}
 
 	@Override
@@ -105,35 +103,36 @@ public class ProxyRenderClient extends ProxyRender {
 	@Override
 	public void registerFluidStateMapper(Block block, Fluids fluid) {
 		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid", fluid.getTag());
-		StateMapperBase ignoreState = new FluidStateMapper(fluidLocation);
-		ModelLoader.setCustomStateMapper(block, ignoreState);
-		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new FluidItemMeshDefinition(fluidLocation));
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), fluidLocation);
+		//TODO - fluids
+		// StateMapperBase ignoreState = new FluidStateMapper(fluidLocation);
+//		ModelLoader.setCustomStateMapper(block, ignoreState);
+//		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new FluidItemMeshDefinition(fluidLocation));
+//		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), fluidLocation);
 	}
 
-	private static class FluidStateMapper extends StateMapperBase {
-		private final ModelResourceLocation fluidLocation;
+//	private static class FluidStateMapper extends StateMapperBase {
+//		private final ModelResourceLocation fluidLocation;
+//
+//		public FluidStateMapper(ModelResourceLocation fluidLocation) {
+//			this.fluidLocation = fluidLocation;
+//		}
+//
+//		@Override
+//		protected ModelResourceLocation getModelResourceLocation(BlockState BlockState) {
+//			return fluidLocation;
+//		}
+//	}
 
-		public FluidStateMapper(ModelResourceLocation fluidLocation) {
-			this.fluidLocation = fluidLocation;
-		}
-
-		@Override
-		protected ModelResourceLocation getModelResourceLocation(BlockState BlockState) {
-			return fluidLocation;
-		}
-	}
-
-	private static class FluidItemMeshDefinition implements ItemMeshDefinition {
-		private final ModelResourceLocation fluidLocation;
-
-		public FluidItemMeshDefinition(ModelResourceLocation fluidLocation) {
-			this.fluidLocation = fluidLocation;
-		}
-
-		@Override
-		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			return fluidLocation;
-		}
-	}
+//	private static class FluidItemMeshDefinition implements ItemMeshDefinition {
+//		private final ModelResourceLocation fluidLocation;
+//
+//		public FluidItemMeshDefinition(ModelResourceLocation fluidLocation) {
+//			this.fluidLocation = fluidLocation;
+//		}
+//
+//		@Override
+//		public ModelResourceLocation getModelLocation(ItemStack stack) {
+//			return fluidLocation;
+//		}
+//	}
 }

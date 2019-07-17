@@ -10,27 +10,26 @@
  ******************************************************************************/
 package forestry.farming.logic.crops;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableCollection;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Optional;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.plugins.PluginIC2;
-import forestry.plugins.PluginTechReborn;
+//import forestry.plugins.PluginIC2;
+//import forestry.plugins.PluginTechReborn;
 
 public class CropRubber extends CropDestroy {
 
@@ -42,18 +41,19 @@ public class CropRubber extends CropDestroy {
 	 * Convert a "wet" rubber log blockstate into the dry version.
 	 * Total hack since we don't have access to the blockstates.
 	 */
+	//TODO - will this hack still work for ic2 in 1.14? Or will they just have to expose blockstates in their API?
 	private static <T extends Comparable<T>> BlockState getReplantState(BlockState sappyState) {
 		if (hasRubberToHarvest(sappyState)) {
-			for (Map.Entry<IProperty<?>, Comparable<?>> wetPropertyEntry : sappyState.getProperties().entrySet()) {
+			for (Map.Entry<IProperty<?>, Comparable<?>> wetPropertyEntry : sappyState.getValues().entrySet()) {
 				String valueWetString = wetPropertyEntry.getValue().toString();
 				String valueDryString = valueWetString.replace("wet", "dry");
 				IProperty<?> property = wetPropertyEntry.getKey();
-				if (property instanceof PropertyBool && property.getName().equals("hassap")) {
-					return sappyState.with(PropertyBool.create("hassap"), false);
+				if (property instanceof BooleanProperty && property.getName().equals("hassap")) {
+					return sappyState.with(BooleanProperty.create("hassap"), false);
 				}
 
-				BlockState baseState = sappyState.getBlock().getBlockState().getBaseState();
-				BlockState dryState = getStateWithValue(baseState, property, valueDryString);
+				//TODO - I think this works
+				BlockState dryState = getStateWithValue(sappyState, property, valueDryString);
 				if (dryState != null) {
 					return dryState;
 				}
@@ -65,15 +65,15 @@ public class CropRubber extends CropDestroy {
 
 	public static boolean hasRubberToHarvest(BlockState blockState) {
 		Block block = blockState.getBlock();
-		if (PluginIC2.rubberWood != null && ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
-			ImmutableCollection<Comparable<?>> propertyValues = blockState.getProperties().values();
+		if (false ){//PluginIC2.rubberWood != null && ItemStackUtil.equals(block, PluginIC2.rubberWood)) {
+			ImmutableCollection<Comparable<?>> propertyValues = blockState.getValues().values();
 			for (Comparable<?> propertyValue : propertyValues) {
 				if (propertyValue.toString().contains("wet")) {
 					return true;
 				}
 			}
-		} else if (PluginTechReborn.RUBBER_WOOD != null && ItemStackUtil.equals(block, PluginTechReborn.RUBBER_WOOD)) {
-			return blockState.getValue(PropertyBool.create("hassap"));
+		} else if (false){//PluginTechReborn.RUBBER_WOOD != null && ItemStackUtil.equals(block, PluginTechReborn.RUBBER_WOOD)) {
+			return blockState.get(BooleanProperty.create("hassap"));
 		}
 		return false;
 	}
@@ -81,21 +81,19 @@ public class CropRubber extends CropDestroy {
 	@Nullable
 	private static <T extends Comparable<T>> BlockState getStateWithValue(BlockState baseState, IProperty<T> property, String valueString) {
 		Optional<T> value = property.parseValue(valueString);
-		if (value.isPresent()) {
-			return baseState.with(property, value.get());
-		}
-		return null;
+		return value.map(t -> baseState.with(property, t)).orElse(null);
 	}
 
 	@Override
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		NonNullList<ItemStack> harvested = NonNullList.create();
 		Block harvestBlock = world.getBlockState(pos).getBlock();
-		if (PluginIC2.rubberWood != null && ItemStackUtil.equals(harvestBlock, PluginIC2.rubberWood)) {
-			harvested.add(PluginIC2.resin.copy());
-		} else if (PluginTechReborn.RUBBER_WOOD != null && ItemStackUtil.equals(harvestBlock, PluginTechReborn.RUBBER_WOOD)) {
-			harvested.add(PluginTechReborn.sap.copy());
-		}
+		//TODO - when other mods exist, implement
+//		if (PluginIC2.rubberWood != null && ItemStackUtil.equals(harvestBlock, PluginIC2.rubberWood)) {
+//			harvested.add(PluginIC2.resin.copy());
+//		} else if (PluginTechReborn.RUBBER_WOOD != null && ItemStackUtil.equals(harvestBlock, PluginTechReborn.RUBBER_WOOD)) {
+//			harvested.add(PluginTechReborn.sap.copy());
+//		}
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 

@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -23,6 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
@@ -50,13 +51,13 @@ public class RenderEscritoire extends TileEntityRenderer<TileEscritoire> {
 	 * @param escritoire If it null its render the item else it render the tile entity.
 	 */
 	@Override
-	public void render(TileEscritoire escritoire, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileEscritoire escritoire, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (escritoire != null) {
 			World world = escritoire.getWorldObj();
 			if (world.isBlockLoaded(escritoire.getPos())) {
 				BlockState blockState = world.getBlockState(escritoire.getPos());
 				if (blockState.getBlock() instanceof BlockBase) {
-					Direction facing = blockState.getValue(BlockBase.FACING);
+					Direction facing = blockState.get(BlockBase.FACING);
 					render(escritoire.getIndividualOnDisplay(), world, facing, x, y, z);
 					return;
 				}
@@ -71,7 +72,7 @@ public class RenderEscritoire extends TileEntityRenderer<TileEscritoire> {
 		Minecraft minecraft = Minecraft.getInstance();
 		GlStateManager.pushMatrix();
 		{
-			GlStateManager.translate((float) x + 0.5f, (float) y + 0.875f, (float) z + 0.5f);
+			GlStateManager.translatef((float) x + 0.5f, (float) y + 0.875f, (float) z + 0.5f);
 
 			float[] angle = {(float) Math.PI, 0, 0};
 
@@ -103,13 +104,14 @@ public class RenderEscritoire extends TileEntityRenderer<TileEscritoire> {
 
 			GlStateManager.pushMatrix();
 			{
-				GlStateManager.translate((float) x + 0.5f, (float) y + 0.6f, (float) z + 0.5f);
-				GlStateManager.scale(renderScale, renderScale, renderScale);
+				GlStateManager.translatef((float) x + 0.5f, (float) y + 0.6f, (float) z + 0.5f);
+				GlStateManager.scalef(renderScale, renderScale, renderScale);
 				dummyItem.setItem(itemstack);
 
-				if (world.getTotalWorldTime() != lastTick) {
-					lastTick = world.getTotalWorldTime();
-					dummyItem.onUpdate();
+				//TODO - right time?
+				if (world.getGameTime() != lastTick) {
+					lastTick = world.getGameTime();
+					dummyItem.tick();
 				}
 
 				EntityRendererManager rendermanager = minecraft.getRenderManager();

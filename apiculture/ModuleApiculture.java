@@ -22,9 +22,7 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowerBlock;
 import net.minecraft.block.FlowerPotBlock;
-import net.minecraft.block.properties.EnumProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -59,7 +57,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -243,10 +240,11 @@ public class ModuleApiculture extends BlankForestryModule {
 		//TODO - commands
 //		ModuleCore.rootCommand.addChildCommand(new CommandBee());
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
-			ApicultureFilterRuleType.init();
-			ApicultureFilterRule.init();
-		}
+		//TODO - for now no sorting
+//		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
+//			ApicultureFilterRuleType.init();
+//			ApicultureFilterRule.init();
+//		}
 	}
 
 	@Override

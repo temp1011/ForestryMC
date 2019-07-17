@@ -12,8 +12,6 @@ import net.minecraft.util.IStringSerializable;
  * @see EnumVanillaWoodType
  */
 public interface IWoodType extends IStringSerializable {
-	int getMetadata();
-
 	float getHardness();
 
 	String getPlankTexture();

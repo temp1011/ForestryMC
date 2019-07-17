@@ -11,11 +11,12 @@
 package forestry.core.blocks.properties;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Optional;
 
 import java.util.List;
+import java.util.Optional;
 
-import net.minecraft.block.properties.IProperty;
+
+import net.minecraft.state.IProperty;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -54,7 +55,7 @@ public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IP
 		if (valueClass.isInstance(allele)) {
 			return Optional.of(valueClass.cast(allele));
 		}
-		return Optional.absent();
+		return Optional.empty();
 	}
 
 	@Override

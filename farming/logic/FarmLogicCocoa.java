@@ -20,8 +20,8 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
+//import net.minecraft.block.BlockOldLog;
+//import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Items;
@@ -46,6 +46,7 @@ public class FarmLogicCocoa extends FarmLogic {
 	}
 
 	@Override
+	//TODO - dye meta
 	public ItemStack getIconItemStack() {
 		return new ItemStack(Items.DYE, 1, 3);
 	}
@@ -132,7 +133,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		BlockPos.MutableBlockPos current = new BlockPos.MutableBlockPos(position);
 		BlockState blockState = world.getBlockState(current);
 		while (isJungleTreeTrunk(blockState)) {
-			for (Direction direction : Direction.HORIZONTALS) {
+			for (Direction direction : Direction.BY_HORIZONTAL_INDEX) {	//TODO - AT
 				BlockPos candidate = new BlockPos(current.getX() + direction.getXOffset(), current.getY(), current.getZ() + direction.getZOffset());
 				if (world.isBlockLoaded(candidate) && world.isAirBlock(candidate)) {
 					return farmHousing.plantGermling(cocoa, world, candidate, farmDirection);
@@ -152,7 +153,8 @@ public class FarmLogicCocoa extends FarmLogic {
 
 	private static boolean isJungleTreeTrunk(BlockState blockState) {
 		Block block = blockState.getBlock();
-		return block == Blocks.LOG && blockState.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE;
+		//TODO - hopefully this is OK
+		return block == Blocks.JUNGLE_LOG;
 	}
 
 	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
@@ -165,6 +167,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		Block block = blockState.getBlock();
 
 		ICrop crop = null;
+		//TODO - probably needs tag
 		if (!block.isWood(world, position)) {
 			crop = cocoa.getCropAt(world, position, blockState);
 			if (crop == null) {
@@ -224,6 +227,7 @@ public class FarmLogicCocoa extends FarmLogic {
 						crops.push(crop);
 						candidates.add(candidate);
 						seen.add(candidate);
+						//TODO - probably needs TAG
 					} else if (blockState.getBlock().isWood(world, candidate)) {
 						candidates.add(candidate);
 						seen.add(candidate);
