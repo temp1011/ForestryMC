@@ -27,8 +27,11 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -181,7 +184,8 @@ public class Forestry {
 	}
 
 	//split
-	@EventHandler
+	//TODO - when to run these events
+//	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		// Register gui handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
@@ -192,7 +196,7 @@ public class Forestry {
 		AdvancementManager.registerTriggers();
 	}
 
-	@EventHandler
+//	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		ModuleManager.getInternalHandler().runPostInit();
 

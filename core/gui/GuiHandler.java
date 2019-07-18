@@ -22,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -34,28 +35,30 @@ public class GuiHandler implements IGuiHandler {
 		openGui(PlayerEntity, guiHandler, (short) 0);
 	}
 
-	public static void openGui(PlayerEntity PlayerEntity, IGuiHandlerEntity guiHandler, short data) {
+	public static void openGui(PlayerEntity playerEntity, IGuiHandlerEntity guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
-		PlayerEntity.openGui(ForestryAPI.instance, guiData, PlayerEntity.world, guiHandler.getIdOfEntity(), 0, 0);
+		//TODO - can only be called on server?
+		NetworkHooks.openGui(playerEntity, () -> guiHandler.getContainer(playerEntity, guiData));
+		playerEntity.openGui(ForestryAPI.instance, guiData, playerEntity.world, guiHandler.getIdOfEntity(), 0, 0);
 	}
 
-	public static void openGui(PlayerEntity PlayerEntity, IGuiHandlerItem guiHandler) {
-		openGui(PlayerEntity, guiHandler, (short) 0);
+	public static void openGui(PlayerEntity playerEntity, IGuiHandlerItem guiHandler) {
+		openGui(playerEntity, guiHandler, (short) 0);
 	}
 
-	public static void openGui(PlayerEntity PlayerEntity, IGuiHandlerItem guiHandler, short data) {
+	public static void openGui(PlayerEntity playerEntity, IGuiHandlerItem guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
-		PlayerEntity.openGui(ForestryAPI.instance, guiData, PlayerEntity.world, 0, 0, 0);
+		playerEntity.openGui(ForestryAPI.instance, guiData, playerEntity.world, 0, 0, 0);
 	}
 
-	public static void openGui(PlayerEntity PlayerEntity, IGuiHandlerTile guiHandler) {
-		openGui(PlayerEntity, guiHandler, (short) 0);
+	public static void openGui(PlayerEntity playerEntity, IGuiHandlerTile guiHandler) {
+		openGui(playerEntity, guiHandler, (short) 0);
 	}
 
-	public static void openGui(PlayerEntity PlayerEntity, IGuiHandlerTile guiHandler, short data) {
+	public static void openGui(PlayerEntity playerEntity, IGuiHandlerTile guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
 		BlockPos coordinates = guiHandler.getCoordinates();
-		PlayerEntity.openGui(ForestryAPI.instance, guiData, PlayerEntity.world, coordinates.getX(), coordinates.getY(), coordinates.getZ());
+		playerEntity.openGui(ForestryAPI.instance, guiData, playerEntity.world, coordinates.getX(), coordinates.getY(), coordinates.getZ());
 	}
 
 	private static int encodeGuiData(IGuiHandlerForestry guiHandler, short data) {
