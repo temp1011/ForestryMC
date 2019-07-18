@@ -20,12 +20,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-import net.minecraftforge.fml.common.Optional;
+//import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.multiblock.IFarmComponent;
 import forestry.core.config.Constants;
@@ -34,14 +35,14 @@ import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.utils.InventoryUtil;
 import forestry.farming.triggers.FarmingTriggers;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.ITriggerExternal;
-import buildcraft.api.statements.ITriggerInternal;
-import buildcraft.api.statements.ITriggerInternalSided;
-import buildcraft.api.statements.ITriggerProvider;
-
-@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
-public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active, ITriggerProvider {
+//import buildcraft.api.statements.IStatementContainer;
+//import buildcraft.api.statements.ITriggerExternal;
+//import buildcraft.api.statements.ITriggerInternal;
+//import buildcraft.api.statements.ITriggerInternalSided;
+//import buildcraft.api.statements.ITriggerProvider;
+//
+//@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
+public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active{//}, ITriggerProvider {
 
 	private static final Direction[] dumpDirections = new Direction[]{Direction.DOWN};
 
@@ -76,36 +77,30 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(this, facing);
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);
+			return LazyOptional.of(() -> sidedInvWrapper).cast();
 		}
 		return super.getCapability(capability, facing);
 	}
 
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
-	}
-
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull Direction side) {
-	}
-
-	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-		if (getMultiblockLogic().isConnected()) {
-			triggers.addAll(FarmingTriggers.allExternalTriggers);
-		}
-	}
+//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+//	@Override
+//	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
+//	}
+//
+//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+//	@Override
+//	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull Direction side) {
+//	}
+//
+//	/* ITRIGGERPROVIDER */
+//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+//	@Override
+//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+//		if (getMultiblockLogic().isConnected()) {
+//			triggers.addAll(FarmingTriggers.allExternalTriggers);
+//		}
+//	}
 }

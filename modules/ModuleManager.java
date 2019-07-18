@@ -220,9 +220,9 @@ public class ModuleManager implements IModuleManager {
 		Locale.setDefault(locale);
 	}
 
-	public static void runSetup(FMLPreInitializationEvent event) {
-		ASMDataTable asmDataTable = event.getAsmData();
-		Map<String, List<IForestryModule>> forestryModules = ForestryPluginUtil.getForestryModules(asmDataTable);
+	//TODO - Is this still called early enough?
+	public static void runSetup() {
+		Map<String, List<IForestryModule>> forestryModules = ForestryPluginUtil.getForestryModules();
 
 		internalHandler = new InternalModuleHandler(getInstance());
 		configureModules(forestryModules);
@@ -234,17 +234,18 @@ public class ModuleManager implements IModuleManager {
 	}
 
 	public static void serverStarting(MinecraftServer server) {
-		CommandHandler commandManager = (CommandHandler) server.getCommandManager();
-
-		for (IForestryModule module : loadedModules) {
-			ICommand[] commands = module.getConsoleCommands();
-			if (commands == null) {
-				continue;
-			}
-			for (ICommand command : commands) {
-				commandManager.registerCommand(command);
-			}
-		}
+		//TODO - commands
+		//		CommandHandler commandManager = (CommandHandler) server.getCommandManager();
+//
+//		for (IForestryModule module : loadedModules) {
+//			ICommand[] commands = module.getConsoleCommands();
+//			if (commands == null) {
+//				continue;
+//			}
+//			for (ICommand command : commands) {
+//				commandManager.registerCommand(command);
+//			}
+//		}
 	}
 
 

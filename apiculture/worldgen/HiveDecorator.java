@@ -22,9 +22,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
-import net.minecraftforge.event.terraingen.TerrainGen;
+//import net.minecraftforge.common.util.EnumHelper;
+//import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
+//import net.minecraftforge.event.terraingen.TerrainGen;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -36,14 +36,16 @@ import forestry.core.utils.Log;
 public abstract class HiveDecorator {
 
 	@Nullable
-	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0]);
+//	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0]);
 
 	public static void decorateHives(ChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-		if (!TerrainGen.populate(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated, EVENT_TYPE)) {
-			return;
-		}
+//		if (!TerrainGen.populate(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated, EVENT_TYPE)) {
+//			return;
+//		}
+		return; //TODO - worldgen
 
-		decorateHives(world, rand, chunkX, chunkZ);
+
+//		decorateHives(world, rand, chunkX, chunkZ);
 	}
 
 	public static void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
@@ -69,7 +71,7 @@ public abstract class HiveDecorator {
 				return;
 			}
 			Biome biome = world.getBiome(pos);
-			EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
+			EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
 
 			for (Hive hive : hives) {
 				if (hive.genChance() * Config.getBeehivesAmount() * hives.size() / 8 >= rand.nextFloat() * 100.0f) {
@@ -87,7 +89,7 @@ public abstract class HiveDecorator {
 		int worldX = (chunkX << 4) + 8;
 		int worldZ = (chunkZ << 4) + 8;
 		Biome biome = world.getBiome(new BlockPos(chunkX, 0, chunkZ));
-		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
+		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
@@ -138,11 +140,12 @@ public abstract class HiveDecorator {
 
 		BlockState state = world.getBlockState(pos);
 		Block placedBlock = state.getBlock();
-		if (!Block.isEqualTo(hiveBlock, placedBlock)) {
+		//TODO - will this work?
+		if (!(hiveBlock == placedBlock)) {
 			return false;
 		}
 
-		hiveBlock.onBlockAdded(world, pos, state);
+		hiveBlock.onBlockAdded(state, world, pos, hiveState, false);    //TODO - work out what correct parameters are here
 
 		if (!Config.generateBeehivesDebug) {
 			hive.postGen(world, rand, pos);

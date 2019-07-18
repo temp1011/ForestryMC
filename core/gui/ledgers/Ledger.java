@@ -157,11 +157,11 @@ public abstract class Ledger {
 
 	public abstract String getTooltip();
 
-	public boolean handleMouseClicked(int x, int y, int mouseButton) {
+	public boolean handleMouseClicked(double x, double y, int mouseButton) {
 		return false;
 	}
 
-	public boolean intersects(int mouseX, int mouseY) {
+	public boolean intersects(double mouseX, double mouseY) {
 		return mouseX >= currentShiftX && mouseX <= currentShiftX + currentWidth && mouseY >= currentShiftY && mouseY <= currentShiftY + getHeight();
 	}
 
@@ -203,7 +203,7 @@ public abstract class Ledger {
 		float colorG = (overlayColor >> 8 & 255) / 255.0F;
 		float colorB = (overlayColor & 255) / 255.0F;
 
-		GlStateManager.color(colorR, colorG, colorB, 1.0F);
+		GlStateManager.color4f(colorR, colorG, colorB, 1.0F);
 
 		Minecraft.getInstance().getTextureManager().bindTexture(texture);
 
@@ -216,7 +216,7 @@ public abstract class Ledger {
 
 		manager.gui.drawTexturedModalRect(x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body + bottom + right
 
-		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
+		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 	}
 
 	protected void drawSprite(TextureAtlasSprite sprite, int x, int y) {
@@ -224,7 +224,7 @@ public abstract class Ledger {
 	}
 
 	protected void drawSprite(ResourceLocation textureMap, TextureAtlasSprite sprite, int x, int y) {
-		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
+		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 		Minecraft.getInstance().getTextureManager().bindTexture(textureMap);
 		manager.gui.drawTexturedModalRect(x, y, sprite, 16, 16);
 	}
@@ -251,6 +251,7 @@ public abstract class Ledger {
 		List strings = minecraft.fontRenderer.listFormattedStringToWidth(string, width);
 		for (Object obj : strings) {
 			if (obj instanceof String) {
+				//TODO - think this needs to be renderString which needs AT
 				minecraft.fontRenderer.drawString((String) obj, x, y, color, shadow);
 				y += minecraft.fontRenderer.FONT_HEIGHT;
 			}

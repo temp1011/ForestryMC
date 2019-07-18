@@ -21,28 +21,29 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerPotBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.potion.Potions;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.Potions;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.storage.loot.LootTables;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
@@ -51,20 +52,11 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.apiculture.IBeekeepingMode;
@@ -81,7 +73,6 @@ import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.apiculture.capabilities.ArmorApiarist;
-import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.entities.MinecartEntityApiary;
 import forestry.apiculture.entities.MinecartEntityBeehouse;
 import forestry.apiculture.flowers.FlowerRegistry;
@@ -128,7 +119,6 @@ import forestry.core.utils.EntityUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.OreDictUtil;
-import forestry.core.utils.VillagerTradeLists;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -238,13 +228,13 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		// Commands
 		//TODO - commands
-//		ModuleCore.rootCommand.addChildCommand(new CommandBee());
+		//		ModuleCore.rootCommand.addChildCommand(new CommandBee());
 
 		//TODO - for now no sorting
-//		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
-//			ApicultureFilterRuleType.init();
-//			ApicultureFilterRule.init();
-//		}
+		//		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
+		//			ApicultureFilterRuleType.init();
+		//			ApicultureFilterRule.init();
+		//		}
 	}
 
 	@Override
@@ -339,41 +329,41 @@ public class ModuleApiculture extends BlankForestryModule {
 		if (Config.enableVillagers) {
 			// Register villager stuff
 			//TODO - villagers
-//			VillageCreationApiculture villageHandler = new VillageCreationApiculture();
-//			VillagerRegistry villagerRegistry = VillagerRegistry.instance();
-//			villagerRegistry.registerVillageCreationHandler(villageHandler);
-//
-//			villagerApiarist = new VillagerProfession(Constants.ID_VILLAGER_APIARIST, Constants.TEXTURE_SKIN_BEEKPEEPER, Constants.TEXTURE_SKIN_ZOMBIE_BEEKPEEPER);
-//			IForgeRegistry<VillagerProfession> villagerProfessions = ForgeRegistries.PROFESSIONS;
-//			villagerProfessions.register(villagerApiarist);
-//
-//			ItemStack wildcardPrincess = new ItemStack(items.beePrincessGE, 1);
-//			ItemStack wildcardDrone = new ItemStack(items.beeDroneGE, 1);
-//			ItemStack apiary = new ItemStack(blocks.apiary);
-//			ItemStack provenFrames = items.frameProven.getItemStack();
-//			ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
-//			ItemStack endDrone = BeeDefinition.ENDED.getMemberStack(EnumBeeType.DRONE);
-//			ItemStack propolis = new ItemStack(items.propolis, 1);
-//
-//			VillagerRegistry.VillagerCareer apiaristCareer = new VillagerRegistry.VillagerCareer(villagerApiarist, "apiarist");
-//			apiaristCareer.addTrade(1,
-//				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.WHEAT), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4)),
-//				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.CARROT), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4)),
-//				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.POTATO), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4))
-//			);
-//			apiaristCareer.addTrade(2,
-//				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 4), new ItemStack(items.smoker), null),
-//				new VillagerTradeLists.GiveItemForLogsAndEmeralds(apiary, new VillagerEntity.PriceInfo(1, 1), new VillagerEntity.PriceInfo(16, 32), new VillagerEntity.PriceInfo(1, 2)),
-//				new VillagerApiaristTrades.GiveRandomHiveDroneForItems(propolis, null, wildcardDrone, new VillagerEntity.PriceInfo(2, 4))
-//			);
-//			apiaristCareer.addTrade(3,
-//				new VillagerTradeLists.GiveEmeraldForItems(wildcardPrincess, null),
-//				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 2), provenFrames, new VillagerEntity.PriceInfo(1, 6))
-//			);
-//			apiaristCareer.addTrade(4,
-//				new VillagerTradeLists.GiveItemForItemAndEmerald(wildcardPrincess, null, new VillagerEntity.PriceInfo(10, 64), monasticDrone, null),
-//				new VillagerTradeLists.GiveItemForTwoItems(wildcardPrincess, null, new ItemStack(Items.ENDER_EYE), new VillagerEntity.PriceInfo(12, 16), endDrone, null)
-//			);
+			//			VillageCreationApiculture villageHandler = new VillageCreationApiculture();
+			//			VillagerRegistry villagerRegistry = VillagerRegistry.instance();
+			//			villagerRegistry.registerVillageCreationHandler(villageHandler);
+			//
+			//			villagerApiarist = new VillagerProfession(Constants.ID_VILLAGER_APIARIST, Constants.TEXTURE_SKIN_BEEKPEEPER, Constants.TEXTURE_SKIN_ZOMBIE_BEEKPEEPER);
+			//			IForgeRegistry<VillagerProfession> villagerProfessions = ForgeRegistries.PROFESSIONS;
+			//			villagerProfessions.register(villagerApiarist);
+			//
+			//			ItemStack wildcardPrincess = new ItemStack(items.beePrincessGE, 1);
+			//			ItemStack wildcardDrone = new ItemStack(items.beeDroneGE, 1);
+			//			ItemStack apiary = new ItemStack(blocks.apiary);
+			//			ItemStack provenFrames = items.frameProven.getItemStack();
+			//			ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
+			//			ItemStack endDrone = BeeDefinition.ENDED.getMemberStack(EnumBeeType.DRONE);
+			//			ItemStack propolis = new ItemStack(items.propolis, 1);
+			//
+			//			VillagerRegistry.VillagerCareer apiaristCareer = new VillagerRegistry.VillagerCareer(villagerApiarist, "apiarist");
+			//			apiaristCareer.addTrade(1,
+			//				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.WHEAT), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4)),
+			//				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.CARROT), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4)),
+			//				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.POTATO), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4))
+			//			);
+			//			apiaristCareer.addTrade(2,
+			//				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 4), new ItemStack(items.smoker), null),
+			//				new VillagerTradeLists.GiveItemForLogsAndEmeralds(apiary, new VillagerEntity.PriceInfo(1, 1), new VillagerEntity.PriceInfo(16, 32), new VillagerEntity.PriceInfo(1, 2)),
+			//				new VillagerApiaristTrades.GiveRandomHiveDroneForItems(propolis, null, wildcardDrone, new VillagerEntity.PriceInfo(2, 4))
+			//			);
+			//			apiaristCareer.addTrade(3,
+			//				new VillagerTradeLists.GiveEmeraldForItems(wildcardPrincess, null),
+			//				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 2), provenFrames, new VillagerEntity.PriceInfo(1, 6))
+			//			);
+			//			apiaristCareer.addTrade(4,
+			//				new VillagerTradeLists.GiveItemForItemAndEmerald(wildcardPrincess, null, new VillagerEntity.PriceInfo(10, 64), monasticDrone, null),
+			//				new VillagerTradeLists.GiveItemForTwoItems(wildcardPrincess, null, new ItemStack(Items.ENDER_EYE), new VillagerEntity.PriceInfo(12, 16), endDrone, null)
+			//			);
 		}
 
 		blocks.apiary.init();
@@ -405,46 +395,46 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		// Register plantable plants
 		//TODO - this now uses the BlockTag SMALL_FLOWERS I believe
-		for (FlowerType flowerType : FlowerType.values()) {
-			BlockState blockState;
-			switch (flowerType.getBlockType()) {
-				case RED:
-					blockState = Blocks.RED_FLOWER.getDefaultState().with(Blocks.RED_FLOWER.getTypeProperty(), flowerType);
-					break;
-				case YELLOW:
-					blockState = Blocks.YELLOW_FLOWER.getDefaultState().with(Blocks.YELLOW_FLOWER.getTypeProperty(), flowerType);
-					break;
-				default:
-					continue;
-			}
-			flowerRegistry.registerPlantableFlower(blockState, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		}
+//		for (FlowerType flowerType : FlowerType.values()) {
+//			BlockState blockState;
+//			switch (flowerType.getBlockType()) {
+//				case RED:
+//					blockState = Blocks.RED_FLOWER.getDefaultState().with(Blocks.RED_FLOWER.getTypeProperty(), flowerType);
+//					break;
+//				case YELLOW:
+//					blockState = Blocks.YELLOW_FLOWER.getDefaultState().with(Blocks.YELLOW_FLOWER.getTypeProperty(), flowerType);
+//					break;
+//				default:
+//					continue;
+//			}
+//			flowerRegistry.registerPlantableFlower(blockState, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+//		}
 
 		flowerRegistry.registerPlantableFlower(Blocks.BROWN_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.RED_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.CACTUS.getDefaultState(), 1.0, FlowerManager.FlowerTypeCacti);
 
 		//Flower Pots
-		BlockState flowerPot = Blocks.FLOWER_POT.getBlockState().getBaseState();
-		EnumProperty<FlowerPotBlock.EnumFlowerType> CONTENTS = FlowerPotBlock.CONTENTS;
-		String[] standardTypes = new String[]{FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow};
-
-		for (FlowerPotBlock.EnumFlowerType flowerType : FlowerPotBlock.EnumFlowerType.values()) {
-			if (flowerType == FlowerPotBlock.EnumFlowerType.EMPTY ||
-				flowerType.getName().contains("sapling") ||
-				flowerType == FlowerPotBlock.EnumFlowerType.DEAD_BUSH ||
-				flowerType == FlowerPotBlock.EnumFlowerType.FERN) {
-				//Don't register these as flowers
-			} else if (flowerType == FlowerPotBlock.EnumFlowerType.MUSHROOM_RED ||
-				flowerType == FlowerPotBlock.EnumFlowerType.MUSHROOM_BROWN) {
-				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), FlowerManager.FlowerTypeMushrooms);
-
-			} else if (flowerType == FlowerPotBlock.EnumFlowerType.CACTUS) {
-				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), FlowerManager.FlowerTypeCacti);
-			} else {
-				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), standardTypes);
-			}
-		}
+		BlockState flowerPot = Blocks.FLOWER_POT.getStateContainer().getBaseState();
+//		EnumProperty<FlowerPotBlock.EnumFlowerType> CONTENTS = FlowerPotBlock.CONTENTS;
+//		String[] standardTypes = new String[]{FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow};
+//
+//		for (FlowerPotBlock.EnumFlowerType flowerType : FlowerPotBlock.EnumFlowerType.values()) {
+//			if (flowerType == FlowerPotBlock.EnumFlowerType.EMPTY ||
+//					flowerType.getName().contains("sapling") ||
+//					flowerType == FlowerPotBlock.EnumFlowerType.DEAD_BUSH ||
+//					flowerType == FlowerPotBlock.EnumFlowerType.FERN) {
+//				//Don't register these as flowers
+//			} else if (flowerType == FlowerPotBlock.EnumFlowerType.MUSHROOM_RED ||
+//					flowerType == FlowerPotBlock.EnumFlowerType.MUSHROOM_BROWN) {
+//				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), FlowerManager.FlowerTypeMushrooms);
+//
+//			} else if (flowerType == FlowerPotBlock.EnumFlowerType.CACTUS) {
+//				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), FlowerManager.FlowerTypeCacti);
+//			} else {
+//				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), standardTypes);
+//			}
+//		}
 	}
 
 	@Override
@@ -500,94 +490,94 @@ public class ModuleApiculture extends BlankForestryModule {
 			NonNullList<ItemStack> lavaIngredients = NonNullList.create();
 			lavaIngredients.add(phosphor);
 			lavaIngredients.add(new ItemStack(Blocks.SAND));
-			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 2000));
+//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 2000));
 
 			lavaIngredients = NonNullList.create();
 			lavaIngredients.add(phosphor);
 			//TODO - sand or red sand?
-			lavaIngredients.add(new ItemStack(Blocks.SAND, 1, 1));
-			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 2000));
+//			lavaIngredients.add(new ItemStack(Blocks.SAND, 1, 1));
+//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 2000));
 
 			lavaIngredients = NonNullList.create();
 			lavaIngredients.add(phosphor);
 			lavaIngredients.add(new ItemStack(Blocks.DIRT));
-			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 1600));
+//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 1600));
 
 			// / CARPENTER
 			RecipeManagers.carpenterManager.addRecipe(50, Fluids.FOR_HONEY.getFluid(500), ItemStack.EMPTY, coreItems.craftingMaterial.getScentedPaneling(),
-				" J ", "###", "WPW",
-				'#', OreDictUtil.PLANK_WOOD,
-				'J', items.royalJelly,
-				'W', coreItems.beeswax,
-				'P', items.pollenCluster.get(EnumPollenCluster.NORMAL, 1));
+					" J ", "###", "WPW",
+					'#', OreDictUtil.PLANK_WOOD,
+					'J', items.royalJelly,
+					'W', coreItems.beeswax,
+					'P', items.pollenCluster.get(EnumPollenCluster.NORMAL, 1));
 
-			RecipeManagers.carpenterManager.addRecipe(30, new FluidStack(FluidRegistry.WATER, 600), ItemStack.EMPTY, blocks.candle.getUnlitCandle(24),
-				" X ",
-				"###",
-				"###",
-				'#', coreItems.beeswax,
-				'X', Items.STRING);
-			RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 200), ItemStack.EMPTY, blocks.candle.getUnlitCandle(6),
-					"#X#",
-					'#', coreItems.beeswax,
-					'X', coreItems.craftingMaterial.getSilkWisp());
+//			RecipeManagers.carpenterManager.addRecipe(30, new FluidStack(FluidRegistry.WATER, 600), ItemStack.EMPTY, blocks.candle.getUnlitCandle(24),
+//					" X ",
+//					"###",
+//					"###",
+//					'#', coreItems.beeswax,
+//					'X', Items.STRING);
+//			RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 200), ItemStack.EMPTY, blocks.candle.getUnlitCandle(6),
+//					"#X#",
+//					'#', coreItems.beeswax,
+//					'X', coreItems.craftingMaterial.getSilkWisp());
 
 			// / CENTRIFUGE
 			// Honey combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.HONEY, 1), ImmutableMap.of(
-				coreItems.beeswax.getItemStack(), 1.0f,
-				items.honeyDrop.getItemStack(), 0.9f
+					coreItems.beeswax.getItemStack(), 1.0f,
+					items.honeyDrop.getItemStack(), 0.9f
 			));
 
 			// Cocoa combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.COCOA, 1), ImmutableMap.of(
-				coreItems.beeswax.getItemStack(), 1.0f,
-				//TODO - dye meta
-				new ItemStack(Items.DYE, 1, 3), 0.5f
+					coreItems.beeswax.getItemStack(), 1.0f,
+					//TODO - dye meta
+					new ItemStack(Items.DYE, 1, 3), 0.5f
 			));
 
 			// Simmering combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.SIMMERING, 1), ImmutableMap.of(
-				coreItems.refractoryWax.getItemStack(), 1.0f,
-				coreItems.phosphor.getItemStack(2), 0.7f
+					coreItems.refractoryWax.getItemStack(), 1.0f,
+					coreItems.phosphor.getItemStack(2), 0.7f
 			));
 
 			// Stringy combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.STRINGY, 1), ImmutableMap.of(
-				items.propolis.getItemStack(), 1.0f,
-				items.honeyDrop.getItemStack(), 0.4f
+					items.propolis.getItemStack(), 1.0f,
+					items.honeyDrop.getItemStack(), 0.4f
 			));
 
 			// Dripping combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.DRIPPING, 1), ImmutableMap.of(
-				items.honeydew.getItemStack(), 1.0f,
-				items.honeyDrop.getItemStack(), 0.4f
+					items.honeydew.getItemStack(), 1.0f,
+					items.honeyDrop.getItemStack(), 0.4f
 			));
 
 			// Frozen combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.FROZEN, 1), ImmutableMap.of(
-				coreItems.beeswax.getItemStack(), 0.8f,
-				items.honeyDrop.getItemStack(), 0.7f,
-				new ItemStack(Items.SNOWBALL), 0.4f,
-				items.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1), 0.2f
+					coreItems.beeswax.getItemStack(), 0.8f,
+					items.honeyDrop.getItemStack(), 0.7f,
+					new ItemStack(Items.SNOWBALL), 0.4f,
+					items.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1), 0.2f
 			));
 
 			// Silky combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.SILKY, 1), ImmutableMap.of(
-				items.honeyDrop.getItemStack(), 1.0f,
-				items.propolis.get(EnumPropolis.SILKY, 1), 0.8f
+					items.honeyDrop.getItemStack(), 1.0f,
+					items.propolis.get(EnumPropolis.SILKY, 1), 0.8f
 			));
 
 			// Parched combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.PARCHED, 1), ImmutableMap.of(
-				coreItems.beeswax.getItemStack(), 1.0f,
-				items.honeyDrop.getItemStack(), 0.9f
+					coreItems.beeswax.getItemStack(), 1.0f,
+					items.honeyDrop.getItemStack(), 0.9f
 			));
 
 			// Mysterious combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.MYSTERIOUS, 1), ImmutableMap.of(
-				items.propolis.get(EnumPropolis.PULSATING, 1), 1.0f,
-				items.honeyDrop.getItemStack(), 0.4f
+					items.propolis.get(EnumPropolis.PULSATING, 1), 1.0f,
+					items.honeyDrop.getItemStack(), 0.4f
 			));
 
 			// Irradiated combs
@@ -596,35 +586,35 @@ public class ModuleApiculture extends BlankForestryModule {
 
 			// Powdery combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.POWDERY, 1), ImmutableMap.of(
-				items.honeyDrop.getItemStack(), 0.2f,
-				coreItems.beeswax.getItemStack(), 0.2f,
-				new ItemStack(Items.GUNPOWDER), 0.9f
+					items.honeyDrop.getItemStack(), 0.2f,
+					coreItems.beeswax.getItemStack(), 0.2f,
+					new ItemStack(Items.GUNPOWDER), 0.9f
 			));
 
 			// Wheaten Combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.WHEATEN, 1), ImmutableMap.of(
-				items.honeyDrop.getItemStack(), 0.2f,
-				coreItems.beeswax.getItemStack(), 0.2f,
-				new ItemStack(Items.WHEAT), 0.8f
+					items.honeyDrop.getItemStack(), 0.2f,
+					coreItems.beeswax.getItemStack(), 0.2f,
+					new ItemStack(Items.WHEAT), 0.8f
 			));
 
 			// Mossy Combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.MOSSY, 1), ImmutableMap.of(
-				coreItems.beeswax.getItemStack(), 1.0f,
-				items.honeyDrop.getItemStack(), 0.9f
+					coreItems.beeswax.getItemStack(), 1.0f,
+					items.honeyDrop.getItemStack(), 0.9f
 			));
 
 			// Mellow Combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.MELLOW, 1), ImmutableMap.of(
-				items.honeydew.getItemStack(), 0.6f,
-				coreItems.beeswax.getItemStack(), 0.2f,
-				new ItemStack(Items.QUARTZ), 0.3f
+					items.honeydew.getItemStack(), 0.6f,
+					coreItems.beeswax.getItemStack(), 0.2f,
+					new ItemStack(Items.QUARTZ), 0.3f
 			));
 
 			// Silky Propolis
 			RecipeManagers.centrifugeManager.addRecipe(5, items.propolis.get(EnumPropolis.SILKY, 1), ImmutableMap.of(
-				coreItems.craftingMaterial.getSilkWisp(), 0.6f,
-				items.propolis.getItemStack(), 0.1f
+					coreItems.craftingMaterial.getSilkWisp(), 0.6f,
+					items.propolis.getItemStack(), 0.1f
 			));
 
 			// / FERMENTER
@@ -637,13 +627,13 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		// BREWING RECIPES
 		BrewingRecipeRegistry.addRecipe(
-			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD),
-			Ingredient.fromStacks(items.pollenCluster.get(EnumPollenCluster.NORMAL, 1)),
-			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.HEALING));
+				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD),
+				Ingredient.fromStacks(items.pollenCluster.get(EnumPollenCluster.NORMAL, 1)),
+				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.HEALING));
 		BrewingRecipeRegistry.addRecipe(
-			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD),
-			Ingredient.fromStacks(items.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1)),
-			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.REGENERATION));
+				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD),
+				Ingredient.fromStacks(items.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1)),
+				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.REGENERATION));
 
 	}
 
@@ -653,43 +643,43 @@ public class ModuleApiculture extends BlankForestryModule {
 		HiveRegistry hiveRegistry = getHiveRegistry();
 
 		hiveRegistry.addDrops(HiveType.FOREST.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7),
-			new HiveDrop(0.08, BeeDefinition.FOREST.getRainResist(), honeyComb),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
+				new HiveDrop(0.80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7),
+				new HiveDrop(0.08, BeeDefinition.FOREST.getRainResist(), honeyComb),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
 		);
 
 		hiveRegistry.addDrops(HiveType.MEADOWS.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
+				new HiveDrop(0.80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
 		);
 
 		ItemStack parchedComb = items.beeComb.get(EnumHoneyComb.PARCHED, 1);
 		hiveRegistry.addDrops(HiveType.DESERT.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, parchedComb)
+				new HiveDrop(0.80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, parchedComb)
 		);
 
 		ItemStack silkyComb = items.beeComb.get(EnumHoneyComb.SILKY, 1);
 		hiveRegistry.addDrops(HiveType.JUNGLE.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, silkyComb)
+				new HiveDrop(0.80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, silkyComb)
 		);
 
 		ItemStack mysteriousComb = items.beeComb.get(EnumHoneyComb.MYSTERIOUS, 1);
 		hiveRegistry.addDrops(HiveType.END.getHiveUid(),
-			new HiveDrop(0.90, BeeDefinition.ENDED, mysteriousComb)
+				new HiveDrop(0.90, BeeDefinition.ENDED, mysteriousComb)
 		);
 
 		ItemStack frozenComb = items.beeComb.get(EnumHoneyComb.FROZEN, 1);
 		hiveRegistry.addDrops(HiveType.SNOW.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, frozenComb)
+				new HiveDrop(0.80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, frozenComb)
 		);
 
 		ItemStack mossyComb = items.beeComb.get(EnumHoneyComb.MOSSY, 1);
 		hiveRegistry.addDrops(HiveType.SWAMP.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb)
+				new HiveDrop(0.80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb)
 		);
 	}
 
@@ -752,7 +742,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	@Override
 	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
-		boolean hasVillageGenerated) {
+			boolean hasVillageGenerated) {
 		if (!world.getDimension().getType().equals(DimensionType.field_223229_c_)) {
 			return;
 		}

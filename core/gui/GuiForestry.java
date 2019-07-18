@@ -25,6 +25,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -59,12 +60,12 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 	protected final TextLayoutHelper textLayout;
 	protected final Window window;
 
-	protected GuiForestry(String texture, C container) {
-		this(new ForestryResource(texture), container);
+	protected GuiForestry(String texture, C container, PlayerInventory inv, ITextComponent title) {
+		this(new ForestryResource(texture), container, inv, title);
 	}
 
-	protected GuiForestry(ResourceLocation texture, C container) {
-		super(container);
+	protected GuiForestry(ResourceLocation texture, C container, PlayerInventory inv, ITextComponent title) {
+		super(container, inv, title);
 
 		this.widgetManager = new WidgetManager(this);
 		this.ledgerManager = new LedgerManager(this);
@@ -79,8 +80,8 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 
 	/* LEDGERS */
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 
 		int maxLedgerWidth = (this.width - this.xSize) / 2;
 
@@ -99,7 +100,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 	}
 
 	@Override
-	public void updateScreen() {
+	public void tick() {
 		window.updateClient();
 	}
 
@@ -149,6 +150,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 		ledgerManager.add(new OwnerLedger(ledgerManager, ownedTile));
 	}
 
+	//TODO - removed() maybe?
 	@Override
 	public void onGuiClosed() {
 		super.onGuiClosed();
@@ -160,11 +162,14 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 	}
 
 	public FontRenderer getFontRenderer() {
-		return fontRenderer;
+		return minecraft.fontRenderer;
 	}
 
+	//super has double double int
+	//int is probably mousebutton?
+	//TODO - check params
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		// / Handle ledger clicks
@@ -172,22 +177,25 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 		widgetManager.handleMouseClicked(mouseX, mouseY, mouseButton);
 		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
 		window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
+		//TODO - what to return
 	}
 
 	@Override
-	protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+	public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
 		if (widgetManager.handleMouseRelease(mouseX, mouseY, mouseButton)) {
 			return;
 		}
 		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
 		window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
 		super.mouseReleased(mouseX, mouseY, mouseButton);
+		//TODO - what to return
 	}
 
+	//TODO decipher
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (keyCode == 1 || (keyCode == this.mc.gameSettings.keyBindInventory.getKeyCode() && this.window.getFocusedElement() == null)) {
-			this.mc.player.closeScreen();
+	public boolean keyPressed(int keyPressed_1, int keyPressed_2, int keyPressed_3) {
+		if (keyCode == 1 || (keyCode == this.minecraft.gameSettings.keyBindInventory.getKeyCode() && this.window.getFocusedElement() == null)) {
+			this.minecraft.player.closeScreen();
 		}
 		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
 		window.postEvent(new GuiEvent.KeyEvent(origin, typedChar, keyCode), GuiEventDestination.ALL);
@@ -225,19 +233,17 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 	}
 
 	@Override
-	protected boolean hasClickedOutside(int mouseX, int mouseY, int guiLeft, int guiTop) {
-		return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop);
+	protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop, int idk) {
+		return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, 0);	//TODO - I have no idea what the last param actually does
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		ledgerManager.drawTooltips(mouseX, mouseY);
 
-		PlayerInventory playerInv = mc.player.inventory;
-
-		if (playerInv.getItemStack().isEmpty()) {
+		if (this.playerInventory.getItemStack().isEmpty()) {
 			GuiUtil.drawToolTips(this, widgetManager.getWidgets(), mouseX, mouseY);
-			GuiUtil.drawToolTips(this, buttonList, mouseX, mouseY);
+			GuiUtil.drawToolTips(this, this.buttons, mouseX, mouseY);
 			GuiUtil.drawToolTips(this, inventorySlots.inventorySlots, mouseX, mouseY);
 			window.drawTooltip(mouseX, mouseY);
 		}
@@ -252,15 +258,15 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 		RenderHelper.enableGUIStandardItemLighting();
 		GlStateManager.disableLighting();
 		GlStateManager.enableRescaleNormal();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.pushMatrix();
 		{
-			GlStateManager.translate(guiLeft, guiTop, 0.0F);
+			GlStateManager.translatef(guiLeft, guiTop, 0.0F);
 			drawWidgets();
 		}
 		GlStateManager.popMatrix();
 
-		GlStateManager.color(1.0F, 1.0F, 1.0F);
+		GlStateManager.color3f(1.0F, 1.0F, 1.0F);
 		window.draw(mouseX, mouseY);
 
 		bindTexture(textureFile);
@@ -280,13 +286,18 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 	}
 
 	protected void bindTexture(ResourceLocation texturePath) {
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(texturePath);
 	}
 
-	public void setZLevel(float level) {
-		this.zLevel = level;
+	//TODO - think this is the right field
+	//not renaming method for now so that when other modules are added it's obvious
+	//where the method is
+	//TODO - or it involves the first line, hard to tell which yet
+	public void setZLevel(int level) {
+		this.itemRenderer.zLevel = 9999999999f;	//TODO
+		this.blitOffset = level;
 	}
 
 	@Override
@@ -311,7 +322,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 
 	@Override
 	public Minecraft getMC() {
-		return mc;
+		return minecraft;
 	}
 
 	@Override

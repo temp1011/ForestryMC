@@ -175,7 +175,7 @@ public interface IGuiElement extends ICroppable {
 	 * @param mouseY The y position of the mouse relative to the parent of the element.
 	 * @return True if the mouse is currently over the element.
 	 */
-	boolean isMouseOver(int mouseX, int mouseY);
+	boolean isMouseOver(double mouseX, double mouseY);
 
 	/**
 	 * @return True if the mouse is currently over the element.

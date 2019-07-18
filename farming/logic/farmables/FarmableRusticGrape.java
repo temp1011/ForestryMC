@@ -5,10 +5,10 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.BooleanProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -39,7 +39,7 @@ public class FarmableRusticGrape implements IFarmable {
 			return null;
 		}
 
-		if (!blockState.getValue(GRAPES)) {
+		if (!blockState.get(GRAPES)) {
 			return null;
 		}
 

@@ -33,13 +33,13 @@ public class GuiEvent extends GuiElementEvent {
 	}
 
 	public static class ButtonEvent extends GuiEvent {
-		private final int x;
-		private final int y;
+		private final double x;
+		private final double y;
 		private final int relativeX;
 		private final int relativeY;
 		private final int button;
 
-		public ButtonEvent(IGuiElement origin, int x, int y, int button) {
+		public ButtonEvent(IGuiElement origin, double x, double y, int button) {
 			super(origin);
 			this.x = x;
 			this.y = y;
@@ -57,11 +57,11 @@ public class GuiEvent extends GuiElementEvent {
 			return relativeY;
 		}
 
-		public int getX() {
+		public double getX() {
 			return this.x;
 		}
 
-		public int getY() {
+		public double getY() {
 			return this.y;
 		}
 
@@ -71,13 +71,13 @@ public class GuiEvent extends GuiElementEvent {
 	}
 
 	public static class DownEvent extends ButtonEvent {
-		public DownEvent(IGuiElement origin, int x, int y, int button) {
+		public DownEvent(IGuiElement origin, double x, double y, int button) {
 			super(origin, x, y, button);
 		}
 	}
 
 	public static class UpEvent extends ButtonEvent {
-		public UpEvent(IGuiElement origin, int x, int y, int button) {
+		public UpEvent(IGuiElement origin, double x, double y, int button) {
 			super(origin, x, y, button);
 		}
 	}

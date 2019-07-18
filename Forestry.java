@@ -141,9 +141,10 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.register(Config.class);
 		Proxies.common.registerEventHandlers();
 		configFolder = new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
+		//TODO - DistExecutor
 		Config.load(event.getSide());
 
-		ModuleManager.runSetup(event);
+		ModuleManager.runSetup();
 		ModuleManager.getInternalHandler().runSetup();
 
 		String gameMode = Config.gameMode;
@@ -151,6 +152,7 @@ public class Forestry {
 		ForestryAPI.activeMode = new GameMode(gameMode);
 
 
+		//TODO - DistExecutor
 		ModuleManager.getInternalHandler().runPreInit(event.getSide());
 	}
 

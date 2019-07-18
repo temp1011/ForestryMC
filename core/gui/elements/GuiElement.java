@@ -258,7 +258,7 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 	}
 
 	@Override
-	public boolean isMouseOver(int mouseX, int mouseY) {
+	public boolean isMouseOver(double mouseX, double mouseY) {
 		if (!isVisible()) {
 			return false;
 		}

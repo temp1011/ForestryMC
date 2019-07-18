@@ -28,7 +28,7 @@ public interface IToolTipProvider {
 	boolean isToolTipVisible();
 
 	@OnlyIn(Dist.CLIENT)
-	boolean isMouseOver(int mouseX, int mouseY);
+	boolean isMouseOver(double mouseX, double mouseY);
 
 	@OnlyIn(Dist.CLIENT)
 	default boolean isRelativeToGui() {

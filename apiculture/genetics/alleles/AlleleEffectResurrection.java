@@ -13,22 +13,13 @@ package forestry.apiculture.genetics.alleles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.monster.BlazeEntity;
-import net.minecraft.entity.monster.CaveSpiderEntity;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.entity.monster.GhastEntity;
-import net.minecraft.entity.monster.SkeletonEntity;
-import net.minecraft.entity.monster.SpiderEntity;
-import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 
@@ -40,49 +31,57 @@ import forestry.core.utils.ItemStackUtil;
 
 public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
-	public static class Resurrectable {
-		public final ItemStack res;
-		public final Class<? extends MobEntity> risen;
-		public final Optional<Consumer<MobEntity>> risenTransformer;
+	private static class Resurrectable<T extends MobEntity> {
+		private final ItemStack res;
+		private final EntityType<T> risen;
+		private final Consumer<T> risenTransformer;
 
-		public Resurrectable(ItemStack res, Class<? extends MobEntity> risen) {
-			this.res = res;
-			this.risen = risen;
-			this.risenTransformer = Optional.empty();
+		private Resurrectable(ItemStack res, EntityType<T> risen) {
+			this(res, risen, e -> {});
 		}
 
-		public <E extends MobEntity> Resurrectable(ItemStack res, Class<E> risen, Consumer<E> risenTransformer) {
+		private Resurrectable(ItemStack res, EntityType<T> risen, Consumer<T> risenTransformer) {
 			this.res = res;
 			this.risen = risen;
-			this.risenTransformer = Optional.of((Consumer<MobEntity>) risenTransformer);
+			this.risenTransformer = risenTransformer;
+		}
+
+
+		private boolean spawnAndTransform(ItemEntity entity) {
+			T spawnedEntity = EntityUtil.spawnEntity(entity.world, this.risen, entity.posX, entity.posY, entity.posZ);
+			if (spawnedEntity != null) {
+				this.risenTransformer.accept(spawnedEntity);
+				return true;
+			}
+			return false;
 		}
 	}
 
-	public static List<Resurrectable> getReanimationList() {
-		ArrayList<Resurrectable> list = new ArrayList<>();
-		list.add(new Resurrectable(new ItemStack(Items.BONE), SkeletonEntity.class));
-		list.add(new Resurrectable(new ItemStack(Items.ARROW), SkeletonEntity.class));
-		list.add(new Resurrectable(new ItemStack(Items.ROTTEN_FLESH), ZombieEntity.class));
-		list.add(new Resurrectable(new ItemStack(Items.BLAZE_ROD), BlazeEntity.class));
+	public static List<Resurrectable<? extends MobEntity>> getReanimationList() {
+		ArrayList<Resurrectable<? extends MobEntity>> list = new ArrayList<>();
+		list.add(new Resurrectable<>(new ItemStack(Items.BONE), EntityType.SKELETON));
+		list.add(new Resurrectable<>(new ItemStack(Items.ARROW), EntityType.SKELETON));
+		list.add(new Resurrectable<>(new ItemStack(Items.ROTTEN_FLESH), EntityType.ZOMBIE));
+		list.add(new Resurrectable<>(new ItemStack(Items.BLAZE_ROD), EntityType.BLAZE));
 		return list;
 	}
 
-	public static List<Resurrectable> getResurrectionList() {
-		ArrayList<Resurrectable> list = new ArrayList<>();
-		list.add(new Resurrectable(new ItemStack(Items.GUNPOWDER), CreeperEntity.class));
-		list.add(new Resurrectable(new ItemStack(Items.ENDER_PEARL), EndermanEntity.class));
-		list.add(new Resurrectable(new ItemStack(Items.STRING), SpiderEntity.class));
-		list.add(new Resurrectable(new ItemStack(Items.SPIDER_EYE), SpiderEntity.class));
-		list.add(new Resurrectable(new ItemStack(Items.STRING), CaveSpiderEntity.class));
-		list.add(new Resurrectable(new ItemStack(Items.SPIDER_EYE), CaveSpiderEntity.class));
-		list.add(new Resurrectable(new ItemStack(Items.GHAST_TEAR), GhastEntity.class));
-		list.add(new Resurrectable(new ItemStack(Blocks.DRAGON_EGG), EnderDragonEntity.class, dragon -> dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN)));
+	public static List<Resurrectable<?>> getResurrectionList() {
+		ArrayList<Resurrectable<?>> list = new ArrayList<>();
+		list.add(new Resurrectable<>(new ItemStack(Items.GUNPOWDER), EntityType.CREEPER));
+		list.add(new Resurrectable<>(new ItemStack(Items.ENDER_PEARL), EntityType.ENDERMAN));
+		list.add(new Resurrectable<>(new ItemStack(Items.STRING), EntityType.SPIDER));
+		list.add(new Resurrectable<>(new ItemStack(Items.SPIDER_EYE), EntityType.SPIDER));
+		list.add(new Resurrectable<>(new ItemStack(Items.STRING), EntityType.CAVE_SPIDER));
+		list.add(new Resurrectable<>(new ItemStack(Items.SPIDER_EYE), EntityType.CAVE_SPIDER));
+		list.add(new Resurrectable<>(new ItemStack(Items.GHAST_TEAR), EntityType.GHAST));
+		list.add(new Resurrectable<>(new ItemStack(Blocks.DRAGON_EGG), EntityType.ENDER_DRAGON, dragon -> dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN)));
 		return list;
 	}
 
-	private final List<Resurrectable> resurrectables;
+	private final List<Resurrectable<?>> resurrectables;
 
-	public AlleleEffectResurrection(String name, List<Resurrectable> resurrectables) {
+	public AlleleEffectResurrection(String name, List<Resurrectable<?>> resurrectables) {
 		super(name, true, 40, true, true);
 		this.resurrectables = resurrectables;
 	}
@@ -111,17 +110,14 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		}
 
 		ItemStack contained = entity.getItem();
-		for (Resurrectable entry : resurrectables) {
+		for (Resurrectable<?> entry : resurrectables) {
 			if (ItemStackUtil.isIdenticalItem(entry.res, contained)) {
-				MobEntity spawnedEntity = EntityUtil.spawnEntity(entity.world, entry.risen, entity.posX, entity.posY, entity.posZ);
-				if (spawnedEntity != null) {
-					entry.risenTransformer.ifPresent(transformer -> transformer.accept(spawnedEntity));
-				}
+				if(entry.spawnAndTransform(entity)) {
+					contained.shrink(1);
 
-				contained.shrink(1);
-
-				if (contained.getCount() <= 0) {
-					entity.setDead();
+					if (contained.getCount() <= 0) {
+						entity.setDead();
+					}
 				}
 
 				return true;

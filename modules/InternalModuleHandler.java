@@ -23,7 +23,7 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
-import forestry.plugins.ForestryCompatPlugins;
+//import forestry.plugins.ForestryCompatPlugins;
 
 //TODO - most of this needs tearing up and replacing
 public class InternalModuleHandler {
@@ -92,7 +92,8 @@ public class InternalModuleHandler {
 			Log.debug("Pre-Init Start: {}", module);
 			registerHandlers(module, side);
 			module.preInit();
-			if (moduleManager.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_STATEMENTS)) {
+			//TODO - compat
+			if (false){//moduleManager.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_STATEMENTS)) {
 				module.registerTriggers();
 			}
 			Log.debug("Pre-Init Complete: {}", module);
@@ -181,11 +182,12 @@ public class InternalModuleHandler {
 		});
 	}
 
-	public void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-		for (BlankForestryModule module : modules) {
-			module.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
-		}
-	}
+	//TODO - worldgen
+//	public void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+//		for (BlankForestryModule module : modules) {
+//			module.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
+//		}
+//	}
 
 	public void decorateBiome(World world, Random rand, BlockPos pos) {
 		for (BlankForestryModule module : modules) {

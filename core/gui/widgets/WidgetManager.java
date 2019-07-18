@@ -51,7 +51,7 @@ public class WidgetManager {
 	}
 
 	@Nullable
-	public Widget getAtPosition(int mX, int mY) {
+	public Widget getAtPosition(double mX, double mY) {
 		for (Widget slot : widgets) {
 			if (slot.isMouseOver(mX, mY)) {
 				return slot;
@@ -73,14 +73,14 @@ public class WidgetManager {
 		}
 	}
 
-	public void handleMouseClicked(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClicked(double mouseX, double mouseY, int mouseButton) {
 		Widget slot = getAtPosition(mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
 		if (slot != null) {
 			slot.handleMouseClick(mouseX, mouseY, mouseButton);
 		}
 	}
 
-	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
+	public boolean handleMouseRelease(double mouseX, double mouseY, int eventType) {
 		boolean hasToStop = false;
 		for (Widget slot : widgets) {
 			hasToStop |= slot.handleMouseRelease(mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop(), eventType);

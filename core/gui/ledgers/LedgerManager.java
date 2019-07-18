@@ -81,7 +81,7 @@ public class LedgerManager {
 	}
 
 	@Nullable
-	private Ledger getAtPosition(int mX, int mY) {
+	private Ledger getAtPosition(double mX, double mY) {
 		if (!ledgers.isEmpty()) {
 			final int xShift = gui.getGuiLeft() + gui.getSizeX();
 			int yShift = gui.getGuiTop() + 8;
@@ -141,7 +141,7 @@ public class LedgerManager {
 				continue;
 			}
 
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			ledger.setPosition(gui.getSizeX(), yPos);
 			ledger.draw();
 			yPos += ledger.getHeight();
@@ -164,11 +164,11 @@ public class LedgerManager {
 				continue;
 			}
 
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			errorLedger.draw(-errorLedger.getWidth(), yPos);
 			yPos += errorLedger.getHeight();
 		}
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 	}
 
 	public void drawTooltips(int mouseX, int mouseY) {
@@ -180,7 +180,7 @@ public class LedgerManager {
 		}
 	}
 
-	public void handleMouseClicked(int x, int y, int mouseButton) {
+	public void handleMouseClicked(double x, double y, int mouseButton) {
 
 		if (mouseButton == 0) {
 
