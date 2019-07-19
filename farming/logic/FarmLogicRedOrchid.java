@@ -20,7 +20,7 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.core.utils.BlockUtil;
-import forestry.plugins.PluginExtraUtilities;
+//import forestry.plugins.PluginExtraUtilities;
 
 public class FarmLogicRedOrchid extends FarmLogicHomogeneous {
 
@@ -35,7 +35,7 @@ public class FarmLogicRedOrchid extends FarmLogicHomogeneous {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return PluginExtraUtilities.orchidStack;
+		return ItemStack.EMPTY;//PluginExtraUtilities.orchidStack;
 	}
 
 	@Override

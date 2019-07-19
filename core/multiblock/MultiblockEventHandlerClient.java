@@ -3,8 +3,8 @@ package forestry.core.multiblock;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,11 +17,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.tiles.TileUtil;
@@ -31,21 +31,23 @@ import forestry.core.utils.Log;
 @OnlyIn(Dist.CLIENT)
 public class MultiblockEventHandlerClient {
 
+	//TODO - register event handler
 	@SubscribeEvent
 	public void onGameOverlay(RenderGameOverlayEvent.Post event) {
 		if (GeneticsUtil.hasNaturalistEye(Minecraft.getInstance().player)) {
 			if (event.getType() == RenderGameOverlayEvent.ElementType.ALL && Minecraft.getInstance().currentScreen == null) {
 				Minecraft minecraft = Minecraft.getInstance();
 				RayTraceResult posHit = minecraft.objectMouseOver;
-				ScaledResolution resolution = event.getResolution();
+				MainWindow window = event.getWindow();
 
 				if (posHit != null && posHit.getBlockPos() != null) {
 					TileUtil.actOnTile(minecraft.world, posHit.getBlockPos(), IMultiblockComponent.class, component -> {
 						IMultiblockController controller = component.getMultiblockLogic().getController();
+						//TODO - make this a textcomponent
 						String lastValidationError = controller.getLastValidationError();
 						if (lastValidationError != null) {
 							lastValidationError = TextFormatting.DARK_RED.toString() + TextFormatting.ITALIC.toString() + lastValidationError;
-							minecraft.fontRenderer.drawSplitString(lastValidationError, resolution.getScaledWidth() / 2 + 35, resolution.getScaledHeight() / 2 - 25, 128, 16777215);
+							minecraft.fontRenderer.drawSplitString(lastValidationError, window.getScaledWidth() / 2 + 35, window.getScaledHeight() / 2 - 25, 128, 16777215);
 						}
 					});
 				}
@@ -68,9 +70,9 @@ public class MultiblockEventHandlerClient {
 
 					GlStateManager.pushMatrix();
 					GlStateManager.enableBlend();
-					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+					GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 					GlStateManager.disableTexture2D();
-					GlStateManager.glLineWidth(2.0F);
+					GlStateManager.lineWidth(2.0F);
 					GlStateManager.depthMask(false);
 					for (IMultiblockController controller : controllers) {
 						if (controller != null) {

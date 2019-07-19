@@ -20,9 +20,6 @@ import java.util.function.BiFunction;
 
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmRegistry;
@@ -30,6 +27,7 @@ import forestry.api.farming.IFarmable;
 import forestry.api.farming.IFarmableInfo;
 import forestry.api.farming.ISimpleFarmLogic;
 import forestry.core.config.LocalizedConfiguration;
+import forestry.core.config.forge_old.Property;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
@@ -150,7 +148,7 @@ public final class FarmRegistry implements IFarmRegistry {
 				continue;
 			}
 			String itemName = spited[0];
-			ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(itemName, OreDictionary.WILDCARD_VALUE);
+			ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(itemName, 0);//TODO oredict OreDictionary.WILDCARD_VALUE);
 			if (fertilizerItem == null || fertilizerItem.isEmpty()) {
 				Log.error("Forestry failed to parse a entry of the fertilizer config, because the item doesn't exists.");
 				continue;

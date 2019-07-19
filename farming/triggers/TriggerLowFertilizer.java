@@ -18,8 +18,8 @@ import forestry.core.triggers.Trigger;
 import forestry.core.utils.InventoryUtil;
 import forestry.farming.tiles.TileFarmHatch;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+//import buildcraft.api.statements.IStatementContainer;
+//import buildcraft.api.statements.IStatementParameter;
 
 public class TriggerLowFertilizer extends Trigger {
 
@@ -30,19 +30,19 @@ public class TriggerLowFertilizer extends Trigger {
 		this.threshold = threshold;
 	}
 
-	@Override
-	public String getDescription() {
-		return super.getDescription() + " < " + threshold * 100 + "%";
-	}
+//	@Override
+//	public String getDescription() {
+//		return super.getDescription() + " < " + threshold * 100 + "%";
+//	}
 
-	@Override
-	public boolean isTriggerActive(TileEntity tile, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
-		if (!(tile instanceof TileFarmHatch)) {
-			return false;
-		}
-
-		TileFarmHatch tileHatch = (TileFarmHatch) tile;
-		IInventory fertilizerInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getFertilizerInventory();
-		return !InventoryUtil.containsPercent(fertilizerInventory, threshold);
-	}
+//	@Override
+//	public boolean isTriggerActive(TileEntity tile, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
+//		if (!(tile instanceof TileFarmHatch)) {
+//			return false;
+//		}
+//
+//		TileFarmHatch tileHatch = (TileFarmHatch) tile;
+//		IInventory fertilizerInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getFertilizerInventory();
+//		return !InventoryUtil.containsPercent(fertilizerInventory, threshold);
+//	}
 }

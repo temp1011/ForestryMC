@@ -14,6 +14,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.AlleleManager;
@@ -56,12 +58,12 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	}
 
 	public EscritoireGameToken(CompoundNBT CompoundNBT) {
-		if (CompoundNBT.hasKey("state")) {
-			int stateOrdinal = CompoundNBT.getInteger("state");
+		if (CompoundNBT.contains("state")) {
+			int stateOrdinal = CompoundNBT.getInt("state");
 			state = State.values()[stateOrdinal];
 		}
 
-		if (CompoundNBT.hasKey("tokenSpecies")) {
+		if (CompoundNBT.contains("tokenSpecies")) {
 			String speciesUid = CompoundNBT.getString("tokenSpecies");
 			setTokenSpecies(speciesUid);
 		}
@@ -133,8 +135,8 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	}
 
 
-	public String getTooltip() {
-		return !tokenStack.isEmpty() ? tokenStack.getDisplayName() : Translator.translateToLocal("for.gui.unknown");
+	public ITextComponent getTooltip() {
+		return !tokenStack.isEmpty() ? tokenStack.getDisplayName() : new TranslationTextComponent("for.gui.unknown");
 	}
 
 	public String[] getOverlayIcons() {
@@ -154,10 +156,10 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 
 	@Override
 	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT.setInteger("state", state.ordinal());
+		CompoundNBT.putInt("state", state.ordinal());
 
 		if (tokenIndividual != null) {
-			CompoundNBT.setString("tokenSpecies", tokenIndividual.getGenome().getPrimary().getUID());
+			CompoundNBT.putString("tokenSpecies", tokenIndividual.getGenome().getPrimary().getUID());
 		}
 		return CompoundNBT;
 	}

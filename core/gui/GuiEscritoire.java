@@ -89,8 +89,8 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 
 		textLayout.startPage();
 		{
-			GlStateManager.scale(0.5, 0.5, 0.5);
-			GlStateManager.translate(guiLeft + 170, guiTop + 10, 0.0);
+			GlStateManager.scaled(0.5, 0.5, 0.5);
+			GlStateManager.translated(guiLeft + 170, guiTop + 10, 0.0);
 
 			textLayout.newLine();
 			textLayout.newLine();

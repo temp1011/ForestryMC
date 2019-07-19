@@ -55,8 +55,8 @@ public class ApiaristAI extends MoveToBlockGoal {
 
 	//TODO - now tick?
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 		BlockPos housePos = this.destinationBlock.north().up();
 		this.villager.getLookHelper().setLookPosition(housePos.getX() + 0.5D, housePos.getY(), housePos.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
 

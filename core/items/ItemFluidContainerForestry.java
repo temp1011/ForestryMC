@@ -11,9 +11,11 @@
 package forestry.core.items;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.Locale;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,6 +33,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.ModelLoader;
@@ -59,7 +63,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
 
 	public ItemFluidContainerForestry(EnumContainerType type) {
-		super(CreativeTabForestry.tabForestry);
+		super((new Item.Properties()).group(CreativeTabForestry.tabForestry));
 		this.type = type;
 	}
 
@@ -74,13 +78,13 @@ public class ItemFluidContainerForestry extends ItemForestry {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void getSubItems(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
 			// empty
 			subItems.add(new ItemStack(this));
 
 			// filled
-			for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
+			for (Fluid fluid : new Fluid[0]){//FluidRegistry.getRegisteredFluids().values()) {
 				ItemStack itemStack = new ItemStack(this);
 				IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
 				if (fluidHandler.fill(new FluidStack(fluid, Fluid.BUCKET_VOLUME), true) == Fluid.BUCKET_VOLUME) {
@@ -106,24 +110,24 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack stack) {
+	public ITextComponent getDisplayName(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ItemFluidContainerForestry) {
 			FluidStack fluid = getContained(stack);
 			if (fluid != null) {
 				String exactTranslationKey = "item.for." + type.getName() + '.' + fluid.getFluid().getName() + ".name";
-				if (Translator.canTranslateToLocal(exactTranslationKey)) {
-					return Translator.translateToLocal(exactTranslationKey);
+				if (Translator.canTranslateToLocal(exactTranslationKey)) {	//TODO - can't call this on the server!! Maybe make custom textcomponent to handle this?
+					return new TranslationTextComponent(exactTranslationKey);
 				} else {
 					String grammarKey = "item.for." + type.getName() + ".grammar";
-					return Translator.translateToLocalFormatted(grammarKey, fluid.getLocalizedName());
+					return new TranslationTextComponent(grammarKey, fluid.getLocalizedName());
 				}
 			} else {
 				String unlocalizedname = "item.for." + type.getName() + ".empty.name";
-				return Translator.translateToLocal(unlocalizedname);
+				return new TranslationTextComponent(unlocalizedname);
 			}
 		}
-		return super.getItemStackDisplayName(stack);
+		return super.getDisplayName(stack);
 	}
 
 	/**
@@ -133,9 +137,9 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
 		DrinkProperties drinkProperties = getDrinkProperties(stack);
 		if (drinkProperties != null) {
-			if (entityLiving instanceof PlayerEntity && !((PlayerEntity) entityLiving).capabilities.isCreativeMode) {
+			if (entityLiving instanceof PlayerEntity && !((PlayerEntity) entityLiving).isCreative()) {
 				PlayerEntity player = (PlayerEntity) entityLiving;
-				if (!player.capabilities.isCreativeMode) {
+				if (!player.abilities.isCreativeMode) {
 					stack.shrink(1);
 				}
 
@@ -145,7 +149,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 					worldIn.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 				}
 
-				player.addStat(Stats.getObjectUseStats(this));
+				player.addStat(Stats.ITEM_USED.get(this));
 			}
 		}
 		return stack;
@@ -164,17 +168,17 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack) {
 		DrinkProperties drinkProperties = getDrinkProperties(itemstack);
 		if (drinkProperties != null) {
 			return drinkProperties.getMaxItemUseDuration();
 		} else {
-			return super.getMaxItemUseDuration(itemstack);
+			return super.getUseDuration(itemstack);
 		}
 	}
 
 	@Override
-	public UseAction getItemUseAction(ItemStack itemstack) {
+	public UseAction getUseAction(ItemStack itemstack) {
 		DrinkProperties drinkProperties = getDrinkProperties(itemstack);
 		if (drinkProperties != null) {
 			return UseAction.DRINK;
@@ -197,7 +201,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		} else {
 			if (Config.CapsuleFluidPickup) {
 				RayTraceResult target = this.rayTrace(world, player, true);
-				if (target == null || target.typeOfHit != RayTraceResult.Type.BLOCK) {
+				if (target == null || target.getType() != RayTraceResult.Type.BLOCK) {
 					return ActionResult.newResult(ActionResultType.PASS, heldItem);
 				}
 
@@ -208,7 +212,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 				if (filledResult.isSuccess()) {
 					ItemHandlerHelper.giveItemToPlayer(player, filledResult.result);
 
-					if (!player.capabilities.isCreativeMode) {
+					if (!player.isCreative()) {
 						// Remove consumed empty container
 						heldItem.shrink(1);
 					}

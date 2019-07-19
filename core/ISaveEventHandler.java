@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.core;
 
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 public interface ISaveEventHandler {
 
-	void onWorldLoad(World world);
+	void onWorldLoad(IWorld world);
 
-	void onWorldUnload(World world);
+	void onWorldUnload(IWorld world);
 
-	void onWorldSave(World world);
+	void onWorldSave(IWorld world);
 
 }

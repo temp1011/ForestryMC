@@ -19,7 +19,7 @@ import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.gui.slots.SlotCrafter;
+//import forestry.core.gui.slots.SlotCrafter;
 import forestry.core.gui.slots.SlotForestry;
 
 public abstract class SlotUtil {
@@ -72,7 +72,7 @@ public abstract class SlotUtil {
 			return ItemStack.EMPTY;
 		}
 
-		boolean fromCraftingSlot = slot instanceof CraftingResultSlot || slot instanceof SlotCrafter;
+		boolean fromCraftingSlot = slot instanceof CraftingResultSlot || false;//slot instanceof SlotCrafter;
 
 		int numSlots = inventorySlots.size();
 		ItemStack stackInSlot = slot.getStack();

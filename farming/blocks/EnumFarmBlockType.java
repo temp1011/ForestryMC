@@ -40,7 +40,7 @@ public enum EnumFarmBlockType implements IStringSerializable {
 
 	@OnlyIn(Dist.CLIENT)
 	public static void registerSprites() {
-		AtlasTexture map = Minecraft.getInstance().getTextureMapBlocks();
+		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 		sprites = Arrays.asList(
 			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/plain")),
 			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/reverse")),

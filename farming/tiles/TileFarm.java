@@ -76,16 +76,16 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		farmBlockTexture = EnumFarmBlockTexture.getFromCompound(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		farmBlockTexture = EnumFarmBlockTexture.getFromCompound(compoundNBT);
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		farmBlockTexture.saveToCompound(CompoundNBT);
-		return CompoundNBT;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		farmBlockTexture.saveToCompound(compoundNBT);
+		return compoundNBT;
 	}
 
 	/* CONSTRUCTION MATERIAL */

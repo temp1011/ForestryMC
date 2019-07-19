@@ -79,16 +79,16 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	/* SAVING & LOADING */
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		tankManager.writeToNBT(CompoundNBT);
-		return CompoundNBT;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		tankManager.writeToNBT(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		tankManager.readFromNBT(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		tankManager.readFromNBT(compoundNBT);
 
 		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 		if (!stackToAnalyze.isEmpty()) {
@@ -123,9 +123,9 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 			specimenToAnalyze.analyze();
 
-			CompoundNBT CompoundNBT = new CompoundNBT();
-			specimenToAnalyze.writeToNBT(CompoundNBT);
-			stackToAnalyze.setTagCompound(CompoundNBT);
+			CompoundNBT compoundNBT = new CompoundNBT();
+			specimenToAnalyze.writeToNBT(compoundNBT);
+			stackToAnalyze.setTag(compoundNBT);
 		}
 
 		boolean added = InventoryUtil.tryAddStack(invOutput, stackToAnalyze, true);
@@ -256,17 +256,11 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		return tankManager;
 	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
 
 	@Override
-	@Nullable
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
 		return super.getCapability(capability, facing);
 	}

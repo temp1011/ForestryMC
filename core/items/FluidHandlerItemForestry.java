@@ -43,13 +43,14 @@ public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consum
 	@Override
 	protected void setFluid(FluidStack fluid) {
 		super.setFluid(fluid);
-		container.setItemDamage(1); // show the filled container model
+//		container.setItemDamage(1); // show the filled container model
+		//TODO - no more meta stuff
 	}
 
 	@Override
 	protected void setContainerToEmpty() {
 		if (Config.nonConsumableCapsules) {        //default behaviour of FluidHandlerItemStack
-			container.getTag().removeTag(FLUID_NBT_KEY);
+			container.getTag().remove(FLUID_NBT_KEY);
 		} else {
 			super.setContainerToEmpty();
 		}

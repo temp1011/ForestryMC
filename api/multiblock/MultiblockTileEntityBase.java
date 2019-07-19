@@ -24,6 +24,7 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	private final T multiblockLogic;
 
 	public MultiblockTileEntityBase(T multiblockLogic) {
+		super();
 		this.multiblockLogic = multiblockLogic;
 	}
 
@@ -44,14 +45,14 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	public abstract void onMachineBroken();
 
 	@Override
-	public void readFromNBT(CompoundNBT data) {
-		super.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		super.read(data);
 		multiblockLogic.readFromNBT(data);
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT data) {
-		data = super.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		data = super.write(data);
 		multiblockLogic.writeToNBT(data);
 		return data;
 	}

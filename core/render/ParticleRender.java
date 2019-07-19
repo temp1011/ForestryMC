@@ -6,9 +6,10 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.settings.ParticleStatus;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -44,11 +45,11 @@ public class ParticleRender {
 		}
 
 		Minecraft mc = Minecraft.getInstance();
-		int particleSetting = mc.gameSettings.particleSetting;
+		ParticleStatus particleSetting = mc.gameSettings.particles;
 
-		if (particleSetting == 2) { // minimal
+		if (particleSetting == ParticleStatus.MINIMAL) { // minimal
 			return world.rand.nextInt(10) == 0;
-		} else if (particleSetting == 1) { // decreased
+		} else if (particleSetting == ParticleStatus.DECREASED) { // decreased
 			return world.rand.nextInt(3) != 0;
 		} else { // all
 			return true;
@@ -61,14 +62,15 @@ public class ParticleRender {
 			return;
 		}
 
-		ParticleManager effectRenderer = Minecraft.getInstance().effectRenderer;
+		ParticleManager effectRenderer = Minecraft.getInstance().particles;
 
 		Vec3d particleStart = housing.getBeeFXCoordinates();
 
 		// Avoid rendering bee particles that are too far away, they're very small.
 		// At 32+ distance, have no bee particles. Make more particles up close.
 		BlockPos playerPosition = Minecraft.getInstance().player.getPosition();
-		double playerDistanceSq = playerPosition.distanceSqToCenter(particleStart.x, particleStart.y, particleStart.z);
+		//TODO - correct?
+		double playerDistanceSq = playerPosition.distanceSq(new Vec3i(particleStart.x, particleStart.y, particleStart.z));
 		if (world.rand.nextInt(1024) < playerDistanceSq) {
 			return;
 		}
@@ -107,7 +109,7 @@ public class ParticleRender {
 			return;
 		}
 
-		ParticleManager effectRenderer = Minecraft.getInstance().effectRenderer;
+		ParticleManager effectRenderer = Minecraft.getInstance().particles;
 		effectRenderer.addEffect(new ParticleHoneydust(world, x, y, z, 0, 0, 0));
 	}
 
@@ -117,7 +119,7 @@ public class ParticleRender {
 		}
 		if (rand.nextFloat() >= 0.75F) {
 			for (int i = 0; i < 3; i++) {
-				Direction facing = Direction.HORIZONTALS[rand.nextInt(4)];
+				Direction facing = Direction.Plane.HORIZONTAL.random(rand);
 				int xOffset = facing.getXOffset();
 				int zOffset = facing.getZOffset();
 				double x = pos.getX() + 0.5 + (xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
@@ -137,7 +139,7 @@ public class ParticleRender {
 			return;
 		}
 
-		ParticleManager effectRenderer = Minecraft.getInstance().effectRenderer;
+		ParticleManager effectRenderer = Minecraft.getInstance().particles;
 		effectRenderer.addEffect(new ParticleClimate(world, x, y, z, color));
 	}
 
@@ -147,7 +149,7 @@ public class ParticleRender {
 		}
 		if (rand.nextFloat() >= 0.65F) {
 			for (int i = 0; i < 3; i++) {
-				Direction facing = Direction.HORIZONTALS[rand.nextInt(4)];
+				Direction facing = Direction.Plane.HORIZONTAL.random(rand);
 				int xOffset = facing.getXOffset();
 				int zOffset = facing.getZOffset();
 				double x = pos.getX() + 0.5 + (xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
@@ -163,7 +165,7 @@ public class ParticleRender {
 			return;
 		}
 
-		ParticleManager effectRenderer = Minecraft.getInstance().effectRenderer;
+		ParticleManager effectRenderer = Minecraft.getInstance().particles;
 		effectRenderer.addEffect(new ParticleClimate(world, x, y, z));
 	}
 
@@ -172,8 +174,8 @@ public class ParticleRender {
 			return;
 		}
 
-		ParticleManager effectRenderer = Minecraft.getInstance().effectRenderer;
-		Particle Particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.EXPLOSION_NORMAL.getParticleID(), x, y, z, 0, 0, 0);
+		ParticleManager effectRenderer = Minecraft.getInstance().particles;
+		Particle Particle = effectRenderer.spawnEffectParticle(ParticleTypes.EXPLOSION.getParticleID(), x, y, z, 0, 0, 0);
 		effectRenderer.addEffect(Particle);
 	}
 
@@ -182,7 +184,7 @@ public class ParticleRender {
 			return;
 		}
 
-		ParticleManager effectRenderer = Minecraft.getInstance().effectRenderer;
+		ParticleManager effectRenderer = Minecraft.getInstance().particles;
 		effectRenderer.addEffect(new ParticleSnow(world, x + world.rand.nextGaussian(), y, z + world.rand.nextGaussian()));
 	}
 
@@ -191,7 +193,7 @@ public class ParticleRender {
 			return;
 		}
 
-		ParticleManager effectRenderer = Minecraft.getInstance().effectRenderer;
+		ParticleManager effectRenderer = Minecraft.getInstance().particles;
 		effectRenderer.addEffect(new ParticleIgnition(world, x, y, z));
 	}
 
@@ -200,7 +202,7 @@ public class ParticleRender {
 			return;
 		}
 
-		ParticleManager effectRenderer = Minecraft.getInstance().effectRenderer;
+		ParticleManager effectRenderer = Minecraft.getInstance().particles;
 		effectRenderer.addEffect(new ParticleSmoke(world, x, y, z));
 	}
 
@@ -213,10 +215,11 @@ public class ParticleRender {
 		float green = (color >> 8 & 255) / 255.0F;
 		float blue = (color & 255) / 255.0F;
 
-		ParticleManager effectRenderer = Minecraft.getInstance().effectRenderer;
-		Particle particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.SPELL.getParticleID(), x, y, z, 0, 0, 0);
+		ParticleManager effectRenderer = Minecraft.getInstance().particles;
+		//TODO - maybe EFFECT?
+		Particle particle = effectRenderer.spawnEffectParticle(ParticleTypes.SPELL.getParticleID(), x, y, z, 0, 0, 0);
 		if (particle != null) {
-			particle.setRBGColorF(red, green, blue);
+			particle.setColor(red, green, blue);
 			effectRenderer.addEffect(particle);
 		}
 	}
@@ -234,8 +237,8 @@ public class ParticleRender {
 		double xSpeed = (double) (rand.nextFloat() * (float) j);
 		double ySpeed = ((double) rand.nextFloat() - 0.5D) * 0.125D;
 		double zSpeed = (double) (rand.nextFloat() * (float) k);
-		ParticleManager effectRenderer = Minecraft.getInstance().effectRenderer;
-		Particle particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.PORTAL.getParticleID(), xPos, yPos, zPos, xSpeed, ySpeed, zSpeed);
+		ParticleManager effectRenderer = Minecraft.getInstance().particles;
+		Particle particle = effectRenderer.spawnEffectParticle(ParticleTypes.PORTAL.getParticleID(), xPos, yPos, zPos, xSpeed, ySpeed, zSpeed);
 		if (particle != null) {
 			effectRenderer.addEffect(particle);
 		}
@@ -246,8 +249,8 @@ public class ParticleRender {
 			return;
 		}
 
-		ParticleManager effectRenderer = Minecraft.getInstance().effectRenderer;
-		Particle particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.VILLAGER_HAPPY.ordinal(), x, y, z, 0, 0, 0);
+		ParticleManager effectRenderer = Minecraft.getInstance().particles;
+		Particle particle = effectRenderer.spawnEffectParticle(ParticleTypes.HAPPY_VILLAGER.ordinal(), x, y, z, 0, 0, 0);
 		if (particle != null) {
 			effectRenderer.addEffect(particle);
 		}

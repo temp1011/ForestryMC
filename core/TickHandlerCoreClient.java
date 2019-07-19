@@ -14,13 +14,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
 import forestry.core.utils.GeneticsUtil;
 
 @OnlyIn(Dist.CLIENT)
@@ -28,6 +29,7 @@ public class TickHandlerCoreClient {
 
 	private boolean hasNaturalistEye;
 
+	//TODO - register event handlers
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
 		if (event.phase == Phase.END) {
@@ -38,7 +40,8 @@ public class TickHandlerCoreClient {
 					boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
 					if (this.hasNaturalistEye != hasNaturalistEye) {
 						this.hasNaturalistEye = hasNaturalistEye;
-						WorldRenderer renderGlobal = minecraft.renderGlobal;
+						//TODO - I think this is the correct field
+						WorldRenderer renderGlobal = minecraft.worldRenderer;
 						if (renderGlobal != null) {
 							renderGlobal.markBlockRangeForRenderUpdate(
 								(int) player.posX - 32, (int) player.posY - 32, (int) player.posZ - 32,

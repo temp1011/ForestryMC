@@ -15,27 +15,28 @@ import java.util.Collection;
 import java.util.Set;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleRegistry;
 import forestry.api.genetics.IBreedingTracker;
@@ -54,15 +55,16 @@ public class EventHandlerCore {
 	public EventHandlerCore() {
 	}
 
+	//TODO - register event handler
 	@SubscribeEvent
 	public void handleItemPickup(EntityItemPickupEvent event) {
-		if (event.isCanceled() || event.getResult() == Result.ALLOW) {
+		if (event.isCanceled() || event.getResult() == Event.Result.ALLOW) {
 			return;
 		}
 
 		for (IPickupHandler handler : ModuleManager.pickupHandlers) {
-			if (handler.onItemPickup(event.getPlayerEntity(), event.getItem())) {
-				event.setResult(Result.ALLOW);
+			if (handler.onItemPickup(event.getEntityPlayer(), event.getItem())) {
+				event.setResult(Event.Result.ALLOW);
 				return;
 			}
 		}
@@ -70,13 +72,13 @@ public class EventHandlerCore {
 
 	@SubscribeEvent
 	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-		PlayerEntity player = event.player;
+		PlayerEntity player = event.getPlayer();
 		syncBreedingTrackers(player);
 	}
 
 	@SubscribeEvent
 	public void handlePlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-		PlayerEntity player = event.player;
+		PlayerEntity player = event.getPlayer();
 		syncBreedingTrackers(player);
 	}
 
@@ -91,7 +93,7 @@ public class EventHandlerCore {
 
 	@SubscribeEvent
 	public void handleWorldLoad(WorldEvent.Load event) {
-		World world = event.getWorld();
+		IWorld world = event.getWorld();
 
 		for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
 			handler.onWorldLoad(world);
@@ -124,7 +126,7 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	public void lootLoad(LootTableLoadEvent event) {
 		if (!event.getName().getNamespace().equals("minecraft")
-			&& !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY)) {
+				&& !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY)) {
 			return;
 		}
 
@@ -152,9 +154,10 @@ public class EventHandlerCore {
 		Entity entity = event.getEntity();
 		if ((entity instanceof VillagerEntity)) {
 			VillagerEntity villager = (VillagerEntity) entity;
-			VillagerRegistry.VillagerProfession profession = villager.getProfessionForge();
-			if (ModuleApiculture.villagerApiarist != null && profession == ModuleApiculture.villagerApiarist) {
-				villager.tasks.addTask(6, new ApiaristAI(villager, 0.6));
+			//TODO - not sure this is quite right
+			VillagerProfession prof = ForgeRegistries.PROFESSIONS.getValue(EntityType.getKey(villager.getType()));
+			if (ModuleApiculture.villagerApiarist != null && prof == ModuleApiculture.villagerApiarist) {
+				villager.goalSelector.addGoal(6, new ApiaristAI(villager, 0.6));
 			}
 		}
 	}

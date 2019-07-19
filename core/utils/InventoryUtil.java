@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.IItemHandler;
 
-import net.minecraftforge.fml.common.Optional;
+//import net.minecraftforge.fml.common.Optional;
 
 import forestry.core.circuits.ISocketable;
 import forestry.core.inventory.ItemHandlerInventoryManipulator;
@@ -34,7 +34,7 @@ import forestry.core.inventory.StandardStackFilters;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
-import forestry.plugins.ForestryCompatPlugins;
+//import forestry.plugins.ForestryCompatPlugins;
 
 public abstract class InventoryUtil {
 	/**
@@ -78,15 +78,15 @@ public abstract class InventoryUtil {
 	}
 
 	public static boolean moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, Direction[] directions) {
-		if (ModuleHelper.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_TRANSPORT)) {
+		if (false){//ModuleHelper.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_TRANSPORT)) {
 			return internal_moveOneItemToPipe(source, tileCache, directions);
 		}
 
 		return false;
 	}
 
-	//TODO Buildcraft for 1.9
-	@Optional.Method(modid = "buildcraftapi_transport")
+	//TODO Buildcraft for 1.14+
+//	@Optional.Method(modid = "buildcraftapi_transport")
 	private static boolean internal_moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, Direction[] directions) {
 		//		IInventory invClone = new InventoryCopy(source);
 		//		ItemStack stackToMove = removeOneItem(invClone);
@@ -603,13 +603,12 @@ public abstract class InventoryUtil {
 			if (stackPartial > itemStack.getCount()) {
 				stackPartial = itemStack.getCount();
 			}
-			ItemStack drop = itemStack.splitStack(stackPartial);
+			ItemStack drop = itemStack.split(stackPartial);
 			ItemEntity entityitem = new ItemEntity(world, x + f, y + f1, z + f2, drop);
-			float accel = 0.05F;
-			entityitem.motionX = (float) world.rand.nextGaussian() * accel;
-			entityitem.motionY = (float) world.rand.nextGaussian() * accel + 0.2F;
-			entityitem.motionZ = (float) world.rand.nextGaussian() * accel;
-			world.spawnEntity(entityitem);
+			double accel = 0.05D;
+			//TODO - hopefully correct I think
+			entityitem.setVelocity(world.rand.nextGaussian() * accel, world.rand.nextGaussian() * accel + 0.2F, world.rand.nextGaussian() * accel);
+			world.addEntity(entityitem);
 		}
 	}
 
@@ -618,30 +617,30 @@ public abstract class InventoryUtil {
 	/**
 	 * The database has an inventory large enough that int must be used here instead of byte
 	 */
-	public static void readFromNBT(IInventory inventory, CompoundNBT CompoundNBT) {
-		if (!CompoundNBT.hasKey(inventory.getName())) {
+	public static void readFromNBT(IInventory inventory, CompoundNBT compoundNBT) {
+		if (!compoundNBT.contains(inventory.getName())) {
 			return;
 		}
 
-		ListNBT nbttaglist = CompoundNBT.getTagList(inventory.getName(), 10);
+		ListNBT nbttaglist = compoundNBT.getList(inventory.getName(), 10);
 
-		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
-			CompoundNBT CompoundNBT2 = nbttaglist.getCompoundNBTAt(j);
-			int index = CompoundNBT2.getInteger("Slot");
-			inventory.setInventorySlotContents(index, new ItemStack(CompoundNBT2));
+		for (int j = 0; j < nbttaglist.size(); ++j) {
+			CompoundNBT compoundNBT2 = nbttaglist.getCompound(j);
+			int index = compoundNBT2.getInt("Slot");
+			inventory.setInventorySlotContents(index, ItemStack.read(compoundNBT2));
 		}
 	}
 
-	public static void writeToNBT(IInventory inventory, CompoundNBT CompoundNBT) {
+	public static void writeToNBT(IInventory inventory, CompoundNBT compoundNBT) {
 		ListNBT nbttaglist = new ListNBT();
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (!inventory.getStackInSlot(i).isEmpty()) {
-				CompoundNBT CompoundNBT2 = new CompoundNBT();
-				CompoundNBT2.setInteger("Slot", i);
-				inventory.getStackInSlot(i).writeToNBT(CompoundNBT2);
-				nbttaglist.appendTag(CompoundNBT2);
+				CompoundNBT compoundNBT2 = new CompoundNBT();
+				compoundNBT2.putInt("Slot", i);
+				inventory.getStackInSlot(i).write(compoundNBT2);
+				nbttaglist.add(compoundNBT2);
 			}
 		}
-		CompoundNBT.setTag(inventory.getName(), nbttaglist);
+		compoundNBT.put(inventory.getName(), nbttaglist);
 	}
 }

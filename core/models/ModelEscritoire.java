@@ -12,8 +12,8 @@ package forestry.core.models;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.RendererModel;
+import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.model.Model;
 import net.minecraft.entity.Entity;
 
 
@@ -21,8 +21,9 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
-public class ModelEscritoire extends ModelBase {
+public class ModelEscritoire extends Model {
 
+	//TODO - is RendererModel in the right place given entity package?????
 	//fields
 	private final RendererModel desk;
 	private final RendererModel standRB;

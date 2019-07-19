@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -123,21 +124,20 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	private boolean hasMjCapability(Capability<?> capability) {
-		return capability == MjHelper.CAP_READABLE ||
-			capability == MjHelper.CAP_CONNECTOR ||
-			capability == MjHelper.CAP_PASSIVE_PROVIDER && externalMode.canExtract() ||
-			capability == MjHelper.CAP_REDSTONE_RECEIVER && externalMode.canReceive() ||
-			capability == MjHelper.CAP_RECEIVER && externalMode.canReceive();
+		return false;//capability == MjHelper.CAP_READABLE ||
+//			capability == MjHelper.CAP_CONNECTOR ||
+//			capability == MjHelper.CAP_PASSIVE_PROVIDER && externalMode.canExtract() ||
+//			capability == MjHelper.CAP_REDSTONE_RECEIVER && externalMode.canReceive() ||
+//			capability == MjHelper.CAP_RECEIVER && externalMode.canReceive();
 	}
 
-	@Nullable
-	public <T> T getCapability(Capability<T> capability) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability) {
 		if (!hasCapability(capability)) {
 			return null;
 		}
 		if (capability == CapabilityEnergy.ENERGY) {
 			IEnergyStorage energyStorage = new EnergyStorageWrapper(this, externalMode);
-			return CapabilityEnergy.ENERGY.cast(energyStorage);
+			return LazyOptional.of(() -> energyStorage).cast();
 		} else if (TeslaHelper.isTeslaCapability(capability)) {
 //			Capability<ITeslaProducer> teslaProducer = TeslaHelper.TESLA_PRODUCER;
 //			Capability<ITeslaConsumer> teslaConsumer = TeslaHelper.TESLA_CONSUMER;
@@ -169,7 +169,7 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 //				return mjConnector.cast(new MjConnectorWrapper(this));
 //			}
 		}
-		return null;
+		return LazyOptional.empty();
 	}
 
 	public int calculateRedstone() {

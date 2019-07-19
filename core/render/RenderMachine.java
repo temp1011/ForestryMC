@@ -16,9 +16,10 @@ import java.util.Locale;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.RendererModel;
 import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.util.Direction;
@@ -44,7 +45,7 @@ public class RenderMachine extends TileEntityRenderer<TileBase> {
 	private final EnumMap<EnumTankLevel, ResourceLocation> texturesTankLevels = new EnumMap<>(EnumTankLevel.class);
 
 	public RenderMachine(String baseTexture) {
-		ModelBase model = new RenderModelBase();
+		Model model = new RenderModelBase();
 
 		basefront = new RendererModel(model, 0, 0);
 		basefront.addBox(-8F, -8F, -8F, 16, 4, 16);
@@ -87,14 +88,14 @@ public class RenderMachine extends TileEntityRenderer<TileBase> {
 	 * @param tile If it null its render the item else it render the tile entity.
 	 */
 	@Override
-	public void render(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
 		if (tile != null) {
 			IRenderableTile generator = (IRenderableTile) tile;
 			World worldObj = tile.getWorldObj();
 			if (worldObj.isBlockLoaded(tile.getPos())) {
 				BlockState blockState = worldObj.getBlockState(tile.getPos());
 				if (blockState.getBlock() instanceof BlockBase) {
-					Direction facing = blockState.getValue(BlockBase.FACING);
+					Direction facing = blockState.get(BlockBase.FACING);
 					render(generator.getResourceTankInfo(), generator.getProductTankInfo(), facing, x, y, z, destroyStage);
 					return;
 				}
@@ -105,7 +106,7 @@ public class RenderMachine extends TileEntityRenderer<TileBase> {
 
 	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, Direction orientation, double x, double y, double z, int destroyStage) {
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y, (float) z);
+		GlStateManager.translatef((float) x, (float) y, (float) z);
 		float[] angle = {0, 0, 0};
 
 		switch (orientation) {
@@ -160,7 +161,7 @@ public class RenderMachine extends TileEntityRenderer<TileBase> {
 		renderTank(productTank, textureProductTank, productTankInfo, factor);
 
 		GlStateManager.popMatrix();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	private void renderTank(RendererModel tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, float factor) {
@@ -178,14 +179,14 @@ public class RenderMachine extends TileEntityRenderer<TileBase> {
 		Color primaryTankColor = fluidDefinition == null ? Color.BLUE : fluidDefinition.getParticleColor();
 		float[] colors = new float[3];
 		primaryTankColor.getRGBColorComponents(colors);
-		GlStateManager.color(colors[0], colors[1], colors[2], 1.0f);
+		GlStateManager.color4f(colors[0], colors[1], colors[2], 1.0f);
 
 		textureManager.bindTexture(textureResourceTankLevel);
 		tankModel.render(factor);
 
-		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	private static class RenderModelBase extends ModelBase {
+	private static class RenderModelBase extends Model {
 	}
 }

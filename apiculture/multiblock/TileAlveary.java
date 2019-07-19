@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
@@ -93,33 +94,26 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
-			capability == ClimateCapabilities.CLIMATE_LISTENER ||
-			super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if (super.hasCapability(capability, facing)) {
-			return super.getCapability(capability, facing);
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		LazyOptional<T> superCap = super.getCapability(capability, facing);
+		if(superCap.isPresent()) {
+			return superCap;
 		}
 
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing != null) {
 				SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(getInternalInventory(), facing);
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);
+				return LazyOptional.of(() -> sidedInvWrapper).cast();	//TODO - still not sure if I am doing this right
 			} else {
 				InvWrapper invWrapper = new InvWrapper(getInternalInventory());
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(invWrapper);
+				return LazyOptional.of(() -> invWrapper).cast();
 			}
 		}
 		if (capability == ClimateCapabilities.CLIMATE_LISTENER) {
 			IClimateListener listener = getMultiblockLogic().getController().getClimateListener();
-			return ClimateCapabilities.CLIMATE_LISTENER.cast(listener);
+			return LazyOptional.of(() -> listener).cast();
 		}
-		return null;
+		return LazyOptional.empty();
 	}
 
 	/* IHousing */

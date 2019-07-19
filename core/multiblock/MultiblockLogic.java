@@ -113,8 +113,8 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	public void readFromNBT(CompoundNBT data) {
 		// We can't directly initialize a multiblock controller yet, so we cache the data here until
 		// we receive a validate() call, which creates the controller and hands off the cached data.
-		if (data.hasKey("multiblockData")) {
-			this.cachedMultiblockData = data.getCompoundNBT("multiblockData");
+		if (data.contains("multiblockData")) {
+			this.cachedMultiblockData = data.getCompound("multiblockData");
 		}
 	}
 
@@ -123,7 +123,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 		if (isMultiblockSaveDelegate() && this.controller != null) {
 			CompoundNBT multiblockData = new CompoundNBT();
 			this.controller.writeToNBT(multiblockData);
-			data.setTag("multiblockData", multiblockData);
+			data.put("multiblockData", multiblockData);
 		}
 		return data;
 	}
@@ -190,7 +190,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 		if (this.isMultiblockSaveDelegate() && controller != null) {
 			CompoundNBT tag = new CompoundNBT();
 			controller.formatDescriptionPacket(tag);
-			packetData.setTag("multiblockData", tag);
+			packetData.put("multiblockData", tag);
 		}
 	}
 
@@ -202,8 +202,8 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 */
 	@Override
 	public void decodeDescriptionPacket(CompoundNBT packetData) {
-		if (packetData.hasKey("multiblockData")) {
-			CompoundNBT tag = packetData.getCompoundNBT("multiblockData");
+		if (packetData.contains("multiblockData")) {
+			CompoundNBT tag = packetData.getCompound("multiblockData");
 			if (controller != null) {
 				controller.decodeDescriptionPacket(tag);
 			} else {

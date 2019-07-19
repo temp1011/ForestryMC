@@ -26,11 +26,11 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.genetics.BeeDefinition;
-import forestry.arboriculture.genetics.Tree;
-import forestry.arboriculture.genetics.TreeDefinition;
+//import forestry.arboriculture.genetics.Tree;
+//import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.config.Constants;
-import forestry.lepidopterology.genetics.Butterfly;
-import forestry.lepidopterology.genetics.ButterflyDefinition;
+//import forestry.lepidopterology.genetics.Butterfly;
+//import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
@@ -73,9 +73,9 @@ public class CreativeTabForestry extends ItemGroup {
 			case 2:
 				return BeeManager.beeRoot.getMemberStack(new Bee(BeeDefinition.FOREST.getGenome()), EnumBeeType.DRONE);
 			case 3:
-				return TreeManager.treeRoot.getMemberStack(new Tree(TreeDefinition.Oak.getGenome()), EnumGermlingType.SAPLING);
+				return ItemStack.EMPTY;//TreeManager.treeRoot.getMemberStack(new Tree(TreeDefinition.Oak.getGenome()), EnumGermlingType.SAPLING);
 			case 4:
-				return ButterflyManager.butterflyRoot.getMemberStack(new Butterfly(ButterflyDefinition.Brimstone.getGenome()), EnumFlutterType.BUTTERFLY);
+				return ItemStack.EMPTY;//ButterflyManager.butterflyRoot.getMemberStack(new Butterfly(ButterflyDefinition.Brimstone.getGenome()), EnumFlutterType.BUTTERFLY);
 			default:
 				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "fertilizerCompound"));
 				break;

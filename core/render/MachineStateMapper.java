@@ -7,9 +7,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
@@ -18,6 +18,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
+
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachinePropertiesTesr;
@@ -38,7 +40,7 @@ public class MachineStateMapper<T extends Enum<T> & IBlockType & IStringSerializ
 		this.directory = directory;
 	}
 
-	@Override
+//	@Override TODO - statemapper
 	public Map<BlockState, ModelResourceLocation> putStateModelLocations(Block block) {
 		if (!(type.getMachineProperties() instanceof IMachinePropertiesTesr)) {
 			for (Direction facing : Direction.values()) {
@@ -46,8 +48,8 @@ public class MachineStateMapper<T extends Enum<T> & IBlockType & IStringSerializ
 					continue;
 				}
 				BlockState state = block.getDefaultState().with(BlockBase.FACING, facing);
-				LinkedHashMap<IProperty<?>, Comparable<?>> linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
-				ResourceLocation blockLocation = Block.REGISTRY.getNameForObject(block);
+				LinkedHashMap<IProperty<?>, Comparable<?>> linkedhashmap = Maps.newLinkedHashMap(state.getValues());
+				ResourceLocation blockLocation = ForgeRegistries.BLOCKS.getKey(block);
 				String s = String.format("%s:%s", blockLocation.getNamespace(), (directory != null ? directory : "") + blockLocation.getPath());
 				mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));
 			}

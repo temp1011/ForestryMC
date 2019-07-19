@@ -49,11 +49,11 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT data) {
-		super.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		super.read(data);
 
-		if (data.hasKey("owner")) {
-			CompoundNBT ownerNbt = data.getCompoundNBT("owner");
+		if (data.contains("owner")) {
+			CompoundNBT ownerNbt = data.getCompound("owner");
 			this.owner = PlayerUtil.readGameProfileFromNBT(ownerNbt);
 		}
 
@@ -61,13 +61,13 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT data) {
-		data = super.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		data = super.write(data);
 
 		if (this.owner != null) {
 			CompoundNBT nbt = new CompoundNBT();
 			PlayerUtil.writeGameProfile(nbt, owner);
-			data.setTag("owner", nbt);
+			data.put("owner", nbt);
 		}
 
 		getInternalInventory().writeToNBT(data);

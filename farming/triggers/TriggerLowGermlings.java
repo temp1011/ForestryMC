@@ -18,8 +18,8 @@ import forestry.core.triggers.Trigger;
 import forestry.core.utils.InventoryUtil;
 import forestry.farming.tiles.TileFarmHatch;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+//import buildcraft.api.statements.IStatementContainer;
+//import buildcraft.api.statements.IStatementParameter;
 
 public class TriggerLowGermlings extends Trigger {
 
@@ -30,22 +30,22 @@ public class TriggerLowGermlings extends Trigger {
 		this.threshold = threshold;
 	}
 
-	@Override
-	public String getDescription() {
-		return super.getDescription() + " < " + threshold * 100 + "%";
-	}
+//	@Override
+//	public String getDescription() {
+//		return super.getDescription() + " < " + threshold * 100 + "%";
+//	}
 
 	/**
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
-	@Override
-	public boolean isTriggerActive(TileEntity tile, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
-		if (!(tile instanceof TileFarmHatch)) {
-			return false;
-		}
-
-		TileFarmHatch tileHatch = (TileFarmHatch) tile;
-		IInventory germlingsInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getGermlingsInventory();
-		return !InventoryUtil.containsPercent(germlingsInventory, threshold);
-	}
+//	@Override
+//	public boolean isTriggerActive(TileEntity tile, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
+//		if (!(tile instanceof TileFarmHatch)) {
+//			return false;
+//		}
+//
+//		TileFarmHatch tileHatch = (TileFarmHatch) tile;
+//		IInventory germlingsInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getGermlingsInventory();
+//		return !InventoryUtil.containsPercent(germlingsInventory, threshold);
+//	}
 }

@@ -1,9 +1,9 @@
 package forestry.core.utils;
 
-import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.InterModComms;
 
 public class IMCUtil {
-	public static String getInvalidIMCMessageText(FMLInterModComms.IMCMessage message) {
+	public static String getInvalidIMCMessageText(InterModComms.IMCMessage message) {
 		final Object messageValue;
 		if (message.isItemStackMessage()) {
 			messageValue = message.getItemStackValue().toString();
@@ -18,7 +18,7 @@ public class IMCUtil {
 		return String.format("Received an invalid '%s' request '%s' from mod '%s'. Please contact the author and report this issue.", message.key, messageValue, message.getSender());
 	}
 
-	public static void logInvalidIMCMessage(FMLInterModComms.IMCMessage message) {
+	public static void logInvalidIMCMessage(InterModComms.IMCMessage message) {
 		String invalidIMCMessageText = getInvalidIMCMessageText(message);
 		Log.warning(invalidIMCMessageText);
 	}

@@ -43,7 +43,7 @@ public class NetworkUtil {
 		int chunkX = pos.getX() >> 4;
 		int chunkZ = pos.getZ() >> 4;
 
-		for (Object playerObj : world.playerEntities) {
+		for (PlayerEntity playerObj : world.getPlayers()) {
 			if (playerObj instanceof ServerPlayerEntity) {
 				ServerPlayerEntity player = (ServerPlayerEntity) playerObj;
 
@@ -73,6 +73,6 @@ public class NetworkUtil {
 	public static void sendToServer(IForestryPacketServer packet) {
 		ClientPlayNetHandler netHandler = Minecraft.getInstance().getConnection();
 		Preconditions.checkNotNull(netHandler, "Tried to send packet before netHandler (client world) exists.");
-		netHandler.sendPacket(packet.getPacket());
+		netHandler.sendPacket(packet);
 	}
 }

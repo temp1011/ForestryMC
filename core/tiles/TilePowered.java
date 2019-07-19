@@ -155,15 +155,15 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT nbt) {
-		nbt = super.writeToNBT(nbt);
+	public CompoundNBT write(CompoundNBT nbt) {
+		nbt = super.write(nbt);
 		energyManager.writeToNBT(nbt);
 		return nbt;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT nbt) {
-		super.readFromNBT(nbt);
+	public void read(CompoundNBT nbt) {
+		super.read(nbt);
 		energyManager.readFromNBT(nbt);
 	}
 
@@ -215,8 +215,8 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 //		if (capability == CAPABILITY_HAS_WORK) {
 //			return CAPABILITY_HAS_WORK.cast(new HasWorkWrapper(this));
 //		}
-		T energyCapability = energyManager.getCapability(capability);
-		if (energyCapability != null) {
+		LazyOptional<T> energyCapability = energyManager.getCapability(capability);
+		if (energyCapability.isPresent()) {
 			return energyCapability;
 		}
 		return super.getCapability(capability, facing);

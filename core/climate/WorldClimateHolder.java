@@ -79,13 +79,13 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	@Override
 	public CompoundNBT write(CompoundNBT compound) {
 		ListNBT transformerData = new ListNBT();
-		for (Map.Entry<Long, TransformerData> entry : transformers.entrySet()) {
+		for (Map.Entry<Long, TransformerData> entry : transformers.long2ObjectEntrySet()) {
 			TransformerData data = entry.getValue();
 			transformerData.add(data.writeToNBT(new CompoundNBT()));
 		}
 		compound.put(TRANSFORMERS_KEY, transformerData);
 		ListNBT chunkData = new ListNBT();
-		for (Map.Entry<Long, long[]> entry : transformersByChunk.entrySet()) {
+		for (Map.Entry<Long, long[]> entry : transformersByChunk.long2ObjectEntrySet()) {
 			CompoundNBT tagCompound = new CompoundNBT();
 			tagCompound.putLong(POS_KEY, entry.getKey());
 			tagCompound.put(TRANSFORMERS_DATA_KEY, new LongArrayNBT(entry.getValue()));

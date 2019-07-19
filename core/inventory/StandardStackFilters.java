@@ -12,9 +12,8 @@ package forestry.core.inventory;
 
 import java.util.function.Predicate;
 
+import net.minecraft.item.Food;
 import net.minecraft.item.Items;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.FurnaceTileEntity;
 
@@ -36,13 +35,15 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
 	FUEL {
 		@Override
 		public boolean test(ItemStack stack) {
-			return FurnaceTileEntity.getItemBurnTime(stack) > 0;
+			return FurnaceTileEntity.getBurnTimes().get(stack.getItem()) > 0;
 		}
 	},
+	//TODO - where is this used?
 	FEED {
 		@Override
 		public boolean test(ItemStack stack) {
-			return stack.getItem() instanceof ItemFood || stack.getItem() == Items.WHEAT || stack.getItem() instanceof ItemSeeds;
+			//TODO - tag on seeds?
+			return stack.getItem().getFood() != null || stack.getItem() == Items.WHEAT || stack.getItem() == Items.WHEAT_SEEDS;
 		}
 	}
 }

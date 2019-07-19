@@ -35,7 +35,7 @@ public class ProbeButton extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
+		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
 		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 228, pressed ? 47 : 22, width, height);

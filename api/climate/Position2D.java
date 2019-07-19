@@ -38,8 +38,8 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 	}
 
 	public Position2D(CompoundNBT CompoundNBT) {
-		this.x = CompoundNBT.getInteger("xPosition");
-		this.z = CompoundNBT.getInteger("zPosition");
+		this.x = CompoundNBT.getInt("xPosition");
+		this.z = CompoundNBT.getInt("zPosition");
 	}
 
 	public boolean equals(Object o) {
@@ -76,8 +76,8 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 
 	@Override
 	public CompoundNBT writeToNBT(CompoundNBT nbt) {
-		nbt.setInteger("xPosition", x);
-		nbt.setInteger("zPosition", z);
+		nbt.putInt("xPosition", x);
+		nbt.putInt("zPosition", z);
 		return nbt;
 	}
 
