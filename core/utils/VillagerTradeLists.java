@@ -13,6 +13,7 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 
 public class VillagerTradeLists {
+	//TODO find where this class is now and copy it
 	/**
 	 * Copy of {@link VillagerEntity.ItemAndEmeraldToItem}
 	 * that takes ItemStacks as parameters and has emerald price info

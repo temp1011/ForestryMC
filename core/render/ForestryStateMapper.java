@@ -5,17 +5,18 @@ import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.state.IProperty;
+//import net.minecraft.client.renderer.block.statemap.IStateMapper;
 
 
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+//TODO - flatten to avoid statemapper?
 @OnlyIn(Dist.CLIENT)
-public abstract class ForestryStateMapper implements IStateMapper {
+public abstract class ForestryStateMapper {//implements IStateMapper {
 
 	protected final Map<BlockState, ModelResourceLocation> mapStateModelLocations = Maps.newLinkedHashMap();
 

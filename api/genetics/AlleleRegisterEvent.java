@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.eventbus.api.Event;
 
 /**
- * Called after Forestry has registered all his alleles of an specific type. Like IAlleleFruit or IAlleleSpecies
+ * Called after Forestry has registered all the alleles of an specific type. Like IAlleleFruit or IAlleleSpecies
  *
  * @since 5.3.3
  */

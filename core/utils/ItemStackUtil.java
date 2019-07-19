@@ -29,8 +29,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.oredict.OreDictionary;
-
 public abstract class ItemStackUtil {
 
 	/**
@@ -49,11 +47,12 @@ public abstract class ItemStackUtil {
 			return false;
 		}
 
-		if (lhs.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
-			if (lhs.getItemDamage() != rhs.getItemDamage()) {
-				return false;
-			}
-		}
+		//TODO - need tags for all of this
+//		if (lhs.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
+//			if (lhs.getItemDamage() != rhs.getItemDamage()) {
+//				return false;
+//			}
+//		}
 
 		return ItemStack.areItemStackTagsEqual(lhs, rhs);
 	}
@@ -82,9 +81,9 @@ public abstract class ItemStackUtil {
 			return null;
 		}
 
-		int meta = itemStack.getItemDamage();
-		if (meta != OreDictionary.WILDCARD_VALUE) {
-			return itemStackString + ':' + meta;
+//		int meta = itemStack.getItemDamage();
+		if (false){//meta != OreDictionary.WILDCARD_VALUE) {
+			return itemStackString ;//+ ':' + meta;
 		} else {
 			return itemStackString;
 		}
@@ -108,7 +107,7 @@ public abstract class ItemStackUtil {
 			return;
 		}
 
-		ItemStack temp = giver.splitStack(receptor.getMaxStackSize() - receptor.getCount());
+		ItemStack temp = giver.split(receptor.getMaxStackSize() - receptor.getCount());
 		receptor.grow(temp.getCount());
 		temp.setCount(0);
 	}
@@ -290,11 +289,11 @@ public abstract class ItemStackUtil {
 			return false;
 		}
 
-		if (base.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
-			if (base.getItemDamage() != comparison.getItemDamage()) {
-				return false;
-			}
-		}
+//		if (base.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
+//			if (base.getItemDamage() != comparison.getItemDamage()) {
+//				return false;
+//			}
+//		}
 
 		// When the base stackTagCompound is null or empty, treat it as a wildcard for crafting
 		if (base.getTag() == null || base.getTag().isEmpty()) {
@@ -313,9 +312,9 @@ public abstract class ItemStackUtil {
 		}
 
 		if (oreDictionary) {
-			int[] idsBase = OreDictionary.getOreIDs(base);
+			int[] idsBase = new int[0];//OreDictionary.getOreIDs(base);
 			Arrays.sort(idsBase);
-			int[] idsComp = OreDictionary.getOreIDs(comparison);
+			int[] idsComp = new int[0];//OreDictionary.getOreIDs(comparison);
 			Arrays.sort(idsComp);
 
 			// check if the sorted arrays "idsBase" and "idsComp" have any ID in common.
@@ -345,8 +344,8 @@ public abstract class ItemStackUtil {
 		}
 
 		if (oreDict != null && !oreDict.isEmpty()) {
-			int[] validIds = OreDictionary.getOreIDs(comparison);
-			int validID = OreDictionary.getOreID(oreDict);
+			int[] validIds = new int[0];//OreDictionary.getOreIDs(comparison);
+			int validID = 0;//OreDictionary.getOreID(oreDict);
 
 			for (int id : validIds) {
 				if (id == validID) {
@@ -387,10 +386,10 @@ public abstract class ItemStackUtil {
 			return true;
 		} else {
 			// tool uses NBT for damage
-			if (base.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-				return true;
-			}
-			return base.getItemDamage() == comparison.getItemDamage();
+//			if (base.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+//				return true;
+//			}
+			return false;//base.getItemDamage() == comparison.getItemDamage();
 		}
 	}
 
@@ -414,7 +413,7 @@ public abstract class ItemStackUtil {
 		ItemEntity entityitem = new ItemEntity(world, x + d, y + d1, z + d2, items);
 		entityitem.setPickupDelay(delayForPickup);
 
-		world.spawnEntity(entityitem);
+		world.addEntity(entityitem);
 	}
 
 
@@ -439,11 +438,11 @@ public abstract class ItemStackUtil {
 	}
 
 	public static boolean equals(BlockState state, ItemStack stack) {
-		return state.getBlock() == getBlock(stack) && state.getBlock().getMetaFromState(state) == stack.getItemDamage();
+		return state.getBlock() == getBlock(stack);// && state.getBlock().getMetaFromState(state) == stack.getItemDamage();
 	}
 
 	public static boolean equals(Block block, int meta, ItemStack stack) {
-		return block == getBlock(stack) && meta == stack.getItemDamage();
+		return block == getBlock(stack);// && meta == stack.getItemDamage();
 	}
 
 
@@ -473,7 +472,7 @@ public abstract class ItemStackUtil {
 			Item item = stack.getItem();
 			if (item != null) {
 				int meta = stack.getMeta();
-				ItemStack itemStack = new ItemStack(item, 1, meta);
+				ItemStack itemStack = new ItemStack(item, 1);//, meta);
 				itemStacks.add(itemStack);
 			}
 		}
@@ -485,7 +484,7 @@ public abstract class ItemStackUtil {
 		Item item = stack.getItem();
 		if (item != null) {
 			int meta = stack.getMeta();
-			return new ItemStack(item, 1, meta);
+			return new ItemStack(item, 1);//, meta);
 		}
 		return null;
 	}
@@ -502,8 +501,8 @@ public abstract class ItemStackUtil {
 			return false;
 		} else if (a.getItem() != b.getItem()) {
 			return false;
-		} else if (a.getItemDamage() != b.getItemDamage()) {
-			return false;
+//		} else if (a.getItemDamage() != b.getItemDamage()) {
+//			return false;
 		} else if (a.getTag() == null && b.getTag() != null) {
 			return false;
 		} else {

@@ -46,9 +46,8 @@ public class FarmLogicCocoa extends FarmLogic {
 	}
 
 	@Override
-	//TODO - dye meta
 	public ItemStack getIconItemStack() {
-		return new ItemStack(Items.DYE, 1, 3);
+		return new ItemStack(Items.COCOA_BEANS);
 	}
 
 	@Override
@@ -133,7 +132,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		BlockPos.MutableBlockPos current = new BlockPos.MutableBlockPos(position);
 		BlockState blockState = world.getBlockState(current);
 		while (isJungleTreeTrunk(blockState)) {
-			for (Direction direction : Direction.BY_HORIZONTAL_INDEX) {	//TODO - AT
+			for (Direction direction : Direction.Plane.HORIZONTAL) {
 				BlockPos candidate = new BlockPos(current.getX() + direction.getXOffset(), current.getY(), current.getZ() + direction.getZOffset());
 				if (world.isBlockLoaded(candidate) && world.isAirBlock(candidate)) {
 					return farmHousing.plantGermling(cocoa, world, candidate, farmDirection);

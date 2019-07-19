@@ -5,10 +5,10 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -66,7 +66,7 @@ public class FarmableAgingCrop implements IFarmable {
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
-		return blockState.getBlock() == cropBlock && blockState.getValue(ageProperty) <= minHarvestAge;
+		return blockState.getBlock() == cropBlock && blockState.get(ageProperty) <= minHarvestAge;
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class FarmableAgingCrop implements IFarmable {
 			return null;
 		}
 
-		if (blockState.getValue(ageProperty) < minHarvestAge) {
+		if (blockState.get(ageProperty) < minHarvestAge) {
 			return null;
 		}
 

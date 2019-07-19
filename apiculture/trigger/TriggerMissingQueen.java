@@ -17,8 +17,8 @@ import forestry.api.core.IErrorLogicSource;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.triggers.Trigger;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+//import buildcraft.api.statements.IStatementContainer;
+//import buildcraft.api.statements.IStatementParameter;
 
 public class TriggerMissingQueen extends Trigger {
 
@@ -29,14 +29,14 @@ public class TriggerMissingQueen extends Trigger {
 	/**
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
-	@Override
-	public boolean isTriggerActive(TileEntity tile, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
-
-		if (!(tile instanceof IErrorLogicSource)) {
-			return false;
-		}
-
-		IErrorLogicSource apiary = (IErrorLogicSource) tile;
-		return apiary.getErrorLogic().contains(EnumErrorCode.NO_QUEEN);
-	}
+//	@Override
+//	public boolean isTriggerActive(TileEntity tile, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
+//
+//		if (!(tile instanceof IErrorLogicSource)) {
+//			return false;
+//		}
+//
+//		IErrorLogicSource apiary = (IErrorLogicSource) tile;
+//		return apiary.getErrorLogic().contains(EnumErrorCode.NO_QUEEN);
+//	}
 }

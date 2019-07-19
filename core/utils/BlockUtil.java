@@ -15,33 +15,33 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockStaticLiquid;
-import net.minecraft.block.properties.IProperty;
+//import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
 
-import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.tiles.TileUtil;
 
 public abstract class BlockUtil {
 
-	private static final int slabWoodId = OreDictionary.getOreID("slabWood");
+	private static final int slabWoodId = -Integer.MAX_VALUE;//TODO - tagsOreDictionary.getOreID("slabWood");
 
 	public static List<ItemStack> getBlockDrops(World world, BlockPos posBlock) {
 		BlockState blockState = world.getBlockState(posBlock);
 
-		return blockState.getBlock().getDrops(world, posBlock, blockState, 0);
+		//TODO - this call needs sorting
+		return blockState.getBlock().getDrops(blockState,(ServerWorld) world, posBlock, TileUtil.getTile(world, posBlock));
 
 	}
 
@@ -52,14 +52,14 @@ public abstract class BlockUtil {
 			return false;
 		}
 
-		BlockState state = Blocks.COCOA.getDefaultState().with(HorizontalBlock.FACING, facing);
+		BlockState state = Blocks.COCOA.getDefaultState().with(HorizontalBlock.HORIZONTAL_FACING, facing);
 		world.setBlockState(pos, state);
 		return true;
 	}
 
 	@Nullable
 	public static Direction getValidPodFacing(World world, BlockPos pos) {
-		for (Direction facing : Direction.HORIZONTALS) {
+		for (Direction facing : Direction.Plane.HORIZONTAL) {
 			if (isValidPodLocation(world, pos, facing)) {
 				return facing;
 			}
@@ -74,6 +74,7 @@ public abstract class BlockUtil {
 		}
 		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
+		//TODO - tags or something
 		if (block == Blocks.LOG) {
 			return state.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE;
 		} else {
@@ -91,7 +92,7 @@ public abstract class BlockUtil {
 			return false;
 		}
 
-		int[] oreIds = OreDictionary.getOreIDs(stack);
+		int[] oreIds = new int[0];//TODO - tags OreDictionary.getOreIDs(stack);
 		for (int oreId : oreIds) {
 			if (oreId == slabWoodId) {
 				return true;
@@ -123,6 +124,7 @@ public abstract class BlockUtil {
 	/**
 	 * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit.
 	 */
+	//TODO - looks pretty copy pasted. Find new version as well?
 	@Nullable
 	public static RayTraceResult collisionRayTrace(BlockPos pos, Vec3d startVec, Vec3d endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		startVec = startVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
@@ -354,7 +356,7 @@ public abstract class BlockUtil {
 
 	@Nullable
 	public static <T extends Comparable<T>> IProperty<T> getProperty(Block block, String propertyName, Class<T> valueClass) {
-		for (IProperty<?> property : block.getDefaultState().getPropertyKeys()) {
+		for (IProperty<?> property : block.getStateContainer().getProperties()) {
 			if (property.getName().equals(propertyName)) {
 				if (property.getValueClass().isAssignableFrom(valueClass)) {
 					//noinspection unchecked

@@ -220,7 +220,7 @@ public abstract class BlockAlveary extends BlockStructure {//implements IStateMa
 	private static List<Direction> getBlocksTouching(IBlockReader world, BlockPos blockPos) {
 		List<Direction> touching = new ArrayList<>();
 		//TODO - AT?
-		for (Direction direction : Direction.BY_HORIZONTAL_INDEX) {	//TODO AT
+		for (Direction direction : Direction.Plane.HORIZONTAL) {
 			BlockState blockState = world.getBlockState(blockPos.offset(direction));
 			if (blockState.getBlock() instanceof BlockAlveary) {
 				touching.add(direction);

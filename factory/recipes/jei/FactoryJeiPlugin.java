@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
-import forestry.core.utils.JeiUtil;
+//import forestry.core.utils.JeiUtil;
 import forestry.factory.MachineUIDs;
 import forestry.factory.ModuleFactory;
 import forestry.factory.blocks.BlockRegistryFactory;

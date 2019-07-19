@@ -20,24 +20,19 @@ import java.util.List;
 import net.minecraft.block.BeetrootBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropsBlock;
-import net.minecraft.block.BlockDirt;
 import net.minecraft.block.NetherWartBlock;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
-
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
 import forestry.Forestry;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IFruitProvider;
@@ -51,7 +46,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.modules.ForestryModule;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
+//import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBogEarth;
 import forestry.core.blocks.BlockRegistryCore;
@@ -101,7 +96,8 @@ import forestry.modules.ModuleHelper;
 public class ModuleFarming extends BlankForestryModule {
 
 	@SuppressWarnings("NullableProblems")
-	@SidedProxy(clientSide = "forestry.farming.proxy.ProxyFarmingClient", serverSide = "forestry.farming.proxy.ProxyFarming")
+	//TODO - distexecutor
+//	@SidedProxy(clientSide = "forestry.farming.proxy.ProxyFarmingClient", serverSide = "forestry.farming.proxy.ProxyFarming")
 	public static ProxyFarming proxy;
 
 	@Nullable
@@ -152,18 +148,19 @@ public class ModuleFarming extends BlankForestryModule {
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));
 
 		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
-		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON_BLOCK));
+		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON));
 
 		registry.registerFarmables(ForestryFarmIdentifier.INFERNAL, new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, NetherWartBlock.AGE, 3));
 
-		registry.registerFarmables(ForestryFarmIdentifier.POALES, new FarmableStacked(new ItemStack(Items.REEDS), Blocks.REEDS, 3));
+		registry.registerFarmables(ForestryFarmIdentifier.POALES, new FarmableStacked(new ItemStack(Items.SUGAR_CANE), Blocks.SUGAR_CANE, 3));
 
 		registry.registerFarmables(ForestryFarmIdentifier.SUCCULENTES, new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
 
 		registry.registerFarmables(ForestryFarmIdentifier.ENDER, FarmableChorus.INSTANCE);
 
 		//Forestry fertilizer
-		registry.registerFertilizer(new ItemStack(coreItems.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
+		//TODO - tags
+//		registry.registerFertilizer(new ItemStack(coreItems.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
 
 		proxy.initializeModels();
 
@@ -219,8 +216,7 @@ public class ModuleFarming extends BlankForestryModule {
 		Circuits.farmShroomManaged = new CircuitFarmLogic("managedShroom", mushroomFarm, false);
 		Circuits.farmShroomManual = new CircuitFarmLogic("manualShroom", mushroomFarm, true);
 		mushroomFarm.registerSoil(new ItemStack(Blocks.MYCELIUM), Blocks.MYCELIUM.getDefaultState());
-		mushroomFarm.registerSoil(new ItemStack(Blocks.DIRT, 1, 2),
-			Blocks.DIRT.getDefaultState().with(BlockDirt.VARIANT, BlockDirt.DirtType.PODZOL), true);
+		mushroomFarm.registerSoil(new ItemStack(Blocks.PODZOL), Blocks.PODZOL.getDefaultState(), true);
 
 		Circuits.farmPeatManaged = new CircuitFarmLogic("managedPeat", peatFarm, false);
 		Circuits.farmPeatManual = new CircuitFarmLogic("manualPeat", peatFarm, true);
@@ -261,10 +257,9 @@ public class ModuleFarming extends BlankForestryModule {
 
 		Circuits.farmCocoaManaged = new CircuitFarmLogic("managedCocoa", cocoaFarm, false);
 		Circuits.farmCocoaManual = new CircuitFarmLogic("manualCocoa", cocoaFarm, true);
-		cocoaFarm.registerSoil(new ItemStack(Blocks.LOG, 1, 3),
-				Blocks.LOG.getDefaultState().with(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE));
-		cocoaFarm.addGermlings(new ItemStack(Items.DYE, 1, 3));
-		cocoaFarm.addProducts(new ItemStack(Items.DYE, 1, 3));
+		cocoaFarm.registerSoil(new ItemStack(Blocks.JUNGLE_LOG), Blocks.JUNGLE_LOG.getDefaultState());
+		cocoaFarm.addGermlings(new ItemStack(Items.COCOA_BEANS));
+		cocoaFarm.addProducts(new ItemStack(Items.COCOA_BEANS));
 
 		Circuits.farmEnderManaged = new CircuitFarmLogic("managedEnder", enderFarm, false);
 		Circuits.farmEnderManual = new CircuitFarmLogic("manualEnder", enderFarm, true);
@@ -320,7 +315,7 @@ public class ModuleFarming extends BlankForestryModule {
 			if (treeRoot != null) {
 				for (ITree tree : treeRoot.getIndividualTemplates()) {
 					IFruitProvider fruitProvider = tree.getGenome().getFruitProvider();
-					if (fruitProvider != AlleleFruits.fruitNone.getProvider()) {
+					if (false){//fruitProvider != AlleleFruits.fruitNone.getProvider()) {
 						orchardFarm.addGermlings(treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING));
 						orchardFarm.addProducts(fruitProvider.getProducts().keySet());
 						orchardFarm.addProducts(fruitProvider.getSpecialty().keySet());
@@ -333,9 +328,11 @@ public class ModuleFarming extends BlankForestryModule {
 	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
 		// mushrooms are a workaround for the farm and should not be obtainable
-		hiddenItems.add(new ItemStack(getBlocks().mushroom, 1, OreDictionary.WILDCARD_VALUE));
+//		hiddenItems.add(new ItemStack(getBlocks().mushroom, 1, OreDictionary.WILDCARD_VALUE));
+		//TODO - tag
 	}
 
+	//TODO - register events
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {

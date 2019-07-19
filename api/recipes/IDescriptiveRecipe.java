@@ -32,6 +32,7 @@ public interface IDescriptiveRecipe {
 	 */
 	NonNullList<NonNullList<ItemStack>> getRawIngredients();
 
+	//TODO replace with tags
 	NonNullList<String> getOreDicts();
 
 	/**

@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -113,7 +114,7 @@ public class Forestry {
 		ForestryAPI.moduleManager = moduleManager;
 //		moduleManager.registerContainers(new ForestryModules(), new ForestryCompatPlugins());
 		NetworkHandler networkHandler = new NetworkHandler();
-		DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
+//		DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
 		// Register the setup method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		// Register the enqueueIMC method for modloading
@@ -143,9 +144,9 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 		MinecraftForge.EVENT_BUS.register(Config.class);
 		Proxies.common.registerEventHandlers();
-		configFolder = new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
+		configFolder = new File("."); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - DistExecutor
-		Config.load(event.getSide());
+		Config.load(Dist.DEDICATED_SERVER);
 
 		ModuleManager.runSetup();
 		ModuleManager.getInternalHandler().runSetup();
@@ -156,7 +157,7 @@ public class Forestry {
 
 
 		//TODO - DistExecutor
-		ModuleManager.getInternalHandler().runPreInit(event.getSide());
+		ModuleManager.getInternalHandler().runPreInit(Dist.DEDICATED_SERVER);
 	}
 
 	// You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
@@ -186,27 +187,27 @@ public class Forestry {
 	//split
 	//TODO - when to run these events
 //	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		// Register gui handler
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-
-		ModuleManager.getInternalHandler().runInit();
-
-		Proxies.render.registerItemAndBlockColors();
-		AdvancementManager.registerTriggers();
-	}
-
-//	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
-		ModuleManager.getInternalHandler().runPostInit();
-
-		// Register world generator
-		WorldGenerator worldGenerator = new WorldGenerator();
-		GameRegistry.registerWorldGenerator(worldGenerator, 0);
-
-		// Register tick handlers
-		Proxies.common.registerTickHandlers(worldGenerator);
-	}
+//	public void init(FMLInitializationEvent event) {
+//		// Register gui handler
+//		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+//
+//		ModuleManager.getInternalHandler().runInit();
+//
+//		Proxies.render.registerItemAndBlockColors();
+//		AdvancementManager.registerTriggers();
+//	}
+//
+////	@EventHandler
+//	public void postInit(FMLPostInitializationEvent event) {
+//		ModuleManager.getInternalHandler().runPostInit();
+//
+//		// Register world generator
+//		WorldGenerator worldGenerator = new WorldGenerator();
+//		GameRegistry.registerWorldGenerator(worldGenerator, 0);
+//
+//		// Register tick handlers
+//		Proxies.common.registerTickHandlers(worldGenerator);
+//	}
 
 	@SubscribeEvent
 	public void serverStarting(FMLServerStartingEvent event) {

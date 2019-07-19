@@ -25,15 +25,15 @@ import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.apiculture.tiles.TileBeeHouse;
-import forestry.book.items.ItemForesterBook;
-import forestry.climatology.tiles.TileHabitatFormer;
+//import forestry.book.items.ItemForesterBook;
+//import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.items.ItemAlyzer;
 import forestry.core.items.ItemSolderingIron;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileNaturalistChest;
-import forestry.cultivation.tiles.TilePlanter;
-import forestry.database.tiles.TileDatabase;
+//import forestry.cultivation.tiles.TilePlanter;
+//import forestry.database.tiles.TileDatabase;
 import forestry.energy.tiles.TileEngineBiogas;
 import forestry.energy.tiles.TileEngineElectric;
 import forestry.energy.tiles.TileEnginePeat;
@@ -48,15 +48,15 @@ import forestry.factory.tiles.TileRaintank;
 import forestry.factory.tiles.TileSqueezer;
 import forestry.factory.tiles.TileStill;
 import forestry.farming.tiles.TileFarm;
-import forestry.mail.items.ItemCatalogue;
-import forestry.mail.items.ItemLetter;
-import forestry.mail.tiles.TileMailbox;
-import forestry.mail.tiles.TileStampCollector;
-import forestry.mail.tiles.TileTrader;
-import forestry.sorting.tiles.TileGeneticFilter;
-import forestry.storage.items.ItemBackpack;
-import forestry.storage.items.ItemBackpackNaturalist;
-import forestry.worktable.tiles.TileWorktable;
+//import forestry.mail.items.ItemCatalogue;
+//import forestry.mail.items.ItemLetter;
+//import forestry.mail.tiles.TileMailbox;
+//import forestry.mail.tiles.TileStampCollector;
+//import forestry.mail.tiles.TileTrader;
+//import forestry.sorting.tiles.TileGeneticFilter;
+//import forestry.storage.items.ItemBackpack;
+//import forestry.storage.items.ItemBackpackNaturalist;
+//import forestry.worktable.tiles.TileWorktable;
 
 public class GuiIdRegistry {
 	private static final Map<Class<? extends IGuiHandlerForestry>, GuiId> classMap = new HashMap<>();
@@ -78,10 +78,10 @@ public class GuiIdRegistry {
 			TileNaturalistChest.class,
 
 			//Worktable Module
-			TileWorktable.class,
+//			TileWorktable.class,
 
 			//Database Module
-			TileDatabase.class,
+//			TileDatabase.class,
 
 			//Factory Module
 			TileBottler.class,
@@ -98,36 +98,36 @@ public class GuiIdRegistry {
 			TileFarm.class,
 
 			//Climatology
-			TileHabitatFormer.class,
+//			TileHabitatFormer.class,
 
 			//Sorting Module
-			TileGeneticFilter.class,
+//			TileGeneticFilter.class,
 
 			//Cultivation Module
-			TilePlanter.class,
+//			TilePlanter.class,
 
 			//Power Module
 			TileEngineBiogas.class,
 			TileEngineElectric.class,
 			TileEnginePeat.class,
-			TileEuGenerator.class,
+			TileEuGenerator.class//,
 
 			//Mail Module
-			TileMailbox.class,
-			TileStampCollector.class,
-			TileTrader.class
+//			TileMailbox.class,
+//			TileStampCollector.class,
+//			TileTrader.class
 		));
 
 		registerGuiHandlers(GuiType.Item, Arrays.asList(
-			ItemBackpack.class,
-			ItemBackpackNaturalist.class,
+//			ItemBackpack.class,
+//			ItemBackpackNaturalist.class,
 			ItemAlyzer.class,
-			ItemCatalogue.class,
+//			ItemCatalogue.class,
 			ItemHabitatLocator.class,
 			ItemImprinter.class,
-			ItemLetter.class,
-			ItemSolderingIron.class,
-			ItemForesterBook.class
+//			ItemLetter.class,
+			ItemSolderingIron.class//,
+//			ItemForesterBook.class
 		));
 
 		registerGuiHandlers(GuiType.Entity, Arrays.asList(

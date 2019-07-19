@@ -11,6 +11,7 @@ import java.util.Set;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 
@@ -27,7 +28,7 @@ import forestry.core.utils.Log;
  * @author Erogenous Beef
  */
 public class MultiblockWorldRegistry {
-	private final World world;
+	private final IWorld world;
 
 	private final Set<IMultiblockControllerInternal> controllers;        // Active controllers
 	private final Set<IMultiblockControllerInternal> dirtyControllers;    // Controllers whose parts lists have changed
@@ -51,7 +52,7 @@ public class MultiblockWorldRegistry {
 	private final Object partsAwaitingChunkLoadMutex;
 	private final Object orphanedPartsMutex;
 
-	public MultiblockWorldRegistry(World world) {
+	public MultiblockWorldRegistry(IWorld world) {
 		this.world = world;
 
 		this.controllers = new HashSet<>();

@@ -6,13 +6,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.events.GuiEvent;
 import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.gui.elements.Window;
-
-import org.lwjgl.input.Mouse;
 
 /**
  * GuiScreen implementation of a gui that contains {@link forestry.api.gui.IGuiElement}s.
@@ -24,7 +23,8 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	protected int guiLeft;
 	protected int guiTop;
 
-	public GuiWindow(int xSize, int ySize) {
+	public GuiWindow(int xSize, int ySize, ITextComponent title) {
+		super(title);
 		this.xSize = xSize;
 		this.ySize = ySize;
 		this.window = new Window<>(xSize, ySize, this);
@@ -34,38 +34,41 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	protected void addElements() {
 	}
 
+	//TODO right method?
 	@Override
-	public boolean doesGuiPauseGame() {
+	public boolean isPauseScreen() {
 		return false;
 	}
 
 	@Override
-	public void updateScreen() {
+	public void tick() {
 		window.updateClient();
 	}
 
+	//TODO - right method?
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		window.setMousePosition(mouseX, mouseY);
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 		window.draw(mouseX, mouseY);
 	}
 
 	protected void drawTooltips(int mouseX, int mouseY) {
-		PlayerInventory playerInv = mc.player.inventory;
+		PlayerInventory playerInv = minecraft.player.inventory;
 
 		if (playerInv.getItemStack().isEmpty()) {
-			GuiUtil.drawToolTips(this, buttonList, mouseX, mouseY);
+			GuiUtil.drawToolTips(this, buttons, mouseX, mouseY);
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(guiLeft, guiTop, 0.0F);
+			GlStateManager.translatef(guiLeft, guiTop, 0.0F);
 			window.drawTooltip(mouseX, mouseY);
 			GlStateManager.popMatrix();
 		}
 	}
 
+	//TODO check right method
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 		this.guiLeft = (this.width - xSize) / 2;
 		this.guiTop = (this.height - ySize) / 2;
 		window.init(guiLeft, guiTop);
@@ -78,18 +81,20 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	}
 
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) {
+//	protected void keyTyped(char typedChar, int keyCode) {
+	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {	//TODO resolve this method
 		if (keyCode == 1) {
-			this.mc.displayGuiScreen(null);
+			this.minecraft.displayGuiScreen(null);
 
-			if (this.mc.currentScreen == null) {
-				this.mc.setIngameFocus();
+			if (this.minecraft.currentScreen == null) {
+				this.minecraft.setIngameFocus();
 			}
 		}
 		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
 		window.postEvent(new GuiEvent.KeyEvent(origin, typedChar, keyCode), GuiEventDestination.ALL);
 	}
 
+	//TODO onMouseClicked
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -97,6 +102,7 @@ public class GuiWindow extends Screen implements IGuiSizable {
 		window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
 	}
 
+	//TODO onMouseRelease
 	@Override
 	protected void mouseReleased(int mouseX, int mouseY, int state) {
 		super.mouseReleased(mouseX, mouseY, state);
@@ -135,7 +141,7 @@ public class GuiWindow extends Screen implements IGuiSizable {
 
 	@Override
 	public Minecraft getMC() {
-		return mc;
+		return minecraft;
 	}
 
 }

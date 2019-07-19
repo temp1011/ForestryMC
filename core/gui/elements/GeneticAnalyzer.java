@@ -8,6 +8,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import org.lwjgl.glfw.GLFW;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IDatabasePlugin;
 import forestry.api.genetics.IDatabaseTab;
@@ -26,8 +28,6 @@ import forestry.core.gui.widgets.IScrollable;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
-
-import org.lwjgl.input.Keyboard;
 
 public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, IScrollable {
 	/* Textures */
@@ -89,11 +89,11 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		});
 		addEventHandler(GuiEvent.KeyEvent.class, event -> {
 			int keyCode = event.getKey();
-			if ((keyCode == Keyboard.KEY_DOWN || keyCode == Keyboard.KEY_RIGHT) && rightButton.isEnabled()) {
+			if ((keyCode == GLFW.GLFW_KEY_DOWN|| keyCode == GLFW.GLFW_KEY_RIGHT) && rightButton.isEnabled()) {
 				rightButton.onPressed();
-			} else if ((keyCode == Keyboard.KEY_UP || keyCode == Keyboard.KEY_LEFT) && leftButton.isEnabled()) {
+			} else if ((keyCode == GLFW.GLFW_KEY_UP || keyCode == GLFW.GLFW_KEY_LEFT) && leftButton.isEnabled()) {
 				leftButton.onPressed();
-			} else if (keyCode == Keyboard.KEY_RETURN && analyzeButton.isEnabled()) {
+			} else if (keyCode == GLFW.GLFW_KEY_ENTER && analyzeButton.isEnabled()) {
 				analyzeButton.onPressed();
 			}
 		});

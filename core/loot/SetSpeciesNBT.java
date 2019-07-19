@@ -4,13 +4,10 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 
-import java.util.Random;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.minecraft.world.storage.loot.functions.ILootFunction;
 
 import forestry.api.genetics.AlleleManager;
@@ -19,16 +16,16 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.genetics.ISpeciesType;
 
-public class SetSpeciesNBT extends ILootFunction {
+//TODO - loot tables now different
+public class SetSpeciesNBT implements ILootFunction {
 	private final String speciesUid;
 
-	public SetSpeciesNBT(ILootCondition[] conditionsIn, String speciesUid) {
-		super(conditionsIn);
+	public SetSpeciesNBT(String speciesUid) {
 		this.speciesUid = speciesUid;
 	}
 
 	@Override
-	public ItemStack apply(ItemStack stack, Random rand, LootContext context) {
+	public ItemStack apply(ItemStack stack, LootContext context) {
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(stack);
 		if (speciesRoot != null) {
 			ISpeciesType speciesType = speciesRoot.getType(stack);
@@ -54,9 +51,9 @@ public class SetSpeciesNBT extends ILootFunction {
 		}
 
 		@Override
-		public SetSpeciesNBT deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
+		public SetSpeciesNBT deserialize(JsonObject object, JsonDeserializationContext deserializationContext) {
 			String speciesUid = JSONUtils.getString(object, "speciesUid");
-			return new SetSpeciesNBT(conditionsIn, speciesUid);
+			return new SetSpeciesNBT(speciesUid);
 		}
 	}
 }

@@ -7,14 +7,14 @@ package forestry.api.arboriculture;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
+//import net.minecraft.client.renderer.block.statemap.IStateMapper;
 
 
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
-public interface IWoodStateMapper extends IStateMapper {
+public interface IWoodStateMapper {//extends IStateMapper {
 
 	ModelResourceLocation getModelLocation(BlockState state);
 
