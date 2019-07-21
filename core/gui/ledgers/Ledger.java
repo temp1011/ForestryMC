@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -159,7 +160,7 @@ public abstract class Ledger {
 	@OnlyIn(Dist.CLIENT)
 	public abstract void draw(int x, int y);
 
-	public abstract String getTooltip();
+	public abstract ITextComponent getTooltip();
 
 	public boolean handleMouseClicked(double x, double y, int mouseButton) {
 		return false;

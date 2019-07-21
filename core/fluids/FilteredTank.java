@@ -17,7 +17,10 @@ import java.util.Set;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Rarity;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -94,11 +97,13 @@ public class FilteredTank extends StandardTank {
 //				toolTip.add(fluidFilter.getLocalizedName(filterFluidStack), rarity.color);
 			}
 		} else {
-			toolTip.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
+			//TODO can this be simplified
+			ITextComponent tmiComponent = new StringTextComponent("<")
+					.appendSibling(new TranslationTextComponent("for.gui.tooltip.tmi"))
+					.appendSibling(new StringTextComponent(">"));
+			toolTip.add(tmiComponent, TextFormatting.ITALIC);
 		}
-
-		String liquidAmount = Translator.translateToLocalFormatted("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity());
-		toolTip.add(liquidAmount);
+		toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity()));
 	}
 
 }

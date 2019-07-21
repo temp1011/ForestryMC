@@ -13,6 +13,9 @@ package forestry.farming.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,7 +33,8 @@ public class FarmLedger extends Ledger {
 		super(ledgerManager, "farm");
 		this.delegate = delegate;
 
-		int titleHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip());
+		//TODO textcomponent
+		int titleHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip().getString());
 		this.maxHeight = titleHeight + 110;
 	}
 
@@ -48,7 +52,7 @@ public class FarmLedger extends Ledger {
 
 		// Draw icon
 		Minecraft minecraft = Minecraft.getInstance();
-		AtlasTexture textureMapBlocks = minecraft.getTextureMapBlocks();
+		AtlasTexture textureMapBlocks = minecraft.getTextureMap();
 		TextureAtlasSprite textureAtlasSprite = textureMapBlocks.getAtlasSprite("minecraft:items/bucket_water");
 		drawSprite(AtlasTexture.LOCATION_BLOCKS_TEXTURE, textureAtlasSprite, xIcon, y);
 		y += 4;
@@ -81,8 +85,9 @@ public class FarmLedger extends Ledger {
 	}
 
 	@Override
-	public String getTooltip() {
+	public ITextComponent getTooltip() {
 		float hydrationModifier = delegate.getHydrationModifier();
-		return StringUtil.floatAsPercent(hydrationModifier) + ' ' + Translator.translateToLocal("for.gui.hydration");
+		return new StringTextComponent(StringUtil.floatAsPercent(hydrationModifier) + ' ')
+				.appendSibling(new TranslationTextComponent("for.gui.hydration"));
 	}
 }

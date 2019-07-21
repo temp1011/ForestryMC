@@ -49,6 +49,12 @@ public class ToolTip {
 		return lines.add(line);
 	}
 
+	public boolean add(ITextComponent line, TextFormatting format) {
+		Style style = new Style();
+		style.setColor(format);
+		return add(line, style);
+	}
+
 	public boolean add(ITextComponent line, Style style) {
 		line.setStyle(style);
 		return lines.add(line);

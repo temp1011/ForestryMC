@@ -11,6 +11,8 @@
 package forestry.energy.gui;
 
 import net.minecraft.inventory.container.Container;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import forestry.core.config.Config;
 import forestry.core.gui.GuiForestryTitled;
@@ -60,8 +62,8 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 		}
 
 		@Override
-		public String getTooltip() {
-			return Config.energyDisplayMode.formatRate(tile.getCurrentOutput());
+		public ITextComponent getTooltip() {
+			return new StringTextComponent(Config.energyDisplayMode.formatRate(tile.getCurrentOutput()));
 		}
 	}
 

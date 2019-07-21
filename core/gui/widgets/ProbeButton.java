@@ -13,6 +13,7 @@ package forestry.core.gui.widgets;
 import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.fml.client.config.GuiUtils;
 
@@ -46,7 +47,7 @@ public class ProbeButton extends Widget {
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		ToolTip tooltip = new ToolTip();
-		tooltip.add(Translator.translateToLocal("for.gui.escritoire.probe"));
+		tooltip.add(new TranslationTextComponent("for.gui.escritoire.probe"));
 		return tooltip;
 	}
 
