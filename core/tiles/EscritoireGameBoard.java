@@ -192,7 +192,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compoundNBT) {
+	public CompoundNBT write(CompoundNBT compoundNBT) {
 		if (tokenCount > 0) {
 			compoundNBT.putInt("TokenCount", tokenCount);
 			ListNBT nbttaglist = new ListNBT();
@@ -205,7 +205,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 
 				CompoundNBT compoundNBT2 = new CompoundNBT();
 				compoundNBT2.putByte("Slot", (byte) i);
-				token.writeToNBT(compoundNBT2);
+				token.write(compoundNBT2);
 				nbttaglist.add(compoundNBT2);
 			}
 

@@ -11,7 +11,6 @@
 package forestry.energy.tiles;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -32,7 +31,6 @@ import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
 import forestry.core.circuits.ISocketable;
 import forestry.core.config.Constants;
-import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
@@ -41,8 +39,6 @@ import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineElectric;
 import forestry.energy.gui.GuiEngineElectric;
 import forestry.energy.inventory.InventoryEngineElectric;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 //import forestry.plugins.ForestryCompatPlugins;
 
 //import ic2.api.energy.prefab.BasicSink;
@@ -83,9 +79,9 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		super.readFromNBT(CompoundNBT);
 
 //		if (ic2EnergySink != null) {
-//			ic2EnergySink.readFromNBT(CompoundNBT);
+//			ic2EnergySink.read(CompoundNBT);
 //		}
-		sockets.readFromNBT(CompoundNBT);
+		sockets.read(CompoundNBT);
 
 		ItemStack chip = sockets.getStackInSlot(0);
 		if (chip != null) {
@@ -102,9 +98,9 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		CompoundNBT = super.writeToNBT(CompoundNBT);
 
 //		if (ic2EnergySink != null) {
-//			ic2EnergySink.writeToNBT(CompoundNBT);
+//			ic2EnergySink.write(CompoundNBT);
 //		}
-		sockets.writeToNBT(CompoundNBT);
+		sockets.write(CompoundNBT);
 		return CompoundNBT;
 	}
 

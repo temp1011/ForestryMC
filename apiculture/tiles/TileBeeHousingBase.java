@@ -75,23 +75,23 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	@Override
 	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
 		CompoundNBT = super.writeToNBT(CompoundNBT);
-		beeLogic.writeToNBT(CompoundNBT);
-		ownerHandler.writeToNBT(CompoundNBT);
+		beeLogic.write(CompoundNBT);
+		ownerHandler.write(CompoundNBT);
 		return CompoundNBT;
 	}
 
 	@Override
 	public void readFromNBT(CompoundNBT CompoundNBT) {
 		super.readFromNBT(CompoundNBT);
-		beeLogic.readFromNBT(CompoundNBT);
-		ownerHandler.readFromNBT(CompoundNBT);
+		beeLogic.read(CompoundNBT);
+		ownerHandler.read(CompoundNBT);
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
 		CompoundNBT updateTag = super.getUpdateTag();
-		beeLogic.writeToNBT(updateTag);
-		ownerHandler.writeToNBT(updateTag);
+		beeLogic.write(updateTag);
+		ownerHandler.write(updateTag);
 		return updateTag;
 	}
 
@@ -99,8 +99,8 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	@OnlyIn(Dist.CLIENT)
 	public void handleUpdateTag(CompoundNBT tag) {
 		super.handleUpdateTag(tag);
-		beeLogic.readFromNBT(tag);
-		ownerHandler.readFromNBT(tag);
+		beeLogic.read(tag);
+		ownerHandler.read(tag);
 	}
 
 	@Override

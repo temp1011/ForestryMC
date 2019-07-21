@@ -59,7 +59,7 @@ public class OwnerHandler implements IOwnerHandler, IStreamable, INbtWritable, I
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT data) {
+	public void read(CompoundNBT data) {
 		if (data.hasKey("owner")) {
 			GameProfile owner = PlayerUtil.readGameProfileFromNBT(data.getCompoundNBT("owner"));
 			if (owner != null) {
@@ -69,7 +69,7 @@ public class OwnerHandler implements IOwnerHandler, IStreamable, INbtWritable, I
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT data) {
+	public CompoundNBT write(CompoundNBT data) {
 		if (this.owner != null) {
 			CompoundNBT nbt = new CompoundNBT();
 			PlayerUtil.writeGameProfile(nbt, owner);

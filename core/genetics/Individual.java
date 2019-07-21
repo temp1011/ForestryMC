@@ -42,7 +42,7 @@ public abstract class Individual implements IIndividual {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 		CompoundNBT.putBoolean("IsAnalyzed", isAnalyzed);
 		return CompoundNBT;
 	}

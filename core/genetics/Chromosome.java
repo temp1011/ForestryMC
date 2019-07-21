@@ -67,7 +67,7 @@ public class Chromosome implements IChromosome {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 		CompoundNBT.putString(UID0_TAG, primary.getUID());
 		CompoundNBT.putString(UID1_TAG, secondary.getUID());
 		return CompoundNBT;

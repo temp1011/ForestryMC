@@ -91,7 +91,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		compoundNBT.putInt("FuelTotalTime", fuelTotalTime);
 		compoundNBT.putInt("FuelCurrentFerment", fuelCurrentFerment);
 
-		tankManager.writeToNBT(compoundNBT);
+		tankManager.write(compoundNBT);
 		return compoundNBT;
 	}
 
@@ -105,7 +105,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		fuelTotalTime = compoundNBT.getInt("FuelTotalTime");
 		fuelCurrentFerment = compoundNBT.getInt("FuelCurrentFerment");
 
-		tankManager.readFromNBT(compoundNBT);
+		tankManager.read(compoundNBT);
 	}
 
 	@Override

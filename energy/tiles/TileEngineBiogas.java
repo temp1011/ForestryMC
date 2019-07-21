@@ -249,14 +249,14 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		if (nbt.hasKey("shutdown")) {
 			shutdown = nbt.getBoolean("shutdown");
 		}
-		tankManager.readFromNBT(nbt);
+		tankManager.read(nbt);
 	}
 
 	@Override
 	public CompoundNBT writeToNBT(CompoundNBT nbt) {
 		nbt = super.writeToNBT(nbt);
 		nbt.setBoolean("shutdown", shutdown);
-		tankManager.writeToNBT(nbt);
+		tankManager.write(nbt);
 		return nbt;
 	}
 

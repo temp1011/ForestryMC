@@ -124,9 +124,9 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compoundNBT) {
+	public CompoundNBT write(CompoundNBT compoundNBT) {
 
-		compoundNBT = super.writeToNBT(compoundNBT);
+		compoundNBT = super.write(compoundNBT);
 
 		if (!isNatural) {
 			compoundNBT.putBoolean("NA", false);
@@ -232,7 +232,7 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public IBee copy() {
 		CompoundNBT CompoundNBT = new CompoundNBT();
-		this.writeToNBT(CompoundNBT);
+		this.write(CompoundNBT);
 		return new Bee(CompoundNBT);
 	}
 

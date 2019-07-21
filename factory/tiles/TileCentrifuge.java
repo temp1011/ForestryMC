@@ -73,10 +73,10 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-		sockets.writeToNBT(CompoundNBT);
+		sockets.write(compoundNBT);
 
 		ListNBT nbttaglist = new ListNBT();
 		ItemStack[] offspring = pendingProducts.toArray(new ItemStack[0]);
@@ -88,20 +88,20 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 				nbttaglist.add(CompoundNBT1);
 			}
 		}
-		CompoundNBT.put("PendingProducts", nbttaglist);
-		return CompoundNBT;
+		compoundNBT.put("PendingProducts", nbttaglist);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
-		ListNBT nbttaglist = CompoundNBT.getList("PendingProducts", 10);
+		ListNBT nbttaglist = compoundNBT.getList("PendingProducts", 10);
 		for (int i = 0; i < nbttaglist.size(); i++) {
 			CompoundNBT CompoundNBT1 = nbttaglist.getCompound(i);
 			pendingProducts.add(ItemStack.read(CompoundNBT1));
 		}
-		sockets.readFromNBT(CompoundNBT);
+		sockets.read(compoundNBT);
 
 		ItemStack chip = sockets.getStackInSlot(0);
 		if (!chip.isEmpty()) {

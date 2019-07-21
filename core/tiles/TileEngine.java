@@ -244,7 +244,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	@Override
 	public void readFromNBT(CompoundNBT nbt) {
 		super.readFromNBT(nbt);
-		energyManager.readFromNBT(nbt);
+		energyManager.read(nbt);
 
 		heat = nbt.getInteger("EngineHeat");
 
@@ -256,7 +256,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	@Override
 	public CompoundNBT writeToNBT(CompoundNBT nbt) {
 		nbt = super.writeToNBT(nbt);
-		energyManager.writeToNBT(nbt);
+		energyManager.write(nbt);
 
 		nbt.setInteger("EngineHeat", heat);
 		nbt.setFloat("EngineProgress", progress);

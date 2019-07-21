@@ -12,7 +12,6 @@ package forestry.core.gui;
 
 import javax.annotation.Nullable;
 import java.awt.Rectangle;
-import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -21,6 +20,7 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
@@ -29,6 +29,8 @@ import net.minecraft.util.text.ITextComponent;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
+
+import net.minecraftforge.fml.client.config.GuiUtils;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
@@ -94,9 +96,9 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 	}
 
 	@Override
-	public void setWorldAndResolution(Minecraft mc, int width, int height) {
+	public void init(Minecraft mc, int width, int height) {
 		window.setSize(width, height);
-		super.setWorldAndResolution(mc, width, height);
+		super.init(mc, width, height);
 	}
 
 	@Override
@@ -104,10 +106,12 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 		window.updateClient();
 	}
 
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	//TODO - I think this is the right method
+	@Override
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		window.setMousePosition(mouseX, mouseY);
-		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderBackground();
+		super.render(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 
@@ -150,11 +154,10 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 		ledgerManager.add(new OwnerLedger(ledgerManager, ownedTile));
 	}
 
-	//TODO - removed() maybe?
 	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
-		ledgerManager.onGuiClosed();
+	public void onClose() {
+		super.onClose();
+		ledgerManager.onClose();
 	}
 
 	public ColourProperties getFontColor() {
@@ -177,28 +180,33 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 		widgetManager.handleMouseClicked(mouseX, mouseY, mouseButton);
 		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
 		window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
+		return true;
 		//TODO - what to return
 	}
 
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
 		if (widgetManager.handleMouseRelease(mouseX, mouseY, mouseButton)) {
-			return;
+			return true;
 		}
 		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
 		window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
 		super.mouseReleased(mouseX, mouseY, mouseButton);
+		return true;
 		//TODO - what to return
 	}
 
-	//TODO decipher
+	//TODO hopefully this is correct
 	@Override
 	public boolean keyPressed(int keyPressed_1, int keyPressed_2, int keyPressed_3) {
-		if (keyCode == 1 || (keyCode == this.minecraft.gameSettings.keyBindInventory.getKeyCode() && this.window.getFocusedElement() == null)) {
+		InputMappings.Input mouseKey = InputMappings.getInputByCode(keyPressed_1, keyPressed_2);
+		if (keyPressed_1 == 256 || this.minecraft.gameSettings.keyBindInventory.isActiveAndMatches(mouseKey)) {
 			this.minecraft.player.closeScreen();
+			return true;
 		}
 		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
-		window.postEvent(new GuiEvent.KeyEvent(origin, typedChar, keyCode), GuiEventDestination.ALL);
+		window.postEvent(new GuiEvent.KeyEvent(origin, keyPressed_1, keyPressed_2), GuiEventDestination.ALL);
+		return true;
 	}
 
 	@Nullable
@@ -217,8 +225,8 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 
 	@Nullable
 	protected Slot getSlotAtPosition(int mouseX, int mouseY) {
-		for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
-			Slot slot = this.inventorySlots.inventorySlots.get(k);
+		for (int k = 0; k < this.container.inventorySlots.size(); ++k) {
+			Slot slot = this.container.inventorySlots.get(k);
 
 			if (isMouseOverSlot(slot, mouseX, mouseY)) {
 				return slot;
@@ -244,7 +252,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 		if (this.playerInventory.getItemStack().isEmpty()) {
 			GuiUtil.drawToolTips(this, widgetManager.getWidgets(), mouseX, mouseY);
 			GuiUtil.drawToolTips(this, this.buttons, mouseX, mouseY);
-			GuiUtil.drawToolTips(this, inventorySlots.inventorySlots, mouseX, mouseY);
+			GuiUtil.drawToolTips(this, container.inventorySlots, mouseX, mouseY);
 			window.drawTooltip(mouseX, mouseY);
 		}
 	}
@@ -277,7 +285,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 
 		//int x = (width - xSize) / 2;
 		//int y = (height - ySize) / 2;
-		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+		GuiUtils.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize, 1.0f);	//TODO - zlevel
 	}
 
 	protected void drawWidgets() {
@@ -325,10 +333,11 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 		return minecraft;
 	}
 
-	@Override
-	public void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6) {
-		super.drawGradientRect(par1, par2, par3, par4, par5, par6);
-	}
+	//TODO - not needed but I think this is fillGradient(...)
+//	@Override
+//	public void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6) {
+//		super.drawGradientRect(par1, par2, par3, par4, par5, par6);
+//	}
 
 	public List<Rectangle> getExtraGuiAreas() {
 		return ledgerManager.getLedgerAreas();

@@ -16,15 +16,16 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemMeshDefinition;
+//import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+//import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -35,6 +36,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IEnviromentBlockReader;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -81,23 +83,27 @@ public class ModelManager implements IModelManager {
 
 	@Override
 	public void registerItemModel(Item item, int meta, String identifier) {
-		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(identifier));
+//		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(identifier));
+		//TODO models
 	}
 
 	@Override
 	public void registerItemModel(Item item, int meta, String modID, String identifier) {
-		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(modID, identifier));
+//		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(modID, identifier));
+		//TODO models
 	}
 
 	@Override
 	public void registerItemModel(Item item, int meta) {
-		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(item));
+//		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(item));
+		//TODO models
 	}
 
-	@Override
-	public void registerItemModel(Item item, ItemMeshDefinition definition) {
-		ModelLoader.setCustomMeshDefinition(item, definition);
-	}
+	//TODO - models
+//	@Override
+//	public void registerItemModel(Item item, ItemMeshDefinition definition) {
+//		ModelLoader.setCustomMeshDefinition(item, definition);
+//	}
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item) {
@@ -167,14 +173,16 @@ public class ModelManager implements IModelManager {
 		BlockColors blockColors = minecraft.getBlockColors();
 		for (IColoredBlock blockColor : blockColorList) {
 			if (blockColor instanceof Block) {
-				blockColors.registerBlockColorHandler(ColoredBlockBlockColor.INSTANCE, (Block) blockColor);
+//				blockColors.registerBlockColorHandler(ColoredBlockBlockColor.INSTANCE, (Block) blockColor);
+				//TODO models
 			}
 		}
 
 		ItemColors itemColors = minecraft.getItemColors();
 		for (IColoredItem itemColor : itemColorList) {
 			if (itemColor instanceof Item) {
-				itemColors.registerItemColorHandler(ColoredItemItemColor.INSTANCE, (Item) itemColor);
+//				itemColors.registerItemColorHandler(ColoredItemItemColor.INSTANCE, (Item) itemColor);
+				//TODO models
 			}
 		}
 	}
@@ -196,8 +204,9 @@ public class ModelManager implements IModelManager {
 	public void registerCustomBlockModel(BlockModelEntry index) {
 		customBlockModels.add(index);
 		if (index.addStateMapper) {
-			StateMapperBase ignoreState = new BlockModeStateMapper(index);
-			ModelLoader.setCustomStateMapper(index.block, ignoreState);
+//			StateMapperBase ignoreState = new BlockModeStateMapper(index);
+//			ModelLoader.setCustomStateMapper(index.block, ignoreState);
+			//TODO models
 		}
 	}
 
@@ -207,16 +216,16 @@ public class ModelManager implements IModelManager {
 
 	public void onBakeModels(ModelBakeEvent event) {
 		//register custom models
-		Registry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
+		Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
 		for (final BlockModelEntry entry : customBlockModels) {
-			registry.putObject(entry.blockModelLocation, entry.model);
+			registry.put(entry.blockModelLocation, entry.model);
 			if (entry.itemModelLocation != null) {
-				registry.putObject(entry.itemModelLocation, entry.model);
+				registry.put(entry.itemModelLocation, entry.model);
 			}
 		}
 
 		for (final ModelEntry entry : customModels) {
-			registry.putObject(entry.modelLocation, entry.model);
+			registry.put(entry.modelLocation, entry.model);
 		}
 	}
 
@@ -229,7 +238,7 @@ public class ModelManager implements IModelManager {
 		}
 
 		@Override
-		public int colorMultiplier(ItemStack stack, int tintIndex) {
+		public int getColor(ItemStack stack, int tintIndex) {
 			Item item = stack.getItem();
 			if (item instanceof IColoredItem) {
 				return ((IColoredItem) item).getColorFromItemstack(stack, tintIndex);
@@ -247,7 +256,7 @@ public class ModelManager implements IModelManager {
 		}
 
 		@Override
-		public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+		public int getColor(BlockState state, @Nullable IEnviromentBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
 			Block block = state.getBlock();
 			if (block instanceof IColoredBlock && worldIn != null && pos != null) {
 				return ((IColoredBlock) block).colorMultiplier(state, worldIn, pos, tintIndex);
@@ -256,16 +265,17 @@ public class ModelManager implements IModelManager {
 		}
 	}
 
-	private static class BlockModeStateMapper extends StateMapperBase {
-		private final BlockModelEntry index;
-
-		public BlockModeStateMapper(BlockModelEntry index) {
-			this.index = index;
-		}
-
-		@Override
-		protected ModelResourceLocation getModelResourceLocation(BlockState BlockState) {
-			return index.blockModelLocation;
-		}
-	}
+	//TODO models
+//	private static class BlockModeStateMapper extends StateMapperBase {
+//		private final BlockModelEntry index;
+//
+//		public BlockModeStateMapper(BlockModelEntry index) {
+//			this.index = index;
+//		}
+//
+//		@Override
+//		protected ModelResourceLocation getModelResourceLocation(BlockState BlockState) {
+//			return index.blockModelLocation;
+//		}
+//	}
 }

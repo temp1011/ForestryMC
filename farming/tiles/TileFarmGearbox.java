@@ -41,7 +41,7 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 	@Override
 	public void readFromNBT(CompoundNBT CompoundNBT) {
 		super.readFromNBT(CompoundNBT);
-		energyManager.readFromNBT(CompoundNBT);
+		energyManager.read(CompoundNBT);
 
 		activationDelay = CompoundNBT.getInteger("ActivationDelay");
 		previousDelays = CompoundNBT.getInteger("PrevDelays");
@@ -51,7 +51,7 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 	@Override
 	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
 		CompoundNBT = super.writeToNBT(CompoundNBT);
-		energyManager.writeToNBT(CompoundNBT);
+		energyManager.write(CompoundNBT);
 
 		CompoundNBT.setInteger("ActivationDelay", activationDelay);
 		CompoundNBT.setInteger("PrevDelays", previousDelays);

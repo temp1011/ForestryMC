@@ -60,14 +60,14 @@ public interface IMultiblockLogic extends INbtWritable {
 
 	/**
 	 * Read the logic's data from file.
-	 * Use this in Tile.readFromNBT()
+	 * Use this in Tile.read()
 	 */
 	void readFromNBT(CompoundNBT CompoundNBT);
 
 	/**
 	 * Write the logic's data to file.
-	 * Use this in Tile.writeToNBT()
+	 * Use this in Tile.write()
 	 */
 	@Override
-	CompoundNBT writeToNBT(CompoundNBT CompoundNBT);
+	CompoundNBT write(CompoundNBT CompoundNBT);
 }

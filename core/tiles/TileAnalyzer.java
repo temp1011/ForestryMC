@@ -81,14 +81,14 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	@Override
 	public CompoundNBT write(CompoundNBT compoundNBT) {
 		compoundNBT = super.write(compoundNBT);
-		tankManager.writeToNBT(compoundNBT);
+		tankManager.write(compoundNBT);
 		return compoundNBT;
 	}
 
 	@Override
 	public void read(CompoundNBT compoundNBT) {
 		super.read(compoundNBT);
-		tankManager.readFromNBT(compoundNBT);
+		tankManager.read(compoundNBT);
 
 		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 		if (!stackToAnalyze.isEmpty()) {
@@ -124,7 +124,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			specimenToAnalyze.analyze();
 
 			CompoundNBT compoundNBT = new CompoundNBT();
-			specimenToAnalyze.writeToNBT(compoundNBT);
+			specimenToAnalyze.write(compoundNBT);
 			stackToAnalyze.setTag(compoundNBT);
 		}
 
@@ -172,7 +172,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public void handleItemStackForDisplay(ItemStack itemStack) {
 		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
 			individualOnDisplayClient = itemStack;
-			world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			world.markForRerender(getPos());	//TODO - correct call?
 		}
 	}
 

@@ -32,6 +32,8 @@ import net.minecraft.util.FoodStats;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -73,7 +75,8 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	public void registerModel(Item item, IModelManager manager) {
 		String identifier = "liquids/" + type.toString().toLowerCase(Locale.ENGLISH);
 		manager.registerItemModel(item, 0, identifier + "_empty");
-		ModelLoader.setCustomModelResourceLocation(item, 1, new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, identifier), "inventory"));
+//		ModelLoader.setCustomModelResourceLocation(item, 1, new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, identifier), "inventory"));
+		//TODO 1.14 - commented out in source
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -200,15 +203,16 @@ public class ItemFluidContainerForestry extends ItemForestry {
 			}
 		} else {
 			if (Config.CapsuleFluidPickup) {
-				RayTraceResult target = this.rayTrace(world, player, true);
-				if (target == null || target.getType() != RayTraceResult.Type.BLOCK) {
+				RayTraceResult target = this.rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
+				if (target.getType() != RayTraceResult.Type.BLOCK) {
 					return ActionResult.newResult(ActionResultType.PASS, heldItem);
 				}
-
+				//TODO - I believe this is safe if  the type is BLOCK
+				BlockRayTraceResult blockTarget = (BlockRayTraceResult) target;
 				ItemStack singleBucket = heldItem.copy();
 				singleBucket.setCount(1);
 
-				FluidActionResult filledResult = FluidUtil.tryPickUpFluid(singleBucket, player, world, target.getBlockPos(), target.sideHit);
+				FluidActionResult filledResult = FluidUtil.tryPickUpFluid(singleBucket, player, world, blockTarget.getPos(), blockTarget.getFace());
 				if (filledResult.isSuccess()) {
 					ItemHandlerHelper.giveItemToPlayer(player, filledResult.result);
 

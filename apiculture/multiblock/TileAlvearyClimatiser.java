@@ -75,7 +75,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 	@Override
 	public void readFromNBT(CompoundNBT CompoundNBT) {
 		super.readFromNBT(CompoundNBT);
-		energyManager.readFromNBT(CompoundNBT);
+		energyManager.read(CompoundNBT);
 		workingTime = CompoundNBT.getInteger("Heating");
 		setActive(workingTime > 0);
 	}
@@ -83,7 +83,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 	@Override
 	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
 		CompoundNBT = super.writeToNBT(CompoundNBT);
-		energyManager.writeToNBT(CompoundNBT);
+		energyManager.write(CompoundNBT);
 		CompoundNBT.setInteger("Heating", workingTime);
 		return CompoundNBT;
 	}

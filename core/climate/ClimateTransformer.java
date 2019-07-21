@@ -95,7 +95,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 
 	/* Save and Load */
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT nbt) {
+	public CompoundNBT write(CompoundNBT nbt) {
 		nbt.put(CURRENT_STATE_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new CompoundNBT(), currentState));
 		nbt.put(TARGETED_STATE_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new CompoundNBT(), targetedState));
 		nbt.putBoolean(CIRCULAR_KEY, circular);
@@ -104,7 +104,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT nbt) {
+	public void read(CompoundNBT nbt) {
 		currentState = ClimateManager.stateHelper.create(nbt.getCompound(CURRENT_STATE_KEY));
 		targetedState = ClimateManager.stateHelper.create(nbt.getCompound(TARGETED_STATE_KEY));
 		circular = nbt.getBoolean(CIRCULAR_KEY);

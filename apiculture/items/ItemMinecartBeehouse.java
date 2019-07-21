@@ -48,7 +48,7 @@ public class ItemMinecartBeehouse extends MinecartItem implements IItemModelRegi
 //		setHasSubtypes(true);
 
 		//TODO - needs AT
-		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, dispenserMinecartBehavior);
+		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.put(this, dispenserMinecartBehavior);
 	}
 
 	@Override

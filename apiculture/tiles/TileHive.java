@@ -187,16 +187,16 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	@Override
 	public void read(CompoundNBT compoundNBT) {
 		super.read(compoundNBT);
-		contained.readFromNBT(compoundNBT);
-		beeLogic.readFromNBT(compoundNBT);
+		contained.read(compoundNBT);
+		beeLogic.read(compoundNBT);
 	}
 
 
 	@Override
 	public CompoundNBT write(CompoundNBT compoundNBT) {
 		compoundNBT = super.write(compoundNBT);
-		contained.writeToNBT(compoundNBT);
-		beeLogic.writeToNBT(compoundNBT);
+		contained.write(compoundNBT);
+		beeLogic.write(compoundNBT);
 		return compoundNBT;
 	}
 
@@ -274,7 +274,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	public CompoundNBT getUpdateTag() {
 		CompoundNBT nbt = super.getUpdateTag();
 		nbt.putBoolean("active", calmTime == 0);
-		beeLogic.writeToNBT(nbt);
+		beeLogic.write(nbt);
 		return nbt;
 	}
 
@@ -282,7 +282,7 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 	public void handleUpdateTag(CompoundNBT tag) {
 		super.handleUpdateTag(tag);
 		setActive(tag.getBoolean("active"));
-		beeLogic.readFromNBT(tag);
+		beeLogic.read(tag);
 	}
 
 	@Override

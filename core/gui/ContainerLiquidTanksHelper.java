@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -61,8 +62,8 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 		IFluidTank tank = tile.getTankManager().getTank(slot);
 		int liquidAmount = tank.getFluidAmount();
 
-		IFluidHandlerItem fluidHandlerItem = FluidUtil.getFluidHandler(itemstack);
-		if (fluidHandlerItem != null) {
+		LazyOptional<IFluidHandlerItem> fluidCap = FluidUtil.getFluidHandler(itemstack);
+		fluidCap.ifPresent(fluidHandlerItem -> {
 			if (pipette.canPipette(itemstack) && liquidAmount > 0) {
 				if (liquidAmount > 0) {
 					if (tank instanceof FluidTank) {
@@ -84,7 +85,7 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 					}
 				}
 			}
-		}
+		});
 	}
 
 	@Override

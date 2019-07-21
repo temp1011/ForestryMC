@@ -52,7 +52,7 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	/* CLIENT */
 
 	/**
-	 * Sync to client by using {@link #writeToNBT(CompoundNBT)} in your {@link TileEntity#getUpdateTag()}
+	 * Sync to client by using {@link #write(CompoundNBT)} in your {@link TileEntity#getUpdateTag()}
 	 */
 	void syncToClient();
 

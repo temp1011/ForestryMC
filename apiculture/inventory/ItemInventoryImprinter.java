@@ -123,7 +123,7 @@ public class ItemInventoryImprinter extends ItemInventory {
 		IBee imprint = getSelectedBee();
 
 		CompoundNBT CompoundNBT = new CompoundNBT();
-		imprint.writeToNBT(CompoundNBT);
+		imprint.write(CompoundNBT);
 		specimen.setTag(CompoundNBT);
 
 		setInventorySlotContents(imprintedSlot, specimen);

@@ -55,8 +55,8 @@ public class TextureMapForestry extends AtlasTexture {
 	public void loadTextureAtlas(IResourceManager resourceManager) {
 		int i = Minecraft.getGLMaximumTextureSize();
 		Stitcher stitcher = new Stitcher(i, i, 0);	//TODO check args correct
-//		this.mapUploadedSprites.clear();	//TODO - needs AT
-//		this.listAnimatedSprites.clear();	//TODO - needs AT
+		this.mapUploadedSprites.clear();	//TODO - needs AT
+		this.listAnimatedSprites.clear();	//TODO - needs AT
 
 //		ProgressManager.ProgressBar bar = ProgressManager.push("Texture stitching", this.mapRegisteredSprites.size());
 
@@ -179,8 +179,8 @@ public class TextureMapForestry extends AtlasTexture {
 	}
 
 	private ResourceLocation getResourceLocation(TextureAtlasSprite p_184396_1_) {
-//		ResourceLocation resourcelocation = new ResourceLocation(p_184396_1_.getIconName());
-//		return new ResourceLocation(resourcelocation.getNamespace(), String.format("%s/%s%s", this.basePath, resourcelocation.getPath(), ".png"));	//TODO - AT
+		ResourceLocation resourcelocation = new ResourceLocation(p_184396_1_.getIconName());
+		return new ResourceLocation(resourcelocation.getNamespace(), String.format("%s/%s%s", this.basePath, resourcelocation.getPath(), ".png"));	//TODO - AT
 		return new ResourceLocation("", "");
 	}
 }

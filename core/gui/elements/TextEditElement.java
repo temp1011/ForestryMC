@@ -18,11 +18,13 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 
 	public TextEditElement(int xPos, int yPos, int width, int height) {
 		super(xPos, yPos, width, height);
-		field = new TextFieldWidget(0, Minecraft.getInstance().fontRenderer, 0, 0, width, height);
+		//TODO - title
+		field = new TextFieldWidget(Minecraft.getInstance().fontRenderer, 0, 0, width, height, "TEST_TITLE");
 		field.setEnableBackgroundDrawing(false);
 		this.addSelfEventHandler(GuiEvent.KeyEvent.class, event -> {
 			String oldText = field.getText();
-			this.field.textboxKeyTyped(event.getCharacter(), event.getKey());
+			//TODO - find a way to get the right char because this seems dodgy
+			this.field.charTyped((char) event.getMouseKey().getKeyCode(), event.getMouseKey().getKeyCode());
 			final String text = field.getText();
 			if (!text.equals(oldText)) {
 				postEvent(new TextEditEvent(this, text, oldText), GuiEventDestination.ALL);
@@ -32,6 +34,7 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 			IWindowElement windowElement = getWindow();
 			this.field.mouseClicked(windowElement.getRelativeMouseX(this), windowElement.getRelativeMouseY(this), event.getButton());
 		});
+		//TODO - method protected so maybe AT the field itself?
 		this.addSelfEventHandler(ElementEvent.GainFocus.class, event -> this.field.setFocused(true));
 		this.addSelfEventHandler(ElementEvent.LoseFocus.class, event -> this.field.setFocused(false));
 	}
@@ -58,6 +61,7 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 		}
 	}
 
+	//TODO - maybe need to supply start/end points now?
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
 		field.drawTextBox();

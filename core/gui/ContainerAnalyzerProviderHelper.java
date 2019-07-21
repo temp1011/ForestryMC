@@ -103,7 +103,7 @@ public class ContainerAnalyzerProviderHelper {
 				breedingTracker.registerSpecies(individual.getGenome().getSecondary());
 
 				CompoundNBT CompoundNBT = new CompoundNBT();
-				individual.writeToNBT(CompoundNBT);
+				individual.write(CompoundNBT);
 				specimen = specimen.copy();
 				specimen.setTag(CompoundNBT);
 

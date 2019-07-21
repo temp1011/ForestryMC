@@ -15,6 +15,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.core.tiles.ForestryTileEntityTypes;
+
 /**
  * Base logic class for Multiblock-connected tile entities.
  * Most multiblock components should derive from this.
@@ -24,7 +27,7 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	private final T multiblockLogic;
 
 	public MultiblockTileEntityBase(T multiblockLogic) {
-		super();
+		super(ForestryTileEntityTypes.MULTIBLOCK_TILE_ENTITY_BASE_TILE_ENTITY_TYPE);
 		this.multiblockLogic = multiblockLogic;
 	}
 
@@ -53,19 +56,19 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	@Override
 	public CompoundNBT write(CompoundNBT data) {
 		data = super.write(data);
-		multiblockLogic.writeToNBT(data);
+		multiblockLogic.write(data);
 		return data;
 	}
 
 	@Override
-	public void invalidate() {
-		super.invalidate();
+	public void remove() {
+		super.remove();
 		multiblockLogic.invalidate(world, this);
 	}
 
 	@Override
-	public void onChunkUnload() {
-		super.onChunkUnload();
+	public void onChunkUnloaded() {
+		super.onChunkUnloaded();
 		multiblockLogic.onChunkUnload(world, this);
 	}
 

@@ -91,7 +91,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 	// / SAVING & LOADING
 	@Override
-	public void readFromNBT(CompoundNBT compoundNBT) {
+	public void read(CompoundNBT compoundNBT) {
 		beeProgress = compoundNBT.getInt("BreedingTime");
 		queenWorkCycleThrottle = compoundNBT.getInt("Throttle");
 
@@ -103,7 +103,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		setActive(compoundNBT.getBoolean("Active"));
 
-		hasFlowersCache.readFromNBT(compoundNBT);
+		hasFlowersCache.read(compoundNBT);
 
 		ListNBT nbttaglist = compoundNBT.getList("Offspring", 10);
 		for (int i = 0; i < nbttaglist.size(); i++) {
@@ -112,7 +112,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compoundNBT) {
+	public CompoundNBT write(CompoundNBT compoundNBT) {
 		compoundNBT.putInt("BreedingTime", beeProgress);
 		compoundNBT.putInt("Throttle", queenWorkCycleThrottle);
 
@@ -124,7 +124,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		compoundNBT.putBoolean("Active", active);
 
-		hasFlowersCache.writeToNBT(compoundNBT);
+		hasFlowersCache.write(compoundNBT);
 
 		Stack<ItemStack> spawnCopy = new Stack<>();
 		spawnCopy.addAll(spawn);
@@ -299,7 +299,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 			// Write the changed queen back into the item stack.
 			CompoundNBT CompoundNBT = new CompoundNBT();
-			queen.writeToNBT(CompoundNBT);
+			queen.write(CompoundNBT);
 			queenStack.setTag(CompoundNBT);
 			housing.getBeeInventory().setQueen(queenStack);
 		}
@@ -380,7 +380,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		princess.mate(drone);
 
 		CompoundNBT CompoundNBT = new CompoundNBT();
-		princess.writeToNBT(CompoundNBT);
+		princess.write(CompoundNBT);
 		queenStack = new ItemStack(ModuleApiculture.getItems().beeQueenGE);
 		queenStack.setTag(CompoundNBT);
 
@@ -413,7 +413,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 			ItemStack convert = new ItemStack(ModuleApiculture.getItems().beePrincessGE);
 			CompoundNBT CompoundNBT = new CompoundNBT();
-			queen.writeToNBT(CompoundNBT);
+			queen.write(CompoundNBT);
 			convert.setTag(CompoundNBT);
 
 			spawn = Collections.singleton(convert);

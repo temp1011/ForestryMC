@@ -18,6 +18,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 
 import com.mojang.authlib.GameProfile;
 
@@ -45,22 +46,23 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	private ItemStack individualOnDisplayClient = ItemStack.EMPTY;
 
 	public TileEscritoire() {
+		super(TileEntityType.CHEST);	//TODO - tileEntityTypes
 		setInternalInventory(new InventoryEscritoire(this));
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		game.readFromNBT(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		game.read(compoundNBT);
 	}
 
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		game.writeToNBT(CompoundNBT);
-		return CompoundNBT;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		game.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	/* GAME */
@@ -157,22 +159,23 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 		}
 	}
 
+	//TODO  - not sure this data is the windowId. Else need to add it to packets etc
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiEscritoire(player, this);
+		return new GuiEscritoire(player, this, data);
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerEscritoire(player, this);
+		return new ContainerEscritoire(player, this, data);
 	}
 
 	@Override
 	public void handleItemStackForDisplay(ItemStack itemStack) {
 		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
 			individualOnDisplayClient = itemStack;
-			world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			world.markForRerender(getPos());
 		}
 	}
 

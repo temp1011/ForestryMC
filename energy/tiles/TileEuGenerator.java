@@ -31,7 +31,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
-import forestry.api.fuels.GeneratorFuel;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -47,8 +46,6 @@ import forestry.core.tiles.TileBase;
 import forestry.energy.gui.ContainerGenerator;
 import forestry.energy.gui.GuiGenerator;
 import forestry.energy.inventory.InventoryGenerator;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 //import forestry.plugins.ForestryCompatPlugins;
 
 //import ic2.api.energy.prefab.BasicSource;
@@ -85,10 +82,10 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 		compoundNBT = super.write(compoundNBT);
 
 //		if (ic2EnergySource != null) {
-//			ic2EnergySource.writeToNBT(CompoundNBT);
+//			ic2EnergySource.write(CompoundNBT);
 //		}
 
-		tankManager.writeToNBT(compoundNBT);
+		tankManager.write(compoundNBT);
 		return compoundNBT;
 	}
 
@@ -97,10 +94,10 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 		super.read(compoundNBT);
 
 //		if (ic2EnergySource != null) {
-//			ic2EnergySource.readFromNBT(CompoundNBT);
+//			ic2EnergySource.read(CompoundNBT);
 //		}
 
-		tankManager.readFromNBT(compoundNBT);
+		tankManager.read(compoundNBT);
 	}
 
 	@Override

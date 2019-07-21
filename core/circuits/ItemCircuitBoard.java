@@ -97,7 +97,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 
 	public static ItemStack createCircuitboard(EnumCircuitBoardType type, @Nullable ICircuitLayout layout, ICircuit[] circuits) {
 		CompoundNBT CompoundNBT = new CompoundNBT();
-		new CircuitBoard(type, layout, circuits).writeToNBT(CompoundNBT);
+		new CircuitBoard(type, layout, circuits).write(CompoundNBT);
 		return new ItemStack(ModuleCore.getItems().circuitboards, 1, CompoundNBT);
 	}
 

@@ -58,12 +58,12 @@ public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStrea
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT data) {
+	public void read(CompoundNBT data) {
 		storedFertilizer = data.getInteger("StoredFertilizer");
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT data) {
+	public CompoundNBT write(CompoundNBT data) {
 		data.setInteger("StoredFertilizer", storedFertilizer);
 		return data;
 	}

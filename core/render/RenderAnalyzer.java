@@ -38,9 +38,9 @@ public class RenderAnalyzer extends TileEntityRenderer<TileAnalyzer> {
 		this.model = new ModelAnalyzer(baseTexture);
 	}
 
-	private ItemEntity dummyItem(World world) {
+	private ItemEntity dummyItem(World world, double x, double y, double z) {
 		if (dummyEntityItem == null) {
-			dummyEntityItem = new ItemEntity(world);
+			dummyEntityItem = new ItemEntity(world, x, y, z);
 		} else {
 			dummyEntityItem.world = world;
 		}
@@ -72,7 +72,7 @@ public class RenderAnalyzer extends TileEntityRenderer<TileAnalyzer> {
 		if (itemstack.isEmpty() || world == null) {
 			return;
 		}
-		ItemEntity dummyItem = dummyItem(world);
+		ItemEntity dummyItem = dummyItem(world, x, y, z);
 		float renderScale = 1.0f;
 
 		GlStateManager.pushMatrix();
@@ -83,7 +83,7 @@ public class RenderAnalyzer extends TileEntityRenderer<TileAnalyzer> {
 
 		if (world.getGameTime() != lastTick) {
 			lastTick = world.getGameTime();
-			dummyItem.tick();	//TODO - correct?
+			dummyItem.tick();    //TODO - correct?
 		}
 		EntityRendererManager rendermanager = Minecraft.getInstance().getRenderManager();
 

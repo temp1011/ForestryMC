@@ -209,14 +209,14 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	@Override
 	protected void readEntityFromNBT(CompoundNBT CompoundNBT) {
 		super.readEntityFromNBT(CompoundNBT);
-		beeLogic.readFromNBT(CompoundNBT);
-		ownerHandler.readFromNBT(CompoundNBT);
+		beeLogic.read(CompoundNBT);
+		ownerHandler.read(CompoundNBT);
 	}
 
 	@Override
 	protected void writeEntityToNBT(CompoundNBT CompoundNBT) {
 		super.writeEntityToNBT(CompoundNBT);
-		beeLogic.writeToNBT(CompoundNBT);
-		ownerHandler.writeToNBT(CompoundNBT);
+		beeLogic.write(CompoundNBT);
+		ownerHandler.write(CompoundNBT);
 	}
 }

@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -54,6 +55,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	private int noPowerTime = 0;
 
 	protected TilePowered(int maxTransfer, int capacity) {
+		super(TileEntityType.CHEST);	//TODO tileentitytype hierarchy
 		this.energyManager = new EnergyManager(maxTransfer, capacity);
 		this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
 
@@ -157,14 +159,14 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	@Override
 	public CompoundNBT write(CompoundNBT nbt) {
 		nbt = super.write(nbt);
-		energyManager.writeToNBT(nbt);
+		energyManager.write(nbt);
 		return nbt;
 	}
 
 	@Override
 	public void read(CompoundNBT nbt) {
 		super.read(nbt);
-		energyManager.readFromNBT(nbt);
+		energyManager.read(nbt);
 	}
 
 	@Override

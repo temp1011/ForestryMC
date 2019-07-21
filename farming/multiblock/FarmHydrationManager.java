@@ -84,7 +84,7 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 		CompoundNBT.setInteger("HydrationDelay", hydrationDelay);
 		CompoundNBT.setInteger("TicksSinceRainfall", ticksSinceRainfall);
 		return CompoundNBT;
@@ -103,7 +103,7 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT nbt) {
+	public void read(CompoundNBT nbt) {
 		hydrationDelay = nbt.getInteger("HydrationDelay");
 		ticksSinceRainfall = nbt.getInteger("TicksSinceRainfall");
 	}

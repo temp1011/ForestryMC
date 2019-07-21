@@ -88,7 +88,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT data) {
+	public CompoundNBT write(CompoundNBT data) {
 		ListNBT tagList = new ListNBT();
 		for (byte slot = 0; slot < tanks.size(); slot++) {
 			StandardTank tank = tanks.get(slot);
@@ -104,7 +104,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT data) {
+	public void read(CompoundNBT data) {
 		NBTList<CompoundNBT> tagList = NBTUtilForestry.getNBTList(data, "tanks", NBTUtilForestry.EnumNBTType.COMPOUND);
 		for (CompoundNBT tag : tagList) {
 			int slot = tag.getByte("tank");

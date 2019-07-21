@@ -75,7 +75,7 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT nbt) {
+	public CompoundNBT write(CompoundNBT nbt) {
 		nbt.putInt("xPosition", x);
 		nbt.putInt("zPosition", z);
 		return nbt;

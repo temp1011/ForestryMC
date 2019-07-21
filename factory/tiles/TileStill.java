@@ -72,25 +72,25 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		tankManager.writeToNBT(CompoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		tankManager.write(compoundNBT);
 
 		if (bufferedLiquid != null) {
 			CompoundNBT buffer = new CompoundNBT();
 			bufferedLiquid.writeToNBT(buffer);
-			CompoundNBT.setTag("Buffer", buffer);
+			compoundNBT.put("Buffer", buffer);
 		}
-		return CompoundNBT;
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		tankManager.readFromNBT(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		tankManager.read(compoundNBT);
 
-		if (CompoundNBT.hasKey("Buffer")) {
-			CompoundNBT buffer = CompoundNBT.getCompoundNBT("Buffer");
+		if (compoundNBT.contains("Buffer")) {
+			CompoundNBT buffer = compoundNBT.getCompound("Buffer");
 			bufferedLiquid = FluidStack.loadFluidStackFromNBT(buffer);
 		}
 	}
@@ -196,16 +196,11 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		return tankManager;
 	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
 
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();	//TODO - still unsure if this is the correct pattern for caps
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -216,8 +211,9 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		return new GuiStill(player.inventory, this);
 	}
 
+	//TODO windowId stiff again
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerStill(player.inventory, this);
+		return new ContainerStill(player.inventory, this, data);
 	}
 }

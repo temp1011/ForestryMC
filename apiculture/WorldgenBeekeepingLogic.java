@@ -46,15 +46,15 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 
 	// / SAVING & LOADING
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
+	public void read(CompoundNBT CompoundNBT) {
 		setActive(CompoundNBT.getBoolean("Active"));
-		hasFlowersCache.readFromNBT(CompoundNBT);
+		hasFlowersCache.read(CompoundNBT);
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 		CompoundNBT.putBoolean("Active", active);
-		hasFlowersCache.writeToNBT(CompoundNBT);
+		hasFlowersCache.write(CompoundNBT);
 
 		return CompoundNBT;
 	}

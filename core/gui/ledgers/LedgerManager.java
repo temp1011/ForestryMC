@@ -67,7 +67,7 @@ public class LedgerManager {
 		}
 	}
 
-	public void onGuiClosed() {
+	public void onClose() {
 		for (Ledger ledger : ledgers) {
 			ledger.onGuiClosed();
 		}

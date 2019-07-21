@@ -80,16 +80,16 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	@Override
 	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
 		CompoundNBT = super.writeToNBT(CompoundNBT);
-		tankManager.writeToNBT(CompoundNBT);
-		sockets.writeToNBT(CompoundNBT);
+		tankManager.write(CompoundNBT);
+		sockets.write(CompoundNBT);
 		return CompoundNBT;
 	}
 
 	@Override
 	public void readFromNBT(CompoundNBT CompoundNBT) {
 		super.readFromNBT(CompoundNBT);
-		tankManager.readFromNBT(CompoundNBT);
-		sockets.readFromNBT(CompoundNBT);
+		tankManager.read(CompoundNBT);
+		sockets.read(CompoundNBT);
 
 		ItemStack chip = sockets.getStackInSlot(0);
 		if (!chip.isEmpty()) {

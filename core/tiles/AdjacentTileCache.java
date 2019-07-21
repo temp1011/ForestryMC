@@ -107,7 +107,7 @@ public final class AdjacentTileCache {
 	public TileEntity getTileOnSide(Direction side) {
 		int s = side.ordinal();
 		if (cache[s] != null) {
-			if (cache[s].isInvalid() || !areCoordinatesOnSide(side, cache[s])) {
+			if (cache[s].isRemoved() || !areCoordinatesOnSide(side, cache[s])) {
 				setTile(s, null);
 			} else {
 				return cache[s];
@@ -142,7 +142,7 @@ public final class AdjacentTileCache {
 		private long startTime = Long.MIN_VALUE;
 
 		public boolean hasTriggered(World world, int ticks) {
-			long currentTime = world.getTotalWorldTime();
+			long currentTime = world.getGameTime();
 			if (currentTime >= ticks + startTime || startTime > currentTime) {
 				startTime = currentTime;
 				return true;

@@ -127,7 +127,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 				breedingTracker.registerSpecies(individual.getGenome().getSecondary());
 
 				CompoundNBT CompoundNBT = new CompoundNBT();
-				individual.writeToNBT(CompoundNBT);
+				individual.write(CompoundNBT);
 				specimen.setTag(CompoundNBT);
 
 				if (requiresEnergy) {

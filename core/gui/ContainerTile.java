@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntity;
 
 
@@ -41,12 +42,14 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 	private int previousWorkCounter = 0;
 	private int previousTicksPerWorkCycle = 0;
 
-	protected ContainerTile(T tile) {
+	protected ContainerTile(T tile, int id) {
+		//TODO ContainerTypes
+		super(ContainerType.CRAFTING, id);
 		this.tile = tile;
 	}
 
-	protected ContainerTile(T tileForestry, PlayerInventory playerInventory, int xInv, int yInv) {
-		this(tileForestry);
+	protected ContainerTile(T tileForestry, PlayerInventory playerInventory, int xInv, int yInv, int id) {
+		this(tileForestry, id);
 
 		addPlayerInventory(playerInventory, xInv, yInv);
 	}

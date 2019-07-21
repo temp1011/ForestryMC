@@ -266,10 +266,10 @@
 //	/**
 //	 * This method is a pass-through for IConfigEntry objects that need to perform actions when the containing GUI is closed.
 //	 */
-//	public void onGuiClosed()
+//	public void onClose()
 //	{
 //		for (IConfigEntry entry : this.listEntries)
-//			entry.onGuiClosed();
+//			entry.onClose();
 //	}
 //
 //	/**
@@ -1690,7 +1690,7 @@
 //		public abstract Object[] getCurrentValues();
 //
 //		@Override
-//		public void onGuiClosed()
+//		public void onClose()
 //		{}
 //
 //		/**
@@ -1810,6 +1810,6 @@
 //		/**
 //		 * This method is called when the parent GUI is closed. Most handlers won't need this; it is provided for special cases.
 //		 */
-//		void onGuiClosed();
+//		void onClose();
 //	}
 //}

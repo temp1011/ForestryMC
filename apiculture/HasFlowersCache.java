@@ -169,7 +169,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT compoundNBT) {
+	public void read(CompoundNBT compoundNBT) {
 		if (!compoundNBT.contains(NBT_KEY)) {
 			return;
 		}
@@ -195,7 +195,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 		CompoundNBT hasFlowerCacheNBT = new CompoundNBT();
 
 		if (!flowerCoords.isEmpty()) {

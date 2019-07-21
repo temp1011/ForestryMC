@@ -37,9 +37,9 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 	protected final IOverlayInfo[] overlays;
 
 	public ItemOverlay(ItemGroup tab, IOverlayInfo[] overlays) {
-		setMaxDamage(0);
-		setHasSubtypes(true);
-		setCreativeTab(tab);
+		super((new Item.Properties()).maxDamage(0)
+		.group(tab));
+//		setHasSubtypes(true); TODO flatten?
 
 		this.overlays = overlays;
 	}
@@ -55,11 +55,11 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public void getSubItems(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
 			for (int i = 0; i < overlays.length; i++) {
 				if (Config.isDebug || !overlays[i].isSecret()) {
-					subItems.add(new ItemStack(this, 1, i));
+//					subItems.add(new ItemStack(this, 1, i)); TODO flatten
 				}
 			}
 		}
@@ -76,16 +76,17 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= overlays.length) {
-			return super.getTranslationKey(stack);
-		}
-
-		return super.getTranslationKey(stack) + "." + overlays[stack.getItemDamage()].getUid();
+//		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= overlays.length) {
+//			return super.getTranslationKey(stack);
+//		}
+//
+//		return super.getTranslationKey(stack) + "." + overlays[stack.getItemDamage()].getUid();
+		return super.getTranslationKey(stack); //TODO flatten
 	}
 
 	@Override
 	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-		int meta = stack.getMetadata();
+		int meta = -1;//TODO flatten stack.getMetadata();
 		if (meta < 0 || meta >= overlays.length) {
 			return 0xffffff;
 		}

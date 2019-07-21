@@ -28,8 +28,8 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 
 	private final ContainerLiquidTanksHelper<T> helper;
 
-	protected ContainerLiquidTanks(T tile, PlayerInventory playerInventory, int xInv, int yInv) {
-		super(tile, playerInventory, xInv, yInv);
+	protected ContainerLiquidTanks(T tile, PlayerInventory playerInventory, int xInv, int yInv, int id) {
+		super(tile, playerInventory, xInv, yInv, id);
 		this.helper = new ContainerLiquidTanksHelper<>(tile);
 	}
 

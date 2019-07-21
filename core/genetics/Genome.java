@@ -177,7 +177,7 @@ public abstract class Genome implements IGenome {
 
 			IAllele[] defaultTemplate = speciesRoot.getDefaultTemplate();
 			IGenome genome = speciesRoot.templateAsGenome(defaultTemplate);
-			genome.writeToNBT(genomeNbt);
+			genome.write(genomeNbt);
 			CompoundNBT.put("Genome", genomeNbt);
 		}
 
@@ -236,13 +236,13 @@ public abstract class Genome implements IGenome {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 		ListNBT nbttaglist = new ListNBT();
 		for (int i = 0; i < chromosomes.length; i++) {
 			if (chromosomes[i] != null) {
 				CompoundNBT CompoundNBT1 = new CompoundNBT();
 				CompoundNBT1.putByte(SLOT_TAG, (byte) i);
-				chromosomes[i].writeToNBT(CompoundNBT1);
+				chromosomes[i].write(CompoundNBT1);
 				nbttaglist.add(CompoundNBT1);
 			}
 		}

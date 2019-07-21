@@ -72,12 +72,12 @@ public class FakeBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
+	public void read(CompoundNBT CompoundNBT) {
 
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 		return CompoundNBT;
 	}
 }

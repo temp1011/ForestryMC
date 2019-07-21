@@ -64,7 +64,7 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 		if (itemStack.isEmpty()) {
 			return ItemStack.EMPTY;
 		}
-		return itemStack.splitStack(count);
+		return itemStack.split(count);
 	}
 
 	@Override
@@ -72,10 +72,11 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 		contents.set(slotId, itemstack);
 	}
 
-	@Override
-	public String getName() {
-		return name;
-	}
+	//TODO - inventory name
+//	@Override
+//	public String getName() {
+//		return name;
+//	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -96,15 +97,16 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 		return this.getStackInSlot(slotIndex);
 	}
 
-	@Override
-	public boolean hasCustomName() {
-		return true;
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return new StringTextComponent(getName());
-	}
+	//TODO inventory title
+//	@Override
+//	public boolean hasCustomName() {
+//		return true;
+//	}
+//
+//	@Override
+//	public ITextComponent getDisplayName() {
+//		return new StringTextComponent(getName());
+//	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -121,31 +123,32 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 
 	/* INBTagable */
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
+	public void read(CompoundNBT CompoundNBT) {
 		InventoryUtil.readFromNBT(this, CompoundNBT);
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 		InventoryUtil.writeToNBT(this, CompoundNBT);
 		return CompoundNBT;
 	}
 
 	/* Fields */
 
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
+	//TODO - inventory fields
+//	@Override
+//	public int getField(int id) {
+//		return 0;
+//	}
+//
+//	@Override
+//	public void setField(int id, int value) {
+//	}
+//
+//	@Override
+//	public int getFieldCount() {
+//		return 0;
+//	}
 
 	@Override
 	public void clear() {

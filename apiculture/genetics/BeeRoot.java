@@ -147,7 +147,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 		}
 
 		CompoundNBT CompoundNBT = new CompoundNBT();
-		bee.writeToNBT(CompoundNBT);
+		bee.write(CompoundNBT);
 		ItemStack beeStack = new ItemStack(beeItem);
 		beeStack.setTag(CompoundNBT);
 		return beeStack;

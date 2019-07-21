@@ -95,14 +95,14 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 
 	/* INbtWritable */
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT data) {
-		ownerHandler.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		ownerHandler.write(data);
 		return data;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT data) {
-		ownerHandler.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		ownerHandler.read(data);
 	}
 
 	/* INVENTORY */

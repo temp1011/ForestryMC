@@ -37,20 +37,20 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 
-		CompoundNBT = super.writeToNBT(CompoundNBT);
+		CompoundNBT = super.write(CompoundNBT);
 
 		CompoundNBT.putInt("Health", health);
 		CompoundNBT.putInt("MaxH", maxHealth);
 
 		CompoundNBT nbtGenome = new CompoundNBT();
-		getGenome().writeToNBT(nbtGenome);
+		getGenome().write(nbtGenome);
 		CompoundNBT.put("Genome", nbtGenome);
 
 		if (getMate() != null) {
 			CompoundNBT nbtMate = new CompoundNBT();
-			getMate().writeToNBT(nbtMate);
+			getMate().write(nbtMate);
 			CompoundNBT.put("Mate", nbtMate);
 		}
 		return CompoundNBT;

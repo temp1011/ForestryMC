@@ -84,13 +84,14 @@ public class FilteredTank extends StandardTank {
 		toolTip.clear();
 		if (Screen.hasShiftDown() || filters.size() < 5) {
 			for (String filterName : filters) {
-				Fluid fluidFilter = FluidRegistry.getFluid(filterName);
-				Rarity rarity = fluidFilter.getRarity();
-				if (rarity == null) {
-					rarity = Rarity.COMMON;
-				}
-				FluidStack filterFluidStack = FluidRegistry.getFluidStack(fluidFilter.getName(), 0);
-				toolTip.add(fluidFilter.getLocalizedName(filterFluidStack), rarity.color);
+				//TODO fluids
+//				Fluid fluidFilter = FluidRegistry.getFluid(filterName);
+//				Rarity rarity = fluidFilter.getRarity();
+//				if (rarity == null) {
+//					rarity = Rarity.COMMON;
+//				}
+//				FluidStack filterFluidStack = FluidRegistry.getFluidStack(fluidFilter.getName(), 0);
+//				toolTip.add(fluidFilter.getLocalizedName(filterFluidStack), rarity.color);
 			}
 		} else {
 			toolTip.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");

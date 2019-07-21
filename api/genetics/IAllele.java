@@ -38,6 +38,7 @@ public interface IAllele {
 	 * @return Localized short, human-readable identifier used in tooltips and beealyzer.
 	 * @apiNote This can't be named "getName" or it can conflict during obfuscation. https://github.com/md-5/SpecialSource/issues/12
 	 * @since Forestry 5.3.4
+	 * TODO - will this need to be changed to ITextcomponent
 	 */
 	String getAlleleName();
 

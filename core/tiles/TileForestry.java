@@ -25,8 +25,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -43,7 +41,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.ILocatable;
-import forestry.core.config.Constants;
 import forestry.core.errors.ErrorLogic;
 import forestry.core.gui.IGuiHandlerTile;
 import forestry.core.inventory.FakeInventoryAdapter;
@@ -127,14 +124,14 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	@Override
 	public void read(CompoundNBT data) {
 		super.read(data);
-		inventory.readFromNBT(data);
+		inventory.read(data);
 	}
 
 
 	@Override
 	public CompoundNBT write(CompoundNBT data) {
 		data = super.write(data);
-		inventory.writeToNBT(data);
+		inventory.write(data);
 		return data;
 	}
 

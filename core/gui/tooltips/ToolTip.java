@@ -24,6 +24,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
+//TODO Textcomponent
 @OnlyIn(Dist.CLIENT)
 public class ToolTip {
 

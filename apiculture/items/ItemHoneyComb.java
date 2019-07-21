@@ -32,9 +32,10 @@ import forestry.core.items.ItemForestry;
 
 public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 	public ItemHoneyComb() {
-		setMaxDamage(0);
-		setHasSubtypes(true);
-		setCreativeTab(ItemGroups.tabApiculture);
+		super((new Item.Properties())
+		.maxDamage(0)
+		.group(ItemGroups.tabApiculture));
+//		setHasSubtypes(true); TODO - flatten?
 	}
 
 	@Override
@@ -57,17 +58,17 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		EnumHoneyComb honeyComb = EnumHoneyComb.get(stack.getItemDamage());
+		EnumHoneyComb honeyComb = EnumHoneyComb.get(0);// TODO - flatten stack.getItemDamage());
 		return super.getTranslationKey(stack) + "." + honeyComb.name;
 	}
 
 	@Override
-	public void getSubItems(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
 			for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
 				EnumHoneyComb honeyComb = EnumHoneyComb.get(i);
 				if (!honeyComb.isSecret() || Config.isDebug) {
-					subItems.add(new ItemStack(this, 1, i));
+					subItems.add(new ItemStack(this));	//TODO - flatten?
 				}
 			}
 		}
@@ -99,12 +100,12 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 	}
 
 	public ItemStack get(EnumHoneyComb honeyComb, int amount) {
-		return new ItemStack(this, amount, honeyComb.ordinal());
+		return new ItemStack(this);//TODO - flatten , amount, honeyComb.ordinal());
 	}
 
 	@Override
 	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
-		EnumHoneyComb honeyComb = EnumHoneyComb.get(itemstack.getItemDamage());
+		EnumHoneyComb honeyComb = EnumHoneyComb.get(0);//TODO - flatten itemstack.getItemDamage());
 		if (tintIndex == 1) {
 			return honeyComb.primaryColor;
 		} else {

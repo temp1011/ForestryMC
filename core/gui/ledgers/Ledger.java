@@ -22,10 +22,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import net.minecraftforge.fml.client.config.GuiUtils;
+
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiUtil;
 import forestry.core.render.ForestryResource;
 import forestry.core.render.TextureManagerForestry;
 
@@ -210,11 +214,13 @@ public abstract class Ledger {
 		int height = getHeight();
 		int width = getWidth();
 
-		manager.gui.drawTexturedModalRect(x, y + 4, 0, 256 - height + 4, 4, height - 4); // left edge
-		manager.gui.drawTexturedModalRect(x + 4, y, 256 - width + 4, 0, width - 4, 4); // top edge
-		manager.gui.drawTexturedModalRect(x, y, 0, 0, 4, 4); // top left corner
+		//TODO zlevel
 
-		manager.gui.drawTexturedModalRect(x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body + bottom + right
+		GuiUtils.drawTexturedModalRect(x, y + 4, 0, 256 - height + 4, 4, height - 4, 1.0f); // left edge
+		GuiUtils.drawTexturedModalRect(x + 4, y, 256 - width + 4, 0, width - 4, 4, 1.0f); // top edge
+		GuiUtils.drawTexturedModalRect(x, y, 0, 0, 4, 4, 1.0f); // top left corner
+
+		GuiUtils.drawTexturedModalRect(x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4, 1.0f); // body + bottom + right
 
 		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 	}
@@ -226,7 +232,8 @@ public abstract class Ledger {
 	protected void drawSprite(ResourceLocation textureMap, TextureAtlasSprite sprite, int x, int y) {
 		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 		Minecraft.getInstance().getTextureManager().bindTexture(textureMap);
-		manager.gui.drawTexturedModalRect(x, y, sprite, 16, 16);
+		//TODO - zlevel and general calc is probably not right
+		GuiUtils.drawTexturedModalRect(x, y, (int) sprite.getMaxU() + x, (int) sprite.getMaxV() + y, 16, 16, 1.0f);
 	}
 
 	protected int drawHeader(String string, int x, int y) {
@@ -251,8 +258,12 @@ public abstract class Ledger {
 		List strings = minecraft.fontRenderer.listFormattedStringToWidth(string, width);
 		for (Object obj : strings) {
 			if (obj instanceof String) {
-				//TODO - think this needs to be renderString which needs AT
-				minecraft.fontRenderer.drawString((String) obj, x, y, color, shadow);
+				String s = (String) obj;
+				if(shadow) {
+					minecraft.fontRenderer.drawStringWithShadow(s, x, y, color);
+				} else {
+					minecraft.fontRenderer.drawString(s, x, y, color);
+				}
 				y += minecraft.fontRenderer.FONT_HEIGHT;
 			}
 		}

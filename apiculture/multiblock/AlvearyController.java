@@ -114,7 +114,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public void onAttachedPartWithMultiblockData(IMultiblockComponent part, CompoundNBT data) {
-		this.readFromNBT(data);
+		this.read(data);
 	}
 
 	@Override
@@ -298,38 +298,38 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT data) {
-		data = super.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		data = super.write(data);
 
 		data.setFloat("TempChange", tempChange);
 		data.setFloat("HumidChange", humidChange);
 
-		beekeepingLogic.writeToNBT(data);
-		inventory.writeToNBT(data);
+		beekeepingLogic.write(data);
+		inventory.write(data);
 		return data;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT data) {
-		super.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		super.read(data);
 
 		tempChange = data.getFloat("TempChange");
 		humidChange = data.getFloat("HumidChange");
 
-		beekeepingLogic.readFromNBT(data);
-		inventory.readFromNBT(data);
+		beekeepingLogic.read(data);
+		inventory.read(data);
 	}
 
 	@Override
 	public void formatDescriptionPacket(CompoundNBT data) {
-		writeToNBT(data);
-		beekeepingLogic.writeToNBT(data);
+		this.write(data);
+		beekeepingLogic.write(data);
 	}
 
 	@Override
 	public void decodeDescriptionPacket(CompoundNBT data) {
-		readFromNBT(data);
-		beekeepingLogic.readFromNBT(data);
+		this.read(data);
+		beekeepingLogic.read(data);
 	}
 
 	/* IActivatable */

@@ -106,7 +106,7 @@ public class CircuitBoard implements ICircuitBoard {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 
 		CompoundNBT.putShort("T", (short) type.ordinal());
 

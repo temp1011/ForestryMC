@@ -153,7 +153,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public void onAttachedPartWithMultiblockData(IMultiblockComponent part, CompoundNBT data) {
-		this.readFromNBT(data);
+		this.read(data);
 	}
 
 	@Override
@@ -271,42 +271,42 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT data) {
-		data = super.writeToNBT(data);
-		sockets.writeToNBT(data);
-		hydrationManager.writeToNBT(data);
-		tankManager.writeToNBT(data);
-		fertilizerManager.writeToNBT(data);
-		inventory.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		data = super.write(data);
+		sockets.write(data);
+		hydrationManager.write(data);
+		tankManager.write(data);
+		fertilizerManager.write(data);
+		inventory.write(data);
 		return data;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT data) {
-		super.readFromNBT(data);
-		sockets.readFromNBT(data);
-		hydrationManager.readFromNBT(data);
-		tankManager.readFromNBT(data);
-		fertilizerManager.readFromNBT(data);
-		inventory.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		super.read(data);
+		sockets.read(data);
+		hydrationManager.read(data);
+		tankManager.read(data);
+		fertilizerManager.read(data);
+		inventory.read(data);
 
 		refreshFarmLogics();
 	}
 
 	@Override
 	public void formatDescriptionPacket(CompoundNBT data) {
-		sockets.writeToNBT(data);
-		hydrationManager.writeToNBT(data);
-		tankManager.writeToNBT(data);
-		fertilizerManager.writeToNBT(data);
+		sockets.write(data);
+		hydrationManager.write(data);
+		tankManager.write(data);
+		fertilizerManager.write(data);
 	}
 
 	@Override
 	public void decodeDescriptionPacket(CompoundNBT data) {
-		sockets.readFromNBT(data);
-		hydrationManager.readFromNBT(data);
-		tankManager.readFromNBT(data);
-		fertilizerManager.readFromNBT(data);
+		sockets.read(data);
+		hydrationManager.read(data);
+		tankManager.read(data);
+		fertilizerManager.read(data);
 
 		refreshFarmLogics();
 	}

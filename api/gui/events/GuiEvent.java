@@ -1,6 +1,8 @@
 package forestry.api.gui.events;
 
 
+import net.minecraft.client.util.InputMappings;
+
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -14,21 +16,17 @@ public class GuiEvent extends GuiElementEvent {
 	}
 
 	public static class KeyEvent extends GuiEvent {
-		private final char character;
-		private final int key;
+		private final InputMappings.Input mouseKey;
 
-		public KeyEvent(IGuiElement origin, char character, int key) {
+		//TODO - better parameter names
+		public KeyEvent(IGuiElement origin, int pressed_1, int pressed_2) {
 			super(origin);
-			this.character = character;
-			this.key = key;
+			this.mouseKey = InputMappings.getInputByCode(pressed_1, pressed_2);
+
 		}
 
-		public char getCharacter() {
-			return this.character;
-		}
-
-		public int getKey() {
-			return this.key;
+		public InputMappings.Input getMouseKey() {
+			return mouseKey;
 		}
 	}
 

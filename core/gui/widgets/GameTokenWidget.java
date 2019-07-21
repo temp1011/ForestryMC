@@ -23,6 +23,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import net.minecraftforge.fml.client.config.GuiUtils;
+
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
@@ -67,10 +70,11 @@ public class GameTokenWidget extends Widget {
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
 
+		//TODO not sure what this maps to
 		GlStateManager.enableDepth();
-		GlStateManager.color(colorR, colorG, colorB);
-		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 228, 0, 22, 22);
-		GlStateManager.color(1.0f, 1.0f, 1.0f);
+		GlStateManager.color3f(colorR, colorG, colorB);
+		GuiUtils.drawTexturedModalRect(startX + xPos, startY + yPos, 228, 0, 22, 22, 1.0f);	//TODO zlevel
+		GlStateManager.color3f(1.0f, 1.0f, 1.0f);
 
 		ItemStack tokenStack = HIDDEN_TOKEN;
 		if (token.isVisible()) {
@@ -83,7 +87,7 @@ public class GameTokenWidget extends Widget {
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
 		for (String ident : getToken().getOverlayIcons()) {
 			TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
-			manager.gui.drawTexturedModalRect(startX + xPos + 3, startY + yPos + 3, icon, 16, 16);
+			GuiUtils.drawTexturedModalRect(startX + xPos + 3, startY + yPos + 3, icon, 16, 16, 1.0f);
 		}
 		GlStateManager.enableDepth();
 	}

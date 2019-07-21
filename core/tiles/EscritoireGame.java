@@ -58,23 +58,23 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT.setInteger("bountyLevel", bountyLevel);
-		CompoundNBT.setLong("lastUpdate", lastUpdate);
-		gameBoard.writeToNBT(CompoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT.putInt("bountyLevel", bountyLevel);
+		compoundNBT.putLong("lastUpdate", lastUpdate);
+		gameBoard.write(compoundNBT);
 
-		CompoundNBT.setInteger("Status", status.ordinal());
-		return CompoundNBT;
+		compoundNBT.putInt("Status", status.ordinal());
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT nbt) {
-		bountyLevel = nbt.getInteger("bountyLevel");
+	public void read(CompoundNBT nbt) {
+		bountyLevel = nbt.getInt("bountyLevel");
 		lastUpdate = nbt.getLong("lastUpdate");
 		gameBoard = new EscritoireGameBoard(nbt);
 
-		if (nbt.hasKey("Status")) {
-			int statusOrdinal = nbt.getInteger("Status");
+		if (nbt.contains("Status")) {
+			int statusOrdinal = nbt.getInt("Status");
 			status = Status.values()[statusOrdinal];
 		}
 

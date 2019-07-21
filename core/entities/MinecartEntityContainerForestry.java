@@ -44,13 +44,13 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	@Override
 	protected void readAdditional(CompoundNBT CompoundNBT) {
 		super.read(CompoundNBT);
-		getInternalInventory().readFromNBT(CompoundNBT);
+		getInternalInventory().read(CompoundNBT);
 	}
 
 	@Override
 	protected void writeAdditional(CompoundNBT CompoundNBT) {
 		super.writeAdditional(CompoundNBT);
-		getInternalInventory().writeToNBT(CompoundNBT);
+		getInternalInventory().write(CompoundNBT);
 	}
 
 	@Override

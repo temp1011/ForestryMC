@@ -16,7 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.server.management.PlayerChunkMap;
+//import net.minecraft.server.management.PlayerChunkMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
@@ -38,16 +38,16 @@ public class NetworkUtil {
 		}
 
 		ServerWorld worldServer = (ServerWorld) world;
-		PlayerChunkMap playerManager = worldServer.getPlayerChunkMap();
+//		PlayerChunkMap playerManager = worldServer.getPlayerChunkMap();
 
-		int chunkX = pos.getX() >> 4;
-		int chunkZ = pos.getZ() >> 4;
+//		int chunkX = pos.getX() >> 4;
+//		int chunkZ = pos.getZ() >> 4;
 
 		for (PlayerEntity playerObj : world.getPlayers()) {
 			if (playerObj instanceof ServerPlayerEntity) {
 				ServerPlayerEntity player = (ServerPlayerEntity) playerObj;
 
-				if (playerManager.isPlayerWatchingChunk(player, chunkX, chunkZ)) {
+				if (true){//TODO packet spam - playerManager.isPlayerWatchingChunk(player, chunkX, chunkZ)) {
 					sendToPlayer(packet, player);
 				}
 			}
@@ -60,12 +60,14 @@ public class NetworkUtil {
 		}
 
 		ServerPlayerEntity player = (ServerPlayerEntity) PlayerEntity;
-		Forestry.getPacketHandler().sendPacket(packet.getPacket(), player);
+		//TODO - packets
+//		Forestry.getPacketHandler().sendPacket(packet.getPacket(), player);
 	}
 
 	public static void inventoryChangeNotify(PlayerEntity player) {
 		if (player instanceof ServerPlayerEntity) {
-			((ServerPlayerEntity) player).sendContainerToPlayer(player.inventoryContainer);
+			//TODO network
+//			((ServerPlayerEntity) player).sendContainerToPlayer(player.inventory);
 		}
 	}
 
@@ -73,6 +75,7 @@ public class NetworkUtil {
 	public static void sendToServer(IForestryPacketServer packet) {
 		ClientPlayNetHandler netHandler = Minecraft.getInstance().getConnection();
 		Preconditions.checkNotNull(netHandler, "Tried to send packet before netHandler (client world) exists.");
-		netHandler.sendPacket(packet);
+		//TODO packets
+//		netHandler.sendPacket(packet);
 	}
 }

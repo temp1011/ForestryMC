@@ -53,7 +53,7 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT nbt) {
+	public void read(CompoundNBT nbt) {
 		final int energy;
 		if (nbt.contains("EnergyManager")) { // legacy
 			CompoundNBT energyManagerNBT = nbt.getCompound("EnergyManager");
@@ -67,7 +67,7 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT nbt) {
+	public CompoundNBT write(CompoundNBT nbt) {
 		nbt.putInt("Energy", energy);
 		return nbt;
 	}

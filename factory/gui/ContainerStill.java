@@ -21,11 +21,11 @@ import forestry.factory.tiles.TileStill;
 
 public class ContainerStill extends ContainerLiquidTanks<TileStill> {
 
-	public ContainerStill(PlayerInventory player, TileStill tile) {
-		super(tile, player, 8, 84);
+	public ContainerStill(PlayerInventory player, TileStill tile, int id) {
+		super(tile, player, 8, 84, id);
 
-		this.addSlotToContainer(new SlotOutput(tile, InventoryStill.SLOT_PRODUCT, 150, 54));
-		this.addSlotToContainer(new SlotEmptyLiquidContainerIn(tile, InventoryStill.SLOT_RESOURCE, 150, 18));
-		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryStill.SLOT_CAN, 10, 36));
+		this.addSlot(new SlotOutput(tile, InventoryStill.SLOT_PRODUCT, 150, 54));
+		this.addSlot(new SlotEmptyLiquidContainerIn(tile, InventoryStill.SLOT_RESOURCE, 150, 18));
+		this.addSlot(new SlotLiquidIn(tile, InventoryStill.SLOT_CAN, 10, 36));
 	}
 }

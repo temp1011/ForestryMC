@@ -119,10 +119,10 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT data) {
+	public CompoundNBT write(CompoundNBT data) {
 		if (isMultiblockSaveDelegate() && this.controller != null) {
 			CompoundNBT multiblockData = new CompoundNBT();
-			this.controller.writeToNBT(multiblockData);
+			this.controller.write(multiblockData);
 			data.put("multiblockData", multiblockData);
 		}
 		return data;

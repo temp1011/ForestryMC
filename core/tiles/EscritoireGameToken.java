@@ -155,7 +155,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 		CompoundNBT.putInt("state", state.ordinal());
 
 		if (tokenIndividual != null) {

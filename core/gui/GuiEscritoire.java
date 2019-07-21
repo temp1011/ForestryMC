@@ -14,6 +14,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 import forestry.core.config.Constants;
@@ -31,8 +32,8 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 	private final EscritoireTextSource textSource = new EscritoireTextSource();
 	private final TileEscritoire tile;
 
-	public GuiEscritoire(PlayerEntity player, TileEscritoire tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/escritoire.png", new ContainerEscritoire(player, tile));
+	public GuiEscritoire(PlayerEntity player, TileEscritoire tile, int id) {
+		super(Constants.TEXTURE_PATH_GUI + "/escritoire.png",  new ContainerEscritoire(player, tile, id),player.inventory, new StringTextComponent("TEMP_TITLE"));
 
 		this.tile = tile;
 		this.xSize = 228;

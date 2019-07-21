@@ -65,7 +65,7 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	 * @return Copy of this inventory. Stacks are copies.
 	 */
 	public InventoryAdapter copy() {
-		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), inventory.getName(), inventory.getInventoryStackLimit());
+		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), "TEST_TITLE_PLEASE_IGNORE", inventory.getInventoryStackLimit());
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (!inventory.getStackInSlot(i).isEmpty()) {
@@ -102,10 +102,11 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 		inventory.setInventorySlotContents(slotId, itemstack);
 	}
 
-	@Override
-	public String getName() {
-		return inventory.getName();
-	}
+	//TODO - inventory name
+//	@Override
+//	public String getName() {
+//		return inventory.getName();
+//	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -127,15 +128,16 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 		return true;
 	}
 
-	@Override
-	public boolean hasCustomName() {
-		return false;
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return new StringTextComponent("");
-	}
+	//TODO - inventory name
+//	@Override
+//	public boolean hasCustomName() {
+//		return false;
+//	}
+//
+//	@Override
+//	public ITextComponent getDisplayName() {
+//		return new StringTextComponent("");
+//	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -189,12 +191,12 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
+	public void read(CompoundNBT CompoundNBT) {
 		InventoryUtil.readFromNBT(this, CompoundNBT);
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 		InventoryUtil.writeToNBT(this, CompoundNBT);
 		return CompoundNBT;
 	}
@@ -210,19 +212,20 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	/* FIELDS */
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
+	//TODO inventory fields
+//	@Override
+//	public int getField(int id) {
+//		return 0;
+//	}
+//
+//	@Override
+//	public int getFieldCount() {
+//		return 0;
+//	}
+//
+//	@Override
+//	public void setField(int id, int value) {
+//	}
 
 	@Override
 	public void clear() {

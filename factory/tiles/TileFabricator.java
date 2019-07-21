@@ -86,8 +86,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		CompoundNBT = super.writeToNBT(CompoundNBT);
 
 		CompoundNBT.setInteger("Heat", heat);
-		tankManager.writeToNBT(CompoundNBT);
-		craftingInventory.writeToNBT(CompoundNBT);
+		tankManager.write(CompoundNBT);
+		craftingInventory.write(CompoundNBT);
 		return CompoundNBT;
 	}
 
@@ -96,8 +96,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		super.readFromNBT(CompoundNBT);
 
 		heat = CompoundNBT.getInteger("Heat");
-		tankManager.readFromNBT(CompoundNBT);
-		craftingInventory.readFromNBT(CompoundNBT);
+		tankManager.read(CompoundNBT);
+		craftingInventory.read(CompoundNBT);
 	}
 
 	@Override

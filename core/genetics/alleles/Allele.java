@@ -43,7 +43,7 @@ public abstract class Allele implements IAllele {
 
 	@Override
 	public String getAlleleName() {
-		return Translator.translateToLocal(getUnlocalizedName()).getFormattedText();
+		return Translator.translateToLocal(getUnlocalizedName());//.getFormattedText();
 	}
 
 	@Override

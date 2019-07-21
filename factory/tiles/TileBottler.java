@@ -10,10 +10,8 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.EnumMap;
 
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -22,7 +20,6 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -89,14 +86,14 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	@Override
 	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
 		CompoundNBT = super.writeToNBT(CompoundNBT);
-		tankManager.writeToNBT(CompoundNBT);
+		tankManager.write(CompoundNBT);
 		return CompoundNBT;
 	}
 
 	@Override
 	public void readFromNBT(CompoundNBT CompoundNBT) {
 		super.readFromNBT(CompoundNBT);
-		tankManager.readFromNBT(CompoundNBT);
+		tankManager.read(CompoundNBT);
 		checkEmptyRecipe();
 		checkFillRecipe();
 	}

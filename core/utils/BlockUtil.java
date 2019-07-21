@@ -23,6 +23,7 @@ import net.minecraft.state.IProperty;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockReader;
@@ -74,10 +75,10 @@ public abstract class BlockUtil {
 		}
 		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		//TODO - tags or something
-		if (block == Blocks.LOG) {
-			return state.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE;
+		if (block == Blocks.JUNGLE_LOG) {
+			return true;
 		} else {
+			//TODO - tags or something
 			return block.isWood(world, pos);
 		}
 	}
@@ -113,7 +114,7 @@ public abstract class BlockUtil {
 
 	public static boolean isReplaceableBlock(BlockState blockState, World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		return block.isReplaceable(world, pos) && !(block instanceof BlockStaticLiquid);
+		return block.isReplaceable(world, pos) && true;//!(block instanceof BlockStaticLiquid);
 	}
 
 	@Nullable
@@ -129,12 +130,12 @@ public abstract class BlockUtil {
 	public static RayTraceResult collisionRayTrace(BlockPos pos, Vec3d startVec, Vec3d endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		startVec = startVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
 		endVec = endVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
-		Vec3d vec32 = startVec.getIntermediateWithXValue(endVec, minX);
-		Vec3d vec33 = startVec.getIntermediateWithXValue(endVec, maxX);
-		Vec3d vec34 = startVec.getIntermediateWithYValue(endVec, minY);
-		Vec3d vec35 = startVec.getIntermediateWithYValue(endVec, maxY);
-		Vec3d vec36 = startVec.getIntermediateWithZValue(endVec, minZ);
-		Vec3d vec37 = startVec.getIntermediateWithZValue(endVec, maxZ);
+		Vec3d vec32 = startVec;//.getIntermediateWithXValue(endVec, minX);
+		Vec3d vec33 = startVec;//.getIntermediateWithXValue(endVec, maxX);
+		Vec3d vec34 = startVec;//.getIntermediateWithYValue(endVec, minY);
+		Vec3d vec35 = startVec;//.getIntermediateWithYValue(endVec, maxY);
+		Vec3d vec36 = startVec;//.getIntermediateWithZValue(endVec, minZ);
+		Vec3d vec37 = startVec;//.getIntermediateWithZValue(endVec, maxZ);
 
 		if (!isVecInsideYZBounds(vec32, minY, minZ, maxY, maxZ)) {
 			vec32 = null;
@@ -215,7 +216,7 @@ public abstract class BlockUtil {
 				sideHit = 3;
 			}
 
-			return new RayTraceResult(minHit.add(pos.getX(), pos.getY(), pos.getZ()), Direction.values()[sideHit], pos);
+			return new BlockRayTraceResult(minHit.add(pos.getX(), pos.getY(), pos.getZ()), Direction.values()[sideHit], pos, true);
 		}
 	}
 
@@ -272,6 +273,7 @@ public abstract class BlockUtil {
 		return newPos.down();
 	}
 
+	@Nullable
 	public static BlockPos getNextSolidDownPos(World world, BlockPos pos) {
 		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos(pos);
 

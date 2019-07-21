@@ -19,6 +19,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -53,8 +54,9 @@ import forestry.factory.gui.GuiRaintank;
 import forestry.factory.inventory.InventoryRaintank;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
-	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME);
-	private static final FluidStack WATER_PER_UPDATE = new FluidStack(FluidRegistry.WATER, Constants.RAINTANK_AMOUNT_PER_UPDATE);
+	//TODO - fluids
+	private static final FluidStack STACK_WATER = new FluidStack((Fluid) null, Fluid.BUCKET_VOLUME);
+	private static final FluidStack WATER_PER_UPDATE = new FluidStack((Fluid) null, Constants.RAINTANK_AMOUNT_PER_UPDATE);
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
@@ -68,9 +70,11 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	private int fillingProgress;
 
 	public TileRaintank() {
+		super(TileEntityType.CHEST);	//TODO - tileentitytypes
 		setInternalInventory(new InventoryRaintank(this));
 
-		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
+		//TODO fluids
+		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(/*FluidRegistry.WATER*/);
 
 		tankManager = new TankManager(this, resourceTank);
 
@@ -78,16 +82,16 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		tankManager.writeToNBT(CompoundNBT);
-		return CompoundNBT;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		tankManager.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		tankManager.readFromNBT(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		tankManager.read(compoundNBT);
 	}
 
 	@Override
@@ -110,7 +114,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 			BlockPos pos = getPos();
 			Biome biome = world.getBiome(pos);
-			errorLogic.setCondition(!biome.canRain(), EnumErrorCode.NO_RAIN_BIOME);
+			errorLogic.setCondition(!(biome.getPrecipitation() == Biome.RainType.RAIN), EnumErrorCode.NO_RAIN_BIOME);
 
 			BlockPos posAbove = pos.up();
 			boolean hasSky = world.canBlockSeeSky(posAbove);
@@ -138,9 +142,9 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 	private boolean dumpFluidBelow() {
 		if (!resourceTank.isEmpty()) {
-			IFluidHandler fluidDestination = FluidUtil.getFluidHandler(world, pos.down(), Direction.UP);
-			if (fluidDestination != null) {
-				return FluidUtil.tryFluidTransfer(fluidDestination, tankManager, Fluid.BUCKET_VOLUME / 20, true) != null;
+			LazyOptional<IFluidHandler> fluidCap = FluidUtil.getFluidHandler(world, pos.down(), Direction.UP);
+			if (fluidCap.isPresent()) {
+				return FluidUtil.tryFluidTransfer(fluidCap.orElse(null), tankManager, Fluid.BUCKET_VOLUME / 20, true) != null;
 			}
 		}
 		return false;
@@ -182,12 +186,6 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			final IFluidHandler fluidHandler;
@@ -196,7 +194,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 			} else {
 				fluidHandler = tankManager;
 			}
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(fluidHandler);
+			return LazyOptional.of(() -> fluidHandler).cast(); //TODO - I think these can all be made more efficient anyway (more lazy)
 		}
 		return super.getCapability(capability, facing);
 	}

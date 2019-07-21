@@ -10,6 +10,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import net.minecraftforge.fml.client.config.GuiUtils;
+
 @OnlyIn(Dist.CLIENT)
 public class Drawable {
 	/* Final Attributes */
@@ -48,8 +51,9 @@ public class Drawable {
 		textureManager.bindTexture(textureLocation);
 
 		// Enable correct lighting.
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		AbstractGui.drawScaledCustomSizeModalRect(xOffset, yOffset, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
+		//TODO - it's one of these methods. Work out the border maths..
+//		GuiUtils.drawContinuousTexturedBox(xOffset, yOffset, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
 	}
 }
