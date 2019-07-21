@@ -105,7 +105,7 @@ public class GameTokenWidget extends Widget {
 	}
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		game.choose(index);
 		NetworkUtil.sendToServer(new PacketGuiSelectRequest(index, 0));
 		SoundUtil.playButtonClick();
