@@ -25,8 +25,8 @@ public class GuiTextBox extends TextFieldWidget {
 	private int lineScroll = 0;
 	private int maxLines = 0;
 
-	public GuiTextBox(int ID, FontRenderer fontRenderer, int startX, int startY, int width, int height) {
-		super(ID, fontRenderer, startX, startY, width, height);
+	public GuiTextBox(FontRenderer fontRenderer, int startX, int startY, int width, int height) {
+		super(fontRenderer, startX, startY, width, height, "A_TEST_STRING");
 		this.fontRenderer = fontRenderer;
 		this.startX = startX;
 		this.startY = startY;
@@ -93,20 +93,21 @@ public class GuiTextBox extends TextFieldWidget {
 
 	}
 
-	@Override
-	public void drawTextBox() {
-		if (!getVisible()) {
-			return;
-		}
-
-		if (getEnableBackgroundDrawing()) {
-			drawRect(startX - 1, startY - 1, startX + this.width + 1, startY + this.height + 1, -6250336);
-			drawRect(startX, startY, startX + this.width, startY + this.height, -16777216);
-		}
-
-		int textColour = isFocused() ? enabledColor : disabledColor;
-
-		drawScrolledSplitString(getCursoredText(), startX + 2, startY + 2, width - 4, textColour);
-	}
+	//TODO gui, rendering, I have no idea where these methods have gone
+//	@Override
+//	public void drawTextBox() {
+//		if (!getVisible()) {
+//			return;
+//		}
+//
+//		if (getEnableBackgroundDrawing()) {	//TODO AT
+//			drawRect(startX - 1, startY - 1, startX + this.width + 1, startY + this.height + 1, -6250336);
+//			drawRect(startX, startY, startX + this.width, startY + this.height, -16777216);
+//		}
+//
+//		int textColour = isFocused() ? enabledColor : disabledColor;
+//
+//		drawScrolledSplitString(getCursoredText(), startX + 2, startY + 2, width - 4, textColour);
+//	}
 
 }

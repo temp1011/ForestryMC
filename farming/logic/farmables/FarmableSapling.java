@@ -17,11 +17,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
@@ -53,10 +56,11 @@ public class FarmableSapling implements IFarmable {
 	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
 		ItemStack copy = germling.copy();
 		player.setHeldItem(Hand.MAIN_HAND, copy);
-		ActionResultType actionResult = copy.onItemUse(player, world, pos.down(), Hand.MAIN_HAND, Direction.UP, 0, 0, 0);
+		BlockRayTraceResult result = new BlockRayTraceResult(Vec3d.ZERO, Direction.UP, pos.down(), true);	//TODO isInside
+		ActionResultType actionResult = copy.onItemUse(new ItemUseContext(player, Hand.MAIN_HAND, result));
 		player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
 		if (actionResult == ActionResultType.SUCCESS) {
-			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, Blocks.SAPLING.getDefaultState());
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, Blocks.OAK_SAPLING.getDefaultState());
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
 		}
@@ -71,9 +75,9 @@ public class FarmableSapling implements IFarmable {
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		Block block = blockState.getBlock();
-		if (!block.isWood(world, pos)) {
-			return null;
-		}
+//		if (!block.isWood(world, pos)) {
+//			return null;
+//		} TODO tags
 
 		return new CropDestroy(world, blockState, pos, null);
 	}
@@ -91,9 +95,9 @@ public class FarmableSapling implements IFarmable {
 		NonNullList<ItemStack> germlings = NonNullList.create();
 		if (ignoreMetadata) {
 			Item germlingItem = germling.getItem();
-			ItemGroup tab = germlingItem.getCreativeTab();
+			ItemGroup tab = germlingItem.getGroup();
 			if (tab != null) {
-				germlingItem.getSubItems(tab, germlings);
+				germlingItem.fillItemGroup(tab, germlings);
 			}
 		}
 		if (germlings.isEmpty()) {

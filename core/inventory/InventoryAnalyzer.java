@@ -13,6 +13,7 @@ package forestry.core.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -41,8 +42,8 @@ public class InventoryAnalyzer extends InventoryAdapterTile<TileAnalyzer> {
 		if (SlotUtil.isSlotInRange(slotIndex, SLOT_INPUT_1, SLOT_INPUT_COUNT)) {
 			return AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null;
 		} else if (slotIndex == SLOT_CAN) {
-			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
-			return fluid != null && tile.getTankManager().canFillFluidType(fluid);
+			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+			return fluid.isPresent() && tile.getTankManager().canFillFluidType(fluid.orElse(null));
 		}
 
 		return false;

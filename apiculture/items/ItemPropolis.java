@@ -21,6 +21,6 @@ public class ItemPropolis extends ItemOverlay {
 	}
 
 	public ItemStack get(EnumPropolis propolis, int amount) {
-		return new ItemStack(this, amount, propolis.ordinal());
+		return new ItemStack(this, amount);//TODO flatten or something else, propolis.ordinal());
 	}
 }

@@ -19,6 +19,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -62,7 +63,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 //	private BasicSource ic2EnergySource;
 
 	public TileEuGenerator() {
-		super();//"generator"
+		super(TileEntityType.DISPENSER);//"generator" TODO tileentitytypes
 
 		setInternalInventory(new InventoryGenerator(this));
 
@@ -212,7 +213,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerGenerator(player.inventory, this);
+		return new ContainerGenerator(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Nonnull

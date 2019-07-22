@@ -32,7 +32,7 @@ public class GuiRaintank extends GuiForestryTitled<ContainerRaintank> {
 
 		if (tile.isFilling()) {
 			int progress = tile.getFillProgressScaled(24);
-			drawTexturedModalRect(guiLeft + 80, guiTop + 39, 176, 74, progress, 16);
+			blit(guiLeft + 80, guiTop + 39, 176, 74, progress, 16);
 		}
 	}
 

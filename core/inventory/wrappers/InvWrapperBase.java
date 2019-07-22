@@ -61,15 +61,16 @@ public abstract class InvWrapperBase implements IInventory {
 		inv.setInventorySlotContents(slot, itemstack);
 	}
 
-	@Override
-	public String getName() {
-		return inv.getName();
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return inv.getDisplayName();
-	}
+	//TODO inventory name
+//	@Override
+//	public String getName() {
+//		return inv.getName();
+//	}
+//
+//	@Override
+//	public ITextComponent getDisplayName() {
+//		return inv.getDisplayName();
+//	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -96,30 +97,32 @@ public abstract class InvWrapperBase implements IInventory {
 		inv.closeInventory(player);
 	}
 
-	@Override
-	public boolean hasCustomName() {
-		return inv.hasCustomName();
-	}
+	//TODO inventory name
+//	@Override
+//	public boolean hasCustomName() {
+//		return inv.hasCustomName();
+//	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		return !checkItems || inv.isItemValidForSlot(slot, stack);
 	}
 
-	@Override
-	public int getField(int id) {
-		return inv.getField(id);
-	}
-
-	@Override
-	public void setField(int id, int value) {
-		inv.setField(id, value);
-	}
-
-	@Override
-	public int getFieldCount() {
-		return inv.getFieldCount();
-	}
+	//TODO inventory field
+//	@Override
+//	public int getField(int id) {
+//		return inv.getField(id);
+//	}
+//
+//	@Override
+//	public void setField(int id, int value) {
+//		inv.setField(id, value);
+//	}
+//
+//	@Override
+//	public int getFieldCount() {
+//		return inv.getFieldCount();
+//	}
 
 	@Override
 	public void clear() {

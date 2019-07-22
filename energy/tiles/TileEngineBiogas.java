@@ -61,7 +61,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		setInternalInventory(new InventoryEngineBiogas(this));
 
 		fuelTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY).setFilters(FuelManager.bronzeEngineFuel.keySet());
-		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, true, false).setFilters(FluidRegistry.LAVA);
+		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, true, false).setFilters(/*FluidRegistry.LAVA TODO fluids*/);
 		burnTank = new StandardTank(Fluid.BUCKET_VOLUME, false, false);
 
 		this.tankManager = new TankManager(this, fuelTank, heatingTank, burnTank);
@@ -112,7 +112,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			if (heatStage > 0.25 && shutdown) {
 				shutdown(false);
 			} else if (shutdown) {
-				if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluidType() == FluidRegistry.LAVA) {
+				if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluidType() == null) {// TODO fluids FluidRegistry.LAVA) {
 					addHeat(Constants.ENGINE_HEAT_VALUE_LAVA);
 					heatingTank.drainInternal(1, true);
 				}
@@ -124,7 +124,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 					FluidStack drained = burnTank.drainInternal(1, true);
 					currentOutput = determineFuelValue(drained);
 					energyManager.generateEnergy(currentOutput);
-					world.updateComparatorOutputLevel(pos, getBlockType());
+					world.updateComparatorOutputLevel(pos, getBlockState().getBlock());
 				} else {
 					FluidStack fuel = fuelTank.drainInternal(Fluid.BUCKET_VOLUME, true);
 					int burnTime = determineBurnTime(fuel);
@@ -243,19 +243,19 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT nbt) {
-		super.readFromNBT(nbt);
+	public void read(CompoundNBT nbt) {
+		super.read(nbt);
 
-		if (nbt.hasKey("shutdown")) {
+		if (nbt.contains("shutdown")) {
 			shutdown = nbt.getBoolean("shutdown");
 		}
 		tankManager.read(nbt);
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT nbt) {
-		nbt = super.writeToNBT(nbt);
-		nbt.setBoolean("shutdown", shutdown);
+	public CompoundNBT write(CompoundNBT nbt) {
+		nbt = super.write(nbt);
+		nbt.putBoolean("shutdown", shutdown);
 		tankManager.write(nbt);
 		return nbt;
 	}
@@ -279,15 +279,9 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -300,6 +294,6 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerEngineBiogas(player.inventory, this);
+		return new ContainerEngineBiogas(player.inventory, this, data);	//TODO windowid
 	}
 }

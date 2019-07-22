@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 
@@ -43,6 +44,12 @@ public class ToolTip {
 
 	public void clear() {
 		lines.clear();
+	}
+
+	//TODO - only for porting, remove when cleaning up
+	@Deprecated
+	public boolean add(String s) {
+		return this.add(new StringTextComponent(s));
 	}
 
 	public boolean add(ITextComponent line) {

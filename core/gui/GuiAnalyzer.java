@@ -37,7 +37,7 @@ public class GuiAnalyzer extends GuiForestryTitled<ContainerAnalyzer> {
 		int i = 176 + rated.getLevelScaled(16);
 		int k = 60;
 
-		drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
+		blit(x, y + 46 - height, i, k + 46 - height, 4, height);
 	}
 
 	@Override

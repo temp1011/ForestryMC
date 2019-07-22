@@ -12,6 +12,7 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ContainerType;
 
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.apiculture.network.packets.PacketImprintSelectionResponse;
@@ -23,13 +24,13 @@ import forestry.core.utils.NetworkUtil;
 
 public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImprinter> implements IGuiSelectable {
 
-	public ContainerImprinter(PlayerInventory inventoryplayer, ItemInventoryImprinter inventory) {
-		super(inventory, inventoryplayer, 8, 103);
+	public ContainerImprinter(PlayerInventory inventoryplayer, ItemInventoryImprinter inventory, int id) {
+		super(inventory, inventoryplayer, 8, 103, ContainerType.BLAST_FURNACE, id);	//TODO ContainerTypes
 
 		// Input
-		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 12));
+		this.addSlot(new SlotFiltered(inventory, 0, 152, 12));
 		// Output
-		this.addSlotToContainer(new SlotOutput(inventory, 1, 152, 72));
+		this.addSlot(new SlotOutput(inventory, 1, 152, 72));
 	}
 
 	@Override

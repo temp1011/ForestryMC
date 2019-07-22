@@ -17,6 +17,7 @@ import java.util.Map;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.StringTextComponent;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.apiculture.ModuleApiculture;
@@ -37,8 +38,8 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 
 	private final Map<String, ItemStack> iconStacks = new HashMap<>();
 
-	public GuiImprinter(PlayerInventory inventoryplayer, ItemInventoryImprinter itemInventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, itemInventory));
+	public GuiImprinter(PlayerInventory inventoryplayer, ItemInventoryImprinter itemInventory, int id) {	//TODO window id, should this create the container here anymore
+		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, itemInventory, id), inventoryplayer, new StringTextComponent("TEXT_COMPONENT_TITLE"));
 
 		this.itemInventory = itemInventory;
 		this.xSize = 176;
@@ -58,20 +59,20 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		int offset = (138 - fontRenderer.getStringWidth(Translator.translateToLocal("for.gui.imprinter.name"))) / 2;
-		fontRenderer.drawString(Translator.translateToLocal("for.gui.imprinter.name"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
+		int offset = (138 - getFontRenderer().getStringWidth(Translator.translateToLocal("for.gui.imprinter.name"))) / 2;
+		getFontRenderer().drawString(Translator.translateToLocal("for.gui.imprinter.name"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		IAlleleBeeSpecies primary = itemInventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
-		fontRenderer.drawString(primary.getAlleleName(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawString(primary.getAlleleName(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
 
 		IAlleleBeeSpecies secondary = itemInventory.getSecondary();
 		drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
-		fontRenderer.drawString(secondary.getAlleleName(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawString(secondary.getAlleleName(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
 
 		String youCheater = Translator.translateToLocal("for.gui.imprinter.cheater");
-		offset = (138 - fontRenderer.getStringWidth(youCheater)) / 2;
-		fontRenderer.drawString(youCheater, startX + 8 + offset, startY + 76, ColourProperties.INSTANCE.get("gui.screen"));
+		offset = (138 - getFontRenderer().getStringWidth(youCheater)) / 2;
+		getFontRenderer().drawString(youCheater, startX + 8 + offset, startY + 76, ColourProperties.INSTANCE.get("gui.screen"));
 
 	}
 
@@ -79,7 +80,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 		GuiUtil.drawItemStack(this, iconStacks.get(bee.getUID()), x, y);
 	}
 
-	private static int getHabitatSlotAtPosition(int i, int j) {
+	private static int getHabitatSlotAtPosition(double i, double j) {
 		int[] xPos = new int[]{12, 12};
 		int[] yPos = new int[]{32, 52};
 
@@ -92,8 +93,9 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 		return -1;
 	}
 
+	//TODO check return
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int k) throws IOException {
+	public boolean mouseClicked(double mouseX, double mouseY, int k) {
 		super.mouseClicked(mouseX, mouseY, k);
 
 		int cornerX = (width - xSize) / 2;
@@ -101,19 +103,21 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 
 		int slot = getHabitatSlotAtPosition(mouseX - cornerX, mouseY - cornerY);
 		if (slot < 0) {
-			return;
+			return true;
 		}
 
 		if (k == 0) {
 			advanceSelection(slot);
+			return true;
 		} else {
 			regressSelection(slot);
+			return true;
 		}
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 
 		startX = (this.width - this.xSize) / 2;
 		startY = (this.height - this.ySize) / 2;

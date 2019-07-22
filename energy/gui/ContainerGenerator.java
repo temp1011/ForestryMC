@@ -20,10 +20,10 @@ import forestry.energy.tiles.TileEuGenerator;
 
 public class ContainerGenerator extends ContainerLiquidTanks<TileEuGenerator> {
 
-	public ContainerGenerator(PlayerInventory player, TileEuGenerator tile) {
-		super(tile, player, 8, 84);
+	public ContainerGenerator(PlayerInventory player, TileEuGenerator tile, int id) {
+		super(tile, player, 8, 84, id);
 
-		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryGenerator.SLOT_CAN, 22, 38));
+		this.addSlot(new SlotLiquidIn(tile, InventoryGenerator.SLOT_CAN, 22, 38));
 	}
 
 	@Override

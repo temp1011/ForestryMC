@@ -40,7 +40,7 @@ public class FarmableChorus implements IFarmable {
 			return null;
 		}
 
-		if (blockState.getValue(ChorusFlowerBlock.AGE) < 5) {
+		if (blockState.get(ChorusFlowerBlock.AGE) < 5) {
 			return null;
 		}
 

@@ -269,12 +269,12 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiCentrifuge(player.inventory, this);
+		return new GuiCentrifuge(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerCentrifuge(player.inventory, this);
+		return new ContainerCentrifuge(player.inventory, this, data);	//TODO windowid
 	}
 
 	public IInventory getCraftPreviewInventory() {

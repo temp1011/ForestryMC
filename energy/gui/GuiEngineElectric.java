@@ -40,7 +40,7 @@ public class GuiEngineElectric extends GuiEngine<ContainerEngineElectric, TileEn
 		int i = 176 + rated.getLevelScaled(16);
 		int k = 0;
 
-		this.drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
+		this.blit(x, y + 46 - height, i, k + 46 - height, 4, height);
 	}
 
 }

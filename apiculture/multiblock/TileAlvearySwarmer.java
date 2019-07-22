@@ -150,7 +150,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	@Override
 	protected void encodeDescriptionPacket(CompoundNBT packetData) {
 		super.encodeDescriptionPacket(packetData);
-		packetData.setBoolean("Active", active);
+		packetData.putBoolean("Active", active);
 	}
 
 	@Override
@@ -161,35 +161,35 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		setActive(CompoundNBT.getBoolean("Active"));
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		setActive(compoundNBT.getBoolean("Active"));
 
-		ListNBT nbttaglist = CompoundNBT.getTagList("PendingSpawns", 10);
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			CompoundNBT CompoundNBT1 = nbttaglist.getCompoundNBTAt(i);
-			pendingSpawns.add(new ItemStack(CompoundNBT1));
+		ListNBT nbttaglist = compoundNBT.getList("PendingSpawns", 10);
+		for (int i = 0; i < nbttaglist.size(); i++) {
+			CompoundNBT compoundNBT1 = nbttaglist.getCompound(i);
+			pendingSpawns.add(ItemStack.read(compoundNBT1));
 		}
 	}
 
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		CompoundNBT.setBoolean("Active", active);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		compoundNBT.putBoolean("Active", active);
 
 		ListNBT nbttaglist = new ListNBT();
 		ItemStack[] offspring = pendingSpawns.toArray(new ItemStack[0]);
 		for (int i = 0; i < offspring.length; i++) {
 			if (offspring[i] != null) {
-				CompoundNBT CompoundNBT1 = new CompoundNBT();
-				CompoundNBT1.setByte("Slot", (byte) i);
-				offspring[i].writeToNBT(CompoundNBT1);
-				nbttaglist.appendTag(CompoundNBT1);
+				CompoundNBT compoundNBT1 = new CompoundNBT();
+				compoundNBT1.putByte("Slot", (byte) i);
+				offspring[i].write(compoundNBT1);
+				nbttaglist.add(compoundNBT1);
 			}
 		}
-		CompoundNBT.setTag("PendingSpawns", nbttaglist);
-		return CompoundNBT;
+		compoundNBT.put("PendingSpawns", nbttaglist);
+		return compoundNBT;
 	}
 
 	@Override

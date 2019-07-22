@@ -33,15 +33,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 public class ParticleHelper {
 
+	//TODO see ParticleManager.addBlockHitEffects which is almost the same (or maybe should replace this...)
 	@OnlyIn(Dist.CLIENT)
 	public static boolean addBlockHitEffects(World world, BlockPos pos, Direction side, ParticleManager effectRenderer, Callback callback) {
-		BlockState BlockState = world.getBlockState(pos);
-		if (BlockState.getRenderType() != BlockRenderType.INVISIBLE) {
+		BlockState blockState = world.getBlockState(pos);
+		if (blockState.getRenderType() != BlockRenderType.INVISIBLE) {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			float f = 0.1F;
-			AxisAlignedBB axisalignedbb = BlockState.getBoundingBox(world, pos);
+			AxisAlignedBB axisalignedbb = blockState.getShape(world, pos).getBoundingBox();
 			double px = x + world.rand.nextDouble() * (axisalignedbb.maxX - axisalignedbb.minX - f * 2.0F) + f + axisalignedbb.minX;
 			double py = y + world.rand.nextDouble() * (axisalignedbb.maxY - axisalignedbb.minY - f * 2.0F) + f + axisalignedbb.minY;
 			double pz = z + world.rand.nextDouble() * (axisalignedbb.maxZ - axisalignedbb.minZ - f * 2.0F) + f + axisalignedbb.minZ;
@@ -69,11 +70,14 @@ public class ParticleHelper {
 				px = x + axisalignedbb.maxX + f;
 			}
 
-			DiggingParticle fx = (DiggingParticle) effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(BlockState));
-			if (fx != null) {
-				callback.addHitEffects(fx, world, pos, BlockState);
-				fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F);
-			}
+			//TODO revisit this once I understand particles better
+			//         this.addEffect((new DiggingParticle(this.world, d0, d1, d2, 0.0D, 0.0D, 0.0D, blockstate)).setBlockPos(pos).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
+//			DiggingParticle fx = (DiggingParticle) effectRenderer.addEffect(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(blockState));
+//			DiggingParticle fx = (DiggingParticle) effectRenderer.addEffect(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(blockState));
+			DiggingParticle fx = new DiggingParticle(world, px, py, pz, 0.0D, 0.0D, 0.0D, blockState);
+			effectRenderer.addEffect(fx);
+			callback.addHitEffects(fx, world, pos, blockState);
+			fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F);
 		}
 		return true;
 	}
@@ -148,8 +152,7 @@ public class ParticleHelper {
 			Minecraft minecraft = Minecraft.getInstance();
 			BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRendererDispatcher();
 			BlockModelShapes blockModelShapes = blockRendererDispatcher.getBlockModelShapes();
-			TextureAtlasSprite texture = blockModelShapes.getTexture(state);
-			fx.setSprite(texture);
+			fx.sprite = blockModelShapes.getTexture(state);	//TODO At on field SpriteTexturedParticle.sprite but it's protected so idk. Reflection?
 		}
 	}
 }

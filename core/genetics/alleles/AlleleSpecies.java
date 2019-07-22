@@ -65,7 +65,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 
 		this.branch = branch;
 		this.binomial = binomial;
-		this.description = Translator.translateToLocal(unlocalizedDescription).getFormattedText();
+		this.description = Translator.translateToLocal(unlocalizedDescription);	//TODO translation maybe on server side
 		this.authority = authority;
 	}
 

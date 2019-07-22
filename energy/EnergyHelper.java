@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
@@ -76,10 +77,10 @@ public class EnergyHelper {
 			return receptor.getEnergyManager().receiveEnergy(extractable, simulate);
 		}
 
-		if (Config.enableRF && tile.hasCapability(CapabilityEnergy.ENERGY, side)) {
-			IEnergyStorage energyStorage = tile.getCapability(CapabilityEnergy.ENERGY, side);
-			if (energyStorage != null) {
-				return energyStorage.receiveEnergy(extractable, simulate);
+		if (Config.enableRF) {
+			LazyOptional<IEnergyStorage> energyStorage = tile.getCapability(CapabilityEnergy.ENERGY, side);
+			if (energyStorage.isPresent()) {
+				return energyStorage.orElse(null).receiveEnergy(extractable, simulate);
 			}
 		}
 
@@ -109,9 +110,9 @@ public class EnergyHelper {
 			return true;
 		}
 
-		if (tile.hasCapability(CapabilityEnergy.ENERGY, side)) {
-			IEnergyStorage energyStorage = tile.getCapability(CapabilityEnergy.ENERGY, side);
-			return energyStorage != null && energyStorage.canReceive();
+			LazyOptional<IEnergyStorage> energyStorage = tile.getCapability(CapabilityEnergy.ENERGY, side);
+		if(energyStorage.isPresent()) {
+			return energyStorage.orElse(null).canReceive();
 		}
 
 		return TeslaHelper.isEnergyReceiver(tile, side) ||

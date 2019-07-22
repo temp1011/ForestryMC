@@ -11,6 +11,7 @@
 package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.ContainerType;
 
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.gui.ContainerItemInventory;
@@ -19,8 +20,8 @@ import forestry.core.gui.slots.SlotOutput;
 
 public class ContainerHabitatLocator extends ContainerItemInventory<ItemInventoryHabitatLocator> {
 
-	public ContainerHabitatLocator(PlayerEntity player, ItemInventoryHabitatLocator inventory) {
-		super(inventory, player.inventory, 8, 102);
+	public ContainerHabitatLocator(PlayerEntity player, ItemInventoryHabitatLocator inventory, int id) {
+		super(inventory, player.inventory, 8, 102, ContainerType.BLAST_FURNACE, id);	//TODO container types
 
 		// Energy
 		this.addSlot(new SlotFiltered(inventory, 2, 152, 8));

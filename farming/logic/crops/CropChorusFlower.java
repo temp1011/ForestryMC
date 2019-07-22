@@ -35,7 +35,7 @@ public class CropChorusFlower extends Crop {
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, BLOCK_STATE);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
-		world.setBlockToAir(pos);
+		world.removeBlock(pos, false);
 
 		return harvested;
 	}

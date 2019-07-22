@@ -20,10 +20,10 @@ import forestry.energy.tiles.TileEngineBiogas;
 
 public class ContainerEngineBiogas extends ContainerLiquidTanks<TileEngineBiogas> {
 
-	public ContainerEngineBiogas(PlayerInventory player, TileEngineBiogas engine) {
-		super(engine, player, 8, 84);
+	public ContainerEngineBiogas(PlayerInventory player, TileEngineBiogas engine, int id) {
+		super(engine, player, 8, 84, id);
 
-		this.addSlotToContainer(new SlotLiquidIn(engine, InventoryEngineBiogas.SLOT_CAN, 143, 40));
+		this.addSlot(new SlotLiquidIn(engine, InventoryEngineBiogas.SLOT_CAN, 143, 40));
 	}
 
 	@Override

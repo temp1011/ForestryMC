@@ -24,6 +24,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.StringTextComponent;
 
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.AlleleManager;
@@ -56,8 +57,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 	private final ItemInventoryAlyzer itemInventory;
 
-	public GuiAlyzer(PlayerEntity player, ItemInventoryAlyzer itemInventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/portablealyzer.png", new ContainerAlyzer(itemInventory, player));
+	public GuiAlyzer(PlayerEntity player, ItemInventoryAlyzer itemInventory, int id) {	//TODO windowid
+		super(Constants.TEXTURE_PATH_GUI + "/portablealyzer.png", new ContainerAlyzer(itemInventory, player, id), player.inventory, new StringTextComponent("GUI_ALYZER_TEST_TITLE"));
 
 		this.itemInventory = itemInventory;
 		this.xSize = 246;
@@ -208,7 +209,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		textLayout.drawCenteredLine(title, 8, 208, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
 
-		fontRenderer.drawSplitString(Translator.translateToLocal("for.gui.portablealyzer.help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawSplitString(Translator.translateToLocal("for.gui.portablealyzer.help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
 		textLayout.newLine();
 		textLayout.newLine();
@@ -274,7 +275,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		textLayout.drawLine(Translator.translateToLocal("for.gui.alyzer.authority") + ": " + individual.getGenome().getPrimary().getAuthority(), 12);
 		if (AlleleManager.alleleRegistry.isBlacklisted(individual.getIdent())) {
 			String extinct = ">> " + Translator.translateToLocal("for.gui.alyzer.extinct").toUpperCase(Locale.ENGLISH) + " <<";
-			fontRenderer.drawStringWithShadow(extinct, guiLeft + 200 - fontRenderer.getStringWidth(extinct),
+			getFontRenderer().drawStringWithShadow(extinct, guiLeft + 200 - getFontRenderer().getStringWidth(extinct),
 				guiTop + textLayout.getLineY(), ColourProperties.INSTANCE.get("gui.beealyzer.dominant"));
 		}
 
@@ -287,7 +288,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 			textLayout.drawSplitLine(tokens[0], 12, 200, 0x666666);
 			if (tokens.length > 1) {
 				String signature = "- " + tokens[1];
-				fontRenderer.drawStringWithShadow(signature, guiLeft + 210 - fontRenderer.getStringWidth(signature), guiTop + 145 - 14, 0x99cc32);
+				getFontRenderer().drawStringWithShadow(signature, guiLeft + 210 - getFontRenderer().getStringWidth(signature), guiTop + 145 - 14, 0x99cc32);
 			}
 		}
 
@@ -359,7 +360,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 	private void drawQuestionMark(int x, int y) {
 		bindTexture(textureFile);
-		drawTexturedModalRect(x, y, 78, 240, 16, 16);
+		blit(x, y, 78, 240, 16, 16);
 	}
 
 	private void drawProbabilityArrow(IMutation combination, int x, int y, IBreedingTracker breedingTracker) {
@@ -390,12 +391,12 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 		// Probability arrow
 		bindTexture(textureFile);
-		drawTexturedModalRect(x, y, column, line, 15, 9);
+		blit(x, y, column, line, 15, 9);
 
 		boolean researched = breedingTracker.isResearched(combination);
 		if (researched) {
-			fontRenderer.drawString("+", x + 9, y + 1, 0);
-			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+			getFontRenderer().drawString("+", x + 9, y + 1, 0);
+			GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
 
@@ -405,7 +406,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		String text = "(" + toleranceAllele.getAlleleName() + ")";
 
 		// Enable correct lighting.
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		switch (tolerance) {
 			case BOTH_1:
@@ -441,34 +442,34 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 	private void drawDownSymbol(int x, int y) {
 		bindTexture(textureFile);
-		drawTexturedModalRect(guiLeft + x, guiTop + y, 0, 247, 15, 9);
+		blit(guiLeft + x, guiTop + y, 0, 247, 15, 9);
 	}
 
 	private void drawUpSymbol(int x, int y) {
 		bindTexture(textureFile);
-		drawTexturedModalRect(guiLeft + x, guiTop + y, 15, 247, 15, 9);
+		blit(guiLeft + x, guiTop + y, 15, 247, 15, 9);
 	}
 
 	private void drawBothSymbol(int x, int y) {
 		bindTexture(textureFile);
-		drawTexturedModalRect(guiLeft + x, guiTop + y, 30, 247, 15, 9);
+		blit(guiLeft + x, guiTop + y, 30, 247, 15, 9);
 	}
 
 	private void drawNoneSymbol(int x, int y) {
 		bindTexture(textureFile);
-		drawTexturedModalRect(guiLeft + x, guiTop + y, 45, 247, 15, 9);
+		blit(guiLeft + x, guiTop + y, 45, 247, 15, 9);
 	}
 
 	public void drawFertilityInfo(int fertility, int x, int textColor, int texOffset) {
 		// Enable correct lighting.
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		String fertilityString = fertility + " x";
 
-		int stringWidth = fontRenderer.getStringWidth(fertilityString);
+		int stringWidth = getFontRenderer().getStringWidth(fertilityString);
 
 		bindTexture(textureFile);
-		drawTexturedModalRect(guiLeft + x + stringWidth + 2, guiTop + textLayout.getLineY() - 1, 60, 240 + texOffset, 12, 8);
+		blit(guiLeft + x + stringWidth + 2, guiTop + textLayout.getLineY() - 1, 60, 240 + texOffset, 12, 8);
 
 		textLayout.drawLine(fertilityString, x, textColor);
 	}

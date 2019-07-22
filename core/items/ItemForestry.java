@@ -36,6 +36,10 @@ public class ItemForestry extends Item implements IItemModelRegister {
 		super(properties.group(CreativeTabForestry.tabForestry));
 	}
 
+	public ItemForestry(ItemGroup group) {
+		this(new Item.Properties(), group);
+	}
+
 	//TODO may be worth removing this
 	public ItemForestry() {
 		this(new Item.Properties());

@@ -18,8 +18,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
@@ -54,20 +57,19 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	}
 
 	@Override
-	public void setDead() {
+	public void remove() {
 		if (dropContentsWhenDead && !world.isRemote) {
 			InventoryUtil.dropInventory(getInternalInventory(), world, posX, posY, posZ);
 		}
-		super.setDead();
+		super.remove();
 	}
 
+	//TODO tbh super() method looks pretty good too
 	@Override
 	protected void applyDrag() {
 		int redstoneLevel = 15 - Container.calcRedstoneFromInventory(this);
 		double drag = 0.98F + redstoneLevel * 0.001F;
-		this.motionX *= drag;
-		this.motionY *= 0.0D;
-		this.motionZ *= drag;
+		this.setMotion(this.getMotion().mul(drag, 0.0D, drag));
 	}
 
 	@Override
@@ -85,7 +87,7 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 
 	@Override
 	public boolean isUsableByPlayer(PlayerEntity player) {
-		return !isDead && player.getDistance(this) <= 64.0D;
+		return isAlive() && player.getDistance(this) <= 64.0D;
 	}
 
 	@Override
@@ -130,7 +132,8 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return getInternalInventory().getDisplayName();
+		return new StringTextComponent("MINECART_TITLE_GOES_HERE");
+		//TODO inventory names return getInternalInventory().getDisplayName();
 	}
 
 	@Override
@@ -175,20 +178,21 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 
 	protected abstract IInventoryAdapter getInternalInventory();
 
-	@Override
-	public int getField(int id) {
-		return getInternalInventory().getField(id);
-	}
-
-	@Override
-	public void setField(int id, int value) {
-		getInternalInventory().setField(id, value);
-	}
-
-	@Override
-	public int getFieldCount() {
-		return getInternalInventory().getFieldCount();
-	}
+	//TODO inventory field things
+//	@Override
+//	public int getField(int id) {
+//		return getInternalInventory().getField(id);
+//	}
+//
+//	@Override
+//	public void setField(int id, int value) {
+//		getInternalInventory().setField(id, value);
+//	}
+//
+//	@Override
+//	public int getFieldCount() {
+//		return getInternalInventory().getFieldCount();
+//	}
 
 	@Override
 	public void clear() {

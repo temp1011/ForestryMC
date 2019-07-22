@@ -22,14 +22,15 @@ import java.util.Map.Entry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.DimensionSavedDataManager;
 
 import com.mojang.authlib.GameProfile;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
@@ -357,13 +358,10 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	@Override
 	public IApiaristTracker getBreedingTracker(World world, @Nullable GameProfile player) {
 		String filename = "ApiaristTracker." + (player == null ? "common" : player.getId());
-		ApiaristTracker tracker = (ApiaristTracker) world.loadData(ApiaristTracker.class, filename);
+		//TODO ServerWorld needed
+		DimensionSavedDataManager manager = ((ServerWorld) world).getSavedData();
+		ApiaristTracker tracker = manager.getOrCreate(() -> new ApiaristTracker(filename), filename);
 
-		// Create a tracker if there is none yet.
-		if (tracker == null) {
-			tracker = new ApiaristTracker(filename);
-			world.setData(filename, tracker);
-		}
 
 		tracker.setUsername(player);
 		tracker.setWorld(world);

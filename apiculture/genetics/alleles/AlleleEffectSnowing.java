@@ -65,8 +65,8 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 				BlockState state = world.getBlockState(posBlock);
 				Block block = state.getBlock();
 
-				if (block == Blocks.SNOW_LAYER) {
-					Integer layers = state.getValue(SnowBlock.LAYERS);
+				if (block == Blocks.SNOW) {
+					Integer layers = state.get(SnowBlock.LAYERS);
 					if (layers < 7) {
 						BlockState moreSnow = state.with(SnowBlock.LAYERS, layers + 1);
 						world.setBlockState(posBlock, moreSnow);
@@ -74,7 +74,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 						world.setBlockState(posBlock, Blocks.SNOW.getDefaultState());
 					}
 				} else if (block.isReplaceable(world, posBlock)) {
-					world.setBlockState(posBlock, Blocks.SNOW_LAYER.getDefaultState());
+					world.setBlockState(posBlock, Blocks.SNOW.getDefaultState());
 				}
 			}
 		}

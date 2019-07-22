@@ -73,23 +73,24 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		// Re-render this block on the client
 		if (world.isRemote) {
-			this.world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			this.world.markForRerender(getPos());
 		}
-		world.notifyNeighborsOfStateChange(getPos(), getBlockType(), false);
+		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO check third bool, false);
 	}
 
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
-		return oldState.getBlock() != newState.getBlock();
-	}
+	//TODO refreshing
+//	@Override
+//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
+//		return oldState.getBlock() != newState.getBlock();
+//	}
 
 	@Override
 	public void onMachineBroken() {
 		// Re-render this block on the client
 		if (world.isRemote) {
-			this.world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			this.world.markForRerender(getPos());
 		}
-		world.notifyNeighborsOfStateChange(getPos(), getBlockType(), false);
+		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO 3rd bool, false);
 		markDirty();
 	}
 

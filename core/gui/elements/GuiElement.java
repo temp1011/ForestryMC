@@ -7,10 +7,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 
 
@@ -19,6 +23,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IGuiElement;
+import forestry.api.gui.ITextElement;
 import forestry.api.gui.ITooltipSupplier;
 import forestry.api.gui.IWindowElement;
 import forestry.api.gui.events.ElementEvent;
@@ -330,21 +335,23 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 	}
 
 	@Override
-	public List<String> getTooltip(int mouseX, int mouseY) {
-		List<String> lines = new ArrayList<>();
+	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
+		List<ITextComponent> lines = new ArrayList<>();
 		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(lines, this, mouseX, mouseY));
 		return lines;
 	}
 
 	@Override
 	public IGuiElement addTooltip(String line) {
-		addTooltip((tooltipLines, element, mouseX, mouseY) -> tooltipLines.add(line));
+		//TODO textcomponent
+		addTooltip((tooltipLines, element, mouseX, mouseY) -> tooltipLines.add(new StringTextComponent(line)));
 		return this;
 	}
 
 	@Override
 	public IGuiElement addTooltip(Collection<String> lines) {
-		addTooltip((tooltipLines, element, mouseX, mouseY) -> tooltipLines.addAll(lines));
+		//TODO textcomponent
+		addTooltip((tooltipLines, element, mouseX, mouseY) -> tooltipLines.addAll(lines.stream().map(StringTextComponent::new).collect(Collectors.toList())));
 		return this;
 	}
 
@@ -365,10 +372,10 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 	}
 
 	@Override
-	public List<String> getTooltip() {
+	public List<ITextComponent> getTooltip() {
 		int mouseX = getWindow().getRelativeMouseX(this);
 		int mouseY = getWindow().getRelativeMouseY(this);
-		List<String> lines = new ArrayList<>();
+		List<ITextComponent> lines = new ArrayList<>();
 		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(lines, this, mouseX, mouseY));
 		return lines;
 	}

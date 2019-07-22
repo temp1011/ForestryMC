@@ -13,6 +13,7 @@ package forestry.apiculture.tiles;
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -55,6 +56,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	private int breedingProgressPercent = 0;
 
 	protected TileBeeHousingBase(String hintKey) {
+		super(TileEntityType.CHEST);	//TODO tileentitytypes
 		this.hintKey = hintKey;
 		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 
@@ -73,18 +75,18 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	/* LOADING & SAVING */
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		beeLogic.write(CompoundNBT);
-		ownerHandler.write(CompoundNBT);
-		return CompoundNBT;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		beeLogic.write(compoundNBT);
+		ownerHandler.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		beeLogic.read(CompoundNBT);
-		ownerHandler.read(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		beeLogic.read(compoundNBT);
+		ownerHandler.read(compoundNBT);
 	}
 
 	@Override
@@ -129,17 +131,10 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		return climateListener.getExactHumidity();
 	}
 
-	/* ClimateListener */
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == ClimateCapabilities.CLIMATE_LISTENER || super.hasCapability(capability, facing);
-	}
-
-	@Nullable
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == ClimateCapabilities.CLIMATE_LISTENER) {
-			return ClimateCapabilities.CLIMATE_LISTENER.cast(climateListener);
+			return LazyOptional.of(() -> climateListener).cast();
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -202,9 +197,10 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		return world.getBiome(getPos());
 	}
 
+	//TODO check this call
 	@Override
 	public int getBlockLightValue() {
-		return world.getLightFromNeighbors(getPos().up());
+		return world.getLight(getPos().up());
 	}
 
 	@Override

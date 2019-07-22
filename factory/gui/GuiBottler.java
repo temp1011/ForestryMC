@@ -36,7 +36,7 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
 
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
-		drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+		blit(x, y, 0, 0, xSize, ySize);
 
 		RenderHelper.enableGUIStandardItemLighting();
 		GlStateManager.disableLighting();
@@ -60,9 +60,9 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
 		int progressArrow = bottler.getProgressScaled(22);
 		if (progressArrow > 0) {
 			if (bottler.isFillRecipe) {
-				drawTexturedModalRect(guiLeft + 108, guiTop + 35, 177, 74, progressArrow, 16);
+				blit(guiLeft + 108, guiTop + 35, 177, 74, progressArrow, 16);
 			} else {
-				drawTexturedModalRect(guiLeft + 46, guiTop + 35, 177, 74, progressArrow, 16);
+				blit(guiLeft + 46, guiTop + 35, 177, 74, progressArrow, 16);
 			}
 		}
 	}

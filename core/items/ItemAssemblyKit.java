@@ -12,6 +12,7 @@ package forestry.core.items;
 
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -22,7 +23,8 @@ public class ItemAssemblyKit extends ItemForestry {
 	private final ItemStack assembled;
 
 	public ItemAssemblyKit(ItemStack assembled) {
-		maxStackSize = 24;
+		super((new Item.Properties())
+		.maxStackSize(24));
 		this.assembled = assembled;
 	}
 
@@ -32,7 +34,7 @@ public class ItemAssemblyKit extends ItemForestry {
 		if (!worldIn.isRemote) {
 			heldItem.shrink(1);
 			ItemEntity entity = new ItemEntity(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, assembled.copy());
-			worldIn.spawnEntity(entity);
+			worldIn.addEntity(entity);
 		}
 		return ActionResult.newResult(ActionResultType.SUCCESS, heldItem);
 	}

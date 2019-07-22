@@ -14,7 +14,10 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 
@@ -36,17 +39,18 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 	private final HiveFrameBeeModifier beeModifier;
 
 	public ItemHiveFrame(int maxDamage, float geneticDecay) {
-		setMaxStackSize(1);
-		setMaxDamage(maxDamage);
-		setCreativeTab(ItemGroups.tabApiculture);
+		super((new Item.Properties())
+		.maxStackSize(1)
+		.maxDamage(maxDamage)
+		.group(ItemGroups.tabApiculture));
 
 		this.beeModifier = new HiveFrameBeeModifier(geneticDecay);
 	}
 
 	@Override
 	public ItemStack frameUsed(IBeeHousing housing, ItemStack frame, IBee queen, int wear) {
-		frame.setItemDamage(frame.getItemDamage() + wear);
-		if (frame.getItemDamage() >= frame.getMaxDamage()) {
+		frame.setDamage(frame.getDamage() + wear);
+		if (frame.getDamage() >= frame.getMaxDamage()) {
 			return ItemStack.EMPTY;
 		} else {
 			return frame;
@@ -60,11 +64,11 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 		beeModifier.addInformation(stack, world, tooltip, advanced);
-		if (!stack.isItemDamaged()) {
-			tooltip.add(Translator.translateToLocalFormatted("item.for.durability", stack.getMaxDamage()));
+		if (!stack.isDamaged()) {
+			tooltip.add(new TranslationTextComponent("item.for.durability", stack.getMaxDamage()));
 		}
 	}
 
@@ -87,9 +91,9 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 		}
 
 		@OnlyIn(Dist.CLIENT)
-		public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-			tooltip.add(Translator.translateToLocalFormatted("item.for.bee.modifier.production", production));
-			tooltip.add(Translator.translateToLocalFormatted("item.for.bee.modifier.genetic.decay", geneticDecay));
+		public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+			tooltip.add(new TranslationTextComponent("item.for.bee.modifier.production", production));
+			tooltip.add(new TranslationTextComponent("item.for.bee.modifier.genetic.decay", geneticDecay));
 		}
 	}
 }

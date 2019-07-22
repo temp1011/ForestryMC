@@ -139,7 +139,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		for (ItemEntity entity : entityItems) {
 			ItemStack contained = entity.getItem();
 			stacks.add(contained.copy());
-			entity.setDead();
+			entity.remove();
 		}
 		return stacks;
 	}
@@ -159,7 +159,7 @@ public abstract class FarmLogic implements IFarmLogic {
 
 		@Override
 		public boolean apply(@Nullable ItemEntity entity) {
-			if (entity == null || entity.isDead) {
+			if (entity == null || !entity.isAlive()) {
 				return false;
 			}
 

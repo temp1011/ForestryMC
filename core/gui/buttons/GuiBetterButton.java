@@ -102,10 +102,10 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 		boolean mouseOver = isMouseOverButton(mouseX, mouseY);
 		int hoverState = getHoverState(mouseOver);
 		if (useTexWidth) {
-			drawTexturedModalRect(x, y, xOffset, yOffset + hoverState * h, w, h);
+			blit(x, y, xOffset, yOffset + hoverState * h, w, h);
 		} else {
-			drawTexturedModalRect(x, y, xOffset, yOffset + hoverState * h, width / 2, h);
-			drawTexturedModalRect(x + width / 2, y, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
+			blit(x, y, xOffset, yOffset + hoverState * h, width / 2, h);
+			blit(x + width / 2, y, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
 		}
 		mouseDragged(minecraft, mouseX, mouseY);
 		drawCenteredString(fontrenderer, displayString, x + getWidth() / 2, y + (h - 8) / 2, getTextColor(mouseOver));

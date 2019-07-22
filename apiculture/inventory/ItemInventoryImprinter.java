@@ -130,10 +130,11 @@ public class ItemInventoryImprinter extends ItemInventory {
 		setInventorySlotContents(specimenSlot, ItemStack.EMPTY);
 	}
 
-	@Override
-	public String getName() {
-		return "Imprinter";
-	}
+	//TODO inventory name
+//	@Override
+//	public String getName() {
+//		return "Imprinter";
+//	}
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {

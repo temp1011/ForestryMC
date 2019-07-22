@@ -218,7 +218,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container> {
 		}
 
 		bindTexture(textureFile);
-		drawTexturedModalRect(guiLeft + x, guiTop + textLayout.getLineY(), column, line, 16, 16);
+		blit(guiLeft + x, guiTop + textLayout.getLineY(), column, line, 16, 16);
 
 	}
 
@@ -249,7 +249,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container> {
 		}
 
 		bindTexture(textureFile);
-		drawTexturedModalRect(guiLeft + x, guiTop + textLayout.getLineY(), column, line, 16, 16);
+		blit(guiLeft + x, guiTop + textLayout.getLineY(), column, line, 16, 16);
 	}
 
 	@Override

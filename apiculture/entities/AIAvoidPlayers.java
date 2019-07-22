@@ -12,10 +12,13 @@ package forestry.apiculture.entities;
 
 import javax.annotation.Nullable;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.play.server.SPlayerPositionLookPacket;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.Vec3d;
@@ -41,13 +44,13 @@ public class AIAvoidPlayers extends Goal {
 		this.farSpeed = farSpeed;
 		this.nearSpeed = nearSpeed;
 		this.pathNavigator = mob.getNavigator();
-		this.setMutexBits(1);
+		this.setMutexFlags(EnumSet.of(Flag.MOVE));
 	}
 
 	@Override
 	public boolean shouldExecute() {
 
-		player = mob.world.getClosestPlayerToEntity(mob, minDistance);
+		player = mob.world.getClosestPlayer(mob, minDistance);
 
 		if (player == null) {
 			return false;
@@ -88,7 +91,7 @@ public class AIAvoidPlayers extends Goal {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (player != null && mob.getDistance(player) < 49.0D) {
 			mob.getNavigator().setSpeed(nearSpeed);
 		} else {

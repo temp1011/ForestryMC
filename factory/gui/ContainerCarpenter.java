@@ -28,30 +28,30 @@ import forestry.factory.tiles.TileCarpenter;
 
 public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> implements IContainerCrafting {
 
-	public ContainerCarpenter(PlayerInventory inventoryplayer, TileCarpenter tile) {
-		super(tile, inventoryplayer, 8, 136);
+	public ContainerCarpenter(PlayerInventory inventoryplayer, TileCarpenter tile, int id) {	//TODO windowid
+		super(tile, inventoryplayer, 8, 136, id);
 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 9; k++) {
-				addSlotToContainer(new Slot(tile, InventoryCarpenter.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
+				addSlot(new Slot(tile, InventoryCarpenter.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
 			}
 		}
 
 		// Liquid Input
-		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryCarpenter.SLOT_CAN_INPUT, 120, 20));
+		this.addSlot(new SlotLiquidIn(tile, InventoryCarpenter.SLOT_CAN_INPUT, 120, 20));
 		// Boxes
-		this.addSlotToContainer(new SlotFiltered(tile, InventoryCarpenter.SLOT_BOX, 83, 20));
+		this.addSlot(new SlotFiltered(tile, InventoryCarpenter.SLOT_BOX, 83, 20));
 		// Product
-		this.addSlotToContainer(new SlotOutput(tile, InventoryCarpenter.SLOT_PRODUCT, 120, 56));
+		this.addSlot(new SlotOutput(tile, InventoryCarpenter.SLOT_PRODUCT, 120, 56));
 
 		// Craft Preview display
-		addSlotToContainer(new SlotLocked(tile.getCraftPreviewInventory(), 0, 80, 51));
+		addSlot(new SlotLocked(tile.getCraftPreviewInventory(), 0, 80, 51));
 
 		// Crafting matrix
 		for (int l = 0; l < 3; l++) {
 			for (int k1 = 0; k1 < 3; k1++) {
-				addSlotToContainer(new SlotCraftMatrix(this, tile.getCraftingInventory(), k1 + l * 3, 10 + k1 * 18, 20 + l * 18));
+				addSlot(new SlotCraftMatrix(this, tile.getCraftingInventory(), k1 + l * 3, 10 + k1 * 18, 20 + l * 18));
 			}
 		}
 	}

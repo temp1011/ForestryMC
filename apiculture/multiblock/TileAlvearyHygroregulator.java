@@ -106,31 +106,31 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		tankManager.read(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		tankManager.read(compoundNBT);
 
-		transferTime = CompoundNBT.getInteger("TransferTime");
+		transferTime = compoundNBT.getInt("TransferTime");
 
-		if (CompoundNBT.hasKey("CurrentLiquid")) {
-			FluidStack liquid = FluidStack.loadFluidStackFromNBT(CompoundNBT.getCompoundNBT("CurrentLiquid"));
+		if (compoundNBT.contains("CurrentLiquid")) {
+			FluidStack liquid = FluidStack.loadFluidStackFromNBT(compoundNBT.getCompound("CurrentLiquid"));
 			currentRecipe = HygroregulatorManager.findMatchingRecipe(liquid);
 		}
 	}
 
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		tankManager.write(CompoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		tankManager.write(compoundNBT);
 
-		CompoundNBT.setInteger("TransferTime", transferTime);
+		compoundNBT.putInt("TransferTime", transferTime);
 		if (currentRecipe != null) {
 			CompoundNBT subcompound = new CompoundNBT();
 			currentRecipe.getResource().writeToNBT(subcompound);
-			CompoundNBT.setTag("CurrentLiquid", subcompound);
+			compoundNBT.put("CurrentLiquid", subcompound);
 		}
-		return CompoundNBT;
+		return compoundNBT;
 	}
 
 	/* ILIQUIDTANKCONTAINER */
@@ -141,21 +141,15 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ||
-			super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if (super.hasCapability(capability, facing)) {
-			return super.getCapability(capability, facing);
+		LazyOptional<T> superCap = super.getCapability(capability, facing);
+		if(superCap.isPresent()) {
+			return superCap;
 		}
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
-		return null;
+		return LazyOptional.empty();
 	}
 
 	@Override

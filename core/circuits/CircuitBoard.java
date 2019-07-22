@@ -16,7 +16,11 @@ import java.util.List;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -82,10 +86,10 @@ public class CircuitBoard implements ICircuitBoard {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addTooltip(List<String> list) {
+	public void addTooltip(List<ITextComponent> list) {
 		if (layout != null) {
-			list.add(TextFormatting.GOLD + layout.getUsage() + ":");
-			List<String> extendedTooltip = new ArrayList<>();
+			list.add(new StringTextComponent(layout.getUsage() + ":").setStyle((new Style()).setColor(TextFormatting.GOLD)));
+			List<ITextComponent> extendedTooltip = new ArrayList<>();
 			for (ICircuit circuit : circuits) {
 				if (circuit != null) {
 					circuit.addTooltip(extendedTooltip);
@@ -95,13 +99,14 @@ public class CircuitBoard implements ICircuitBoard {
 			if (Screen.hasShiftDown() || extendedTooltip.size() <= 4) {
 				list.addAll(extendedTooltip);
 			} else {
-				list.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
+				list.add(new StringTextComponent("<").setStyle((new Style()).setUnderlined(true))
+						.appendSibling(new TranslationTextComponent("for.gui.tooltip.tmi"))
+						.appendSibling(new StringTextComponent(">")));
 			}
 		} else {
 			int socketCount = type.getSockets();
 			String localizationKey = "item.for.circuitboard.tooltip." + (socketCount == 1 ? "singular" : "plural");
-			String tooltip = Translator.translateToLocalFormatted(localizationKey, type.getSockets());
-			list.add(tooltip);
+			list.add(new TranslationTextComponent(localizationKey, type.getSockets()));
 		}
 	}
 

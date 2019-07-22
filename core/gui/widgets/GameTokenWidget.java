@@ -70,10 +70,10 @@ public class GameTokenWidget extends Widget {
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
 
-		//TODO not sure what this maps to
-		GlStateManager.enableDepth();
+		//TODO not sure if this works...
+		GlStateManager.enableDepthTest();
 		GlStateManager.color3f(colorR, colorG, colorB);
-		GuiUtils.drawTexturedModalRect(startX + xPos, startY + yPos, 228, 0, 22, 22, 1.0f);	//TODO zlevel
+		manager.gui.blit(startX + xPos, startY + yPos, 228, 0, 22, 22);
 		GlStateManager.color3f(1.0f, 1.0f, 1.0f);
 
 		ItemStack tokenStack = HIDDEN_TOKEN;
@@ -83,13 +83,14 @@ public class GameTokenWidget extends Widget {
 
 		GuiUtil.drawItemStack(manager.gui, tokenStack, startX + xPos + 3, startY + yPos + 3);
 
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
 		for (String ident : getToken().getOverlayIcons()) {
 			TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
-			GuiUtils.drawTexturedModalRect(startX + xPos + 3, startY + yPos + 3, icon, 16, 16, 1.0f);
+			//TODO no idea if this is right at all
+			blit(startX + xPos + 3, startY + yPos + 3,(int) (startX + xPos + 3 + icon.getMaxU()),(int) (startY + yPos + 3 + icon.getMaxV()), 16, 16, 1.0f);
 		}
-		GlStateManager.enableDepth();
+		GlStateManager.enableDepthTest();
 	}
 
 	@Override

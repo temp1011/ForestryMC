@@ -16,6 +16,7 @@ import java.io.IOException;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -62,6 +63,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	private final String hintKey;
 
 	protected TileEngine(String hintKey, int maxHeat, int maxEnergy) {
+		super(TileEntityType.BLAST_FURNACE);	//TODO tileentitytypes
 		this.hintKey = hintKey;
 		this.maxHeat = maxHeat;
 		energyManager = new EnergyManager(2000, maxEnergy);
@@ -122,7 +124,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 		// Determine targeted tile
 		BlockState blockState = world.getBlockState(getPos());
-		Direction facing = blockState.getValue(BlockBase.FACING);
+		Direction facing = blockState.get(BlockBase.FACING);
 		TileEntity tile = world.getTileEntity(getPos().offset(facing));
 
 		float newPistonSpeed = getPistonSpeed();
@@ -242,11 +244,11 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(CompoundNBT nbt) {
-		super.readFromNBT(nbt);
+	public void read(CompoundNBT nbt) {
+		super.read(nbt);
 		energyManager.read(nbt);
 
-		heat = nbt.getInteger("EngineHeat");
+		heat = nbt.getInt("EngineHeat");
 
 		progress = nbt.getFloat("EngineProgress");
 		forceCooldown = nbt.getBoolean("ForceCooldown");
@@ -254,13 +256,13 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT nbt) {
-		nbt = super.writeToNBT(nbt);
+	public CompoundNBT write(CompoundNBT nbt) {
+		nbt = super.write(nbt);
 		energyManager.write(nbt);
 
-		nbt.setInteger("EngineHeat", heat);
-		nbt.setFloat("EngineProgress", progress);
-		nbt.setBoolean("ForceCooldown", forceCooldown);
+		nbt.putInt("EngineHeat", heat);
+		nbt.putFloat("EngineProgress", progress);
+		nbt.putBoolean("ForceCooldown", forceCooldown);
 		return nbt;
 	}
 
@@ -305,16 +307,10 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return (facing == getFacing() && energyManager.hasCapability(capability)) || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (facing == getFacing()) {
-			T energyCapability = energyManager.getCapability(capability);
-			if (energyCapability != null) {
+			LazyOptional<T> energyCapability = energyManager.getCapability(capability);
+			if(energyCapability.isPresent()) {
 				return energyCapability;
 			}
 		}

@@ -215,13 +215,11 @@ public abstract class Ledger {
 		int height = getHeight();
 		int width = getWidth();
 
-		//TODO zlevel
+		manager.gui.blit(x, y + 4, 0, 256 - height + 4, 4, height - 4); // left edge
+		manager.gui.blit(x + 4, y, 256 - width + 4, 0, width - 4, 4); // top edge
+		manager.gui.blit(x, y, 0, 0, 4, 4); // top left corner
 
-		GuiUtils.drawTexturedModalRect(x, y + 4, 0, 256 - height + 4, 4, height - 4, 1.0f); // left edge
-		GuiUtils.drawTexturedModalRect(x + 4, y, 256 - width + 4, 0, width - 4, 4, 1.0f); // top edge
-		GuiUtils.drawTexturedModalRect(x, y, 0, 0, 4, 4, 1.0f); // top left corner
-
-		GuiUtils.drawTexturedModalRect(x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4, 1.0f); // body + bottom + right
+		manager.gui.blit(x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body + bottom + right
 
 		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 	}
@@ -234,7 +232,7 @@ public abstract class Ledger {
 		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 		Minecraft.getInstance().getTextureManager().bindTexture(textureMap);
 		//TODO - zlevel and general calc is probably not right
-		GuiUtils.drawTexturedModalRect(x, y, (int) sprite.getMaxU() + x, (int) sprite.getMaxV() + y, 16, 16, 1.0f);
+		blit(x, y, (int) sprite.getMaxU() + x, (int) sprite.getMaxV() + y, 16, 16, 1.0f);
 	}
 
 	protected int drawHeader(String string, int x, int y) {

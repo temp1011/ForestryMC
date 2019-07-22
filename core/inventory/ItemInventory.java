@@ -60,12 +60,12 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		}
 		setUID(nbt); // Set a uid to identify the itemStack on SMP
 
-		CompoundNBT nbtSlots = nbt.getCompoundNBT(KEY_SLOTS);
+		CompoundNBT nbtSlots = nbt.getCompound(KEY_SLOTS);
 		for (int i = 0; i < inventoryStacks.size(); i++) {
 			String slotKey = getSlotNBTKey(i);
 			if (nbtSlots.contains(slotKey)) {
-				CompoundNBT itemNbt = nbtSlots.getCompoundNBT(slotKey);
-				ItemStack itemStack = new ItemStack(itemNbt);
+				CompoundNBT itemNbt = nbtSlots.getCompound(slotKey);
+				ItemStack itemStack = ItemStack.read(itemNbt);
 				inventoryStacks.set(i, itemStack);
 			} else {
 				inventoryStacks.set(i, ItemStack.EMPTY);
@@ -79,13 +79,13 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 			return 0;
 		}
 
-		CompoundNBT slotNbt = nbt.getCompoundNBT(KEY_SLOTS);
-		return slotNbt.getKeySet().size();
+		CompoundNBT slotNbt = nbt.getCompound(KEY_SLOTS);
+		return slotNbt.size();
 	}
 
 	private void setUID(CompoundNBT nbt) {
 		if (!nbt.contains(KEY_UID)) {
-			nbt.setInteger(KEY_UID, rand.nextInt());
+			nbt.putInt(KEY_UID, rand.nextInt());
 		}
 	}
 
@@ -134,8 +134,8 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 			return false;
 		}
 
-		int baseUID = baseTagCompound.getInteger(KEY_UID);
-		int comparisonUID = comparisonTagCompound.getInteger(KEY_UID);
+		int baseUID = baseTagCompound.getInt(KEY_UID);
+		int comparisonUID = comparisonTagCompound.getInt(KEY_UID);
 		return baseUID == comparisonUID;
 	}
 
@@ -154,12 +154,12 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 			if (!itemStack.isEmpty()) {
 				String slotKey = getSlotNBTKey(i);
 				CompoundNBT itemNbt = new CompoundNBT();
-				itemStack.writeToNBT(itemNbt);
-				slotsNbt.setTag(slotKey, itemNbt);
+				itemStack.write(itemNbt);
+				slotsNbt.put(slotKey, itemNbt);
 			}
 		}
 
-		nbt.setTag(KEY_SLOTS, slotsNbt);
+		nbt.put(KEY_SLOTS, slotsNbt);
 		onWriteNBT(nbt);
 	}
 
@@ -238,15 +238,16 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		return inventoryStacks.size();
 	}
 
-	@Override
-	public String getName() {
-		return "BeeBag";
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return new StringTextComponent(getName());
-	}
+	//TODO inventory names
+//	@Override
+//	public String getName() {
+//		return "BeeBag";
+//	}
+//
+//	@Override
+//	public ITextComponent getDisplayName() {
+//		return new StringTextComponent(getName());
+//	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -263,10 +264,11 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		return true;
 	}
 
-	@Override
-	public boolean hasCustomName() {
-		return true;
-	}
+	//TODO inventory names
+//	@Override
+//	public boolean hasCustomName() {
+//		return true;
+//	}
 
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
@@ -304,39 +306,39 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	/* Fields */
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
-
-	@Override
-	public void clear() {
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
+	//TODO inventory fields
+//	@Override
+//	public int getField(int id) {
+//		return 0;
+//	}
+//
+//	@Override
+//	public int getFieldCount() {
+//		return 0;
+//	}
+//
+//	@Override
+//	public void clear() {
+//	}
+//
+//	@Override
+//	public void setField(int id, int value) {
+//	}
 
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-//			return LazyOptional.of().cast(); TODO - caps
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemHandler);
+			return LazyOptional.of(() -> itemHandler).cast();
 		}
 		return LazyOptional.empty();
 	}
 
-//	@Override
-//	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-//		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
-//	}
-
 	public IItemHandler getItemHandler() {
 		return itemHandler;
+	}
+
+	@Override
+	public void clear() {
+		this.inventoryStacks.clear();
 	}
 }

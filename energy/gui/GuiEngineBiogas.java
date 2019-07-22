@@ -34,7 +34,7 @@ public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngine
 			temperature = 16;
 		}
 		if (temperature > 0) {
-			drawTexturedModalRect(guiLeft + 53, guiTop + 47 + 16 - temperature, 176, 60 + 16 - temperature, 4, temperature);
+			blit(guiLeft + 53, guiTop + 47 + 16 - temperature, 176, 60 + 16 - temperature, 4, temperature);
 		}
 	}
 }

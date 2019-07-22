@@ -81,8 +81,8 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 		this.hasTESR = blockType instanceof IBlockTypeTesr;
 		this.hasCustom = blockType instanceof IBlockTypeCustom;
-		this.lightOpacity = (!hasTESR && !hasCustom) ? 255 : 0;
-
+//		this.lightOpacity = (!hasTESR && !hasCustom) ? 255 : 0;
+		//TODO opacity
 		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
 
 		particleCallback = new MachineParticleCallback<>(this, blockType);
@@ -196,8 +196,9 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		return Direction.NORTH;
 	}
 
+	//TODO think this is the correct method
 	@Override
-	public void breakBlock(World world, BlockPos pos, BlockState state) {
+	public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 
 		if (world.isRemote) {
 			return;
@@ -214,7 +215,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		if (tile instanceof ISocketable) {
 			InventoryUtil.dropSockets((ISocketable) tile, tile.getWorld(), tile.getPos());
 		}
-		super.breakBlock(world, pos, state);
+		super.onBlockHarvested(world, pos, state, player);
 	}
 
 	@Override
@@ -248,39 +249,46 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerStateMapper() {
-		ModelLoader.setCustomStateMapper(this, new MachineStateMapper<>(blockType));
+
+		//ModelLoader.setCustomStateMapper(this, new MachineStateMapper<>(blockType));
+		//TODO statemapper
 	}
 
-	@Override
-	public boolean isFullCube(BlockState state) {
-		IMachineProperties definition = getDefinition();
-		return definition.isFullCube(state);
-	}
+	//TODO isFullCube, block methods
+//	@Override
+//	public boolean isFullCube(BlockState state) {
+//		IMachineProperties definition = getDefinition();
+//		return definition.isFullCube(state);
+//	}
 
 	@Override
-	public BlockState withRotation(BlockState state, Rotation rot) {
+	public BlockState rotate(BlockState state, Rotation rot) {
 		Direction facing = state.get(FACING);
 		return state.with(FACING, rot.rotate(facing));
 	}
 
-	@Override
-	public boolean getUseNeighborBrightness(BlockState state) {
-		return hasTESR;
-	}
+	//TODO block methods
+//	@Override
+//	public boolean getUseNeighborBrightness(BlockState state) {
+//		return hasTESR;
+//	}
 
 	/* Particles */
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public boolean addHitEffects(BlockState state, World world, RayTraceResult target, ParticleManager effectRenderer) {
 		if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
-			return ParticleHelper.addBlockHitEffects(world, target.getBlockPos(), target.sideHit, effectRenderer, particleCallback);
+			if (target.getType() == RayTraceResult.Type.BLOCK) {
+				BlockRayTraceResult result = (BlockRayTraceResult) target;
+				return ParticleHelper.addBlockHitEffects(world, result.getPos(), result.getFace(), effectRenderer, particleCallback);
+			}
 		}
 		return false;
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager effectRenderer) {
+	public boolean addDestroyEffects(BlockState state, World world, BlockPos pos, ParticleManager effectRenderer) {
 		if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
 			BlockState blockState = world.getBlockState(pos);
 			return ParticleHelper.addDestroyEffects(world, this, blockState, pos, effectRenderer, particleCallback);
@@ -293,9 +301,10 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	public void registerSprites(ITextureManager manager) {
 		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
 		if (machineProperties instanceof IMachinePropertiesTesr) {
-			AtlasTexture textureMapBlocks = Minecraft.getInstance().getTextureMapBlocks();
+			AtlasTexture textureMapBlocks = Minecraft.getInstance().getTextureMap();
 			String particleTextureLocation = ((IMachinePropertiesTesr) machineProperties).getParticleTextureLocation();
-			textureMapBlocks.registerSprite(new ResourceLocation(particleTextureLocation));
+//			textureMapBlocks.registerSprite(new ResourceLocation(particleTextureLocation));
+			//TODO textures
 		}
 	}
 }

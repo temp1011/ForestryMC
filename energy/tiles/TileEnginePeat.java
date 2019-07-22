@@ -272,8 +272,8 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	// / LOADING AND SAVING
 	@Override
-	public void readFromNBT(CompoundNBT compoundNBT) {
-		super.readFromNBT(compoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
 		if (compoundNBT.contains("EngineFuelItemStack")) {
 			CompoundNBT fuelItemNbt = compoundNBT.getCompound("EngineFuelItemStack");
@@ -289,8 +289,8 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compoundNBT) {
-		compoundNBT = super.writeToNBT(compoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
 		if (!fuel.isEmpty()) {
 			compoundNBT.put("EngineFuelItemStack", fuel.serializeNBT());
@@ -333,6 +333,6 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerEnginePeat(player.inventory, this);
+		return new ContainerEnginePeat(player.inventory, this, data);	//TODO windowid
 	}
 }

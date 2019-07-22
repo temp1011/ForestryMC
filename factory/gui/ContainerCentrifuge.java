@@ -23,19 +23,19 @@ import forestry.factory.tiles.TileCentrifuge;
 
 public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 
-	public ContainerCentrifuge(PlayerInventory player, TileCentrifuge tile) {
-		super(tile, player, 8, 84);
+	public ContainerCentrifuge(PlayerInventory player, TileCentrifuge tile, int id) {
+		super(tile, player, 8, 84, id);
 
 		// Resource
-		this.addSlotToContainer(new SlotFiltered(tile, 0, 16, 37));
+		this.addSlot(new SlotFiltered(tile, 0, 16, 37));
 
 		// Craft Preview display
-		addSlotToContainer(new SlotLocked(tile.getCraftPreviewInventory(), 0, 49, 37));
+		addSlot(new SlotLocked(tile.getCraftPreviewInventory(), 0, 49, 37));
 
 		// Product Inventory
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 3; k++) {
-				addSlotToContainer(new SlotOutput(tile, 1 + k + l * 3, 112 + k * 18, 19 + l * 18));
+				addSlot(new SlotOutput(tile, 1 + k + l * 3, 112 + k * 18, 19 + l * 18));
 			}
 		}
 	}

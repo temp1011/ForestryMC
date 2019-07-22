@@ -17,6 +17,7 @@ import net.minecraft.entity.item.minecart.MinecartEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import forestry.core.gui.IGuiHandlerEntity;
@@ -86,7 +87,7 @@ public abstract class MinecartEntityForestry extends MinecartEntity implements I
 
 	@Override
 	public ITextComponent getName() {
-		return Translator.translateToLocal(getUnlocalizedTitle());
+		return new TranslationTextComponent(getUnlocalizedTitle());
 	}
 
 	/* ITitled */

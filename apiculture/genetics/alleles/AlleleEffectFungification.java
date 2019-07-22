@@ -109,13 +109,13 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 			return false;
 		}
 		World world = cow.world;
-		cow.setDead();
+		cow.remove();
 		MooshroomEntity mooshroom = new MooshroomEntity(EntityType.MOOSHROOM, world);
 		mooshroom.setLocationAndAngles(cow.posX, cow.posY, cow.posZ, cow.rotationYaw, cow.rotationPitch);
 		mooshroom.setHealth(cow.getHealth());
 		mooshroom.renderYawOffset = cow.renderYawOffset;
 		world.addEntity(mooshroom);
-		world.addParticle(ParticleTypes.EXPLOSION, cow.posX, cow.posY + cow.height / 2.0F, cow.posZ, 0.0D, 0.0D, 0.0D);
+		world.addParticle(ParticleTypes.EXPLOSION, cow.posX, cow.posY + cow.getHeight() / 2.0F, cow.posZ, 0.0D, 0.0D, 0.0D);
 		return true;
 	}
 }

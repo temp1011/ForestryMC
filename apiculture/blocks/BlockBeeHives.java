@@ -54,55 +54,46 @@ public class BlockBeeHives extends ContainerBlock implements IItemModelRegister,
 	private static final EnumProperty<HiveType> HIVE_TYPES = EnumProperty.create("hive", HiveType.class);
 
 	public BlockBeeHives() {
-		super(Block.Properties.create(new MaterialBeehive(true))
-				.lightValue((int) (0.4f * 15))	//TODO - correct?
+		super(Properties.create(MaterialBeehive.BEEHIVE_WORLD)
+				.lightValue((int) (0.4f * 15))    //TODO - correct?
 				.hardnessAndResistance(2.5f));
-		setCreativeTab(ItemGroups.tabApiculture);
-		setHarvestLevel("scoop", 0);
+		//		setCreativeTab(ItemGroups.tabApiculture); TODO done in item
+		//		setHarvestLevel("scoop", 0); TODO harvest level, addToolType in item?
 		setDefaultState(this.getStateContainer().getBaseState().with(HIVE_TYPES, HiveType.FOREST));
 	}
-//
-//	@Override
-//	protected BlockStateContainer createBlockState() {
-//		return new BlockStateContainer(this, HIVE_TYPES);
-//	}
-
-//	@Override
-//	public int getMetaFromState(BlockState state) {
-//		return state.getValue(HIVE_TYPES).getMeta();
-//	}
-//
-//	@Override
-//	public BlockState getStateFromMeta(int meta) {
-//		return getDefaultState().with(HIVE_TYPES, HiveType.VALUES[meta]);
-//	}
+	//
+	//	@Override
+	//	protected BlockStateContainer createBlockState() {
+	//		return new BlockStateContainer(this, HIVE_TYPES);
+	//	}
 
 	public BlockState getStateForType(HiveType type) {
 		return getDefaultState().with(HIVE_TYPES, type);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
+	public TileEntity createNewTileEntity(IBlockReader world) {
 		return new TileHive();
 	}
 
 	@Override
-	public void onBlockClicked(World world, BlockPos pos, PlayerEntity player) {
-		super.onBlockClicked(world, pos, player);
+	public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+		super.onBlockClicked(state, world, pos, player);
 		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onAttack(world, pos, player));
 	}
 
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		boolean canHarvest = canHarvestBlock(world, pos, player);
+		boolean canHarvest = canHarvestBlock(state, world, pos, player);
 		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onBroken(world, pos, player, canHarvest));
 	}
 
-	@Override
+	//TODO loot table drops things
+	//	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
 		Random random = world instanceof World ? ((World) world).rand : RANDOM;
 
-		List<IHiveDrop> hiveDrops = getDropsForHive(getMetaFromState(state));
+		List<IHiveDrop> hiveDrops = getDropsForHive(0);//TODO flatten getMetaFromState(state));
 		Collections.shuffle(hiveDrops);
 
 		// Grab a princess
@@ -146,10 +137,10 @@ public class BlockBeeHives extends ContainerBlock implements IItemModelRegister,
 	}
 
 	// / CREATIVE INVENTORY
-//	@Override
-//	public int damageDropped(BlockState state) {
-//		return getMetaFromState(state);
-//	}
+	//	@Override
+	//	public int damageDropped(BlockState state) {
+	//		return getMetaFromState(state);
+	//	}
 
 	private static List<IHiveDrop> getDropsForHive(int meta) {
 		String hiveName = getHiveNameForMeta(meta);
@@ -175,8 +166,7 @@ public class BlockBeeHives extends ContainerBlock implements IItemModelRegister,
 	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
 		for (BlockState blockState : this.getStateContainer().getValidStates()) {
 			if (getHiveType(blockState) != HiveType.SWARM) {
-				int meta = getMetaFromState(blockState);
-				list.add(new ItemStack(this, 1, meta));
+				list.add(new ItemStack(this, 1));//TODO flatten , meta));
 			}
 		}
 	}
@@ -201,17 +191,17 @@ public class BlockBeeHives extends ContainerBlock implements IItemModelRegister,
 	}
 
 	@Override
-	public int getFlammability(IBlockReader world, BlockPos pos, Direction face) {
+	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		return 5;
 	}
 
 	@Override
-	public boolean isFlammable(IBlockReader world, BlockPos pos, Direction face) {
+	public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		return true;
 	}
 
 	@Override
-	public int getFireSpreadSpeed(IBlockReader world, BlockPos pos, Direction face) {
+	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		return 5;
 	}
 }

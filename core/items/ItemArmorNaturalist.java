@@ -17,10 +17,12 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -30,6 +32,8 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
+
 import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
@@ -40,9 +44,9 @@ import forestry.core.utils.ItemTooltipUtil;
 public class ItemArmorNaturalist extends ArmorItem implements IItemModelRegister {
 
 	public ItemArmorNaturalist() {
-		super(ArmorMaterial.LEATHER, 0, EquipmentSlotType.HEAD);
-		this.setMaxDamage(100);
-		setCreativeTab(CreativeTabForestry.tabForestry);
+		super(ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, (new Item.Properties())
+		.maxDamage(100)
+		.group(CreativeTabForestry.tabForestry));
 	}
 
 	@Override
@@ -56,33 +60,29 @@ public class ItemArmorNaturalist extends ArmorItem implements IItemModelRegister
 		manager.registerItemModel(item, 0);
 	}
 
-	@Override
-	public boolean hasColor(ItemStack itemstack) {
-		return false;
-	}
+	//TODO - maybe IDyeableArmorItem?
+//	@Override
+//	public boolean hasColor(ItemStack itemstack) {
+//		return false;
+//	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
 	}
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
 		return new ICapabilityProvider() {
-			@Override
-			public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-				return capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
-					armorType == EquipmentSlotType.HEAD;
-			}
 
 			@Override
-			public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
+			public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 				if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
-					armorType == EquipmentSlotType.HEAD) {
-					return capability.getDefaultInstance();
+					slot == EquipmentSlotType.HEAD) {
+					return LazyOptional.of(capability::getDefaultInstance);
 				}
-				return null;
+				return LazyOptional.empty();
 			}
 		};
 	}

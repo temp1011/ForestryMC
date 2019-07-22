@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.SoundCategory;
@@ -42,6 +43,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	private int numPlayersUsing;
 
 	public TileNaturalistChest(ISpeciesRoot speciesRoot) {
+		super(TileEntityType.DISPENSER);	//TODO tilentitytypes
 		this.speciesRoot = speciesRoot;
 		setInternalInventory(new InventoryNaturalistChest(this, speciesRoot));
 	}

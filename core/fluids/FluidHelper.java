@@ -18,6 +18,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
@@ -42,12 +43,13 @@ public final class FluidHelper {
 	}
 
 	public static boolean canAcceptFluid(World world, BlockPos pos, Direction facing, FluidStack fluid) {
-		IFluidHandler capability = FluidUtil.getFluidHandler(world, pos, facing);
-		if (capability != null) {
-			if (capability.getTankProperties() == null) {
+		LazyOptional<IFluidHandler> capability = FluidUtil.getFluidHandler(world, pos, facing);
+		if (capability.isPresent()) {
+			IFluidHandler handler = capability.orElse(null);
+			if (handler.getTankProperties() == null) {
 				throw new NullPointerException("The fluid handler " + capability.toString() + " returns null in the method getTankProperties, this is not allowed, please report that to the author of the mod from that the handler is.");
 			}
-			for (IFluidTankProperties tankProperties : capability.getTankProperties()) {
+			for (IFluidTankProperties tankProperties : handler.getTankProperties()) {
 				if (tankProperties.canFillFluidType(fluid)) {
 					return true;
 				}
@@ -78,11 +80,14 @@ public final class FluidHelper {
 			emptyStack = filled;
 		}
 
-		IFluidHandlerItem fluidFilledHandler = FluidUtil.getFluidHandler(filled);
-		IFluidHandlerItem fluidEmptyHandler = FluidUtil.getFluidHandler(emptyStack);
-		if (fluidFilledHandler == null || fluidEmptyHandler == null) {
+		LazyOptional<IFluidHandlerItem> fluidFilledHandlerCap = FluidUtil.getFluidHandler(filled);
+		LazyOptional<IFluidHandlerItem> fluidEmptyHandlerCap = FluidUtil.getFluidHandler(emptyStack);
+		if (!fluidFilledHandlerCap.isPresent() || !fluidEmptyHandlerCap.isPresent()) {
 			return FillStatus.INVALID_INPUT;
 		}
+
+		IFluidHandlerItem fluidFilledHandler = fluidFilledHandlerCap.orElse(null);
+		IFluidHandlerItem fluidEmptyHandler = fluidEmptyHandlerCap.orElse(null);
 
 		int containerEmptyCapacity = fluidEmptyHandler.fill(new FluidStack(fluidToFill, Integer.MAX_VALUE), false);
 		int containerCapacity = fluidFilledHandler.fill(new FluidStack(fluidToFill, Integer.MAX_VALUE), false);
@@ -206,10 +211,12 @@ public final class FluidHelper {
 	}
 
 	public static boolean isFillableContainer(ItemStack container) {
-		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
-		if (fluidHandler == null) {
+		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
+		if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
+
+		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
 		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
 		for (IFluidTankProperties properties : tankProperties) {
@@ -222,10 +229,12 @@ public final class FluidHelper {
 	}
 
 	public static boolean isFillableContainerAndEmpty(ItemStack container) {
-		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
-		if (fluidHandler == null) {
+		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
+		if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
+
+		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
 		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
 		for (IFluidTankProperties properties : tankProperties) {
@@ -245,10 +254,13 @@ public final class FluidHelper {
 	public static ItemStack getEmptyContainer(ItemStack container) {
 		ItemStack empty = container.copy();
 		empty.setCount(1);
-		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(empty);
-		if (fluidHandler == null) {
+		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(empty);
+		if (!fluidHandlerCap.isPresent()) {
 			return ItemStack.EMPTY;
 		}
+
+		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
+
 		if (fluidHandler.drain(Integer.MAX_VALUE, true) != null) {
 			return empty;
 		}
@@ -256,10 +268,12 @@ public final class FluidHelper {
 	}
 
 	public static boolean isFillableContainerWithRoom(ItemStack container) {
-		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
-		if (fluidHandler == null) {
+		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
+		if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
+
+		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
 		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
 		for (IFluidTankProperties properties : tankProperties) {
@@ -277,10 +291,12 @@ public final class FluidHelper {
 	}
 
 	public static boolean isFillableEmptyContainer(ItemStack empty) {
-		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(empty);
-		if (fluidHandler == null) {
+		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(empty);
+		if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
+
+		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
 		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
 		for (IFluidTankProperties properties : tankProperties) {
@@ -298,10 +314,12 @@ public final class FluidHelper {
 	}
 
 	public static boolean isDrainableFilledContainer(ItemStack container) {
-		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
-		if (fluidHandler == null) {
+		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
+		if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
+
+		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
 		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
 		for (IFluidTankProperties properties : tankProperties) {
@@ -319,10 +337,12 @@ public final class FluidHelper {
 	}
 
 	public static boolean isDrainableContainer(ItemStack container) {
-		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
-		if (fluidHandler == null) {
+		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
+		if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
+
+		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
 		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
 		for (IFluidTankProperties properties : tankProperties) {
@@ -335,10 +355,12 @@ public final class FluidHelper {
 	}
 
 	public static boolean isEmpty(ItemStack container) {
-		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
-		if (fluidHandler == null) {
+		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
+		if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
+
+		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
 		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
 		for (IFluidTankProperties properties : tankProperties) {

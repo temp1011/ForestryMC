@@ -89,19 +89,19 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-		tankManager.write(CompoundNBT);
-		craftingInventory.write(CompoundNBT);
-		return CompoundNBT;
+		tankManager.write(compoundNBT);
+		craftingInventory.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		tankManager.read(CompoundNBT);
-		craftingInventory.read(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		tankManager.read(compoundNBT);
+		craftingInventory.read(compoundNBT);
 	}
 
 	@Override
@@ -260,16 +260,11 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		return tankManager;
 	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
 
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -282,6 +277,6 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerCarpenter(player.inventory, this);
-	}
+		return new ContainerCarpenter(player.inventory, this, data);
+	}	//TODO windowid
 }

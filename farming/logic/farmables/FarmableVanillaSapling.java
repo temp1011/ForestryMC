@@ -17,6 +17,6 @@ import net.minecraft.item.ItemStack;
 public class FarmableVanillaSapling extends FarmableSapling {
 
 	public FarmableVanillaSapling() {
-		super(new ItemStack(Blocks.SAPLING), new ItemStack[]{new ItemStack(Items.APPLE), new ItemStack(FarmableCocoa.COCOA_SEED, 1, FarmableCocoa.COCOA_META)});
+		super(new ItemStack(Blocks.OAK_SAPLING), new ItemStack[]{new ItemStack(Items.APPLE), new ItemStack(Items.COCOA_BEANS)});
 	}
 }

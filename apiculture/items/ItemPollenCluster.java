@@ -21,6 +21,6 @@ public class ItemPollenCluster extends ItemOverlay {
 	}
 
 	public ItemStack get(EnumPollenCluster pollenCluster, int amount) {
-		return new ItemStack(this, amount, pollenCluster.ordinal());
+		return new ItemStack(this, amount);//TODO flatten, pollenCluster.ordinal());
 	}
 }

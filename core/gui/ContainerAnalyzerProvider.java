@@ -14,8 +14,8 @@ public class ContainerAnalyzerProvider<T extends TileEntity> extends ContainerTi
 	private final ContainerAnalyzerProviderHelper providerHelper;
 
 	/* Constructors */
-	public ContainerAnalyzerProvider(T tileForestry, PlayerInventory playerInventory, int xInv, int yInv) {
-		super(tileForestry, playerInventory, xInv, yInv);
+	public ContainerAnalyzerProvider(T tileForestry, PlayerInventory playerInventory, int xInv, int yInv, int id) {	//TODO windowid
+		super(tileForestry, playerInventory, xInv, yInv, id);
 
 		providerHelper = new ContainerAnalyzerProviderHelper(this, playerInventory);
 	}
@@ -29,12 +29,12 @@ public class ContainerAnalyzerProvider<T extends TileEntity> extends ContainerTi
 	/* Methods - Implement ContainerForestry */
 	@Override
 	protected void addSlot(PlayerInventory playerInventory, int slot, int x, int y) {
-		addSlotToContainer(new SlotLockable(playerInventory, slot, x, y));
+		addSlot(new SlotLockable(playerInventory, slot, x, y));
 	}
 
 	@Override
 	protected void addHotbarSlot(PlayerInventory playerInventory, int slot, int x, int y) {
-		addSlotToContainer(new SlotLockable(playerInventory, slot, x, y));
+		addSlot(new SlotLockable(playerInventory, slot, x, y));
 	}
 
 	/* Methods - Implement IGuiSelectable */

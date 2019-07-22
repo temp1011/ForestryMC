@@ -49,7 +49,7 @@ public class FarmLogicSlot extends Widget {
 			Minecraft minecraft = Minecraft.getInstance();
 			TextureManager textureManager = minecraft.getTextureManager();
 			textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-			ItemRenderer renderItem = minecraft.getRenderItem();
+			ItemRenderer renderItem = minecraft.getItemRenderer();
 			renderItem.renderItemIntoGUI(getStackIndex(), startX + xPos, startY + yPos);
 		}
 	}

@@ -33,13 +33,13 @@ public class GuiMoistener extends GuiForestryTitled<ContainerMoistener> {
 		// Mycelium production progress
 		if (tile.isProducing()) {
 			int i1 = tile.getProductionProgressScaled(16);
-			drawTexturedModalRect(guiLeft + 124, guiTop + 36, 176, 74, 16 - i1, 16);
+			blit(guiLeft + 124, guiTop + 36, 176, 74, 16 - i1, 16);
 		}
 
 		// Resource consumption progress
 		if (tile.isWorking()) {
 			int i1 = tile.getConsumptionProgressScaled(54);
-			drawTexturedModalRect(guiLeft + 93, guiTop + 18 + i1, 176, 92 + i1, 29, 54 - i1);
+			blit(guiLeft + 93, guiTop + 18 + i1, 176, 92 + i1, 29, 54 - i1);
 		}
 	}
 

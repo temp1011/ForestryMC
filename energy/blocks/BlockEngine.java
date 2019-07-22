@@ -21,11 +21,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockBase;
@@ -60,12 +62,12 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	public BlockEngine(BlockTypeEngine blockType) {
 		super(blockType);
-		setHarvestLevel("pickaxe", 0);
+//		setHarvestLevel("pickaxe", 0);	//TODO setToolType in item?
 	}
 
 	@Override
 	public void addCollisionBoxToList(BlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
-		Direction orientation = state.getValue(FACING);
+		Direction orientation = state.get(FACING);
 		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 		if (boundingBoxes == null) {
 			return;
@@ -79,9 +81,10 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 		}
 	}
 
+	//TODO potentially getRayTraceResult
 	@Override
 	public RayTraceResult collisionRayTrace(BlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-		Direction orientation = blockState.getValue(FACING);
+		Direction orientation = blockState.get(FACING);
 		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 		if (boundingBoxes == null) {
 			return super.collisionRayTrace(blockState, worldIn, pos, start, end);
@@ -110,29 +113,29 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	}
 
 	@Override
-	public boolean rotateBlock(World world, BlockPos pos, Direction axis) {
-		return rotate(world, pos) ||
-			super.rotateBlock(world, pos, axis);
+	public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation rot) {
+		return rotate(world, pos);	//TODO check
 	}
 
-	private static boolean isOrientedAtEnergyReciever(World world, BlockPos pos, Direction orientation) {
+	private static boolean isOrientedAtEnergyReciever(IWorld world, BlockPos pos, Direction orientation) {
 		BlockPos offsetPos = pos.offset(orientation);
 		TileEntity tile = TileUtil.getTile(world, offsetPos);
 		return EnergyHelper.isEnergyReceiverOrEngine(orientation.getOpposite(), tile);
 	}
 
-	private static boolean rotate(World world, BlockPos pos) {
+	private static BlockState rotate(IWorld world, BlockPos pos) {
 		BlockState blockState = world.getBlockState(pos);
-		Direction blockFacing = blockState.getValue(FACING);
+		Direction blockFacing = blockState.get(FACING);
 		for (int i = blockFacing.ordinal() + 1; i <= blockFacing.ordinal() + 6; ++i) {
 			Direction orientation = Direction.values()[i % 6];
 			if (isOrientedAtEnergyReciever(world, pos, orientation)) {
-				blockState = blockState.with(FACING, orientation);
-				world.setBlockState(pos, blockState);
-				return true;
+				BlockState newState = blockState.with(FACING, orientation);
+				if(world.setBlockState(pos, blockState, 3)) {//;	//TODO flags
+					return newState;
+				}
 			}
 		}
-		return false;
+		return blockState;
 	}
 
 	@Override
@@ -151,7 +154,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	@Override
 	public boolean isSideSolid(BlockState base_state, IBlockReader world, BlockPos pos, Direction side) {
 		BlockState blockState = world.getBlockState(pos);
-		Direction facing = blockState.getValue(BlockBase.FACING);
+		Direction facing = blockState.get(BlockBase.FACING);
 		return facing.getOpposite() == side;
 	}
 

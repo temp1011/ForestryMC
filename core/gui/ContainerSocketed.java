@@ -25,8 +25,8 @@ public abstract class ContainerSocketed<T extends TileEntity & ISocketable> exte
 
 	private final ContainerSocketedHelper<T> helper;
 
-	protected ContainerSocketed(T tile, PlayerInventory playerInventory, int xInv, int yInv) {
-		super(tile, playerInventory, xInv, yInv);
+	protected ContainerSocketed(T tile, PlayerInventory playerInventory, int xInv, int yInv, int id) {	//TODO windowid
+		super(tile, playerInventory, xInv, yInv, id);
 		this.helper = new ContainerSocketedHelper<>(tile);
 	}
 

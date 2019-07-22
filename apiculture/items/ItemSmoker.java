@@ -5,7 +5,9 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -18,6 +20,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.apiculture.ApicultureCapabilities;
 import forestry.api.apiculture.IHiveTile;
@@ -28,13 +31,14 @@ import forestry.core.tiles.TileUtil;
 
 public class ItemSmoker extends ItemForestry {
 	public ItemSmoker() {
-		super(ItemGroups.tabApiculture);
-		setMaxStackSize(1);
+		super((new Item.Properties())
+		.maxStackSize(1)
+		.group(ItemGroups.tabApiculture));
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
 		if (worldIn.isRemote && isSelected && worldIn.rand.nextInt(40) == 0) {
 			addSmoke(stack, worldIn, entityIn, 1);
 		}
@@ -95,30 +99,26 @@ public class ItemSmoker extends ItemForestry {
 	}
 
 	@Override
-	public ActionResultType onItemUseFirst(PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, Hand hand) {
-		TileUtil.actOnTile(world, pos, IHiveTile.class, IHiveTile::calmBees);
-		return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
+	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+		TileUtil.actOnTile(context.getWorld(), context.getPos(), IHiveTile.class, IHiveTile::calmBees);
+		return super.onItemUseFirst(stack, context);
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
+	public int getUseDuration(ItemStack stack) {
 		return 32;
 	}
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
 		return new ICapabilityProvider() {
-			@Override
-			public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-				return capability == ApicultureCapabilities.ARMOR_APIARIST;
-			}
 
 			@Override
-			public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
+			public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
-					return capability.getDefaultInstance();
+					return LazyOptional.of(capability::getDefaultInstance);
 				}
-				return null;
+				return LazyOptional.empty();
 			}
 		};
 	}

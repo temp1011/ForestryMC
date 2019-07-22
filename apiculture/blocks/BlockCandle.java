@@ -20,9 +20,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,8 +39,10 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -105,10 +109,12 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 	}
 
 	public BlockCandle() {
-		this.setHardness(0.0F);
-		this.setSoundType(SoundType.WOOD);
-		setCreativeTab(ItemGroups.tabApiculture);
-		setDefaultState(this.blockState.getBaseState().with(FACING, Direction.UP).with(STATE, State.OFF));
+		super(Block.Properties.create(Material.MISCELLANEOUS)
+		.hardnessAndResistance(0.0f)
+		.sound(SoundType.WOOD)
+		);
+//		setCreativeTab(ItemGroups.tabApiculture);	TODO done in item
+		setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.UP).with(STATE, State.OFF));
 	}
 
 //	@Override
@@ -133,7 +139,7 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 	}
 
 	@Override
-	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+	public int getLightValue(BlockState state, IEnviromentBlockReader world, BlockPos pos) {
 		TileCandle candle = TileUtil.getTile(world, pos, TileCandle.class);
 		if (candle != null && candle.isLit()) {
 			return 14;
@@ -142,12 +148,11 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 	}
 
 	@Override
-	public void getSubBlocks(ItemGroup tab, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this, 1, 0));
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
+		list.add(new ItemStack(this, 1));//TODO meta stuff, 0));
 	}
-
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
 		TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
 		if (tileCandle == null) {
 			return false;
@@ -184,7 +189,7 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 			} else {
 				boolean dyed = tryDye(heldItem, isLit, tileCandle);
 				if (dyed) {
-					worldIn.markBlockRangeForRenderUpdate(pos, pos);
+					worldIn.markForRerender(pos);
 					toggleLitState = false;
 					flag = true;
 				}
@@ -193,10 +198,10 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 
 		if (toggleLitState) {
 			tileCandle.setLit(!isLit);
-			worldIn.markBlockRangeForRenderUpdate(pos, pos);
-			worldIn.profiler.startSection("checkLight");
+			worldIn.markForRerender(pos);
+			worldIn.getProfiler().startSection("checkLight");
 			worldIn.checkLight(pos);
-			worldIn.profiler.endSection();
+			worldIn.getProfiler().endSection();
 			flag = true;
 		}
 		return flag;
@@ -206,8 +211,8 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 		// Check for dye-able.
 		for (Map.Entry<String, Integer> colour : colours.entrySet()) {
 			String colourName = colour.getKey();
-			for (ItemStack stack : OreDictionary.getOres(colourName)) {
-				if (OreDictionary.itemMatches(stack, held, true)) {
+			for (ItemStack stack : new ItemStack[0]){// TODO tags OreDictionary.getOres(colourName)) {
+				if (false) {//OreDictionary.itemMatches(stack, held, true)) {
 					if (isLit) {
 						tileCandle.setColour(colour.getValue());
 					} else {
@@ -234,6 +239,7 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 		}
 	}
 
+	//TODO loot table stuff??
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
 		ItemStack dropStack = drop.get();
@@ -247,7 +253,7 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 		drops.add(dropStack);
 	}
 
-	@Override
+	@Override	//TODO still comment in Block.java about forge version, but will it be added
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, World world, BlockPos pos, PlayerEntity player) {
 		return getCandleDrop(world, pos);
 	}
@@ -260,7 +266,7 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 		int colour = tileCandle.getColour();
 
 		int newMeta = tileCandle.isLit() ? 1 : 0;
-		ItemStack itemStack = new ItemStack(this, 1, newMeta);
+		ItemStack itemStack = new ItemStack(this, 1);//TODO flatten, newMeta);
 		if (colour != 0xffffff) {
 			// When dropped, tag new item stack with colour. Unless it's white, then do no such thing for maximum stacking.
 			CompoundNBT tag = new CompoundNBT();
@@ -279,19 +285,19 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 			tileCandle.setColour(colour);
 			tileCandle.setLit(isLit);
 			if (tileCandle.isLit()) {
-				world.profiler.startSection("checkLight");
+				world.getProfiler().startSection("checkLight");
 				world.checkLight(pos);
-				world.profiler.endSection();
+				world.getProfiler().endSection();
 			}
 		}
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void randomTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
 		if (tileCandle != null && tileCandle.isLit()) {
-			super.randomDisplayTick(stateIn, worldIn, pos, rand);
+			super.randomTick(stateIn, worldIn, pos, rand);
 		}
 	}
 
@@ -307,7 +313,7 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 	}
 
 	public static boolean isLit(ItemStack itemStack) {
-		return itemStack.getItemDamage() > 0;
+		return false;//TODO properties or something itemStack.getItemDamage() > 0;
 	}
 
 	public static void addItemToLightingList(Item item) {
@@ -315,11 +321,11 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 	}
 
 	public ItemStack getUnlitCandle(int amount) {
-		return new ItemStack(this, amount, 0);
+		return new ItemStack(this, amount);//TODO flatten , 0);
 	}
 
 	public ItemStack getLitCandle(int amount) {
-		return new ItemStack(this, amount, 1);
+		return new ItemStack(this, amount);// TODO flatten , 1);
 	}
 
 	@OnlyIn(Dist.CLIENT)

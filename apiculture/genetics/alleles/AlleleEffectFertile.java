@@ -13,6 +13,7 @@ package forestry.apiculture.genetics.alleles;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.IGrowable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -63,9 +64,10 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 
 	private static boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
 		for (int y = maxY; y >= minY; --y) {
-			Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
-			if (block.getTickRandomly() && (block instanceof IGrowable || block instanceof IPlantable)) {
-				world.scheduleUpdate(new BlockPos(x, y, z), block, 5);
+			BlockState state = world.getBlockState(new BlockPos(x, y, z));
+			Block block = state.getBlock();
+			if (block.ticksRandomly(state) && (block instanceof IGrowable || block instanceof IPlantable)) {
+				world.scheduleTick(new BlockPos(x, y, z), block, 5);
 				return true;
 			}
 		}

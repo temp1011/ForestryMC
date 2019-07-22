@@ -82,8 +82,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compoundNBT) {
-		compoundNBT = super.writeToNBT(compoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
 		compoundNBT.putInt("FermentationTime", fermentationTime);
 		compoundNBT.putInt("FermentationTotalTime", fermentationTotalTime);
@@ -96,8 +96,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT compoundNBT) {
-		super.readFromNBT(compoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
 		fermentationTime = compoundNBT.getInt("FermentationTime");
 		fermentationTotalTime = compoundNBT.getInt("FermentationTotalTime");
@@ -322,12 +322,12 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiFermenter(player.inventory, this);
-	}
+		return new GuiFermenter(player.inventory, this, data);
+	} //TODO windowid
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerFermenter(player.inventory, this);
+		return new ContainerFermenter(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override

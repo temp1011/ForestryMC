@@ -22,13 +22,16 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
@@ -36,7 +39,6 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.core.utils.Translator;
 
 public class ItemElectronTube extends ItemOverlay {
 
@@ -46,14 +48,14 @@ public class ItemElectronTube extends ItemOverlay {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
 		Multimap<ICircuitLayout, ICircuit> circuits = getCircuits(itemstack);
 		if (!circuits.isEmpty()) {
-			if (Screen.isShiftKeyDown()) {
+			if (Screen.hasShiftDown()) {
 				for (ICircuitLayout circuitLayout : circuits.keys()) {
 					String circuitLayoutName = circuitLayout.getUsage();
-					list.add(TextFormatting.WHITE.toString() + TextFormatting.UNDERLINE + circuitLayoutName);
+					list.add(new StringTextComponent(circuitLayoutName).setStyle((new Style()).setColor(TextFormatting.WHITE).setUnderlined(true)));
 					for (ICircuit circuit : circuits.get(circuitLayout)) {
 						circuit.addTooltip(list);
 					}
@@ -62,16 +64,18 @@ public class ItemElectronTube extends ItemOverlay {
 				ItemTooltipUtil.addShiftInformation(itemstack, world, list, flag);
 			}
 		} else {
-			list.add("<" + Translator.translateToLocal("for.gui.noeffect") + ">");
+			list.add(new StringTextComponent("<")
+					.appendSibling(new TranslationTextComponent("for.gui.noeffect")
+							.appendText(">")));
 		}
 	}
 
 	@Override
-	public void getSubItems(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
-			for (int i = 0; i < overlays.length; i++) {
-				if (Config.isDebug || !overlays[i].isSecret()) {
-					ItemStack itemStack = new ItemStack(this, 1, i);
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
+			for (IOverlayInfo overlay : overlays) {
+				if (Config.isDebug || !overlay.isSecret()) {
+					ItemStack itemStack = new ItemStack(this, 1);//TODO - flatten, i);
 					if (Config.isDebug || !getCircuits(itemStack).isEmpty()) {
 						subItems.add(itemStack);
 					}
@@ -93,6 +97,6 @@ public class ItemElectronTube extends ItemOverlay {
 	}
 
 	public ItemStack get(EnumElectronTube type, int amount) {
-		return new ItemStack(this, amount, type.ordinal());
+		return new ItemStack(this, amount);//TODO - flatten, type.ordinal());
 	}
 }

@@ -12,13 +12,15 @@ package forestry.energy.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
 
+import net.minecraftforge.fml.client.config.GuiUtils;
+
 import forestry.core.config.Constants;
 import forestry.energy.tiles.TileEnginePeat;
 
 public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat> {
 
-	public GuiEnginePeat(PlayerInventory inventory, TileEnginePeat tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEnginePeat(inventory, tile), tile);
+	public GuiEnginePeat(PlayerInventory inventory, TileEnginePeat tile, int id) {
+		super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEnginePeat(inventory, tile, id), tile);
 	}
 
 	@Override
@@ -27,7 +29,7 @@ public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat
 
 		if (tile.isBurning()) {
 			int progress = tile.getBurnTimeRemainingScaled(12);
-			this.drawTexturedModalRect(guiLeft + 45, guiTop + 27 + 12 - progress, 176, 12 - progress, 14, progress + 2);
+			blit(guiLeft + 45, guiTop + 27 + 12 - progress, 176, 12 - progress, 14, progress + 2);
 		}
 	}
 }

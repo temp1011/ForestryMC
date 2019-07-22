@@ -82,7 +82,7 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 
 	@Override
 	public BlockPos getCoordinates() {
-		return BlockPos.ORIGIN;
+		return BlockPos.ZERO;
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -47,7 +48,7 @@ public abstract class AbstractItemElement extends GuiElement {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public List<String> getTooltip(int mouseX, int mouseY) {
+	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
 		ItemStack itemStack = getStack();
 		return ItemTooltipUtil.getInformation(itemStack);
 	}

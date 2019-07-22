@@ -72,7 +72,8 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	@OnlyIn(Dist.CLIENT)
 	public void registerSprites(ITextureManager manager) {
 		TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
-		Minecraft.getInstance().getTextureMapBlocks().setTextureEntry(texture);
+//		Minecraft.getInstance().getTextureMap().setTextureEntry(texture);
+		//TODO textures
 	}
 
 	@Override
@@ -105,11 +106,11 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int data) {
-		return new GuiHabitatLocator(player, new ItemInventoryHabitatLocator(player, heldItem));
+		return new GuiHabitatLocator(player, new ItemInventoryHabitatLocator(player, heldItem), data);	//TODO windowid
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, ItemStack heldItem, int data) {
-		return new ContainerHabitatLocator(player, new ItemInventoryHabitatLocator(player, heldItem));
+		return new ContainerHabitatLocator(player, new ItemInventoryHabitatLocator(player, heldItem), data);	//TODO windowid
 	}
 }

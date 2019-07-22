@@ -29,6 +29,7 @@ public class FarmLogicSucculent extends FarmLogicSoil {
 
 	@Override
 	public ItemStack getIconItemStack() {
+		//TODO dye meta lookup
 		return new ItemStack(Items.DYE, 1, 2);
 	}
 

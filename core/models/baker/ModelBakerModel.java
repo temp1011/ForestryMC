@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -64,7 +65,7 @@ public class ModelBakerModel implements IBakedModel {
 		modelsPost = new ArrayList<>();
 		faceQuads = new EnumMap<>(Direction.class);
 		generalQuads = new ArrayList<>();
-		particleSprite = Minecraft.getInstance().getTextureMapBlocks().missingImage;
+		particleSprite = Minecraft.getInstance().getTextureMap().missingImage;	//TODO AT
 		isGui3d = true;
 		isAmbientOcclusion = false;
 		setModelState(modelState);
@@ -123,7 +124,7 @@ public class ModelBakerModel implements IBakedModel {
 
 	@Override
 	public ItemOverrideList getOverrides() {
-		return ItemOverrideList.NONE;
+		return ItemOverrideList.EMPTY;
 	}
 
 	private static float[] getDefaultRotation() {
@@ -176,7 +177,7 @@ public class ModelBakerModel implements IBakedModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		List<BakedQuad> quads = new ArrayList<>();
 		for (Pair<BlockState, IBakedModel> model : this.models) {
 			List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);

@@ -23,16 +23,18 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
@@ -69,7 +71,7 @@ public class ItemResearchNote extends ItemForestry {
 			for (IMutation mutation : root.getCombinations(allele0)) {
 				if (mutation.isPartner(allele1)) {
 					if (result == null
-						|| mutation.getTemplate()[0].getUID().equals(result.getUID())) {
+							|| mutation.getTemplate()[0].getUID().equals(result.getUID())) {
 						encoded = mutation;
 						break;
 					}
@@ -79,8 +81,8 @@ public class ItemResearchNote extends ItemForestry {
 			return encoded;
 		}
 
-		public List<String> getTooltip(CompoundNBT compound) {
-			List<String> tooltips = new ArrayList<>();
+		public List<ITextComponent> getTooltip(CompoundNBT compound) {
+			List<ITextComponent> tooltips = new ArrayList<>();
 
 			if (this == NONE) {
 				return tooltips;
@@ -103,14 +105,14 @@ public class ItemResearchNote extends ItemForestry {
 				String mutationChance = Translator.translateToLocal("for.researchNote.chance." + mutationChanceKey);
 				String speciesResult = encoded.getTemplate()[root.getSpeciesChromosomeType().ordinal()].getAlleleName();
 
-				tooltips.add(Translator.translateToLocal("for.researchNote.discovery.0"));
-				tooltips.add(Translator.translateToLocal("for.researchNote.discovery.1").replace("%SPEC1", species1).replace("%SPEC2", species2));
-				tooltips.add(Translator.translateToLocalFormatted("for.researchNote.discovery.2", mutationChance));
-				tooltips.add(Translator.translateToLocalFormatted("for.researchNote.discovery.3", speciesResult));
+				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.0"));
+				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.1", species1, species2));// TODO sort out format in lang file.replace("%SPEC1", species1).replace("%SPEC2", species2));
+				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.2", mutationChance));
+				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.3", speciesResult));
 
 				if (!encoded.getSpecialConditions().isEmpty()) {
 					for (String line : encoded.getSpecialConditions()) {
-						tooltips.add(TextFormatting.GOLD + line);
+						tooltips.add(new StringTextComponent(line).setStyle((new Style()).setColor(TextFormatting.GOLD)));
 					}
 				}
 			} else if (this == SPECIES) {
@@ -123,8 +125,8 @@ public class ItemResearchNote extends ItemForestry {
 					return tooltips;
 				}
 
-				tooltips.add("researchNote.discovered.0");
-				tooltips.add(Translator.translateToLocalFormatted("for.researchNote.discovered.1", allele0.getAlleleName(), allele0.getBinomial()));
+				tooltips.add(new TranslationTextComponent("researchNote.discovered.0"));
+				tooltips.add(new TranslationTextComponent("for.researchNote.discovered.1", allele0.getAlleleName(), allele0.getBinomial()));
 			}
 
 			return tooltips;
@@ -164,9 +166,9 @@ public class ItemResearchNote extends ItemForestry {
 				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote"));
 
 				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote2",
-					TextFormatting.GRAY + species0.getAlleleName(),
-					TextFormatting.GRAY + species1.getAlleleName(),
-					TextFormatting.GREEN + speciesResult.getAlleleName()));
+						TextFormatting.GRAY + species0.getAlleleName(),
+						TextFormatting.GRAY + species1.getAlleleName(),
+						TextFormatting.GREEN + speciesResult.getAlleleName()));
 
 				return true;
 			}
@@ -177,10 +179,10 @@ public class ItemResearchNote extends ItemForestry {
 
 		public static ResearchNote createMutationNote(GameProfile researcher, IMutation mutation) {
 			CompoundNBT compound = new CompoundNBT();
-			compound.setString("ROT", mutation.getRoot().getUID());
-			compound.setString("AL0", mutation.getAllele0().getUID());
-			compound.setString("AL1", mutation.getAllele1().getUID());
-			compound.setString("RST", mutation.getTemplate()[0].getUID());
+			compound.putString("ROT", mutation.getRoot().getUID());
+			compound.putString("AL0", mutation.getAllele0().getUID());
+			compound.putString("AL1", mutation.getAllele1().getUID());
+			compound.putString("RST", mutation.getTemplate()[0].getUID());
 			return new ResearchNote(researcher, MUTATION, compound);
 		}
 
@@ -189,14 +191,14 @@ public class ItemResearchNote extends ItemForestry {
 			CompoundNBT compound = new CompoundNBT();
 			note.writeToNBT(compound);
 			ItemStack created = new ItemStack(item);
-			created.setTagCompound(compound);
+			created.setTag(compound);
 			return created;
 		}
 
 		public static ResearchNote createSpeciesNote(GameProfile researcher, IAlleleSpecies species) {
 			CompoundNBT compound = new CompoundNBT();
-			compound.setString("ROT", species.getRoot().getUID());
-			compound.setString("AL0", species.getUID());
+			compound.putString("ROT", species.getRoot().getUID());
+			compound.putString("AL0", species.getUID());
 			return new ResearchNote(researcher, SPECIES, compound);
 		}
 
@@ -205,7 +207,7 @@ public class ItemResearchNote extends ItemForestry {
 			CompoundNBT compound = new CompoundNBT();
 			note.writeToNBT(compound);
 			ItemStack created = new ItemStack(item);
-			created.setTagCompound(compound);
+			created.setTag(compound);
 			return created;
 		}
 
@@ -225,13 +227,13 @@ public class ItemResearchNote extends ItemForestry {
 
 		public ResearchNote(@Nullable CompoundNBT compound) {
 			if (compound != null) {
-				if (compound.hasKey("res")) {
-					this.researcher = PlayerUtil.readGameProfileFromNBT(compound.getCompoundNBT("res"));
+				if (compound.contains("res")) {
+					this.researcher = PlayerUtil.readGameProfileFromNBT(compound.getCompound("res"));
 				} else {
 					this.researcher = null;
 				}
 				this.type = EnumNoteType.VALUES[compound.getByte("TYP")];
-				this.inner = compound.getCompoundNBT("INN");
+				this.inner = compound.getCompound("INN");
 			} else {
 				this.type = EnumNoteType.NONE;
 				this.researcher = null;
@@ -243,18 +245,18 @@ public class ItemResearchNote extends ItemForestry {
 			if (this.researcher != null) {
 				CompoundNBT nbt = new CompoundNBT();
 				PlayerUtil.writeGameProfile(nbt, researcher);
-				compound.setTag("res", nbt);
+				compound.put("res", nbt);
 			}
-			compound.setByte("TYP", (byte) type.ordinal());
-			compound.setTag("INN", inner);
+			compound.putByte("TYP", (byte) type.ordinal());
+			compound.put("INN", inner);
 			return compound;
 		}
 
-		public void addTooltip(List<String> list) {
-			List<String> tooltips = type.getTooltip(inner);
+		public void addTooltip(List<ITextComponent> list) {
+			List<ITextComponent> tooltips = type.getTooltip(inner);
 			if (tooltips.size() <= 0) {
-				list.add(TextFormatting.ITALIC + TextFormatting.RED.toString() + Translator.translateToLocal("for.researchNote.error.0"));
-				list.add(Translator.translateToLocal("for.researchNote.error.1"));
+				list.add(new TranslationTextComponent("for.researchNote.error.0").setStyle((new Style()).setColor(TextFormatting.RED).setItalic(true)));
+				list.add(new TranslationTextComponent("for.researchNote.error.1"));
 				return;
 			}
 
@@ -267,11 +269,12 @@ public class ItemResearchNote extends ItemForestry {
 	}
 
 	public ItemResearchNote() {
-		setCreativeTab(null);
+		super((new Item.Properties())
+				.group(null));
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
+	public ITextComponent getDisplayName(ItemStack itemstack) {
 		ResearchNote note = new ResearchNote(itemstack.getTag());
 		String researcherName;
 		if (note.researcher == null) {
@@ -279,12 +282,12 @@ public class ItemResearchNote extends ItemForestry {
 		} else {
 			researcherName = note.researcher.getName();
 		}
-		return Translator.translateToLocalFormatted(getTranslationKey(itemstack) + ".name", researcherName);
+		return new TranslationTextComponent(getTranslationKey(itemstack) + ".name", researcherName);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
 		ResearchNote note = new ResearchNote(itemstack.getTag());
 		note.addTooltip(list);

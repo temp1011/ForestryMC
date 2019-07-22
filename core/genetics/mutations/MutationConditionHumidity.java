@@ -40,12 +40,13 @@ public class MutationConditionHumidity implements IMutationCondition {
 		return 1;
 	}
 
+	//TODO textcomponent (this will probably crash atm)
 	@Override
 	public String getDescription() {
-		String minHumidityString = AlleleManager.climateHelper.toDisplay(minHumidity);
+		String minHumidityString = AlleleManager.climateHelper.toDisplay(minHumidity).getString();
 
 		if (minHumidity != maxHumidity) {
-			String maxHumidityString = AlleleManager.climateHelper.toDisplay(maxHumidity);
+			String maxHumidityString = AlleleManager.climateHelper.toDisplay(maxHumidity).getString();
 			return Translator.translateToLocal("for.mutation.condition.humidity.range").replace("%LOW", minHumidityString).replace("%HIGH", maxHumidityString);
 		} else {
 			return Translator.translateToLocalFormatted("for.mutation.condition.humidity.single", minHumidityString);

@@ -11,8 +11,10 @@
 package forestry.core.items;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BoneMealItem;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -22,13 +24,18 @@ import net.minecraft.world.World;
 public class ItemFertilizer extends ItemForestry {
 
 	@Override
-	public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+	public ActionResultType onItemUse(ItemUseContext context) {
+		PlayerEntity player = context.getPlayer();
+		World worldIn = context.getWorld();
+		Hand hand = context.getHand();
+		BlockPos pos = context.getPos();
+		Direction facing = context.getFace();
 		ItemStack heldItem = player.getHeldItem(hand);
 		if (!player.canPlayerEdit(pos.offset(facing), facing, heldItem)) {
 			return ActionResultType.FAIL;
 		}
 
-		if (DyeItem.applyBonemeal(heldItem, worldIn, pos, player, hand)) {
+		if (BoneMealItem.applyBonemeal(heldItem, worldIn, pos, player)) {
 			if (!worldIn.isRemote) {
 				worldIn.playEvent(2005, pos, 0);
 			}

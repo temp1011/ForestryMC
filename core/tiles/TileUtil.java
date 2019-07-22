@@ -21,6 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.Region;
 import net.minecraft.world.World;
@@ -57,10 +58,10 @@ public abstract class TileUtil {
 	 * see {@link FlowerPotBlock#getActualState(BlockState, IWorldReader, BlockPos)}
 	 */
 	@Nullable
-	public static TileEntity getTile(IWorldReader world, BlockPos pos) {
+	public static TileEntity getTile(IBlockReader world, BlockPos pos) {
 		if (world instanceof Region) {
 			Region chunkCache = (Region) world;
-			return chunkCache.getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK);
+			return chunkCache.getTileEntity(pos);
 		} else {
 			return world.getTileEntity(pos);
 		}
@@ -72,7 +73,7 @@ public abstract class TileUtil {
 	 * see {@link FlowerPotBlock#getActualState(BlockState, IWorldReader, BlockPos)}
 	 */
 	@Nullable
-	public static <T> T getTile(IWorldReader world, BlockPos pos, Class<T> tileClass) {
+	public static <T> T getTile(IBlockReader world, BlockPos pos, Class<T> tileClass) {
 		TileEntity tileEntity = getTile(world, pos);
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);

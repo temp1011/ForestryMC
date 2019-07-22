@@ -13,6 +13,7 @@ package forestry.apiculture.items;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 
@@ -27,17 +28,19 @@ import forestry.core.items.ItemWithGui;
 
 public class ItemImprinter extends ItemWithGui {
 	public ItemImprinter() {
-		setCreativeTab(ItemGroups.tabApiculture);
+		super((new Item.Properties()).group(ItemGroups.tabApiculture));
 	}
 
+	//TODO window id
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int data) {
-		return new GuiImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem));
+		return new GuiImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem), data);
 	}
 
+	//TODO window id
 	@Override
 	public Container getContainer(PlayerEntity player, ItemStack heldItem, int data) {
-		return new ContainerImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem));
+		return new ContainerImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem), data);
 	}
 }

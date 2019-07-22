@@ -20,15 +20,15 @@ import forestry.energy.tiles.TileEnginePeat;
 
 public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
 
-	public ContainerEnginePeat(PlayerInventory player, TileEnginePeat tile) {
-		super(tile, player, 8, 84);
+	public ContainerEnginePeat(PlayerInventory player, TileEnginePeat tile, int id) {
+		super(tile, player, 8, 84, id);
 
-		this.addSlotToContainer(new SlotFiltered(tile, 0, 44, 46));
+		this.addSlot(new SlotFiltered(tile, 0, 44, 46));
 
-		this.addSlotToContainer(new SlotOutput(tile, 1, 98, 35));
-		this.addSlotToContainer(new SlotOutput(tile, 2, 98, 53));
-		this.addSlotToContainer(new SlotOutput(tile, 3, 116, 35));
-		this.addSlotToContainer(new SlotOutput(tile, 4, 116, 53));
+		this.addSlot(new SlotOutput(tile, 1, 98, 35));
+		this.addSlot(new SlotOutput(tile, 2, 98, 53));
+		this.addSlot(new SlotOutput(tile, 3, 116, 35));
+		this.addSlot(new SlotOutput(tile, 4, 116, 53));
 	}
 
 	@Override

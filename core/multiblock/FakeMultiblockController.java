@@ -65,7 +65,7 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 
 	@Override
 	public BlockPos getReferenceCoord() {
-		return BlockPos.ORIGIN;
+		return BlockPos.ZERO;
 	}
 
 	@Override

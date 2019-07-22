@@ -17,9 +17,13 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 
@@ -33,9 +37,12 @@ import forestry.core.gui.GuiAlyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.Translator;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 public class ItemAlyzer extends ItemWithGui {
 	public ItemAlyzer() {
-		setCreativeTab(ItemGroups.tabApiculture);
+		super((new Item.Properties())
+		.group(ItemGroups.tabApiculture));
 	}
 
 	@Override
@@ -51,17 +58,17 @@ public class ItemAlyzer extends ItemWithGui {
 
 	@Override
 	public Container getContainer(PlayerEntity player, ItemStack heldItem, int data) {
-		return new ContainerAlyzer(new ItemInventoryAlyzer(player, heldItem), player);
+		return new ContainerAlyzer(new ItemInventoryAlyzer(player, heldItem), player, data);	//TODO windowid
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 		int charges = 0;
 		CompoundNBT compound = stack.getTag();
 		if (compound != null) {
-			charges = compound.getInteger("Charges");
+			charges = compound.getInt("Charges");
 		}
-		tooltip.add(TextFormatting.GOLD + Translator.translateToLocalFormatted(stack.getTranslationKey() + ".charges", charges));
+		tooltip.add(new TranslationTextComponent(stack.getTranslationKey() + ".charges", charges).setStyle((new Style()).setColor(TextFormatting.GOLD)));
 	}
 }

@@ -28,7 +28,7 @@ public class AlleleEffectExploration extends AlleleEffectThrottled {
 	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
 		for (PlayerEntity player : players) {
-			player.addExperience(2);
+			player.giveExperiencePoints(2);
 		}
 
 		return storedData;

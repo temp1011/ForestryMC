@@ -285,7 +285,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen i
 
 		//int x = (width - xSize) / 2;
 		//int y = (height - ySize) / 2;
-		GuiUtils.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize, 1.0f);	//TODO - zlevel
+		blit(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 
 	protected void drawWidgets() {

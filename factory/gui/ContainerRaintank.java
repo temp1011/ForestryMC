@@ -25,11 +25,11 @@ import forestry.factory.tiles.TileRaintank;
 
 public class ContainerRaintank extends ContainerLiquidTanks<TileRaintank> {
 
-	public ContainerRaintank(PlayerInventory player, TileRaintank tile) {
-		super(tile, player, 8, 84);
+	public ContainerRaintank(PlayerInventory player, TileRaintank tile, int id) {
+		super(tile, player, 8, 84, id);
 
-		this.addSlotToContainer(new SlotEmptyLiquidContainerIn(tile, InventoryRaintank.SLOT_RESOURCE, 116, 19));
-		this.addSlotToContainer(new SlotOutput(tile, InventoryRaintank.SLOT_PRODUCT, 116, 55));
+		this.addSlot(new SlotEmptyLiquidContainerIn(tile, InventoryRaintank.SLOT_RESOURCE, 116, 19));
+		this.addSlot(new SlotOutput(tile, InventoryRaintank.SLOT_PRODUCT, 116, 55));
 	}
 
 	@Override

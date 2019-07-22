@@ -30,29 +30,29 @@ import forestry.factory.tiles.TileFabricator;
 
 public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> implements IContainerCrafting {
 
-	public ContainerFabricator(PlayerInventory playerInventory, TileFabricator tile) {
-		super(tile, playerInventory, 8, 129);
+	public ContainerFabricator(PlayerInventory playerInventory, TileFabricator tile, int id) {
+		super(tile, playerInventory, 8, 129, id);
 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 9; k++) {
-				addSlotToContainer(new Slot(tile, InventoryFabricator.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 84 + i * 18));
+				addSlot(new Slot(tile, InventoryFabricator.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 84 + i * 18));
 			}
 		}
 
 		// Molten resource
-		this.addSlotToContainer(new SlotFiltered(tile, InventoryFabricator.SLOT_METAL, 26, 21));
+		this.addSlot(new SlotFiltered(tile, InventoryFabricator.SLOT_METAL, 26, 21));
 
 		// Plan
-		this.addSlotToContainer(new SlotFiltered(tile, InventoryFabricator.SLOT_PLAN, 139, 17));
+		this.addSlot(new SlotFiltered(tile, InventoryFabricator.SLOT_PLAN, 139, 17));
 
 		// Result
-		this.addSlotToContainer(new SlotOutput(tile, InventoryFabricator.SLOT_RESULT, 139, 53));
+		this.addSlot(new SlotOutput(tile, InventoryFabricator.SLOT_RESULT, 139, 53));
 
 		// Crafting matrix
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 3; k++) {
-				addSlotToContainer(new SlotCraftMatrix(this, tile.getCraftingInventory(), InventoryGhostCrafting.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
+				addSlot(new SlotCraftMatrix(this, tile.getCraftingInventory(), InventoryGhostCrafting.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
 			}
 		}
 	}

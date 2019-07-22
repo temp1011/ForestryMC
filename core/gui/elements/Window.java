@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.text.ITextComponent;
 
 import net.minecraftforge.fml.client.config.GuiUtils;
 
@@ -237,19 +239,21 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 	}
 
 	public void drawTooltip(int mouseX, int mouseY) {
-		List<String> lines = getTooltip(mouseX, mouseY);
+		List<ITextComponent> lines = getTooltip(mouseX, mouseY);
+		//TODO has textComponent gone too far?
+		List<String> strings = lines.stream().map(ITextComponent::getString).collect(Collectors.toList());
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();
 			//TODO test
 			MainWindow window = Minecraft.getInstance().mainWindow;
-			GuiUtils.drawHoveringText(lines, mouseX - getX(), mouseY - getY(), window.getScaledWidth(), window.getScaledHeight(), -1, getFontRenderer());
+			GuiUtils.drawHoveringText(strings, mouseX - getX(), mouseY - getY(), window.getScaledWidth(), window.getScaledHeight(), -1, getFontRenderer());
 			GlStateManager.popMatrix();
 		}
 	}
 
 	@Override
-	public List<String> getTooltip(int mouseX, int mouseY) {
-		List<String> tooltip = new ArrayList<>();
+	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
+		List<ITextComponent> tooltip = new ArrayList<>();
 		Deque<IGuiElement> queue = this.calculateMousedOverElements();
 		while (!queue.isEmpty()) {
 			IGuiElement element = queue.removeFirst();

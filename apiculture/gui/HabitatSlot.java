@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.text.StringTextComponent;
 
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -44,7 +45,7 @@ public class HabitatSlot extends Widget {
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		ToolTip tooltip = new ToolTip();
-		tooltip.add(name);
+		tooltip.add(new StringTextComponent(name));
 		return tooltip;
 	}
 
@@ -60,12 +61,13 @@ public class HabitatSlot extends Widget {
 	@Override
 	public void draw(int startX, int startY) {
 		if (!isActive) {
-			GlStateManager.color(0.2f, 0.2f, 0.2f, 0.2f);
+			GlStateManager.color4f(0.2f, 0.2f, 0.2f, 0.2f);
 		} else {
-			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+			GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
-		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, getIcon(), 16, 16);
+		//TODO how to do the border maths for this
+//		manager.gui.blit(startX + xPos, startY + yPos, getIcon(), 16, 16);
 	}
 }

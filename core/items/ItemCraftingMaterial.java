@@ -26,8 +26,9 @@ public class ItemCraftingMaterial extends ItemForestry {
 	private final String[] definition = new String[]{"pulsating_dust", "pulsating_mesh", "silk_wisp", "woven_silk", "dissipation_charge", "ice_shard", "scented_paneling", "camouflaged_paneling"};
 
 	public ItemCraftingMaterial() {
-		setMaxDamage(0);
-		setHasSubtypes(true);
+		super((new Item.Properties())
+		.maxDamage(0));
+//		setHasSubtypes(true); TODO flatten?
 	}
 
 	@Override
@@ -42,10 +43,10 @@ public class ItemCraftingMaterial extends ItemForestry {
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		if (stack.getItemDamage() >= definition.length || stack.getItemDamage() < 0) {
+		if (true){//TODO flatten stack.getItemDamage() >= definition.length || stack.getItemDamage() < 0) {
 			return "item.forestry.unknown";
 		} else {
-			return super.getTranslationKey(stack) + "." + definition[stack.getItemDamage()];
+			return super.getTranslationKey(stack) + "." + definition[0];//TODO flatten stack.getItemDamage()];
 		}
 	}
 
@@ -59,40 +60,40 @@ public class ItemCraftingMaterial extends ItemForestry {
 	}
 
 	@Override
-	public void getSubItems(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
 			for (int i = 0; i < definition.length; i++) {
-				subItems.add(new ItemStack(this, 1, i));
+				subItems.add(new ItemStack(this));//TODO flatten, 1, i));
 			}
 		}
 	}
 
 	public ItemStack getPulsatingDust() {
-		return new ItemStack(this, 1, 0);
+		return new ItemStack(this, 1);//TODO flatten, 0);
 	}
 
 	public ItemStack getPulsatingMesh() {
-		return new ItemStack(this, 1, 1);
+		return new ItemStack(this, 1);//TODO flatten, 1);
 	}
 
 	public ItemStack getSilkWisp() {
-		return new ItemStack(this, 1, 2);
+		return new ItemStack(this, 1);//TODO flatten, 2);
 	}
 
 	public ItemStack getWovenSilk() {
-		return new ItemStack(this, 1, 3);
+		return new ItemStack(this, 1);// TODO flatten, 3);
 	}
 
 	public ItemStack getDissipationCharge() {
-		return new ItemStack(this, 1, 4);
+		return new ItemStack(this, 1);// TODO flatten , 4);
 	}
 
 	public ItemStack getIceShard(int amount) {
-		return new ItemStack(this, amount, 5);
+		return new ItemStack(this, amount);//TODO flatten , 5);
 	}
 
 	public ItemStack getScentedPaneling() {
-		return new ItemStack(this, 1, 6);
+		return new ItemStack(this, 1);// TODO flatten , 6);
 	}
 
 	public ItemStack getCamouflagedPaneling() {
@@ -100,6 +101,6 @@ public class ItemCraftingMaterial extends ItemForestry {
 	}
 
 	public ItemStack getCamouflagedPaneling(int stackSize) {
-		return new ItemStack(this, stackSize, 7);
+		return new ItemStack(this, stackSize); //TODO flatten, 7);
 	}
 }

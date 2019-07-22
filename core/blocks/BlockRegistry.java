@@ -36,7 +36,7 @@ public abstract class BlockRegistry {
 
 		//TODO - are these done by registry name now?
 		//https://gist.github.com/williewillus/353c872bcf1a6ace9921189f6100d09a#lang-changes
-		block.setTranslationKey("for." + name);
+//		block.setTranslationKey("for." + name);
 		block.setRegistryName(name);
 		ForgeRegistries.BLOCKS.register(block);
 		Proxies.common.registerBlock(block);
@@ -54,7 +54,8 @@ public abstract class BlockRegistry {
 	}
 
 	protected static void registerOreDictWildcard(String oreDictName, Block block) {
-		OreDictionary.registerOre(oreDictName, new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
+//		OreDictionary.registerOre(oreDictName, new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
+		//TODO oredict, tags
 	}
 
 }
