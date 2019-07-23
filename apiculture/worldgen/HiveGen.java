@@ -22,7 +22,8 @@ public abstract class HiveGen implements IHiveGen {
 
 	public static boolean isTreeBlock(BlockState blockState, World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		return block.isLeaves(blockState, world, pos) || block.isWood(world, pos);
+		//TODO tag?
+		return false;//block.isLeaves(blockState, world, pos) || block.isWood(world, pos);
 	}
 
 	@Override

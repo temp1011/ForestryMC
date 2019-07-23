@@ -68,12 +68,12 @@ public class ButtonElement extends GuiElement {
 
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		boolean mouseOver = isMouseOver();
 		int hoverState = getHoverState(mouseOver);
 		Drawable drawable = textures[hoverState];
 		drawable.draw(0, 0);
-		GlStateManager.disableAlpha();
+		GlStateManager.disableAlphaTest();
 	}
 
 	@Override

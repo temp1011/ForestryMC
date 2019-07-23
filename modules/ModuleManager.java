@@ -40,6 +40,7 @@ import forestry.api.modules.IModuleManager;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
+import forestry.core.config.forge_old.Configuration;
 import forestry.core.utils.Log;
 
 public class ModuleManager implements IModuleManager {

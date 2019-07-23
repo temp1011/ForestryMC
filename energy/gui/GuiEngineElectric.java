@@ -19,8 +19,8 @@ import forestry.energy.tiles.TileEngineElectric;
 
 public class GuiEngineElectric extends GuiEngine<ContainerEngineElectric, TileEngineElectric> {
 
-	public GuiEngineElectric(PlayerInventory inventory, TileEngineElectric tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/electricalengine.png", new ContainerEngineElectric(inventory, tile), tile);
+	public GuiEngineElectric(PlayerInventory inventory, TileEngineElectric tile, int id) {
+		super(Constants.TEXTURE_PATH_GUI + "/electricalengine.png", new ContainerEngineElectric(inventory, tile, id), inventory, tile);
 		widgetManager.add(new SocketWidget(this.widgetManager, 30, 40, tile, 0));
 	}
 

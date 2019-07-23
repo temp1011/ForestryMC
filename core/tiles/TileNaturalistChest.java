@@ -121,12 +121,12 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int page) {
-		ContainerNaturalistInventory container = new ContainerNaturalistInventory(player.inventory, this, page);
+		ContainerNaturalistInventory container = new ContainerNaturalistInventory(player.inventory, this, page, page);	//TODO Windowid
 		return new GuiNaturalistInventory(speciesRoot, player, container, page, 5);
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int page) {
-		return new ContainerNaturalistInventory(player.inventory, this, page);
+		return new ContainerNaturalistInventory(player.inventory, this, page, page);	//TODO windowid
 	}
 }

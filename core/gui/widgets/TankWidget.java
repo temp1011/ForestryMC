@@ -143,7 +143,7 @@ public class TankWidget extends Widget {
 			GlStateManager.enableAlphaTest();
 			GlStateManager.disableDepthTest();
 			textureManager.bindTexture(manager.gui.textureFile);
-			blit(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
+			manager.gui.blit(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
 			GlStateManager.enableDepthTest();
 			GlStateManager.disableAlphaTest();
 		}

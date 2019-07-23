@@ -41,7 +41,7 @@ public class ApiaristAI extends MoveToBlockGoal {
 	public ApiaristAI(VillagerEntity villager, double speed) {
 		super(villager, speed, 16);
 		this.villager = villager;
-		villagerInventory = villager.getVillagerInventory();
+		villagerInventory = villager.func_213715_ed();
 	}
 
 	@Override
@@ -58,8 +58,8 @@ public class ApiaristAI extends MoveToBlockGoal {
 	public void tick() {
 		super.tick();
 		BlockPos housePos = this.destinationBlock.north().up();
-		this.villager.getLookHelper().setLookPosition(housePos.getX() + 0.5D, housePos.getY(), housePos.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
-
+//		this.villager.getLookHelper().setLookPosition(housePos.getX() + 0.5D, housePos.getY(), housePos.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
+//TODO lookHelper
 		if (this.getIsAboveDestination()) {
 			World world = this.villager.world;
 

@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -40,7 +41,8 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 	private double angleDelta;
 
 	public TextureHabitatLocator(String iconName) {
-		super(iconName);
+		//TODO texture size
+		super(new ResourceLocation(iconName), 0,0);
 		instance = this;
 	}
 

@@ -29,7 +29,7 @@ public class FarmableRusticSapling implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
-		BlockState blockState = germlingBlock.getStateFromMeta(germling.getItemDamage());    //TODO - stop using meta here
+		BlockState blockState = germlingBlock.getDefaultState();//TODO flatten germlingBlock.getStateFromMeta(germling.getItemDamage());    //TODO - stop using meta here
 		if (world.setBlockState(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
@@ -46,7 +46,7 @@ public class FarmableRusticSapling implements IFarmable {
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		Block block = blockState.getBlock();
-		if (!block.isWood(world, pos)) {
+		if (false) {//TODO tags !block.isWood(world, pos)) {
 			return null;
 		}
 

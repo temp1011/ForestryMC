@@ -45,7 +45,7 @@ public class FluidMap<T> extends StackMap<Fluid, T> {
 			return (Fluid) key;
 		}
 		if (key instanceof String) {
-			return FluidRegistry.getFluid((String) key);
+			return null;//TODO fluids FluidRegistry.getFluid((String) key);
 		}
 		return null;
 	}

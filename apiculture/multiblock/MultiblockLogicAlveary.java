@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import forestry.api.climate.IClimateListener;

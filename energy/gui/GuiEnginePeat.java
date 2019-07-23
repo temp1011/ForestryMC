@@ -20,7 +20,7 @@ import forestry.energy.tiles.TileEnginePeat;
 public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat> {
 
 	public GuiEnginePeat(PlayerInventory inventory, TileEnginePeat tile, int id) {
-		super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEnginePeat(inventory, tile, id), tile);
+		super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEnginePeat(inventory, tile, id), inventory, tile);
 	}
 
 	@Override

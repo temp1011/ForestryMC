@@ -39,7 +39,7 @@ public class BiogasSlot extends ReservoirWidget {
 	}
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		// do not allow pipette
 	}
 }

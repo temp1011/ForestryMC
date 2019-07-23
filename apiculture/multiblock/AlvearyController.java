@@ -186,7 +186,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
 
-				int meta = block.getMetaFromState(state);
+				int meta = 0;//TODO flatten block.getMetaFromState(state);
 				if ((meta & 8) != 0) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
@@ -201,8 +201,9 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				if (isCoordInMultiblock(airX, airY, airZ)) {
 					continue;
 				}
-				BlockState blockState = world.getBlockState(new BlockPos(airX, airY, airZ));
-				if (blockState.isOpaqueCube()) {
+				BlockPos pos = new BlockPos(airX, airY, airZ);
+				BlockState blockState = world.getBlockState(pos);
+				if (blockState.isOpaqueCube(world, pos)) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSpace"));
 				}
 			}
@@ -301,8 +302,8 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	public CompoundNBT write(CompoundNBT data) {
 		data = super.write(data);
 
-		data.setFloat("TempChange", tempChange);
-		data.setFloat("HumidChange", humidChange);
+		data.putFloat("TempChange", tempChange);
+		data.putFloat("HumidChange", humidChange);
 
 		beekeepingLogic.write(data);
 		inventory.write(data);
@@ -393,7 +394,8 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public int getBlockLightValue() {
 		BlockPos topCenter = getTopCenterCoord();
-		return world.getLightFromNeighbors(topCenter.up());
+		//TODO light
+		return world.getLight(topCenter.up());
 	}
 
 	@Override

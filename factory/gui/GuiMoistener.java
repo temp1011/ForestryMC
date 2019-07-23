@@ -20,8 +20,8 @@ import forestry.factory.tiles.TileMoistener;
 public class GuiMoistener extends GuiForestryTitled<ContainerMoistener> {
 	private final TileMoistener tile;
 
-	public GuiMoistener(PlayerInventory inventory, TileMoistener tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/moistener.png", new ContainerMoistener(inventory, tile), tile);
+	public GuiMoistener(PlayerInventory inventory, TileMoistener tile, int id) {	//TODO windowid
+		super(Constants.TEXTURE_PATH_GUI + "/moistener.png", new ContainerMoistener(inventory, tile, id), inventory, tile);
 		this.tile = tile;
 		widgetManager.add(new TankWidget(this.widgetManager, 16, 16, 0));
 	}

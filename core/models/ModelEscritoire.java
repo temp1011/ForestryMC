@@ -164,7 +164,8 @@ public class ModelEscritoire extends Model {
 		*/
 	}
 
-	@Override
+	//TODO models
+//	@Override
 	public void render(@Nullable Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		desk.render(f5);
@@ -185,7 +186,8 @@ public class ModelEscritoire extends Model {
 		model.rotateAngleZ = z;
 	}
 
-	@Override
+	//TODO model rotations
+//	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
 		setRotation(desk, f + 0.0872665f, f1, f2);
 		setRotation(standRB, f, f1, f2);
@@ -197,7 +199,7 @@ public class ModelEscritoire extends Model {
 		setRotation(standLowRB, f, f1, f2);
 		setRotation(standLowRF, f, f1, f2);
 		setRotation(standLowLB, f, f1, f2);
-		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+//		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 	}
 
 }

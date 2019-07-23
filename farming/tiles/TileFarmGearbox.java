@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IFarmController;
@@ -39,23 +40,23 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		energyManager.read(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		energyManager.read(compoundNBT);
 
-		activationDelay = CompoundNBT.getInteger("ActivationDelay");
-		previousDelays = CompoundNBT.getInteger("PrevDelays");
+		activationDelay = compoundNBT.getInt("ActivationDelay");
+		previousDelays = compoundNBT.getInt("PrevDelays");
 	}
 
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		energyManager.write(CompoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		energyManager.write(compoundNBT);
 
-		CompoundNBT.setInteger("ActivationDelay", activationDelay);
-		CompoundNBT.setInteger("PrevDelays", previousDelays);
-		return CompoundNBT;
+		compoundNBT.putInt("ActivationDelay", activationDelay);
+		compoundNBT.putInt("PrevDelays", previousDelays);
+		return compoundNBT;
 	}
 
 	@Override
@@ -96,16 +97,11 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 		return energyManager;
 	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
-	}
 
-	@Nullable
 	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
-		T energyCapability = energyManager.getCapability(capability);
-		if (energyCapability != null) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		LazyOptional<T> energyCapability = energyManager.getCapability(capability);
+		if (energyCapability.isPresent()) {
 			return energyCapability;
 		}
 		return super.getCapability(capability, facing);

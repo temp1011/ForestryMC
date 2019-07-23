@@ -52,7 +52,8 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 		}
 
 		models.put(beeType, manager.getModelLocation(beeTypeNameBase));
-		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + beeTypeNameBase));
+		//TODO flatten or work out what this maps to
+//		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + beeTypeNameBase));
 	}
 
 	@Override

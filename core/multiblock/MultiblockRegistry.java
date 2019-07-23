@@ -54,7 +54,7 @@ public class MultiblockRegistry {
 	 * @param world The world into which this part is loading.
 	 * @param part  The part being loaded.
 	 */
-	public static void onPartAdded(IWorld world, IMultiblockComponent part) {
+	public static void onPartAdded(World world, IMultiblockComponent part) {
 		MultiblockWorldRegistry registry = getOrCreateRegistry(world);
 		registry.onPartAdded(part);
 	}
@@ -65,7 +65,7 @@ public class MultiblockRegistry {
 	 * @param world The world from which a multiblock part is being removed.
 	 * @param part  The part being removed.
 	 */
-	public static void onPartRemovedFromWorld(IWorld world, IMultiblockComponent part) {
+	public static void onPartRemovedFromWorld(World world, IMultiblockComponent part) {
 		if (registries.containsKey(world)) {
 			registries.get(world).onPartRemovedFromWorld(part);
 		}
@@ -128,7 +128,7 @@ public class MultiblockRegistry {
 
 	/// *** PRIVATE HELPERS *** ///
 	//TODO refactor to getOrDefault
-	private static MultiblockWorldRegistry getOrCreateRegistry(IWorld world) {
+	private static MultiblockWorldRegistry getOrCreateRegistry(World world) {
 		if (registries.containsKey(world)) {
 			return registries.get(world);
 		} else {

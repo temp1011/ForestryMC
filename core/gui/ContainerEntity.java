@@ -18,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.ContainerType;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
@@ -28,12 +29,13 @@ public class ContainerEntity<T extends Entity & IInventory> extends ContainerFor
 	@Nullable
 	private ImmutableSet<IErrorState> previousErrorStates;
 
-	protected ContainerEntity(T entity) {
+	protected ContainerEntity(T entity, int id) {	//TODO containertypes, windowid
+		super(ContainerType.BLAST_FURNACE, id);
 		this.entity = entity;
 	}
 
-	protected ContainerEntity(T entity, PlayerInventory playerInventory, int xInv, int yInv) {
-		this(entity);
+	protected ContainerEntity(T entity, PlayerInventory playerInventory, int xInv, int yInv, int id) {
+		this(entity, id);
 		addPlayerInventory(playerInventory, xInv, yInv);
 	}
 

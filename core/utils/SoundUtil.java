@@ -35,7 +35,7 @@ public class SoundUtil {
 	public static void playSoundEvent(SoundEvent soundIn, float pitchIn) {
 		Minecraft minecraft = Minecraft.getInstance();
 		SoundHandler soundHandler = minecraft.getSoundHandler();
-		SimpleSound sound = SimpleSound.getMasterRecord(soundIn, pitchIn);
-		soundHandler.playSound(sound);
+		SimpleSound sound = SimpleSound.master(soundIn, pitchIn);
+		soundHandler.play(sound);
 	}
 }

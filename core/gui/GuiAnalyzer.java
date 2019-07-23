@@ -20,8 +20,8 @@ import forestry.core.tiles.TileAnalyzer;
 public class GuiAnalyzer extends GuiForestryTitled<ContainerAnalyzer> {
 	private final TileAnalyzer tile;
 
-	public GuiAnalyzer(PlayerInventory inventory, TileAnalyzer tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/alyzer.png", new ContainerAnalyzer(inventory, tile), tile);
+	public GuiAnalyzer(PlayerInventory inventory, TileAnalyzer tile, int id) {
+		super(Constants.TEXTURE_PATH_GUI + "/alyzer.png", new ContainerAnalyzer(inventory, tile, id), inventory, tile);
 		this.tile = tile;
 		this.ySize = 176;
 		this.widgetManager.add(new TankWidget(this.widgetManager, 95, 24, 0));

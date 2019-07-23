@@ -231,8 +231,9 @@ public abstract class Ledger {
 	protected void drawSprite(ResourceLocation textureMap, TextureAtlasSprite sprite, int x, int y) {
 		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 		Minecraft.getInstance().getTextureManager().bindTexture(textureMap);
-		//TODO - zlevel and general calc is probably not right
-		blit(x, y, (int) sprite.getMaxU() + x, (int) sprite.getMaxV() + y, 16, 16, 1.0f);
+		//TODO - probably want this method, but not sure what the extra param is
+		//   public static void blit(int p_blit_0_, int p_blit_1_, int p_blit_2_, int p_blit_3_, int p_blit_4_, TextureAtlasSprite p_blit_5_) {
+//		manager.gui.blit(x, y, sprite, 16, 16);
 	}
 
 	protected int drawHeader(String string, int x, int y) {

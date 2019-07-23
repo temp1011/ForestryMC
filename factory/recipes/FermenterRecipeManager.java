@@ -40,7 +40,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 
 	@Override
 	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
-		addRecipe(resource, fermentationValue, modifier, output, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME));
+		addRecipe(resource, fermentationValue, modifier, output, new FluidStack((Fluid) null/*TODO fluids  FluidRegistry.WATER*/, Fluid.BUCKET_VOLUME));
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 
 	@Override
 	public void addRecipe(String resourceOreName, int fermentationValue, float modifier, FluidStack output) {
-		addRecipe(resourceOreName, fermentationValue, modifier, output, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME));
+		addRecipe(resourceOreName, fermentationValue, modifier, output, new FluidStack((Fluid) null/*TODO fluids  FluidRegistry.WATER*/, Fluid.BUCKET_VOLUME));
 	}
 
 	@Nullable

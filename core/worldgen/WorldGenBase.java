@@ -14,17 +14,26 @@ import java.util.Random;
 import java.util.function.Function;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 
-public abstract class WorldGenBase extends Feature {
+import com.mojang.datafixers.Dynamic;
 
-	@Override
-	public final boolean generate(World world, Random random, BlockPos pos) {
-		return generate(world, random, pos, false);
+public abstract class WorldGenBase<FC extends IFeatureConfig> extends Feature<FC> {
+
+	public WorldGenBase(Function<Dynamic<?>, ? extends FC> configFactoryIn) {
+		super(configFactoryIn);
 	}
 
-	public boolean generate(World world, Random random, BlockPos pos, boolean forced) {
+	@Override
+	public final boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, FC config) {
+		return place(worldIn, generator, rand, pos, config, false);
+	}
+
+	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, FC config, boolean forced) {
 		return false;
 	}
 

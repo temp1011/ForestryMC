@@ -14,6 +14,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 
 public class HiveGenTree extends HiveGen {
 
@@ -34,7 +35,7 @@ public class HiveGenTree extends HiveGen {
 	@Override
 	public BlockPos getPosForHive(World world, int x, int z) {
 		// get top leaf block
-		final BlockPos topPos = world.getHeight(new BlockPos(x, 0, z)).down();
+		final BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z)).down();
 		if (topPos.getY() <= 0) {
 			return null;
 		}

@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import java.io.IOException;
 import java.util.Locale;
 
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.StringTextComponent;
 
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
@@ -31,7 +31,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	private final ItemInventorySolderingIron itemInventory;
 
 	public GuiSolderingIron(PlayerEntity player, ItemInventorySolderingIron itemInventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/solder.png", new ContainerSolderingIron(player, itemInventory));
+		super(Constants.TEXTURE_PATH_GUI + "/solder.png", new ContainerSolderingIron(player, itemInventory), player.inventory, new StringTextComponent("TEST_SOLDERING_IRON_TITLE"));
 
 		this.itemInventory = itemInventory;
 		this.xSize = 176;
@@ -42,9 +42,9 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		ICircuitLayout layout = ((ContainerSolderingIron) inventorySlots).getLayout();
+		ICircuitLayout layout = ((ContainerSolderingIron) container).getLayout();
 		String title = layout.getName();
-		fontRenderer.drawString(title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawString(title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		for (int i = 0; i < 4; i++) {
 			String description;
@@ -57,7 +57,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 			}
 
 			int row = i * 20;
-			fontRenderer.drawString(description, guiLeft + 32, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
+			getFontRenderer().drawString(description, guiLeft + 32, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
 
 			if (tube.isEmpty()) {
 				ICircuitSocketType socketType = layout.getSocketType();
@@ -65,30 +65,48 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 					FarmDirection farmDirection = FarmDirection.values()[i];
 					String farmDirectionString = farmDirection.toString().toLowerCase(Locale.ENGLISH);
 					String localizedDirection = Translator.translateToLocal("for.gui.solder." + farmDirectionString);
-					fontRenderer.drawString(localizedDirection, guiLeft + 17, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
+					getFontRenderer().drawString(localizedDirection, guiLeft + 17, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
 				}
 			}
 		}
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 
-		buttonList.add(new Button(1, guiLeft + 12, guiTop + 10, 12, 18, "<"));
-		buttonList.add(new Button(2, guiLeft + 130, guiTop + 10, 12, 18, ">"));
+//		buttons.add(new Button(1, guiLeft + 12, guiTop + 10, 12, 18, "<"));
+//		buttons.add(new Button(2, guiLeft + 130, guiTop + 10, 12, 18, ">"));
+		buttons.add(new Button(guiLeft + 12, guiTop + 10, 12, 18, "<", new RegressSelection()));
+		buttons.add(new Button(guiLeft + 130, guiTop + 10, 12, 18, ">", new AdvanceSelection()));
 	}
 
-	@Override
-	protected void actionPerformed(Button button) throws IOException {
-		super.actionPerformed(button);
+	class RegressSelection implements Button.IPressable {
 
-		if (button.id == 1) {
+		@Override
+		public void onPress(Button button) {
 			ContainerSolderingIron.regressSelection(0);
-		} else if (button.id == 2) {
+		}
+	}
+
+	class AdvanceSelection implements Button.IPressable {
+
+		@Override
+		public void onPress(Button p_onPress_1_) {
 			ContainerSolderingIron.advanceSelection(0);
 		}
 	}
+	//TODO idk, probably is now onPressed in IPressable????
+//	@Override
+//	protected void actionPerformed(Button button) throws IOException {
+//		super.actionPerformed(button);
+//
+//		if (button.id == 1) {
+//			ContainerSolderingIron.regressSelection(0);
+//		} else if (button.id == 2) {
+//			ContainerSolderingIron.advanceSelection(0);
+//		}
+//	}
 
 	@Override
 	protected void addLedgers() {

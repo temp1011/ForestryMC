@@ -20,6 +20,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 
 public final class VectUtil {
 	public static BlockPos getRandomPositionInArea(Random random, Vec3i area) {
@@ -107,7 +108,7 @@ public final class VectUtil {
 		protected BlockPos.MutableBlockPos nextPos() {
 			if (this.theBlockPos == null) {
 				this.theBlockPos = new BlockPos.MutableBlockPos(center.getX(), maxPos.getY(), center.getZ());
-				int y = Math.min(this.maxPos.getY(), this.world.getHeight(this.theBlockPos).getY());
+				int y = Math.min(this.maxPos.getY(), this.world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, this.theBlockPos).getY());
 				this.theBlockPos.setY(y);
 				return this.theBlockPos;
 			} else if (spiralLayer > maxSpiralLayers) {
@@ -149,7 +150,7 @@ public final class VectUtil {
 					}
 
 					this.theBlockPos.setPos(x, y, z);
-					y = Math.min(this.maxPos.getY(), this.world.getHeight(this.theBlockPos).getY());
+					y = Math.min(this.maxPos.getY(), this.world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, this.theBlockPos).getY());
 				}
 
 				return this.theBlockPos.setPos(x, y, z);

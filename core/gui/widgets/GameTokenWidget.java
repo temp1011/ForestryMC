@@ -88,7 +88,7 @@ public class GameTokenWidget extends Widget {
 		for (String ident : getToken().getOverlayIcons()) {
 			TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
 			//TODO no idea if this is right at all
-			blit(startX + xPos + 3, startY + yPos + 3,(int) (startX + xPos + 3 + icon.getMaxU()),(int) (startY + yPos + 3 + icon.getMaxV()), 16, 16, 1.0f);
+			manager.gui.blit(startX + xPos + 3, startY + yPos + 3,(int) (startX + xPos + 3 + icon.getMaxU()),(int) (startY + yPos + 3 + icon.getMaxV()), 16, 16);
 		}
 		GlStateManager.enableDepthTest();
 	}

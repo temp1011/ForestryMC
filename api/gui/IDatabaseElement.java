@@ -13,6 +13,7 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.gui.style.ITextStyle;
 
+//TODO textcomponents?
 public interface IDatabaseElement extends IElementLayout {
 
 	/**

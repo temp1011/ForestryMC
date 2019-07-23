@@ -13,6 +13,7 @@ package forestry.energy.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -34,9 +35,9 @@ public class InventoryEngineBiogas extends InventoryAdapterTile<TileEngineBiogas
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_CAN) {
-			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
-			if (fluid != null) {
-				return tile.getTankManager().canFillFluidType(fluid);
+			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+			if (fluid.isPresent()) {
+				return tile.getTankManager().canFillFluidType(fluid.orElse(null));
 			}
 		}
 

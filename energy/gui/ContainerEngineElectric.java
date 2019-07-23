@@ -20,10 +20,10 @@ import forestry.energy.tiles.TileEngineElectric;
 
 public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectric> {
 
-	public ContainerEngineElectric(PlayerInventory player, TileEngineElectric tile) {
-		super(tile, player, 8, 84);
+	public ContainerEngineElectric(PlayerInventory player, TileEngineElectric tile, int id) {
+		super(tile, player, 8, 84, id);
 
-		this.addSlotToContainer(new SlotFiltered(tile, InventoryEngineElectric.SLOT_BATTERY, 84, 53));
+		this.addSlot(new SlotFiltered(tile, InventoryEngineElectric.SLOT_BATTERY, 84, 53));
 	}
 
 	@Override

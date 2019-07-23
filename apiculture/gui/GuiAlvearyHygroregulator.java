@@ -20,8 +20,8 @@ import forestry.core.gui.widgets.TankWidget;
 public class GuiAlvearyHygroregulator extends GuiForestryTitled<ContainerAlvearyHygroregulator> {
 	private final TileAlvearyHygroregulator tile;
 
-	public GuiAlvearyHygroregulator(PlayerInventory inventory, TileAlvearyHygroregulator tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/hygroregulator.png", new ContainerAlvearyHygroregulator(inventory, tile), tile);
+	public GuiAlvearyHygroregulator(PlayerInventory inventory, TileAlvearyHygroregulator tile,int id) {	//TODO windowid
+		super(Constants.TEXTURE_PATH_GUI + "/hygroregulator.png", new ContainerAlvearyHygroregulator(inventory, tile, id), inventory, tile);
 		this.tile = tile;
 
 		widgetManager.add(new TankWidget(this.widgetManager, 104, 17, 0));

@@ -53,7 +53,7 @@ public class ItemAlyzer extends ItemWithGui {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int data) {
-		return new GuiAlyzer(player, new ItemInventoryAlyzer(player, heldItem));
+		return new GuiAlyzer(player, new ItemInventoryAlyzer(player, heldItem), data);	//TODO windowid
 	}
 
 	@Override

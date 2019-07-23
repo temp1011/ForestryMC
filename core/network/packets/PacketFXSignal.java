@@ -68,9 +68,8 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 		data.writeBlockPos(pos);
 		data.writeByte(visualFX.ordinal());
 		data.writeByte(soundFX.ordinal());
-		CompoundNBT tag = new CompoundNBT();
-		NBTUtil.writeBlockState(tag, blockState);
-		data.writeCompoundNBT(tag);
+		CompoundNBT tag = NBTUtil.writeBlockState(blockState);
+		data.writeCompoundTag(tag);
 	}
 
 	@Override
@@ -86,11 +85,11 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 			VisualFXType visualFX = VisualFXType.values()[data.readByte()];
 			SoundFXType soundFX = SoundFXType.values()[data.readByte()];
 			World world = player.world;
-			BlockState blockState = NBTUtil.readBlockState(data.readCompoundNBT());
+			BlockState blockState = NBTUtil.readBlockState(data.readCompoundTag());
 			Block block = blockState.getBlock();
 
 			if (visualFX == VisualFXType.BLOCK_BREAK) {
-				Minecraft.getInstance().effectRenderer.addBlockDestroyEffects(pos, blockState);
+				Minecraft.getInstance().particles.addBlockDestroyEffects(pos, blockState);
 			}
 
 			if (soundFX != SoundFXType.NONE) {

@@ -19,6 +19,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 
 public class HiveGenGround extends HiveGen {
 
@@ -42,7 +43,7 @@ public class HiveGenGround extends HiveGen {
 	@Override
 	public BlockPos getPosForHive(World world, int x, int z) {
 		// get to the ground
-		final BlockPos topPos = world.getHeight(new BlockPos(x, 0, z));
+		final BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z));
 		if (topPos.getY() == 0) {
 			return null;
 		}

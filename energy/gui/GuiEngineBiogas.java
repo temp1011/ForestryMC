@@ -17,8 +17,8 @@ import forestry.core.gui.widgets.TankWidget;
 import forestry.energy.tiles.TileEngineBiogas;
 
 public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngineBiogas> {
-	public GuiEngineBiogas(PlayerInventory inventory, TileEngineBiogas tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/bioengine.png", new ContainerEngineBiogas(inventory, tile), tile);
+	public GuiEngineBiogas(PlayerInventory inventory, TileEngineBiogas tile, int windowid) {	//TODO windowid
+		super(Constants.TEXTURE_PATH_GUI + "/bioengine.png", new ContainerEngineBiogas(inventory, tile, windowid), inventory, tile);
 		widgetManager.add(new TankWidget(widgetManager, 89, 19, 0));
 		widgetManager.add(new TankWidget(widgetManager, 107, 19, 1));
 

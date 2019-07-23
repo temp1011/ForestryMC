@@ -268,11 +268,11 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiAnalyzer(player.inventory, this);
+		return new GuiAnalyzer(player.inventory, this,data);	//TODO windowid
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerAnalyzer(player.inventory, this);
+		return new ContainerAnalyzer(player.inventory, this, data);	//TODO windowid
 	}
 }

@@ -78,17 +78,17 @@ public class TileEngineClockwork extends TileEngine {
 
 	/* LOADING & SAVING */
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		tension = CompoundNBT.getFloat("Wound");
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		tension = compoundNBT.getFloat("Wound");
 	}
 
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		CompoundNBT.setFloat("Wound", tension);
-		return CompoundNBT;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		compoundNBT.putFloat("Wound", tension);
+		return compoundNBT;
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class TileEngineClockwork extends TileEngine {
 			tension = 0;
 		}
 		energyManager.generateEnergy(ENGINE_CLOCKWORK_ENERGY_PER_CYCLE * (int) tension);
-		world.updateComparatorOutputLevel(pos, getBlockType());
+		world.updateComparatorOutputLevel(pos, getBlockState().getBlock());
 	}
 
 	@Override

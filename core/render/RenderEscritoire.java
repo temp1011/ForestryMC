@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -40,7 +41,7 @@ public class RenderEscritoire extends TileEntityRenderer<TileEscritoire> {
 
 	private ItemEntity dummyItem(World world) {
 		if (dummyEntityItem == null) {
-			dummyEntityItem = new ItemEntity(world);
+			dummyEntityItem = new ItemEntity(EntityType.ITEM, world);
 		} else {
 			dummyEntityItem.world = world;
 		}

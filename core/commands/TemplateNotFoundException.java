@@ -11,6 +11,7 @@
 package forestry.core.commands;
 
 import net.minecraft.command.CommandException;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.api.genetics.IAlleleSpecies;
 
@@ -19,7 +20,7 @@ public class TemplateNotFoundException extends CommandException {
 	private static final long serialVersionUID = 1L;
 
 	public TemplateNotFoundException(IAlleleSpecies species) {
-		super("Could not find template for species %s with UID %s", species.getAlleleName(), species.getUID());
+		super(new TranslationTextComponent("Could not find template for species %s with UID %s", species.getAlleleName(), species.getUID()));
 	}
 
 }

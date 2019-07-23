@@ -371,11 +371,11 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiBottler(player.inventory, this);
+		return new GuiBottler(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerBottler(player.inventory, this);
+		return new ContainerBottler(player.inventory, this, data);	//TODO windowid
 	}
 }

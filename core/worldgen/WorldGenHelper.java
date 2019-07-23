@@ -1,14 +1,17 @@
 package forestry.core.worldgen;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.block.VineBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -340,24 +343,16 @@ public class WorldGenHelper {
 		public abstract boolean canReplace(BlockState blockState, World world, BlockPos pos);
 	}
 
-	public enum Direction {
-		NORTH(Direction.NORTH),
-		SOUTH(Direction.SOUTH),
-		WEST(Direction.WEST),
-		EAST(Direction.EAST);
+	public static class DirectionHelper {
 
-		public final Direction facing;
-
-		Direction(Direction forgeDirection) {
-			this.facing = forgeDirection;
-		}
+		public static final Direction[] VALUES = new Direction[] {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
 
 		public static Direction getRandom(Random random) {
-			return values()[random.nextInt(values().length)];
+			return VALUES[random.nextInt(VALUES.length)];
 		}
 
 		public static Direction getRandomOther(Random random, Direction direction) {
-			EnumSet<Direction> directions = EnumSet.allOf(Direction.class);
+			List<Direction> directions = Arrays.asList(VALUES);
 			directions.remove(direction);
 			int size = directions.size();
 			return directions.toArray(new Direction[size])[random.nextInt(size)];

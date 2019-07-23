@@ -19,6 +19,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -76,8 +77,11 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
 			return acceptsAsResource(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
-			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
-			return fluid != null && farmController.getTankManager().canFillFluidType(fluid);
+			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+			if(!fluid.isPresent()) {
+				return false;
+			}
+			return farmController.getTankManager().canFillFluidType(fluid.orElse(null));
 		}
 		return false;
 	}

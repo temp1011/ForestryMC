@@ -15,10 +15,12 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import forestry.core.fluids.Fluids;
 
@@ -35,9 +37,9 @@ public class ItemRegistryFluids extends ItemRegistry {
 
 	public ItemStack getContainer(EnumContainerType type, Fluid fluid) {
 		ItemStack container = new ItemStack(containers.get(type));
-		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
-		if (fluidHandler != null) {
-			fluidHandler.fill(new FluidStack(fluid, Integer.MAX_VALUE), true);
+		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
+		if (fluidHandlerCap.isPresent()) {
+			fluidHandlerCap.orElse(null).fill(new FluidStack(fluid, Integer.MAX_VALUE), true);
 			return container;
 		} else {
 			return ItemStack.EMPTY;

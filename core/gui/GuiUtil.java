@@ -13,6 +13,7 @@ package forestry.core.gui;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -20,6 +21,7 @@ import net.minecraft.client.gui.FontRenderer;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
 import net.minecraftforge.fml.client.config.GuiUtils;
 
@@ -49,8 +51,10 @@ public class GuiUtil {
 		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, null);
 	}
 
+	//TODO hopefully this is client side...
 	public static void drawToolTips(IGuiSizable gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
-		List<String> lines = toolTips.getLines();
+		//TODO textcomponent
+		List<String> lines = toolTips.getLines().stream().map(ITextComponent::getFormattedText).collect(Collectors.toList());
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();
 			if (provider == null || provider.isRelativeToGui()) {

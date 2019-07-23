@@ -111,12 +111,12 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		ContainerMinecartBeehouse container = new ContainerMinecartBeehouse(player.inventory, this, true);
+		ContainerMinecartBeehouse container = new ContainerMinecartBeehouse(player.inventory, this, true, data);	//TODO windowid
 		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.APIARY);
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerMinecartBeehouse(player.inventory, this, true);
+		return new ContainerMinecartBeehouse(player.inventory, this, true, data);	//TODO Windowid
 	}
 }

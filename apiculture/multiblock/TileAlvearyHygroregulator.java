@@ -155,11 +155,11 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiAlvearyHygroregulator(player.inventory, this);
+		return new GuiAlvearyHygroregulator(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerAlvearyHygroregulator(player.inventory, this);
+		return new ContainerAlvearyHygroregulator(player.inventory, this, data);	//TODO windowid
 	}
 }

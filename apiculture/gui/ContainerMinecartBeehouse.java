@@ -27,8 +27,8 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 	/* Attributes - Final*/
 	private final ContainerAnalyzerProviderHelper providerHelper;
 
-	public ContainerMinecartBeehouse(PlayerInventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames) {
-		super(entity, player, 8, 108);
+	public ContainerMinecartBeehouse(PlayerInventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames, int id) {
+		super(entity, player, 8, 108, id);
 		providerHelper = new ContainerAnalyzerProviderHelper(this, player);
 
 		ContainerBeeHelper.addSlots(this, entity, hasFrames);
@@ -59,12 +59,12 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 	/* Methods - Implement ContainerForestry */
 	@Override
 	protected void addSlot(PlayerInventory playerInventory, int slot, int x, int y) {
-		addSlotToContainer(new SlotLockable(playerInventory, slot, x, y));
+		addSlot(new SlotLockable(playerInventory, slot, x, y));
 	}
 
 	@Override
 	protected void addHotbarSlot(PlayerInventory playerInventory, int slot, int x, int y) {
-		addSlotToContainer(new SlotLockable(playerInventory, slot, x, y));
+		addSlot(new SlotLockable(playerInventory, slot, x, y));
 	}
 
 	/* Methods - Implement IGuiSelectable */

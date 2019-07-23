@@ -22,8 +22,8 @@ import forestry.core.network.packets.PacketGuiUpdate;
 
 public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousingBase> implements IContainerBeeHousing {
 
-	public ContainerBeeHousing(PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames) {
-		super(tile, player, 8, 108);
+	public ContainerBeeHousing(PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames, int id) {	//TODO windowid
+		super(tile, player, 8, 108, id);
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 
 		tile.getBeekeepingLogic().clearCachedValues();

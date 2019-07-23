@@ -179,8 +179,7 @@ public class TextureMapForestry extends AtlasTexture {
 	}
 
 	private ResourceLocation getResourceLocation(TextureAtlasSprite p_184396_1_) {
-		ResourceLocation resourcelocation = new ResourceLocation(p_184396_1_.getIconName());
-		return new ResourceLocation(resourcelocation.getNamespace(), String.format("%s/%s%s", this.basePath, resourcelocation.getPath(), ".png"));	//TODO - AT
-		return new ResourceLocation("", "");
+		ResourceLocation resourcelocation = p_184396_1_.getName();
+		return new ResourceLocation(resourcelocation.getNamespace(), String.format("%s/%s%s", this.basePath, resourcelocation.getPath(), ".png"));
 	}
 }

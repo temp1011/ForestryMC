@@ -82,8 +82,8 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		this.dataManager.register(OWNER, Optional.empty());
 	}
 
@@ -119,9 +119,10 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 		return getBiome().getDownfall();
 	}
 
+	//TODO getLight
 	@Override
 	public int getBlockLightValue() {
-		return world.getLightFromNeighbors(getPosition().up());
+		return world.getLight(getPosition().up());
 	}
 
 	@Override
@@ -180,8 +181,8 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 		tickHelper.onTick();
 		if (!world.isRemote) {
 			if (beeLogic.canWork()) {
@@ -207,16 +208,16 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	}
 
 	@Override
-	protected void readEntityFromNBT(CompoundNBT CompoundNBT) {
-		super.readEntityFromNBT(CompoundNBT);
-		beeLogic.read(CompoundNBT);
-		ownerHandler.read(CompoundNBT);
+	public void readAdditional(CompoundNBT compoundNBT) {
+		super.readAdditional(compoundNBT);
+		beeLogic.read(compoundNBT);
+		ownerHandler.read(compoundNBT);
 	}
 
 	@Override
-	protected void writeEntityToNBT(CompoundNBT CompoundNBT) {
-		super.writeEntityToNBT(CompoundNBT);
-		beeLogic.write(CompoundNBT);
-		ownerHandler.write(CompoundNBT);
+	protected void writeAdditional(CompoundNBT compoundNBT) {
+		super.writeAdditional(compoundNBT);
+		beeLogic.write(compoundNBT);
+		ownerHandler.write(compoundNBT);
 	}
 }

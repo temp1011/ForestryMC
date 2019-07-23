@@ -19,8 +19,8 @@ import forestry.core.gui.GuiForestryTitled;
 public class GuiAlvearySieve extends GuiForestryTitled<ContainerAlvearySieve> {
 	private final TileAlvearySieve tile;
 
-	public GuiAlvearySieve(PlayerInventory inventory, TileAlvearySieve tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/sieve.png", new ContainerAlvearySieve(inventory, tile), tile);
+	public GuiAlvearySieve(PlayerInventory inventory, TileAlvearySieve tile, int id) {
+		super(Constants.TEXTURE_PATH_GUI + "/sieve.png", new ContainerAlvearySieve(inventory, tile, id), inventory, tile);
 		this.tile = tile;
 	}
 

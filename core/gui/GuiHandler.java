@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fml.network.NetworkRegistry;
 
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -38,8 +39,9 @@ public class GuiHandler implements IGuiHandler {
 	public static void openGui(PlayerEntity playerEntity, IGuiHandlerEntity guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
 		//TODO - can only be called on server?
-		NetworkHooks.openGui(playerEntity, () -> guiHandler.getContainer(playerEntity, guiData));
-		playerEntity.openGui(ForestryAPI.instance, guiData, playerEntity.world, guiHandler.getIdOfEntity(), 0, 0);
+		//TODO gui
+//		NetworkHooks.openGui(playerEntity, () -> guiHandler.getContainer(playerEntity, guiData));
+//		playerEntity.openGui(ForestryAPI.instance, guiData, playerEntity.world, guiHandler.getIdOfEntity(), 0, 0);
 	}
 
 	public static void openGui(PlayerEntity playerEntity, IGuiHandlerItem guiHandler) {
@@ -48,7 +50,8 @@ public class GuiHandler implements IGuiHandler {
 
 	public static void openGui(PlayerEntity playerEntity, IGuiHandlerItem guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
-		playerEntity.openGui(ForestryAPI.instance, guiData, playerEntity.world, 0, 0, 0);
+		//TODO gui
+//		playerEntity.openGui(ForestryAPI.instance, guiData, playerEntity.world, 0, 0, 0);
 	}
 
 	public static void openGui(PlayerEntity playerEntity, IGuiHandlerTile guiHandler) {
@@ -58,7 +61,8 @@ public class GuiHandler implements IGuiHandler {
 	public static void openGui(PlayerEntity playerEntity, IGuiHandlerTile guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
 		BlockPos coordinates = guiHandler.getCoordinates();
-		playerEntity.openGui(ForestryAPI.instance, guiData, playerEntity.world, coordinates.getX(), coordinates.getY(), coordinates.getZ());
+		//TODO gui
+//		playerEntity.openGui(ForestryAPI.instance, guiData, playerEntity.world, coordinates.getX(), coordinates.getY(), coordinates.getZ());
 	}
 
 	private static int encodeGuiData(IGuiHandlerForestry guiHandler, short data) {

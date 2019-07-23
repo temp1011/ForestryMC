@@ -88,7 +88,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 			}
 		});
 		addEventHandler(GuiEvent.KeyEvent.class, event -> {
-			int keyCode = event.getKey();
+			int keyCode = event.getMouseKey().getKeyCode();
 			if ((keyCode == GLFW.GLFW_KEY_DOWN|| keyCode == GLFW.GLFW_KEY_RIGHT) && rightButton.isEnabled()) {
 				rightButton.onPressed();
 			} else if ((keyCode == GLFW.GLFW_KEY_UP || keyCode == GLFW.GLFW_KEY_LEFT) && leftButton.isEnabled()) {

@@ -65,52 +65,54 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 //		setHarvestLevel("pickaxe", 0);	//TODO setToolType in item?
 	}
 
-	@Override
-	public void addCollisionBoxToList(BlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
-		Direction orientation = state.get(FACING);
-		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
-		if (boundingBoxes == null) {
-			return;
-		}
-
-		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
-			AxisAlignedBB boundingBox = boundingBoxBase.offset(pos.getX(), pos.getY(), pos.getZ());
-			if (entityBox.intersects(boundingBox)) {
-				collidingBoxes.add(boundingBox);
-			}
-		}
-	}
+	//TODO raytracing
+//	@Override
+//	public void addCollisionBoxToList(BlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
+//		Direction orientation = state.get(FACING);
+//		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
+//		if (boundingBoxes == null) {
+//			return;
+//		}
+//
+//		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
+//			AxisAlignedBB boundingBox = boundingBoxBase.offset(pos.getX(), pos.getY(), pos.getZ());
+//			if (entityBox.intersects(boundingBox)) {
+//				collidingBoxes.add(boundingBox);
+//			}
+//		}
+//	}
 
 	//TODO potentially getRayTraceResult
-	@Override
-	public RayTraceResult collisionRayTrace(BlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-		Direction orientation = blockState.get(FACING);
-		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
-		if (boundingBoxes == null) {
-			return super.collisionRayTrace(blockState, worldIn, pos, start, end);
-		}
-
-		RayTraceResult nearestIntersection = null;
-		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
-			AxisAlignedBB boundingBox = boundingBoxBase.offset(pos.getX(), pos.getY(), pos.getZ());
-			RayTraceResult intersection = boundingBox.calculateIntercept(start, end);
-			if (intersection != null) {
-				if (nearestIntersection == null || intersection.hitVec.distanceTo(start) < nearestIntersection.hitVec.distanceTo(start)) {
-					nearestIntersection = intersection;
-				}
-			}
-		}
-
-		if (nearestIntersection != null) {
-			Object hitInfo = nearestIntersection.hitInfo;
-			Entity entityHit = nearestIntersection.entityHit;
-			nearestIntersection = new RayTraceResult(nearestIntersection.typeOfHit, nearestIntersection.hitVec, nearestIntersection.sideHit, pos);
-			nearestIntersection.hitInfo = hitInfo;
-			nearestIntersection.entityHit = entityHit;
-		}
-
-		return nearestIntersection;
-	}
+//	@Override
+//	public RayTraceResult collisionRayTrace(BlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
+//		Direction orientation = blockState.get(FACING);
+//		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
+//		if (boundingBoxes == null) {
+//			return super.collisionRayTrace(blockState, worldIn, pos, start, end);
+//		}
+//
+//		RayTraceResult nearestIntersection = null;
+//		for (AxisAlignedBB boundingBoxBase : boundingBoxes) {
+//			AxisAlignedBB boundingBox = boundingBoxBase.offset(pos.getX(), pos.getY(), pos.getZ());
+//			RayTraceResult intersection = boundingBox.calculateIntercept(start, end);
+//			if (intersection != null) {
+//				if (nearestIntersection == null || intersection.hitVec.distanceTo(start) < nearestIntersection.hitVec.distanceTo(start)) {
+//					nearestIntersection = intersection;
+//				}
+//			}
+//		}
+//
+//		if (nearestIntersection != null) {
+//			//TODO needs to be entityRayTrace here
+//			Object hitInfo = nearestIntersection.hitInfo;
+//			Entity entityHit = nearestIntersection.entityHit;
+//			nearestIntersection = new RayTraceResult(nearestIntersection.typeOfHit, nearestIntersection.hitVec, nearestIntersection.sideHit, pos);
+//			nearestIntersection.hitInfo = hitInfo;
+//			nearestIntersection.entityHit = entityHit;
+//		}
+//
+//		return nearestIntersection;
+//	}
 
 	@Override
 	public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation rot) {
@@ -151,12 +153,13 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 		}
 	}
 
-	@Override
-	public boolean isSideSolid(BlockState base_state, IBlockReader world, BlockPos pos, Direction side) {
-		BlockState blockState = world.getBlockState(pos);
-		Direction facing = blockState.get(BlockBase.FACING);
-		return facing.getOpposite() == side;
-	}
+	//TODO voxelShapes?
+//	@Override
+//	public boolean isSideSolid(BlockState base_state, IBlockReader world, BlockPos pos, Direction side) {
+//		BlockState blockState = world.getBlockState(pos);
+//		Direction facing = blockState.get(BlockBase.FACING);
+//		return facing.getOpposite() == side;
+//	}
 
 	@Override
 	public boolean hasComparatorInputOverride(BlockState state) {

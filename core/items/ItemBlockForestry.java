@@ -15,12 +15,17 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 
@@ -36,9 +41,9 @@ import forestry.core.utils.ItemTooltipUtil;
 public class ItemBlockForestry<B extends Block> extends BlockItem {
 
 	public ItemBlockForestry(B block) {
-		super(block);
-		setMaxDamage(0);
-		setHasSubtypes(true);
+		super(block, (new Item.Properties()).maxDamage(0));
+//	TODO done in item or flatten
+//		setHasSubtypes(true);
 	}
 
 	@Override
@@ -48,16 +53,11 @@ public class ItemBlockForestry<B extends Block> extends BlockItem {
 	}
 
 	@Override
-	public int getMetadata(int i) {
-		return i;
-	}
-
-	@Override
 	public String getTranslationKey(ItemStack itemstack) {
 		Block block = getBlock();
 		if (block instanceof IBlockWithMeta) {
 			IBlockWithMeta blockMeta = (IBlockWithMeta) block;
-			int meta = itemstack.getMetadata();
+			int meta = 0;//TODO flatten itemstack.getMetadata();
 			return block.getTranslationKey() + "." + blockMeta.getNameFromMeta(meta);
 		}
 		return block.getTranslationKey();
@@ -65,28 +65,36 @@ public class ItemBlockForestry<B extends Block> extends BlockItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
 	}
 
+	//TODO is this the right method
+	//and is it needed any more
 	@Override
-	public boolean placeBlockAt(ItemStack stack, PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, BlockState newState) {
-		boolean placed = super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);
+	public ActionResultType tryPlace(BlockItemUseContext context) {
+		ActionResultType placed = super.tryPlace(context);
 
-		if (placed) {
-			if (block.hasTileEntity(newState)) {
+		ItemStack stack = context.getItem();
+		BlockPos pos = context.getPos();
+		World world = context.getWorld();
+		PlayerEntity player = context.getPlayer();
+		Direction side = context.getFace();
+
+		if (placed == ActionResultType.SUCCESS) {
+			if (getBlock().hasTileEntity(getBlock().getDefaultState())) {	//TODO how to get the state??
 				if (stack.getItem() instanceof ItemBlockNBT && stack.getTag() != null) {
 					TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
 					if (tile != null) {
-						tile.readFromNBT(stack.getTag());
+						tile.read(stack.getTag());
 						tile.setPos(pos);
 					}
 				}
 			}
 
-			if (block instanceof IBlockRotatable) {
-				((IBlockRotatable) block).rotateAfterPlacement(player, world, pos, side);
+			if (getBlock() instanceof IBlockRotatable) {
+				((IBlockRotatable) getBlock()).rotateAfterPlacement(player, world, pos, side);
 			}
 		}
 

@@ -23,6 +23,7 @@ import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
@@ -77,7 +78,7 @@ public class TRSRBakedModel implements IBakedModel {
 		EnumMap<Direction, ImmutableList<BakedQuad>> faces = Maps.newEnumMap(Direction.class);
 		for (Direction face : Direction.values()) {
 			if (!original.isBuiltInRenderer()) {
-				for (BakedQuad quad : original.getQuads(null, face, 0)) {
+				for (BakedQuad quad : original.getQuads(null, face, new Random())) {
 					Transformer transformer = new Transformer(transform, quad.getFormat());
 					quad.pipe(transformer);
 					builder.add(transformer.build());
@@ -90,7 +91,7 @@ public class TRSRBakedModel implements IBakedModel {
 		// general quads
 		//builder = ImmutableList.builder();
 		if (!original.isBuiltInRenderer()) {
-			for (BakedQuad quad : original.getQuads(null, null, 0)) {
+			for (BakedQuad quad : original.getQuads(null, null, new Random())) {
 				Transformer transformer = new Transformer(transform, quad.getFormat());
 				quad.pipe(transformer);
 				builder.add(transformer.build());
@@ -102,7 +103,7 @@ public class TRSRBakedModel implements IBakedModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		if (side != null) {
 			return faces.get(side);
 		}
@@ -147,7 +148,7 @@ public class TRSRBakedModel implements IBakedModel {
 		public Transformer(TRSRTransformation transformation, VertexFormat format) {
 			super(new UnpackedBakedQuad.Builder(format));
 			// position transform
-			this.transformation = transformation.getMatrix();
+			this.transformation = transformation.getMatrix(Direction.UP/*this.parent.getVertexFormat()*/);	//TODO how to access direction
 			// normal transform
 			this.normalTransformation = new Matrix3f();
 			this.transformation.getRotationScale(this.normalTransformation);
@@ -157,16 +158,16 @@ public class TRSRBakedModel implements IBakedModel {
 
 		@Override
 		public void put(int element, float... data) {
-			VertexFormatElement.EnumUsage usage = parent.getVertexFormat().getElement(element).getUsage();
+			VertexFormatElement.Usage usage = parent.getVertexFormat().getElement(element).getUsage();
 
 			// transform normals and position
-			if (usage == VertexFormatElement.EnumUsage.POSITION && data.length >= 3) {
+			if (usage == VertexFormatElement.Usage.POSITION && data.length >= 3) {
 				Vector4f vec = new Vector4f(data);
 				vec.setW(1.0f);
 				transformation.transform(vec);
 				data = new float[4];
 				vec.get(data);
-			} else if (usage == VertexFormatElement.EnumUsage.NORMAL && data.length >= 3) {
+			} else if (usage == VertexFormatElement.Usage.NORMAL && data.length >= 3) {
 				Vector3f vec = new Vector3f(data);
 				normalTransformation.transform(vec);
 				vec.normalize();

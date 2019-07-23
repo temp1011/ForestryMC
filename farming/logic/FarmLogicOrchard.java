@@ -142,7 +142,8 @@ public class FarmLogicOrchard extends FarmLogic {
 		// Determine what type we want to harvest.
 		BlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
-		if (!block.isWood(world, position) && !isBlockTraversable(blockState, traversalBlocks) && !isFruitBearer(world, position, blockState)) {
+		//TODO tags
+		if (false){//!block.isWood(world, position) && !isBlockTraversable(blockState, traversalBlocks) && !isFruitBearer(world, position, blockState)) {
 			return crops;
 		}
 
@@ -185,7 +186,7 @@ public class FarmLogicOrchard extends FarmLogic {
 
 					BlockState blockState = world.getBlockState(candidate);
 					Block block = blockState.getBlock();
-					if (block.isWood(world, candidate) || isBlockTraversable(blockState, traversalBlocks)) {
+					if (false){//block.isWood(world, candidate) || isBlockTraversable(blockState, traversalBlocks)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 					}

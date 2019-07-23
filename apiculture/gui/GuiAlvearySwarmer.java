@@ -19,8 +19,8 @@ import forestry.core.gui.GuiForestryTitled;
 public class GuiAlvearySwarmer extends GuiForestryTitled<ContainerAlvearySwarmer> {
 	private final TileAlvearySwarmer tile;
 
-	public GuiAlvearySwarmer(PlayerInventory inventory, TileAlvearySwarmer tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/swarmer.png", new ContainerAlvearySwarmer(inventory, tile), tile);
+	public GuiAlvearySwarmer(PlayerInventory inventory, TileAlvearySwarmer tile, int id) {
+		super(Constants.TEXTURE_PATH_GUI + "/swarmer.png", new ContainerAlvearySwarmer(inventory, tile, id), inventory, tile);
 		this.tile = tile;
 	}
 

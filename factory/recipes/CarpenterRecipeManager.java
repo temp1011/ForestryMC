@@ -48,8 +48,9 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 
 	@Override
 	public void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object[] materials) {
-		ICarpenterRecipe recipe = new CarpenterRecipe(packagingTime, liquid, box, ShapedRecipeCustom.createShapedRecipe(product, materials));
-		addRecipe(recipe);
+//		ICarpenterRecipe recipe = new CarpenterRecipe(packagingTime, liquid, box, ShapedRecipeCustom.createShapedRecipe(product, materials));
+//		addRecipe(recipe);
+		//TODO json
 	}
 
 	public static RecipePair<ICarpenterRecipe> findMatchingRecipe(@Nullable FluidStack liquid, ItemStack item, IInventory CraftingInventory) {

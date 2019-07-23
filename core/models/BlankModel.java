@@ -13,6 +13,7 @@ package forestry.core.models;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -33,12 +34,12 @@ public abstract class BlankModel implements IBakedModel {
 	protected ItemOverrideList overrideList;
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		return Collections.emptyList();
 	}
 
 	protected ItemOverrideList createOverrides() {
-		return ItemOverrideList.NONE;
+		return ItemOverrideList.EMPTY;
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public abstract class BlankModel implements IBakedModel {
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		return Minecraft.getInstance().getTextureMapBlocks().getMissingSprite();
+		return Minecraft.getInstance().getTextureMap().missingImage;
 	}
 
 	@Override

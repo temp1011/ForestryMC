@@ -26,9 +26,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 
 
 import forestry.core.network.packets.PacketFXSignal;
@@ -79,7 +82,7 @@ public abstract class BlockUtil {
 			return true;
 		} else {
 			//TODO - tags or something
-			return block.isWood(world, pos);
+			return false;//block.isWood(world, pos);
 		}
 	}
 
@@ -114,7 +117,7 @@ public abstract class BlockUtil {
 
 	public static boolean isReplaceableBlock(BlockState blockState, World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		return block.isReplaceable(world, pos) && true;//!(block instanceof BlockStaticLiquid);
+		return world.getBlockState(pos).getMaterial().isReplaceable() && true;//!(block instanceof BlockStaticLiquid);
 	}
 
 	@Nullable
@@ -245,20 +248,20 @@ public abstract class BlockUtil {
 
 	public static boolean canReplace(BlockState blockState, World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		return block.isReplaceable(world, pos) && !blockState.getMaterial().isLiquid();
+		return world.getBlockState(pos).getMaterial().isReplaceable() && !blockState.getMaterial().isLiquid();
 	}
 
 	public static boolean canPlaceTree(BlockState blockState, World world, BlockPos pos) {
 		BlockPos downPos = pos.down();
 		Block block = world.getBlockState(downPos).getBlock();
-		return !(block.isReplaceable(world, downPos) &&
-			blockState.getMaterial().isLiquid()) &&
-			!block.isLeaves(blockState, world, downPos) &&
-			!block.isWood(world, downPos);
+		return !(world.getBlockState(pos).getMaterial().isReplaceable() &&
+			blockState.getMaterial().isLiquid()) && true;
+//			!block.isLeaves(blockState, world, downPos) &&
+//			!block.isWood(world, downPos);
 	}
 
 	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos) {
-		BlockPos topPos = world.getHeight(pos);
+		BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
 		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos(pos);
 		BlockState blockState = world.getBlockState(newPos);
 
@@ -291,8 +294,8 @@ public abstract class BlockUtil {
 	/**
 	 * Copied from {@link Block#shouldSideBeRendered}
 	 */
-	public static boolean shouldSideBeRendered(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		AxisAlignedBB axisalignedbb = blockState.getBoundingBox(blockAccess, pos);
+	public static boolean shouldSideBeRendered(BlockState blockState, IEnviromentBlockReader blockAccess, BlockPos pos, Direction side) {
+		AxisAlignedBB axisalignedbb = blockState.getShape(blockAccess, pos).getBoundingBox();
 
 		switch (side) {
 			case DOWN:
@@ -348,7 +351,7 @@ public abstract class BlockUtil {
 	}
 
 	public static boolean setBlockToAirWithSound(World world, BlockPos pos, BlockState oldState) {
-		if (world.setBlockToAir(pos)) {
+		if (world.removeBlock(pos, false)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;

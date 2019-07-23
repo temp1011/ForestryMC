@@ -13,9 +13,11 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunk;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -120,7 +122,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		if (!connectedParts.add(part)) {
 			Log.warning("[%s] Controller %s is double-adding part %d @ %s. This is unusual. " +
 					"If you encounter odd behavior, please tear down the machine and rebuild it.",
-				world.isRemote ? "CLIENT" : "SERVER", hashCode(), part.hashCode(), coord);
+				world.isRemote() ? "CLIENT" : "SERVER", hashCode(), part.hashCode(), coord);
 		}
 
 		MultiblockLogic logic = (MultiblockLogic) part.getMultiblockLogic();
@@ -255,7 +257,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			BlockPos partCoords = part.getCoordinates();
 			Log.warning("[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. " +
 					"If you encounter anomalies, please tear down the reactor and rebuild it.",
-				world.isRemote ? "CLIENT" : "SERVER", part.hashCode(), partCoords.getX(), partCoords.getY(), partCoords.getZ());
+				world.isRemote() ? "CLIENT" : "SERVER", part.hashCode(), partCoords.getX(), partCoords.getY(), partCoords.getZ());
 		}
 
 		if (connectedParts.isEmpty()) {
@@ -394,7 +396,9 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	@Override
 	public void _onAssimilated(IMultiblockControllerInternal otherController) {
 		if (referenceCoord != null) {
-			if (world.getChunkProvider().getLoadedChunk(referenceCoord.getX() >> 4, referenceCoord.getZ() >> 4) != null) {
+			//TODO think 3rd param means will be loaded
+			//also TODO - is this the source of multiblock chunk loading stuff
+			if (world.getChunkProvider().getChunk(referenceCoord.getX() >> 4, referenceCoord.getZ() >> 4, true) != null) {
 				TileUtil.actOnTile(world, referenceCoord, IMultiblockComponent.class, part -> {
 					MultiblockLogic logic = (MultiblockLogic) part.getMultiblockLogic();
 					logic.forfeitMultiblockSaveDelegate();
@@ -441,7 +445,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			return;
 		}
 
-		if (world.isRemote) {
+		if (world.isRemote()) {
 			updateClient(tickCount);
 		} else if (updateServer(tickCount)) {
 			// If this returns true, the server has changed its internal data. 
@@ -457,7 +461,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 					for (int z = minChunkZ; z <= maxChunkZ; z++) {
 						// Ensure that we save our data, even if the our save delegate is in has no TEs.
 						Chunk chunkToSave = this.world.getChunk(x, z);
-						chunkToSave.markDirty();
+						chunkToSave.markDirty();	//TODO types mean this needs cast or something
 					}
 				}
 			}
@@ -500,7 +504,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 */
 	protected void isBlockGoodForExteriorLevel(int level, World world, BlockPos pos) throws MultiblockValidationException {
 		Block block = world.getBlockState(pos).getBlock();
-		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getLocalizedName()), pos);
+		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getRegistryName()), pos);
 	}
 
 	/**
@@ -512,7 +516,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 */
 	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
 		Block block = world.getBlockState(pos).getBlock();
-		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getLocalizedName()), pos);
+		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getRegistryName()), pos);
 	}
 
 	@Override
@@ -727,7 +731,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		for (IMultiblockComponent part : connectedParts) {
 			// This happens during chunk unload.
 			BlockPos partCoord = part.getCoordinates();
-			if (chunkProvider.getLoadedChunk(partCoord.getX() >> 4, partCoord.getZ() >> 4) == null || isInvalid(part)) {
+			if (chunkProvider.getChunk(partCoord.getX() >> 4, partCoord.getZ() >> 4, true) == null || isInvalid(part)) {
 				deadParts.add(part);
 				onDetachBlock(part);
 				continue;
@@ -827,7 +831,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		AbstractChunkProvider chunkProvider = world.getChunkProvider();
 		for (IMultiblockComponent part : connectedParts) {
 			BlockPos partCoord = part.getCoordinates();
-			if (chunkProvider.getLoadedChunk(partCoord.getX() >> 4, partCoord.getZ() >> 4) != null) {
+			if (chunkProvider.getChunk(partCoord.getX() >> 4, partCoord.getZ() >> 4, true) != null) {
 				onDetachBlock(part);
 			}
 		}
@@ -853,7 +857,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
 		for (IMultiblockComponent part : connectedParts) {
 			BlockPos partCoord = part.getCoordinates();
-			if (isInvalid(part) || chunkProvider.getLoadedChunk(partCoord.getX() >> 4, partCoord.getZ() >> 4) == null) {
+			if (isInvalid(part) || chunkProvider.getChunk(partCoord.getX() >> 4, partCoord.getZ() >> 4, true) == null) {
 				// Chunk is unloading, skip this coord to prevent chunk thrashing
 				continue;
 			}
@@ -873,6 +877,6 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	}
 
 	private static boolean isInvalid(IMultiblockComponent part) {
-		return part instanceof TileEntity && ((TileEntity) part).isInvalid();
+		return part instanceof TileEntity && ((TileEntity) part).isRemoved();
 	}
 }

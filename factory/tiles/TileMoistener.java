@@ -21,6 +21,7 @@ import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -70,54 +71,55 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	private ItemStack pendingProduct;
 
 	public TileMoistener() {
+		super(TileEntityType.DISPENSER);	//TODO tileentitytypes
 		setInternalInventory(new InventoryMoistener(this));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(/* TODO fluids FluidRegistry.WATER*/);
 		tankManager = new TankManager(this, resourceTank);
 	}
 
 	/* LOADING & SAVING */
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-		CompoundNBT.setInteger("BurnTime", burnTime);
-		CompoundNBT.setInteger("TotalTime", totalTime);
-		CompoundNBT.setInteger("ProductionTime", productionTime);
+		compoundNBT.putInt("BurnTime", burnTime);
+		compoundNBT.putInt("TotalTime", totalTime);
+		compoundNBT.putInt("ProductionTime", productionTime);
 
-		tankManager.write(CompoundNBT);
+		tankManager.write(compoundNBT);
 
 		// Write pending product
 		if (pendingProduct != null) {
 			CompoundNBT CompoundNBTP = new CompoundNBT();
-			pendingProduct.writeToNBT(CompoundNBTP);
-			CompoundNBT.setTag("PendingProduct", CompoundNBTP);
+			pendingProduct.write(CompoundNBTP);
+			compoundNBT.put("PendingProduct", CompoundNBTP);
 		}
 		if (currentProduct != null) {
 			CompoundNBT CompoundNBTP = new CompoundNBT();
-			currentProduct.writeToNBT(CompoundNBTP);
-			CompoundNBT.setTag("CurrentProduct", CompoundNBTP);
+			currentProduct.write(CompoundNBTP);
+			compoundNBT.put("CurrentProduct", CompoundNBTP);
 		}
-		return CompoundNBT;
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
-		burnTime = CompoundNBT.getInteger("BurnTime");
-		totalTime = CompoundNBT.getInteger("TotalTime");
-		productionTime = CompoundNBT.getInteger("ProductionTime");
+		burnTime = compoundNBT.getInt("BurnTime");
+		totalTime = compoundNBT.getInt("TotalTime");
+		productionTime = compoundNBT.getInt("ProductionTime");
 
-		tankManager.read(CompoundNBT);
+		tankManager.read(compoundNBT);
 
 		// Load pending product
-		if (CompoundNBT.hasKey("PendingProduct")) {
-			CompoundNBT CompoundNBTP = CompoundNBT.getCompoundNBT("PendingProduct");
-			pendingProduct = new ItemStack(CompoundNBTP);
+		if (compoundNBT.contains("PendingProduct")) {
+			CompoundNBT compoundNBTP = compoundNBT.getCompound("PendingProduct");
+			pendingProduct = ItemStack.read(compoundNBTP);
 		}
-		if (CompoundNBT.hasKey("CurrentProduct")) {
-			CompoundNBT CompoundNBTP = CompoundNBT.getCompoundNBT("CurrentProduct");
-			currentProduct = new ItemStack(CompoundNBTP);
+		if (compoundNBT.contains("CurrentProduct")) {
+			CompoundNBT compoundNBTP = compoundNBT.getCompound("CurrentProduct");
+			currentProduct = ItemStack.read(compoundNBTP);
 		}
 
 		checkRecipe();
@@ -145,7 +147,8 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		}
 
 		// Let's get to work
-		int lightvalue = world.getLightFromNeighbors(getPos().up());
+		//TODO correct method?
+		int lightvalue = world.getLightValue(getPos().up());
 
 		IErrorLogic errorLogic = getErrorLogic();
 
@@ -516,24 +519,18 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiMoistener(player.inventory, this);
+		return new GuiMoistener(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerMoistener(player.inventory, this);
+		return new ContainerMoistener(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();	//TODO this shouldn't be created every time this method is called...
 		}
 		return super.getCapability(capability, facing);
 	}

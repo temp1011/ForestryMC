@@ -20,8 +20,8 @@ import forestry.factory.tiles.TileCarpenter;
 public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter> {
 	private final TileCarpenter tile;
 
-	public GuiCarpenter(PlayerInventory inventory, TileCarpenter tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/carpenter.png", new ContainerCarpenter(inventory, tile), tile);
+	public GuiCarpenter(PlayerInventory inventory, TileCarpenter tile, int id) {	//TODO windowid
+		super(Constants.TEXTURE_PATH_GUI + "/carpenter.png", new ContainerCarpenter(inventory, tile, id), inventory, tile);
 
 		this.tile = tile;
 		this.ySize = 218;

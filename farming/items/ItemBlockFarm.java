@@ -17,8 +17,12 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 
@@ -32,26 +36,21 @@ import forestry.farming.models.EnumFarmBlockTexture;
 public class ItemBlockFarm extends BlockItem {
 
 	public ItemBlockFarm(Block block) {
-		super(block);
-		setHasSubtypes(true);
-	}
-
-	@Override
-	public int getMetadata(int i) {
-		return i;
+		super(block, new Item.Properties());
+//		setHasSubtypes(true);
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-		if (Screen.isShiftKeyDown()) {
-			tooltip.add(Translator.translateToLocal("tile.for.ffarm.tooltip"));
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+		if (Screen.hasShiftDown()) {
+			tooltip.add(new TranslationTextComponent("tile.for.ffarm.tooltip"));
 			if (stack.getTag() == null) {
 				return;
 			}
 			EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTag());
 
-			tooltip.add(Translator.translateToLocal("tile.for.ffarm.material.tooltip") + texture.getFormatting() + TextFormatting.ITALIC + " " + texture.getName());
+			tooltip.add(new TranslationTextComponent("tile.for.ffarm.material.tooltip").setStyle((new Style()).setItalic(true).setColor(texture.getFormatting())).appendText(" " + texture.getName()));
 		} else {
 			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}
@@ -59,6 +58,6 @@ public class ItemBlockFarm extends BlockItem {
 
 	@Override
 	public String getTranslationKey(ItemStack itemstack) {
-		return super.getTranslationKey(itemstack) + "." + itemstack.getItemDamage();
+		return super.getTranslationKey(itemstack) + "." + 0;// TODO flatten itemstack.getItemDamage();
 	}
 }

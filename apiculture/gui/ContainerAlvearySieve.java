@@ -21,8 +21,8 @@ import forestry.core.inventory.watchers.ISlotPickupWatcher;
 
 public class ContainerAlvearySieve extends ContainerTile<TileAlvearySieve> {
 
-	public ContainerAlvearySieve(PlayerInventory player, TileAlvearySieve tile) {
-		super(tile, player, 8, 87);
+	public ContainerAlvearySieve(PlayerInventory player, TileAlvearySieve tile, int id) {
+		super(tile, player, 8, 87, id);
 
 		ISlotPickupWatcher crafter = tile.getCrafter();
 

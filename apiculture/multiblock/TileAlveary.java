@@ -221,11 +221,11 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiAlveary(player.inventory, this);
+		return new GuiAlveary(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerAlveary(player.inventory, this);
+		return new ContainerAlveary(player.inventory, this, data);	//TODO windowid
 	}
 }

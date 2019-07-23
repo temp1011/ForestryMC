@@ -13,6 +13,7 @@ package forestry.factory.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -34,8 +35,8 @@ public class InventoryStill extends InventoryAdapterTile<TileStill> {
 		if (slotIndex == SLOT_RESOURCE) {
 			return FluidHelper.isFillableEmptyContainer(itemStack);
 		} else if (slotIndex == SLOT_CAN) {
-			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
-			return fluid != null && tile.getTankManager().canFillFluidType(fluid);
+			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+			return fluid.isPresent() && tile.getTankManager().canFillFluidType(fluid.orElse(null));
 		}
 		return false;
 	}

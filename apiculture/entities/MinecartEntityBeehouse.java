@@ -89,12 +89,12 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		ContainerMinecartBeehouse container = new ContainerMinecartBeehouse(player.inventory, this, false);
+		ContainerMinecartBeehouse container = new ContainerMinecartBeehouse(player.inventory, this, false, data);	//TODO windowid
 		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.BEE_HOUSE);
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerMinecartBeehouse(player.inventory, this, false);
+		return new ContainerMinecartBeehouse(player.inventory, this, false, data);	//TODO windowid
 	}
 }

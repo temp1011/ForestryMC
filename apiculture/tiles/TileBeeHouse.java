@@ -62,12 +62,12 @@ public class TileBeeHouse extends TileBeeHousingBase {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		ContainerBeeHousing container = new ContainerBeeHousing(player.inventory, this, false);
+		ContainerBeeHousing container = new ContainerBeeHousing(player.inventory, this, false, data);	//TODO windowid
 		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.BEE_HOUSE);
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerBeeHousing(player.inventory, this, false);
+		return new ContainerBeeHousing(player.inventory, this, false, data);	//TODO windowid
 	}
 }

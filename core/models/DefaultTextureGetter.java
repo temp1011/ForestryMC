@@ -31,7 +31,7 @@ public class DefaultTextureGetter implements Function<ResourceLocation, TextureA
 	@Override
 	public TextureAtlasSprite apply(@Nullable ResourceLocation location) {
 		Preconditions.checkNotNull(location);
-		return Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite(location.toString());
+		return Minecraft.getInstance().getTextureMap().getAtlasSprite(location.toString());
 	}
 
 }

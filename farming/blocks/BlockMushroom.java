@@ -29,14 +29,21 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 //import net.minecraft.world.gen.feature.WorldGenBigMushroom;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.storage.loot.LootContext;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -99,18 +106,20 @@ public class BlockMushroom extends BushBlock implements IItemModelRegister, IGro
 		return Lists.newArrayList(type.getDrop());
 	}
 
+	//TODO now through isValidPosition?
+//	@Override
+//	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+//		return super.canPlaceBlockAt(worldIn, pos) && this.isValidPosition(this.getDefaultState(), worldIn, pos);
+//	}
+
 	@Override
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-		return super.canPlaceBlockAt(worldIn, pos) && this.canBlockStay(worldIn, pos, this.getDefaultState());
+	protected boolean isValidGround(BlockState state, IBlockReader world, BlockPos pos) {
+//		return state.isFullBlock();	//TODO VoxelShapes?
+		return false;
 	}
 
 	@Override
-	protected boolean canSustainBush(BlockState state) {
-		return state.isFullBlock();
-	}
-
-	@Override
-	public boolean canBlockStay(BlockState state, World worldIn, BlockPos pos) {
+	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
 		if (pos.getY() >= 0 && pos.getY() < 256) {
 			BlockState blockState = worldIn.getBlockState(pos.down());
 			Block block = blockState.getBlock();
@@ -130,32 +139,34 @@ public class BlockMushroom extends BushBlock implements IItemModelRegister, IGro
 		if (!blockState.get(MATURE)) {
 			world.setBlockState(pos, blockState.with(MATURE, true), Constants.FLAG_BLOCK_SYNC);
 		} else {
-			int lightValue1 = world.getLightFromNeighbors(pos.up());
+			//TODO probably not right
+			int lightValue1 = world.getLightFor(LightType.BLOCK, pos.up());
 			if (lightValue1 <= 7) {
-				generateGiantMushroom(world, pos, blockState, rand);
+				//TODO worldgen
+//				generateGiantMushroom(world, pos, blockState, rand);
 			}
 		}
 	}
 
-	public void generateGiantMushroom(World world, BlockPos pos, BlockState state, Random rand) {
+	public void generateGiantMushroom(IWorld world, ChunkGenerator<? extends GenerationSettings> gen, BlockPos pos, BlockState state, Random rand, IFeatureConfig config) {
 		MushroomType type = state.get(VARIANT);
 
-		world.setBlockToAir(pos);
-		//TODO - should be .place()
-		if (!generators[type.ordinal()].generate(world, rand, pos)) {
+		world.removeBlock(pos, false);
+		if (!generators[type.ordinal()].place(world, gen, rand, pos, config)) {//TODO worldgen .generate(world, rand, pos)) {
 			world.setBlockState(pos, this.stateContainer.getBaseState().with(VARIANT, type), 0);
 		}
 	}
 
 	public void grow(World worldIn, BlockPos pos, BlockState state, Random rand) {
-		this.generateGiantMushroom(worldIn, pos, state, rand);
+//		this.generateGiantMushroom(worldIn, pos, state, rand);
+		//TODO worldgen
 	}
 
 	@Override
 	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
 		//TODO - blockstate into itemstack (or flatten?)
-		list.add(new ItemStack(this, 1, 0));
-		list.add(new ItemStack(this, 1, 1));
+		list.add(new ItemStack(this, 1));//, 0));
+		list.add(new ItemStack(this, 1));//, 1));
 	}
 
 	@Override
@@ -180,9 +191,8 @@ public class BlockMushroom extends BushBlock implements IItemModelRegister, IGro
 		this.grow(worldIn, pos, state, rand);
 	}
 
-	//TODO - getPickBlock doesn't seem to exist
 	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, World world, BlockPos pos, PlayerEntity player) {
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		return state.get(VARIANT).getDrop();
 	}
 

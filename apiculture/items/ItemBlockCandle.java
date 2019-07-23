@@ -33,8 +33,8 @@ public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements I
 		int value = 0xffffff;
 		if (pass == 1 && stack.getTag() != null) {
 			CompoundNBT tag = stack.getTag();
-			if (tag.hasKey(BlockCandle.colourTagName)) {
-				value = tag.getInteger(BlockCandle.colourTagName);
+			if (tag.contains(BlockCandle.colourTagName)) {
+				value = tag.getInt(BlockCandle.colourTagName);
 			}
 		}
 		return value;
@@ -43,7 +43,7 @@ public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements I
 	@Override
 	public String getTranslationKey(ItemStack itemStack) {
 		String value = getBlock().getTranslationKey();
-		if (itemStack.getTag() != null && itemStack.getTag().hasKey(BlockCandle.colourTagName)) {
+		if (itemStack.getTag() != null && itemStack.getTag().contains(BlockCandle.colourTagName)) {
 			value = value + ".dyed";
 		}
 

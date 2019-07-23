@@ -31,8 +31,8 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 	private final ContainerSocketedHelper<T> socketedHelper;
 	private final ContainerLiquidTanksHelper<T> tanksHelper;
 
-	protected ContainerLiquidTanksSocketed(T tile, PlayerInventory playerInventory, int xInv, int yInv) {
-		super(tile, playerInventory, xInv, yInv);
+	protected ContainerLiquidTanksSocketed(T tile, PlayerInventory playerInventory, int xInv, int yInv, int id) {
+		super(tile, playerInventory, xInv, yInv, id);
 		this.socketedHelper = new ContainerSocketedHelper<>(tile);
 		this.tanksHelper = new ContainerLiquidTanksHelper<>(tile);
 	}

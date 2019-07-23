@@ -99,7 +99,7 @@ public final class FarmProperties implements IFarmProperties {
 			Block soilBlock = soilState.getBlock();
 			Block block = ground.getBlock();
 			if (soilState.getBlock() == ground.getBlock()) {
-				if (!soil.hasMetaData() || block.getMetaFromState(ground) == soilBlock.getMetaFromState(soilState)) {
+				if (!soil.hasMetaData() || false) {//TODO Flatten block.getMetaFromState(ground) == soilBlock.getMetaFromState(soilState)) {
 					return true;
 				}
 			}

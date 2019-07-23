@@ -328,7 +328,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiEnginePeat(player.inventory, this);
+		return new GuiEnginePeat(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.settings.ParticleStatus;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -30,8 +31,8 @@ import forestry.apiculture.entities.ParticleBeeRoundTrip;
 import forestry.apiculture.entities.ParticleBeeTargetEntity;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.core.config.Config;
-import forestry.core.entities.ParticleClimate;
-import forestry.core.entities.ParticleHoneydust;
+//import forestry.core.entities.ParticleClimate;
+//import forestry.core.entities.ParticleHoneydust;
 import forestry.core.entities.ParticleIgnition;
 import forestry.core.entities.ParticleSmoke;
 import forestry.core.entities.ParticleSnow;
@@ -110,7 +111,7 @@ public class ParticleRender {
 		}
 
 		ParticleManager effectRenderer = Minecraft.getInstance().particles;
-		effectRenderer.addEffect(new ParticleHoneydust(world, x, y, z, 0, 0, 0));
+//		effectRenderer.addEffect(new ParticleHoneydust(world, x, y, z, 0, 0, 0));
 	}
 
 	public static void addClimateParticles(World worldIn, BlockPos pos, Random rand, EnumTemperature temperature, EnumHumidity humidity) {
@@ -140,7 +141,8 @@ public class ParticleRender {
 		}
 
 		ParticleManager effectRenderer = Minecraft.getInstance().particles;
-		effectRenderer.addEffect(new ParticleClimate(world, x, y, z, color));
+//		effectRenderer.addEffect(new ParticleClimate(world, x, y, z, color));
+		//TODO particles
 	}
 
 	public static void addTransformParticles(World worldIn, BlockPos pos, Random rand) {
@@ -166,7 +168,8 @@ public class ParticleRender {
 		}
 
 		ParticleManager effectRenderer = Minecraft.getInstance().particles;
-		effectRenderer.addEffect(new ParticleClimate(world, x, y, z));
+//		effectRenderer.addEffect(new ParticleClimate(world, x, y, z));
+		//TODO particles
 	}
 
 	public static void addEntityExplodeFX(World world, double x, double y, double z) {
@@ -175,7 +178,8 @@ public class ParticleRender {
 		}
 
 		ParticleManager effectRenderer = Minecraft.getInstance().particles;
-		Particle Particle = effectRenderer.spawnEffectParticle(ParticleTypes.EXPLOSION.getParticleID(), x, y, z, 0, 0, 0);
+		//TODO particle data
+		Particle Particle = effectRenderer.addParticle(RedstoneParticleData.REDSTONE_DUST, x, y, z, 0, 0, 0);
 		effectRenderer.addEffect(Particle);
 	}
 
@@ -217,7 +221,8 @@ public class ParticleRender {
 
 		ParticleManager effectRenderer = Minecraft.getInstance().particles;
 		//TODO - maybe EFFECT?
-		Particle particle = effectRenderer.spawnEffectParticle(ParticleTypes.SPELL.getParticleID(), x, y, z, 0, 0, 0);
+		//TODO particle data
+		Particle particle = effectRenderer.addParticle(RedstoneParticleData.REDSTONE_DUST, x, y, z, 0, 0, 0);
 		if (particle != null) {
 			particle.setColor(red, green, blue);
 			effectRenderer.addEffect(particle);
@@ -238,7 +243,8 @@ public class ParticleRender {
 		double ySpeed = ((double) rand.nextFloat() - 0.5D) * 0.125D;
 		double zSpeed = (double) (rand.nextFloat() * (float) k);
 		ParticleManager effectRenderer = Minecraft.getInstance().particles;
-		Particle particle = effectRenderer.spawnEffectParticle(ParticleTypes.PORTAL.getParticleID(), xPos, yPos, zPos, xSpeed, ySpeed, zSpeed);
+		//TODO particle data
+		Particle particle = effectRenderer.addParticle(RedstoneParticleData.REDSTONE_DUST, xPos, yPos, zPos, xSpeed, ySpeed, zSpeed);
 		if (particle != null) {
 			effectRenderer.addEffect(particle);
 		}
@@ -250,7 +256,8 @@ public class ParticleRender {
 		}
 
 		ParticleManager effectRenderer = Minecraft.getInstance().particles;
-		Particle particle = effectRenderer.spawnEffectParticle(ParticleTypes.HAPPY_VILLAGER.ordinal(), x, y, z, 0, 0, 0);
+		//TODO particle data
+		Particle particle = effectRenderer.addParticle(RedstoneParticleData.REDSTONE_DUST, x, y, z, 0, 0, 0);
 		if (particle != null) {
 			effectRenderer.addEffect(particle);
 		}

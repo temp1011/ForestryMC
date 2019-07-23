@@ -53,7 +53,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 
 		if (data.contains("owner")) {
 			CompoundNBT ownerNbt = data.getCompound("owner");
-			this.owner = PlayerUtil.readGameProfileFromNBT(ownerNbt);
+			this.owner = PlayerUtil.readGameProfile(ownerNbt);
 		}
 
 		getInternalInventory().read(data);

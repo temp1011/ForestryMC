@@ -208,7 +208,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiGenerator(player.inventory, this);
+		return new GuiGenerator(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override

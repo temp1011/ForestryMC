@@ -19,8 +19,8 @@ import forestry.core.gui.slots.SlotLiquidIn;
 
 public class ContainerAlvearyHygroregulator extends ContainerLiquidTanks<TileAlvearyHygroregulator> {
 
-	public ContainerAlvearyHygroregulator(PlayerInventory playerInventory, TileAlvearyHygroregulator tile) {
-		super(tile, playerInventory, 8, 84);
+	public ContainerAlvearyHygroregulator(PlayerInventory playerInventory, TileAlvearyHygroregulator tile, int id) {	//TODO windowid
+		super(tile, playerInventory, 8, 84, id);
 
 		this.addSlot(new SlotLiquidIn(tile, InventoryHygroregulator.SLOT_INPUT, 56, 38));
 	}

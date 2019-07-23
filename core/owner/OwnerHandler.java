@@ -61,7 +61,7 @@ public class OwnerHandler implements IOwnerHandler, IStreamable, INbtWritable, I
 	@Override
 	public void read(CompoundNBT data) {
 		if (data.contains("owner")) {
-			GameProfile owner = PlayerUtil.readGameProfileFromNBT(data.getCompound("owner"));
+			GameProfile owner = PlayerUtil.readGameProfile(data.getCompound("owner"));
 			if (owner != null) {
 				setOwner(owner);
 			}

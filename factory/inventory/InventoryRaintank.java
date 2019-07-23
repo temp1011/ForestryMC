@@ -13,10 +13,13 @@ package forestry.factory.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.factory.tiles.TileRaintank;
@@ -32,9 +35,9 @@ public class InventoryRaintank extends InventoryAdapterTile<TileRaintank> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_RESOURCE) {
-			IFluidHandler fluidHandler = FluidUtil.getFluidHandler(itemStack);
-			if (fluidHandler != null) {
-				return fluidHandler.fill(new FluidStack(FluidRegistry.WATER, Integer.MAX_VALUE), false) > 0;
+			LazyOptional<IFluidHandlerItem> fluidHandler = FluidUtil.getFluidHandler(itemStack);
+			if (fluidHandler.isPresent()) {
+				return fluidHandler.orElse(null).fill(new FluidStack((Fluid) null /*FluidRegistry.WATER*/, Integer.MAX_VALUE), false) > 0;
 			}
 		}
 		return false;

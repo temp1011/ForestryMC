@@ -25,13 +25,14 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.Region;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -40,14 +41,15 @@ import forestry.core.config.Constants;
 public abstract class TileUtil {
 
 	public static void registerTile(Class<? extends TileEntity> tileClass, String key) {
-		GameRegistry.registerTileEntity(tileClass, new ResourceLocation(Constants.MOD_ID, key));
+//		ForgeRegistries.TILE_ENTITIES.register();	//TODO tileentitytype
+//		GameRegistry.registerTileEntity(tileClass, new ResourceLocation(Constants.MOD_ID, key));
 	}
 
 	public static boolean isUsableByPlayer(PlayerEntity player, TileEntity tile) {
 		BlockPos pos = tile.getPos();
 		World world = tile.getWorld();
 
-		return !tile.isInvalid() &&
+		return !tile.isRemoved() &&
 			getTile(world, pos) == tile &&
 			player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
 	}
@@ -119,9 +121,12 @@ public abstract class TileUtil {
 			return null;
 		}
 
-		if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
-			return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);
+
+		LazyOptional<IItemHandler> itemCap = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);
+		if(itemCap.isPresent()) {
+			return itemCap.orElse(null);
 		}
+
 
 		if (tile instanceof ISidedInventory) {
 			return new SidedInvWrapper((ISidedInventory) tile, side);
@@ -135,10 +140,10 @@ public abstract class TileUtil {
 	}
 
 	@Nullable
-	public static <T> T getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable Direction facing) {
+	public static <T> LazyOptional<T> getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable Direction facing) {
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity == null || !tileEntity.hasCapability(capability, facing)) {
-			return null;
+		if (tileEntity == null) {
+			return LazyOptional.empty();
 		}
 		return tileEntity.getCapability(capability, facing);
 	}

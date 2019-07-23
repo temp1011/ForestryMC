@@ -69,10 +69,10 @@ public class FarmHelper {
 	}
 
 	public static final ImmutableSet<Block> bricks = ImmutableSet.of(
-		Blocks.BRICK_BLOCK,
-		Blocks.STONEBRICK,
+		Blocks.BRICKS,
+		Blocks.STONE_BRICKS,
 		Blocks.SANDSTONE,
-		Blocks.NETHER_BRICK,
+		Blocks.NETHER_BRICKS,
 		Blocks.QUARTZ_BLOCK
 	);
 

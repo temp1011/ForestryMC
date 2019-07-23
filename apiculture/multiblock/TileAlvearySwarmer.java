@@ -213,11 +213,11 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiAlvearySwarmer(player.inventory, this);
+		return new GuiAlvearySwarmer(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerAlvearySwarmer(player.inventory, this);
+		return new ContainerAlvearySwarmer(player.inventory, this, data);	//TODO windowid
 	}
 }

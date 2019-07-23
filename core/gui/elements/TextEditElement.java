@@ -35,8 +35,8 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 			this.field.mouseClicked(windowElement.getRelativeMouseX(this), windowElement.getRelativeMouseY(this), event.getButton());
 		});
 		//TODO - method protected so maybe AT the field itself?
-		this.addSelfEventHandler(ElementEvent.GainFocus.class, event -> this.field.setFocused(true));
-		this.addSelfEventHandler(ElementEvent.LoseFocus.class, event -> this.field.setFocused(false));
+		this.addSelfEventHandler(ElementEvent.GainFocus.class, event -> this.field.focused = true);
+		this.addSelfEventHandler(ElementEvent.LoseFocus.class, event -> this.field.focused = false);
 	}
 
 	public TextEditElement setMaxLength(int maxLength) {
@@ -62,9 +62,10 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 	}
 
 	//TODO - maybe need to supply start/end points now?
+	//TODO third param probably partial ticks. Is it being 0 a problem?
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
-		field.drawTextBox();
+		field.render(mouseX, mouseY, 0);
 	}
 
 	@Override

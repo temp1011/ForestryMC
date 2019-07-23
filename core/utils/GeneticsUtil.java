@@ -24,6 +24,8 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.common.util.LazyOptional;
+
 import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
@@ -51,17 +53,15 @@ public class GeneticsUtil {
 			return false;
 		}
 
-		final Item armorItem = armorItemStack.getItem();
 		final IArmorNaturalist armorNaturalist;
-		if (armorItem instanceof IArmorNaturalist) { // legacy
-			armorNaturalist = (IArmorNaturalist) armorItem;
-		} else if (armorItemStack.hasCapability(ArboricultureCapabilities.ARMOR_NATURALIST, null)) {
-			armorNaturalist = armorItemStack.getCapability(ArboricultureCapabilities.ARMOR_NATURALIST, null);
+		LazyOptional<IArmorNaturalist> armorCap = armorItemStack.getCapability(ArboricultureCapabilities.ARMOR_NATURALIST);
+			if (armorCap.isPresent()) {
+			armorNaturalist = armorCap.orElse(null);
 		} else {
 			return false;
 		}
 
-		return armorNaturalist != null && armorNaturalist.canSeePollination(player, armorItemStack, true);
+		return armorNaturalist.canSeePollination(player, armorItemStack, true);
 	}
 
 	public static boolean canNurse(IButterfly butterfly, World world, final BlockPos pos) {

@@ -22,8 +22,8 @@ import forestry.core.tiles.TileNaturalistChest;
 
 public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistChest> implements IGuiSelectable {
 
-	public ContainerNaturalistInventory(PlayerInventory player, TileNaturalistChest tile, int page) {
-		super(tile, player, 18, 120);
+	public ContainerNaturalistInventory(PlayerInventory player, TileNaturalistChest tile, int page, int id) {	//TODO windowid
+		super(tile, player, 18, 120, id);
 
 		addInventory(this, tile, page);
 	}
@@ -34,9 +34,9 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 				for (int y = 0; y < 5; y++) {
 					int slot = y + page * 25 + x * 5;
 					if (page == selectedPage) {
-						container.addSlotToContainer(new SlotFilteredInventory(inventory, slot, 100 + y * 18, 21 + x * 18));
+						container.addSlot(new SlotFilteredInventory(inventory, slot, 100 + y * 18, 21 + x * 18));
 					} else {
-						container.addSlotToContainer(new SlotFilteredInventory(inventory, slot, -10000, -10000));
+						container.addSlot(new SlotFilteredInventory(inventory, slot, -10000, -10000));
 					}
 				}
 			}

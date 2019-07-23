@@ -29,11 +29,13 @@ import java.util.Stack;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidRegistry;
@@ -118,7 +120,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	public FarmController(World world) {
 		super(world, FarmMultiblockSizeLimits.instance);
 
-		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
+		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(/* TODO fluids FluidRegistry.WATER*/);
 
 		this.tankManager = new TankManager(this, resourceTank);
 
@@ -369,7 +371,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public float getExactHumidity() {
 		BlockPos coords = getReferenceCoord();
-		return world.getBiome(coords).getRainfall();
+		return world.getBiome(coords).getDownfall();
 	}
 
 	@Override
@@ -504,7 +506,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
 			final int fertilizerConsumption = Math.round(logic.getFertilizerConsumption() * Config.fertilizerModifier);
 			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
-			final FluidStack liquid = new FluidStack(FluidRegistry.WATER, liquidConsumption);
+			final FluidStack liquid = new FluidStack((Fluid) null/*TODO fluids FluidRegistry.WATER*/, liquidConsumption);
 
 			for (FarmTarget target : farmTargets) {
 				// Check fertilizer and water
@@ -572,7 +574,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		// Check water
 		float hydrationModifier = hydrationManager.getHydrationModifier();
 		int waterConsumption = provider.getWaterConsumption(hydrationModifier);
-		FluidStack requiredLiquid = new FluidStack(FluidRegistry.WATER, waterConsumption);
+		FluidStack requiredLiquid = new FluidStack((Fluid) null/*TODO fluids FluidRegistry.WATER*/, waterConsumption);
 		boolean hasLiquid = requiredLiquid.amount == 0 || hasLiquid(requiredLiquid);
 
 		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {

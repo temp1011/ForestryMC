@@ -106,15 +106,15 @@ public class GuiEvent extends GuiElementEvent {
 	}
 
 	public static class WheelEvent extends GuiEvent {
-		private int dWheel;
+		private double dWheel;
 
-		public WheelEvent(IGuiElement origin, int dWheel) {
+		public WheelEvent(IGuiElement origin, double dWheel) {
 			super(origin);
 			this.dWheel = 0;
 			this.dWheel = dWheel / 28;
 		}
 
-		public int getDWheel() {
+		public double getDWheel() {
 			return this.dWheel;
 		}
 	}

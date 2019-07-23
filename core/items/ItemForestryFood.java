@@ -31,6 +31,10 @@ public class ItemForestryFood extends Item/*Food*/ implements IItemModelRegister
 		this(heal, 0.6f);
 	}
 
+	public ItemForestryFood(Item.Properties properties) {
+		super(properties);
+	}
+
 	public ItemForestryFood(int heal, float saturation) {
 		this(heal, saturation, new Item.Properties());
 	}

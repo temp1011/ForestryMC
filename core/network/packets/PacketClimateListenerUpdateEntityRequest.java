@@ -5,6 +5,8 @@ import java.io.IOException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
+import net.minecraftforge.common.util.LazyOptional;
+
 import forestry.api.climate.ClimateCapabilities;
 import forestry.api.climate.IClimateListener;
 import forestry.core.network.ForestryPacket;
@@ -35,11 +37,8 @@ public class PacketClimateListenerUpdateEntityRequest extends ForestryPacket imp
 		@Override
 		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			Entity entity = data.readEntityById(player.world);
-			if (entity != null && entity.hasCapability(ClimateCapabilities.CLIMATE_LISTENER, null)) {
-				IClimateListener listener = entity.getCapability(ClimateCapabilities.CLIMATE_LISTENER, null);
-				if (listener != null) {
-					listener.syncToClient(player);
-				}
+			if (entity != null) {
+				entity.getCapability(ClimateCapabilities.CLIMATE_LISTENER).ifPresent(l -> l.syncToClient(player));
 			}
 		}
 	}

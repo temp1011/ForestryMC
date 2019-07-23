@@ -76,8 +76,9 @@ public class TextureManagerForestry implements ITextureManager {
 	}
 
 	public static TextureAtlasSprite registerSprite(ResourceLocation location) {
-		AtlasTexture textureMap = Minecraft.getInstance().getTextureMapBlocks();
-		return textureMap.registerSprite(location);
+		AtlasTexture textureMap = Minecraft.getInstance().getTextureMap();
+//		return textureMap.registerSprite(location);
+		return null;	//TODO textures
 	}
 
 	@Override
@@ -99,7 +100,8 @@ public class TextureManagerForestry implements ITextureManager {
 
 	@Override
 	public TextureAtlasSprite registerGuiSprite(ResourceLocation location) {
-		return getTextureMap().registerSprite(location);
+		return null; //TODO textures
+//		return getTextureMap().registerSprite(location);
 	}
 
 	public void registerBlock(Block block) {

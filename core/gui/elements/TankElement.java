@@ -16,6 +16,9 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -55,9 +58,9 @@ public class TankElement extends GuiElement {
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
 		GlStateManager.disableBlend();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		if (background != null) {
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			background.draw(0, 0);
 		}
 		FluidTankInfo tankInfo = getTank();
@@ -71,14 +74,14 @@ public class TankElement extends GuiElement {
 		if (contents != null && contents.amount > 0 && contents.getFluid() != null) {
 			Fluid fluid = contents.getFluid();
 			if (fluid != null) {
-				AtlasTexture textureMapBlocks = minecraft.getTextureMapBlocks();
+				AtlasTexture textureMapBlocks = minecraft.getTextureMap();
 				ResourceLocation fluidStill = fluid.getStill();
 				TextureAtlasSprite fluidStillSprite = null;
 				if (fluidStill != null) {
-					fluidStillSprite = textureMapBlocks.getTextureExtry(fluidStill.toString());
+					fluidStillSprite = textureMapBlocks.getSprite(fluidStill);
 				}
 				if (fluidStillSprite == null) {
-					fluidStillSprite = textureMapBlocks.getMissingSprite();
+					fluidStillSprite = textureMapBlocks.missingImage;
 				}
 
 				int fluidColor = fluid.getColor(contents);
@@ -119,22 +122,22 @@ public class TankElement extends GuiElement {
 		}
 
 		if (overlay != null) {
-			GlStateManager.disableDepth();
+			GlStateManager.disableDepthTest();
 			overlay.draw(0, 0);
-			GlStateManager.enableDepth();
+			GlStateManager.enableDepthTest();
 		}
 
-		GlStateManager.color(1, 1, 1, 1);
-		GlStateManager.disableAlpha();
+		GlStateManager.color4f(1, 1, 1, 1);
+		GlStateManager.disableAlphaTest();
 	}
 
 	@Override
-	public List<String> getTooltip(int mouseX, int mouseY) {
+	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
 		FluidTankInfo tankInfo = getTank();
 		if (tankInfo == null) {
 			return Collections.emptyList();
 		}
-		List<String> toolTip = new ArrayList<>();
+		List<ITextComponent> toolTip = new ArrayList<>();
 		int amount = 0;
 		FluidStack fluidStack = tankInfo.fluid;
 		if (fluidStack != null) {
@@ -143,11 +146,10 @@ public class TankElement extends GuiElement {
 			if (rarity == null) {
 				rarity = Rarity.COMMON;
 			}
-			toolTip.add(rarity.color + fluidType.getLocalizedName(fluidStack));
+			toolTip.add(new TranslationTextComponent(fluidType.getUnlocalizedName(fluidStack)).setStyle((new Style()).setColor(rarity.color)));
 			amount = fluidStack.amount;
 		}
-		String liquidAmount = Translator.translateToLocalFormatted("for.gui.tooltip.liquid.amount", amount, tankInfo.capacity);
-		toolTip.add(liquidAmount);
+		toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", amount, tankInfo.capacity));
 		return toolTip;
 	}
 
@@ -161,7 +163,7 @@ public class TankElement extends GuiElement {
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-		GlStateManager.color(red, green, blue, 1.0F);
+		GlStateManager.color4f(red, green, blue, 1.0F);
 	}
 
 	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {

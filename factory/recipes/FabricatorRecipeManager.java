@@ -35,11 +35,12 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 
 	@Override
 	public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
-		ShapedRecipeCustom patternRecipe = new ShapedRecipeCustom(result, pattern);
-		NonNullList<NonNullList<ItemStack>> ingredients = patternRecipe.getRawIngredients();
-
-		IFabricatorRecipe recipe = new FabricatorRecipe(plan, molten, result, ingredients, patternRecipe.getOreDicts(), patternRecipe.getWidth(), patternRecipe.getHeight());
-		addRecipe(recipe);
+		//TODO json
+//		ShapedRecipeCustom patternRecipe = new ShapedRecipeCustom(result, pattern);
+//		NonNullList<NonNullList<ItemStack>> ingredients = patternRecipe.getRawIngredients();
+//
+//		IFabricatorRecipe recipe = new FabricatorRecipe(plan, molten, result, ingredients, patternRecipe.getOreDicts(), patternRecipe.getWidth(), patternRecipe.getHeight());
+//		addRecipe(recipe);
 	}
 
 	public static RecipePair<IFabricatorRecipe> findMatchingRecipe(ItemStack plan, IInventory resources) {

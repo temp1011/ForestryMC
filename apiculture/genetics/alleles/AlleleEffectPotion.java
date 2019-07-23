@@ -18,6 +18,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.EffectType;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -63,7 +64,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 			}
 
 			int dur = this.duration;
-			if (potion.isBadEffect()) {
+			if (potion.getEffectType() == EffectType.HARMFUL) {
 				// Entities are not attacked if they wear a full set of apiarist's armor.
 				int count = BeeManager.armorApiaristHelper.wearsItems(entity, getUID(), true);
 				if (count >= 4) {

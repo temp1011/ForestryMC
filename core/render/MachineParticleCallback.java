@@ -43,11 +43,11 @@ public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSer
 		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
 		if (machineProperties instanceof IMachinePropertiesTesr) {
 			Minecraft minecraft = Minecraft.getInstance();
-			AtlasTexture textureMapBlocks = minecraft.getTextureMapBlocks();
+			AtlasTexture textureMapBlocks = minecraft.getTextureMap();
 			IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
 			String particleTextureLocation = machinePropertiesTesr.getParticleTextureLocation();
 			TextureAtlasSprite particleTexture = textureMapBlocks.getAtlasSprite(particleTextureLocation);
-			fx.setParticleTexture(particleTexture);
+			fx.sprite = particleTexture;
 		}
 	}
 

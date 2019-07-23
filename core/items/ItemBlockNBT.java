@@ -16,6 +16,8 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
 
@@ -30,11 +32,11 @@ public class ItemBlockNBT extends ItemBlockForestry<Block> {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> info, ITooltipFlag advanced) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> info, ITooltipFlag advanced) {
 		super.addInformation(itemstack, world, info, advanced);
 
 		if (itemstack.getTag() != null) {
-			info.add("There are still some scribbles on this.");
+			info.add(new StringTextComponent("There are still some scribbles on this."));
 		}
 	}
 }

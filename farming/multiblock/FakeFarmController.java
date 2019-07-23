@@ -43,7 +43,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 
 	@Override
 	public BlockPos getCoords() {
-		return BlockPos.ORIGIN;
+		return BlockPos.ZERO;
 	}
 
 	@Override

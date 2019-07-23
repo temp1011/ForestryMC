@@ -78,18 +78,18 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		tankManager.write(CompoundNBT);
-		sockets.write(CompoundNBT);
-		return CompoundNBT;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		tankManager.write(compoundNBT);
+		sockets.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		tankManager.read(CompoundNBT);
-		sockets.read(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		tankManager.read(compoundNBT);
+		sockets.read(compoundNBT);
 
 		ItemStack chip = sockets.getStackInSlot(0);
 		if (!chip.isEmpty()) {
@@ -265,15 +265,9 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -281,11 +275,11 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiSqueezer(player.inventory, this);
+		return new GuiSqueezer(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerSqueezer(player.inventory, this);
+		return new ContainerSqueezer(player.inventory, this, data);	//TODO windowid
 	}
 }

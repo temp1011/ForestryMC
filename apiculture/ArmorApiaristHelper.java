@@ -14,6 +14,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.common.util.LazyOptional;
+
 import forestry.api.apiculture.ApicultureCapabilities;
 import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.apiculture.IArmorApiaristHelper;
@@ -26,17 +28,15 @@ public class ArmorApiaristHelper implements IArmorApiaristHelper {
 			return false;
 		}
 
-		final Item item = stack.getItem();
 		final IArmorApiarist armorApiarist;
-		if (item instanceof IArmorApiarist) { // legacy
-			armorApiarist = (IArmorApiarist) item;
-		} else if (stack.hasCapability(ApicultureCapabilities.ARMOR_APIARIST, null)) {
-			armorApiarist = stack.getCapability(ApicultureCapabilities.ARMOR_APIARIST, null);
+		LazyOptional<IArmorApiarist> armorCap = stack.getCapability(ApicultureCapabilities.ARMOR_APIARIST);
+		if (armorCap.isPresent()) {
+			armorApiarist = armorCap.orElse(null);
 		} else {
 			return false;
 		}
 
-		return armorApiarist != null && armorApiarist.protectEntity(entity, stack, cause, doProtect);
+		return armorApiarist.protectEntity(entity, stack, cause, doProtect);
 	}
 
 	@Override

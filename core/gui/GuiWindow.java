@@ -8,10 +8,14 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import org.lwjgl.glfw.GLFW;
+
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.events.GuiEvent;
 import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.gui.elements.Window;
+
+import net.java.games.input.Mouse;
 
 /**
  * GuiScreen implementation of a gui that contains {@link forestry.api.gui.IGuiElement}s.
@@ -75,49 +79,65 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	}
 
 	@Override
-	public void setWorldAndResolution(Minecraft mc, int width, int height) {
+	public void init(Minecraft mc, int width, int height) {
 		window.setSize(width, height);
-		super.setWorldAndResolution(mc, width, height);
+		super.init(mc, width, height);
 	}
 
 	@Override
 //	protected void keyTyped(char typedChar, int keyCode) {
-	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {	//TODO resolve this method
-		if (keyCode == 1) {
+	//TODO these are the params I belive
+	public boolean keyPressed(int keyCode, int scanCode, int mods) {	//TODO resolve this method
+		if (keyCode == GLFW.GLFW_KEY_ESCAPE) {	//TODO - keybinds?
 			this.minecraft.displayGuiScreen(null);
 
 			if (this.minecraft.currentScreen == null) {
-				this.minecraft.setIngameFocus();
+				this.minecraft.setGameFocused(true);
 			}
 		}
 		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
-		window.postEvent(new GuiEvent.KeyEvent(origin, typedChar, keyCode), GuiEventDestination.ALL);
+		window.postEvent(new GuiEvent.KeyEvent(origin, keyCode, scanCode), GuiEventDestination.ALL);
+		return true; //TODO return type
 	}
 
 	//TODO onMouseClicked
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
 		window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
+		return true; //TODO return type
 	}
 
 	//TODO onMouseRelease
 	@Override
-	protected void mouseReleased(int mouseX, int mouseY, int state) {
+	public boolean mouseReleased(double mouseX, double mouseY, int state) {
 		super.mouseReleased(mouseX, mouseY, state);
 		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
 		window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, state), GuiEventDestination.ALL);
+		//TODO return type
+		return true;
 	}
 
 	@Override
-	public void handleMouseInput() throws IOException {
-		super.handleMouseInput();
-		int dWheel = Mouse.getDWheel();
-		if (dWheel != 0) {
-			window.postEvent(new GuiEvent.WheelEvent(window, dWheel), GuiEventDestination.ALL);
+	public boolean mouseScrolled(double x, double y , double w) {
+		super.mouseScrolled(x, y, w);
+		if (w != 0) {
+			window.postEvent(new GuiEvent.WheelEvent(window, w), GuiEventDestination.ALL);
+
 		}
+		return true;
 	}
+
+	//TODO above is how to do dwheel
+//	@Override
+//	public void handleMouseInput() {
+//		super.handleMouseInput();
+//		int dWheel = Mouse.getDWheel();
+//		if (dWheel != 0) {
+//			window.postEvent(new GuiEvent.WheelEvent(window, dWheel), GuiEventDestination.ALL);
+//		}
+//	}
 
 	@Override
 	public int getGuiLeft() {

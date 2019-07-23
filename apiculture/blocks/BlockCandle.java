@@ -14,8 +14,10 @@ import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -44,6 +46,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
 
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -200,7 +204,7 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 			tileCandle.setLit(!isLit);
 			worldIn.markForRerender(pos);
 			worldIn.getProfiler().startSection("checkLight");
-			worldIn.checkLight(pos);
+			worldIn.getChunkProvider().getLightManager().checkBlock(pos);
 			worldIn.getProfiler().endSection();
 			flag = true;
 		}
@@ -241,20 +245,22 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 
 	//TODO loot table stuff??
 	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
+	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
 		ItemStack dropStack = drop.get();
 		drop.remove();
+		List<ItemStack> drops = new ArrayList<>();
 
 		// not harvested, get drops normally
 		if (dropStack == null) {
-			dropStack = getCandleDrop(world, pos);
+			dropStack = getCandleDrop(builder.getWorld(), builder.assertPresent(LootParameters.POSITION));
 		}
 
 		drops.add(dropStack);
+		return drops;
 	}
 
-	@Override	//TODO still comment in Block.java about forge version, but will it be added
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, World world, BlockPos pos, PlayerEntity player) {
+	@Override
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		return getCandleDrop(world, pos);
 	}
 
@@ -286,7 +292,7 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 			tileCandle.setLit(isLit);
 			if (tileCandle.isLit()) {
 				world.getProfiler().startSection("checkLight");
-				world.checkLight(pos);
+				world.getChunkProvider().getLightManager().checkBlock(pos);
 				world.getProfiler().endSection();
 			}
 		}

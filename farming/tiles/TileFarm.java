@@ -173,11 +173,11 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiFarm(player, this);
+		return new GuiFarm(player, this, data);	//TODO windowid
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerFarm(player.inventory, this);
+		return new ContainerFarm(player.inventory, this, data);	//TODO windowid
 	}
 }

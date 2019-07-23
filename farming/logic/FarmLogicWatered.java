@@ -28,7 +28,7 @@ import forestry.api.farming.ISoil;
 import forestry.core.utils.BlockUtil;
 
 public abstract class FarmLogicWatered extends FarmLogicSoil {
-	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME);
+	private static final FluidStack STACK_WATER = new FluidStack((Fluid) null /*FluidRegistry.WATER*/, Fluid.BUCKET_VOLUME);
 
 	protected NonNullList<ItemStack> produce = NonNullList.create();
 
@@ -94,7 +94,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 
 				if (!BlockUtil.isReplaceableBlock(state, world, position)) {
 					produce.addAll(BlockUtil.getBlockDrops(world, position));
-					world.setBlockToAir(position);
+					world.removeBlock(position, false);	//TODO
 					return trySetSoil(world, farmHousing, position, soil.getResource(), soil.getSoilState());
 				}
 

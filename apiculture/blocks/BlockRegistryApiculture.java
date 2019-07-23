@@ -41,8 +41,8 @@ public class BlockRegistryApiculture extends BlockRegistry {
 
 		beeChest = new BlockBase<>(BlockTypeApicultureTesr.APIARIST_CHEST, Material.WOOD);
 		registerBlock(beeChest, new ItemBlockForestry<>(beeChest), "bee_chest");
-		beeChest.setCreativeTab(ItemGroups.tabApiculture);	//TODO done in item
-		beeChest.setHarvestLevel("axe", 0);
+//		beeChest.setCreativeTab(ItemGroups.tabApiculture);	//TODO done in item
+//		beeChest.setHarvestLevel("axe", 0);	//TODO done in item
 
 		beehives = new BlockBeeHives();
 		registerBlock(beehives, new ItemBlockForestry<>(beehives), "beehives");

@@ -228,7 +228,7 @@ public class ItemResearchNote extends ItemForestry {
 		public ResearchNote(@Nullable CompoundNBT compound) {
 			if (compound != null) {
 				if (compound.contains("res")) {
-					this.researcher = PlayerUtil.readGameProfileFromNBT(compound.getCompound("res"));
+					this.researcher = PlayerUtil.readGameProfile(compound.getCompound("res"));
 				} else {
 					this.researcher = null;
 				}

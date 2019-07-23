@@ -45,7 +45,7 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 		int groundMeta;
 		for (Block b : this.allowedItems) {
 			if (b == ground) {
-				groundMeta = ground.getMetaFromState(state);
+				groundMeta = 0;//TODO flatten ground.getMetaFromState(state);
 				if (groundMeta > 6) {
 					return false;
 				}
@@ -55,7 +55,7 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 					groundMeta = 7;
 				}
 
-				return world.setBlockState(pos, ground.getStateFromMeta(groundMeta), 2);
+				return world.setBlockState(pos, ground.getDefaultState(), 2); //TODO flatten ground.getStateFromMeta(groundMeta), 2);
 			}
 		}
 

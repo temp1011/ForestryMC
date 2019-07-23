@@ -16,6 +16,7 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -37,12 +38,13 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 
 	public MutationConditionRequiresResource(String oreDictName) {
 		this.displayName = oreDictName;
-		for (ItemStack ore : OreDictionary.getOres(oreDictName)) {
+		for (ItemStack ore : new ItemStack[0]) {//TODO oredictionary OreDictionary.getOres(oreDictName)) {
 			if (!ore.isEmpty()) {
 				Item oreItem = ore.getItem();
 				Block oreBlock = Block.getBlockFromItem(oreItem);
+				//TODO - tag or state, Blocks,AIR doesn't cover everything any more
 				if (oreBlock != Blocks.AIR) {
-					this.acceptedBlockStates.addAll(oreBlock.getBlockState().getValidStates());
+					this.acceptedBlockStates.addAll(oreBlock.getStateContainer().getValidStates());
 				}
 			}
 		}
@@ -50,7 +52,7 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 
 	public MutationConditionRequiresResource(BlockState... acceptedBlockStates) {
 		Collections.addAll(this.acceptedBlockStates, acceptedBlockStates);
-		this.displayName = acceptedBlockStates[0].getBlock().getLocalizedName();
+		this.displayName = acceptedBlockStates[0].getBlock().getRegistryName().toString();	//TODO translation
 	}
 
 	@Override

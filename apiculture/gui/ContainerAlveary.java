@@ -22,8 +22,8 @@ import forestry.core.network.packets.PacketGuiUpdate;
 
 public class ContainerAlveary extends ContainerTile<TileAlveary> {
 
-	public ContainerAlveary(PlayerInventory player, TileAlveary tile) {
-		super(tile, player, 8, 108);
+	public ContainerAlveary(PlayerInventory player, TileAlveary tile, int windowid) {	//TODO windowid
+		super(tile, player, 8, 108, windowid);
 		ContainerBeeHelper.addSlots(this, tile, false);
 
 		tile.getBeekeepingLogic().clearCachedValues();

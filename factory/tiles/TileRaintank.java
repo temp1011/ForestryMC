@@ -202,11 +202,11 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiRaintank(player.inventory, this);
+		return new GuiRaintank(player.inventory, this, data);	//todo WINDOWID
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerRaintank(player.inventory, this);
+		return new ContainerRaintank(player.inventory, this, data);	//TODO windowid
 	}
 }

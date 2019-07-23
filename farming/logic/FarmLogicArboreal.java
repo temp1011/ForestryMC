@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -58,7 +60,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(Blocks.SAPLING);
+		return new ItemStack(Blocks.OAK_SAPLING);
 	}
 
 	@Override
@@ -115,7 +117,8 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 		while (!knownCropPositions.empty()) {
 			BlockPos knownCropPos = knownCropPositions.pop();
-			for (BlockPos candidate : BlockPos.getAllInBox(knownCropPos.add(-1, -1, -1), knownCropPos.add(1, 1, 1))) {
+			//TODO potentially unnecessary collect
+			for (BlockPos candidate : BlockPos.getAllInBox(knownCropPos.add(-1, -1, -1), knownCropPos.add(1, 1, 1)).collect(Collectors.toList())) {
 				if (!world.isBlockLoaded(candidate)) {
 					return crops;
 				}

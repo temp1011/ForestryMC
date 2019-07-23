@@ -75,16 +75,16 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 
 	// / SAVING / LOADING
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
 //		if (ic2EnergySink != null) {
-//			ic2EnergySink.read(CompoundNBT);
+//			ic2EnergySink.read(compoundNBT);
 //		}
-		sockets.read(CompoundNBT);
+		sockets.read(compoundNBT);
 
 		ItemStack chip = sockets.getStackInSlot(0);
-		if (chip != null) {
+		if (!chip.isEmpty()) {
 			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(chip);
 			if (chipset != null) {
 				chipset.onLoad(this);
@@ -94,14 +94,14 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 
 	@Nonnull
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
 //		if (ic2EnergySink != null) {
-//			ic2EnergySink.write(CompoundNBT);
+//			ic2EnergySink.write(compoundNBT);
 //		}
-		sockets.write(CompoundNBT);
-		return CompoundNBT;
+		sockets.write(compoundNBT);
+		return compoundNBT;
 	}
 
 //	@Override
@@ -311,11 +311,11 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiEngineElectric(player.inventory, this);
+		return new GuiEngineElectric(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerEngineElectric(player.inventory, this);
+		return new ContainerEngineElectric(player.inventory, this, data);	//TODO windowid
 	}
 }

@@ -25,8 +25,8 @@ import forestry.core.utils.Translator;
 public abstract class GuiEngine<C extends Container, I extends TileEngine> extends GuiForestryTitled<C> {
 	protected final I tile;
 
-	protected GuiEngine(String texture, C container, I tile) {
-		super(texture, container, C.playerInventory, tile);
+	protected GuiEngine(String texture, C container, PlayerInventory inv, I tile) {
+		super(texture, container, inv, tile);
 		this.tile = tile;
 	}
 

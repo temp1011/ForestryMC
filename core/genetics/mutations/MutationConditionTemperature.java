@@ -43,10 +43,11 @@ public class MutationConditionTemperature implements IMutationCondition {
 
 	@Override
 	public String getDescription() {
-		String minString = AlleleManager.climateHelper.toDisplay(minTemperature);
+		//TODO textcomponent
+		String minString = AlleleManager.climateHelper.toDisplay(minTemperature).getFormattedText();
 
 		if (minTemperature != maxTemperature) {
-			String maxString = AlleleManager.climateHelper.toDisplay(maxTemperature);
+			String maxString = AlleleManager.climateHelper.toDisplay(maxTemperature).getFormattedText();
 			return Translator.translateToLocal("for.mutation.condition.temperature.range").replace("%LOW", minString).replace("%HIGH", maxString);
 		} else {
 			return Translator.translateToLocalFormatted("for.mutation.condition.temperature.single", minString);

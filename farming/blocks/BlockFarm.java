@@ -107,16 +107,14 @@ public class BlockFarm extends BlockStructure {
 		}
 	}
 
-	//TODO - forge version doesnt seem to exist in block?
-//	@Override
-//	public ItemStack getPickBlock(BlockState state, RayTraceResult target, World world, BlockPos pos, PlayerEntity player) {
-////		List<ItemStack> drops = getDrops(world.getBlockState(pos), world, pos, 0);
-////		if (drops.isEmpty()) {
-////			return super.getPickBlock(state, target, world, pos, player);
-////		}
-////		return drops.get(0);
-//		return new ItemStack(this);
-//	}
+	@Override
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+		List<ItemStack> drops = getDrops(world.getBlockState(pos),(ServerWorld) world, pos, world.getTileEntity(pos));	//TODO this call is not safe
+		if (drops.isEmpty()) {
+			return super.getPickBlock(state, target, world, pos, player);
+		}
+		return drops.get(0);
+	}
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {

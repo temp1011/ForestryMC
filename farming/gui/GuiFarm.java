@@ -23,8 +23,8 @@ import forestry.farming.tiles.TileFarm;
 public class GuiFarm extends GuiForestryTitled<ContainerFarm> {
 	private final TileFarm tile;
 
-	public GuiFarm(PlayerEntity player, TileFarm tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/mfarm.png", new ContainerFarm(player.inventory, tile), tile);
+	public GuiFarm(PlayerEntity player, TileFarm tile, int id) {	//TODO windowid
+		super(Constants.TEXTURE_PATH_GUI + "/mfarm.png", new ContainerFarm(player.inventory, tile, id), player.inventory, tile);
 		this.tile = tile;
 
 		widgetManager.add(new TankWidget(widgetManager, 15, 19, 0).setOverlayOrigin(216, 18));

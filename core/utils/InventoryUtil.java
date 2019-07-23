@@ -618,11 +618,11 @@ public abstract class InventoryUtil {
 	 * The database has an inventory large enough that int must be used here instead of byte
 	 */
 	public static void readFromNBT(IInventory inventory, CompoundNBT compoundNBT) {
-		if (!compoundNBT.contains(inventory.getName())) {
+		if (!compoundNBT.contains(null)) {//TODO inventory name inventory.getName())) {
 			return;
 		}
 
-		ListNBT nbttaglist = compoundNBT.getList(inventory.getName(), 10);
+		ListNBT nbttaglist = compoundNBT.getList(null, 10);//inventory.getName(), 10);
 
 		for (int j = 0; j < nbttaglist.size(); ++j) {
 			CompoundNBT compoundNBT2 = nbttaglist.getCompound(j);
@@ -641,6 +641,6 @@ public abstract class InventoryUtil {
 				nbttaglist.add(compoundNBT2);
 			}
 		}
-		compoundNBT.put(inventory.getName(), nbttaglist);
+		compoundNBT.put(null, nbttaglist);//TODO names inventory inventory.getName(), nbttaglist);
 	}
 }

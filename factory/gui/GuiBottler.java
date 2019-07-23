@@ -24,8 +24,8 @@ import forestry.factory.tiles.TileBottler;
 public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
 	private final TileBottler tile;
 
-	public GuiBottler(PlayerInventory inventory, TileBottler tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/bottler.png", new ContainerBottler(inventory, tile), tile);
+	public GuiBottler(PlayerInventory inventory, TileBottler tile, int id) {	//TODO windowid
+		super(Constants.TEXTURE_PATH_GUI + "/bottler.png", new ContainerBottler(inventory, tile, id), inventory, tile);
 		this.tile = tile;
 		widgetManager.add(new TankWidget(this.widgetManager, 80, 14, 0));
 	}
@@ -41,10 +41,10 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
 		RenderHelper.enableGUIStandardItemLighting();
 		GlStateManager.disableLighting();
 		GlStateManager.enableRescaleNormal();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.pushMatrix();
 		{
-			GlStateManager.translate(guiLeft, guiTop, 0.0F);
+			GlStateManager.translatef(guiLeft, guiTop, 0.0F);
 			drawWidgets();
 		}
 		GlStateManager.popMatrix();

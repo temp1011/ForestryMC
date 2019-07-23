@@ -114,14 +114,14 @@ public class WidgetScrollBar extends Widget {
 		boolean mouseDown = Minecraft.getInstance().mouseHelper.isLeftDown();
 
 		if (listener == null || listener.isFocused(mouseX, mouseY)) {
-			int wheel = Mouse.getDWheel();    //TODO - dwheel. Maybe need to hook into forge events now?
-			if (wheel > 0) {
-				setValue(currentValue - step);
-				return;
-			} else if (wheel < 0) {
-				setValue(currentValue + step);
-				return;
-			}
+//			int wheel = Mouse.getDWheel();    //TODO - dwheel. Maybe need to hook into forge events now?
+//			if (wheel > 0) {	//TODO I think this needs to be changed through the gui in mouseScrolled
+//				setValue(currentValue - step);
+//				return;
+//			} else if (wheel < 0) {
+//				setValue(currentValue + step);
+//				return;
+//			}
 		}
 
 		//the position of the mouse relative to the position of the widget

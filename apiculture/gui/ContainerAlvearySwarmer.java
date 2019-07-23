@@ -18,8 +18,8 @@ import forestry.core.gui.slots.SlotFiltered;
 
 public class ContainerAlvearySwarmer extends ContainerTile<TileAlvearySwarmer> {
 
-	public ContainerAlvearySwarmer(PlayerInventory player, TileAlvearySwarmer tile) {
-		super(tile, player, 8, 87);
+	public ContainerAlvearySwarmer(PlayerInventory player, TileAlvearySwarmer tile, int id) {
+		super(tile, player, 8, 87, id);	//TODO windowid
 
 		this.addSlot(new SlotFiltered(tile, 0, 79, 52));
 		this.addSlot(new SlotFiltered(tile, 1, 100, 39));

@@ -37,9 +37,9 @@ public class CropDestroyDouble extends Crop {
 		Block block = blockState.getBlock();
 		Block blockUp = blockStateUp.getBlock();
 		NonNullList<ItemStack> harvested = NonNullList.create();
-		block.getDrops(harvested, world, pos, blockState, 0);
-		blockUp.getDrops(harvested, world, pos.up(), blockStateUp, 0);
-
+//		block.getDrops(harvested, world, pos, blockState, 0);
+//		blockUp.getDrops(harvested, world, pos.up(), blockStateUp, 0);
+		//TODO getDrops. Loot tables?
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 

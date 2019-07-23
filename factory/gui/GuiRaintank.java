@@ -20,8 +20,8 @@ import forestry.factory.tiles.TileRaintank;
 public class GuiRaintank extends GuiForestryTitled<ContainerRaintank> {
 	private final TileRaintank tile;
 
-	public GuiRaintank(PlayerInventory inventory, TileRaintank tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/raintank.png", new ContainerRaintank(inventory, tile), tile);
+	public GuiRaintank(PlayerInventory inventory, TileRaintank tile, int id) {	//TODO windowid
+		super(Constants.TEXTURE_PATH_GUI + "/raintank.png", new ContainerRaintank(inventory, tile, id), inventory, tile);
 		this.tile = tile;
 		widgetManager.add(new TankWidget(this.widgetManager, 53, 17, 0));
 	}

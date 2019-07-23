@@ -73,26 +73,26 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 	/* LOADING & SAVING */
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
-		energyManager.read(CompoundNBT);
-		workingTime = CompoundNBT.getInteger("Heating");
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		energyManager.read(compoundNBT);
+		workingTime = compoundNBT.getInt("Heating");
 		setActive(workingTime > 0);
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
-		energyManager.write(CompoundNBT);
-		CompoundNBT.setInteger("Heating", workingTime);
-		return CompoundNBT;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		energyManager.write(compoundNBT);
+		compoundNBT.putInt("Heating", workingTime);
+		return compoundNBT;
 	}
 
 	/* Network */
 	@Override
 	protected void encodeDescriptionPacket(CompoundNBT packetData) {
 		super.encodeDescriptionPacket(packetData);
-		packetData.setBoolean("Active", active);
+		packetData.putBoolean("Active", active);
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 		if (world != null) {
 			if (world.isRemote) {
-				world.markBlockRangeForRenderUpdate(getPos(), getPos());
+				world.markForRerender(getPos());
 			} else {
 				NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
 			}
@@ -125,14 +125,9 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
-	}
-
-	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		T energyCapability = energyManager.getCapability(capability);
-		if (energyCapability != null) {
+		LazyOptional<T> energyCapability = energyManager.getCapability(capability);
+		if (energyCapability.isPresent()) {
 			return energyCapability;
 		}
 		return super.getCapability(capability, facing);

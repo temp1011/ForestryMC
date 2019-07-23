@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 
 
@@ -27,7 +28,7 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	private final T multiblockLogic;
 
 	public MultiblockTileEntityBase(T multiblockLogic) {
-		super(ForestryTileEntityTypes.MULTIBLOCK_TILE_ENTITY_BASE_TILE_ENTITY_TYPE);
+		super(TileEntityType.DISPENSER);	//TODO tileentitytype
 		this.multiblockLogic = multiblockLogic;
 	}
 

@@ -26,7 +26,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -356,11 +359,11 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	public void addTooltip(List<String> list) {
+	public void addTooltip(List<ITextComponent> list) {
 
 		// No info 4 u!
 		if (!isAnalyzed) {
-			list.add("<" + Translator.translateToLocal("for.gui.unknown") + ">");
+			list.add(new StringTextComponent("<").appendSibling(new TranslationTextComponent("for.gui.unknown")).appendText(">"));
 			return;
 		}
 
@@ -368,7 +371,8 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumBeeChromosome.SPECIES)) {
-			list.add(TextFormatting.BLUE + Translator.translateToLocal("for.bees.hybrid").replaceAll("%PRIMARY", primary.getAlleleName()).replaceAll("%SECONDARY", secondary.getAlleleName()));
+			//TODO textcomponent
+			list.add(new StringTextComponent(TextFormatting.BLUE + Translator.translateToLocal("for.bees.hybrid").replaceAll("%PRIMARY", primary.getAlleleName()).replaceAll("%SECONDARY", secondary.getAlleleName())));
 		}
 
 		if (generation > 0) {
@@ -384,7 +388,9 @@ public class Bee extends IndividualLiving implements IBee {
 			}
 
 			String generationString = rarity.color + Translator.translateToLocalFormatted("for.gui.beealyzer.generations", generation);
-			list.add(generationString);
+			list.add(new StringTextComponent(generationString));
+			//TODO textcomponent
+
 		}
 
 		IAllele speedAllele = genome.getActiveAllele(EnumBeeChromosome.SPEED);
@@ -404,18 +410,19 @@ public class Bee extends IndividualLiving implements IBee {
 		String humidTolerance = TextFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidToleranceAllele.getAlleleName();
 		String flowers = genome.getFlowerProvider().getDescription();
 
-		list.add(lifespan);
-		list.add(speed);
-		list.add(tempTolerance);
-		list.add(humidTolerance);
-		list.add(flowers);
+		//TODO textcomponent many times...
+		list.add(new StringTextComponent(lifespan));
+		list.add(new StringTextComponent(speed));
+		list.add(new StringTextComponent(tempTolerance));
+		list.add(new StringTextComponent(humidTolerance));
+		list.add(new StringTextComponent(flowers));
 
 		if (genome.getNeverSleeps()) {
-			list.add(TextFormatting.RED + GenericRatings.rateActivityTime(genome.getNeverSleeps(), false));
+			list.add(new StringTextComponent(TextFormatting.RED + GenericRatings.rateActivityTime(genome.getNeverSleeps(), false)));
 		}
 
 		if (genome.getToleratesRain()) {
-			list.add(TextFormatting.WHITE + Translator.translateToLocal("for.gui.flyer.tooltip"));
+			list.add(new StringTextComponent(TextFormatting.WHITE + Translator.translateToLocal("for.gui.flyer.tooltip")));
 		}
 	}
 

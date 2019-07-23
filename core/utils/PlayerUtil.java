@@ -62,7 +62,7 @@ public abstract class PlayerUtil {
 			}
 		}
 
-		PlayerEntity player = world.getPlayerEntityByName(profile.getName());
+		PlayerEntity player = world.getPlayerByUuid(profile.getId());
 		if (player == null && world instanceof ServerWorld) {
 			player = FakePlayerFactory.get((ServerWorld) world, profile);
 		}
@@ -91,16 +91,16 @@ public abstract class PlayerUtil {
 
 	public static void writeGameProfile(CompoundNBT tagCompound, GameProfile profile) {
 		if (!StringUtils.isNullOrEmpty(profile.getName())) {
-			tagCompound.setString("Name", profile.getName());
+			tagCompound.putString("Name", profile.getName());
 		}
 
 		if (profile.getId() != null) {
-			tagCompound.setString("Id", profile.getId().toString());
+			tagCompound.putString("Id", profile.getId().toString());
 		}
 	}
 
 	@Nullable
-	public static GameProfile readGameProfileFromNBT(CompoundNBT compound) {
-		return NBTUtil.readGameProfileFromNBT(compound);
+	public static GameProfile readGameProfile(CompoundNBT compound) {
+		return NBTUtil.readGameProfile(compound);
 	}
 }

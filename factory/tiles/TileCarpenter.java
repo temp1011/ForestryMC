@@ -272,7 +272,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiCarpenter(player.inventory, this);
+		return new GuiCarpenter(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override

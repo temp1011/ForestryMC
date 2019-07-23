@@ -208,10 +208,10 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiStill(player.inventory, this);
+		return new GuiStill(player.inventory, this, data);	//TODO windowid
 	}
 
-	//TODO windowId stiff again
+	//TODO windowId stuff again
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
 		return new ContainerStill(player.inventory, this, data);

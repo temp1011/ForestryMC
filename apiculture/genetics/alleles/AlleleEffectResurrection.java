@@ -105,7 +105,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 	}
 
 	private boolean resurrectEntity(ItemEntity entity) {
-		if (entity.isDead) {
+		if (!entity.isAlive()) {
 			return false;
 		}
 
@@ -116,7 +116,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 					contained.shrink(1);
 
 					if (contained.getCount() <= 0) {
-						entity.setDead();
+						entity.remove();
 					}
 				}
 

@@ -74,11 +74,6 @@ public enum EnumForestryWoodType implements IWoodType {
 		return toString();
 	}
 
-	@Override
-	public int getMetadata() {
-		return ordinal();
-	}
-
 	public static EnumForestryWoodType byMetadata(int meta) {
 		if (meta < 0 || meta >= VALUES.length) {
 			meta = 0;

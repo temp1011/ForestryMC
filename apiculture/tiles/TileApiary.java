@@ -99,12 +99,12 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		ContainerBeeHousing container = new ContainerBeeHousing(player.inventory, this, true);
+		ContainerBeeHousing container = new ContainerBeeHousing(player.inventory, this, true, data);	//TODO windowid
 		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.APIARY);
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerBeeHousing(player.inventory, this, true);
+		return new ContainerBeeHousing(player.inventory, this, true, data);	//TODO windowid
 	}
 }

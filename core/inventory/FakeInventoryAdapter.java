@@ -91,20 +91,21 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 
 	}
 
-	@Override
-	public ITextComponent getDisplayName() {
-		return new StringTextComponent(getName());
-	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return false;
-	}
+	//TODO inventory name
+//	@Override
+//	public ITextComponent getDisplayName() {
+//		return new StringTextComponent(getName());
+//	}
+//
+//	@Override
+//	public String getName() {
+//		return "";
+//	}
+//
+//	@Override
+//	public boolean hasCustomName() {
+//		return false;
+//	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -146,19 +147,20 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 		return CompoundNBT;
 	}
 
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
+	//TODO inventory fields
+//	@Override
+//	public int getField(int id) {
+//		return 0;
+//	}
+//
+//	@Override
+//	public void setField(int id, int value) {
+//	}
+//
+//	@Override
+//	public int getFieldCount() {
+//		return 0;
+//	}
 
 	@Override
 	public void clear() {

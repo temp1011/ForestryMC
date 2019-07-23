@@ -21,26 +21,26 @@ import forestry.core.tiles.TileAnalyzer;
 
 public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
 
-	public ContainerAnalyzer(PlayerInventory player, TileAnalyzer tile) {
-		super(tile, player, 8, 94);
+	public ContainerAnalyzer(PlayerInventory player, TileAnalyzer tile, int id) {
+		super(tile, player, 8, 94, id);
 
 		// Input buffer
 		for (int i = 0; i < 3; i++) {
 			for (int k = 0; k < 2; k++) {
-				addSlotToContainer(new SlotFiltered(tile, InventoryAnalyzer.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18));
+				addSlot(new SlotFiltered(tile, InventoryAnalyzer.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18));
 			}
 		}
 
 		// Analyze slot
-		addSlotToContainer(new SlotWorking(tile, InventoryAnalyzer.SLOT_ANALYZE, 73, 59));
+		addSlot(new SlotWorking(tile, InventoryAnalyzer.SLOT_ANALYZE, 73, 59));
 
 		// Can slot
-		addSlotToContainer(new SlotLiquidIn(tile, InventoryAnalyzer.SLOT_CAN, 143, 24));
+		addSlot(new SlotLiquidIn(tile, InventoryAnalyzer.SLOT_CAN, 143, 24));
 
 		// Output buffer
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 2; k++) {
-				addSlotToContainer(new SlotOutput(tile, InventoryAnalyzer.SLOT_OUTPUT_1 + i * 2 + k, 134 + k * 18, 48 + i * 18));
+				addSlot(new SlotOutput(tile, InventoryAnalyzer.SLOT_OUTPUT_1 + i * 2 + k, 134 + k * 18, 48 + i * 18));
 			}
 		}
 	}

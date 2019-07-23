@@ -27,7 +27,7 @@ public class FarmLogicReeds extends FarmLogicSoil {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(Items.REEDS);
+		return new ItemStack(Items.SUGAR_CANE);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class FarmLogicReeds extends FarmLogicSoil {
 			return false;
 		}
 
-		return itemstack.getItem() == Items.REEDS;
+		return itemstack.getItem() == Items.SUGAR_CANE;
 	}
 
 	@Override

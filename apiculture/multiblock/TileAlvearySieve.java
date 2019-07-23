@@ -61,12 +61,12 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiAlvearySieve(player.inventory, this);
+		return new GuiAlvearySieve(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override
 	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerAlvearySieve(player.inventory, this);
+		return new ContainerAlvearySieve(player.inventory, this, data);	//TODO windowid
 	}
 
 	static class AlvearySieveBeeListener extends DefaultBeeListener {

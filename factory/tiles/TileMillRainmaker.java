@@ -51,27 +51,27 @@ public class TileMillRainmaker extends TileMill {
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT CompoundNBT) {
-		super.readFromNBT(CompoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
-		charge = CompoundNBT.getInteger("Charge");
-		progress = CompoundNBT.getFloat("Progress");
-		stage = CompoundNBT.getInteger("Stage");
-		duration = CompoundNBT.getInteger("Duration");
-		reverse = CompoundNBT.getBoolean("Reverse");
+		charge = compoundNBT.getInt("Charge");
+		progress = compoundNBT.getFloat("Progress");
+		stage = compoundNBT.getInt("Stage");
+		duration = compoundNBT.getInt("Duration");
+		reverse = compoundNBT.getBoolean("Reverse");
 	}
 
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.writeToNBT(CompoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-		CompoundNBT.setInteger("Charge", charge);
-		CompoundNBT.setFloat("Progress", progress);
-		CompoundNBT.setInteger("Stage", stage);
-		CompoundNBT.setInteger("Duration", duration);
-		CompoundNBT.setBoolean("Reverse", reverse);
-		return CompoundNBT;
+		compoundNBT.putInt("Charge", charge);
+		compoundNBT.putFloat("Progress", progress);
+		compoundNBT.putInt("Stage", stage);
+		compoundNBT.putInt("Duration", duration);
+		compoundNBT.putBoolean("Reverse", reverse);
+		return compoundNBT;
 	}
 
 	public void addCharge(RainSubstrate substrate) {
@@ -85,7 +85,7 @@ public class TileMillRainmaker extends TileMill {
 	@Override
 	public void activate() {
 		if (world.isRemote) {
-			world.playSound(null, getPos(), SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + world.rand.nextFloat() * 0.2F);
+			world.playSound(null, getPos(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + world.rand.nextFloat() * 0.2F);
 
 			float f = getPos().getX() + 0.5F;
 			float f1 = getPos().getY() + 0.0F + world.rand.nextFloat() * 6F / 16F;

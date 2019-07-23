@@ -123,8 +123,9 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.newLine();
 
-			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.climate"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getTemperature()),
-				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getTemperature()), bee, EnumBeeChromosome.SPECIES);
+			//TODO textcomponent
+			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.climate"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getTemperature()).getFormattedText(),
+				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getTemperature()).getFormattedText(), bee, EnumBeeChromosome.SPECIES);
 
 			textLayout.newLine();
 
@@ -136,8 +137,9 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.newLine(16);
 
-			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.humidity"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getHumidity()),
-				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getHumidity()), bee, EnumBeeChromosome.SPECIES);
+			//TODO textcomponent
+			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.humidity"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getHumidity()).getFormattedText(),
+				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getHumidity()).getFormattedText(), bee, EnumBeeChromosome.SPECIES);
 
 			textLayout.newLine();
 

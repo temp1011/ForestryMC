@@ -20,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.StringTextComponent;
 
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -44,7 +45,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container> {
 	private final int pageCurrent, pageMax;
 
 	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, PlayerEntity player, Container container, int page, int maxPages) {
-		super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container);
+		super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, player.inventory, new StringTextComponent("NATURALIST_GUI_INVENTORY_TEST_TITLE"));
 
 		this.speciesRoot = speciesRoot;
 
@@ -65,7 +66,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container> {
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		super.drawGuiContainerBackgroundLayer(f, i, j);
 		String header = Translator.translateToLocal("for.gui.page") + " " + (pageCurrent + 1) + "/" + pageMax;
-		fontRenderer.drawString(header, guiLeft + 95 + textLayout.getCenteredOffset(header, 98), guiTop + 10, ColourProperties.INSTANCE.get("gui.title"));
+		getFontRenderer().drawString(header, guiLeft + 95 + textLayout.getCenteredOffset(header, 98), guiTop + 10, ColourProperties.INSTANCE.get("gui.title"));
 
 		IIndividual individual = getIndividualAtPosition(i, j);
 		if (individual == null) {
@@ -86,26 +87,23 @@ public class GuiNaturalistInventory extends GuiForestry<Container> {
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 
-		buttonList.add(new GuiBetterButton(1, guiLeft + 99, guiTop + 7, StandardButtonTextureSets.LEFT_BUTTON_SMALL));
-		buttonList.add(new GuiBetterButton(2, guiLeft + 180, guiTop + 7, StandardButtonTextureSets.RIGHT_BUTTON_SMALL));
+		buttons.add(new GuiBetterButton(guiLeft + 99, guiTop + 7, StandardButtonTextureSets.LEFT_BUTTON_SMALL, b -> {
+			if(pageCurrent > 0) {
+				flipPage(pageCurrent - 1);
+			}
+		}));
+		buttons.add(new GuiBetterButton(guiLeft + 180, guiTop + 7, StandardButtonTextureSets.RIGHT_BUTTON_SMALL, b -> {
+			if(pageCurrent < pageMax - 1) {
+				flipPage(pageCurrent + 1);
+			}
+		}));
 	}
 
 	private static void flipPage(int page) {
 		NetworkUtil.sendToServer(new PacketGuiSelectRequest(page, 0));
-	}
-
-	@Override
-	protected void actionPerformed(Button guibutton) throws IOException {
-		super.actionPerformed(guibutton);
-
-		if (guibutton.id == 1 && pageCurrent > 0) {
-			flipPage(pageCurrent - 1);
-		} else if (guibutton.id == 2 && pageCurrent < pageMax - 1) {
-			flipPage(pageCurrent + 1);
-		}
 	}
 
 	@Nullable

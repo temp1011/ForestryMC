@@ -105,8 +105,7 @@ public abstract class ModelBlockCustom<B extends Block, K> implements IBakedMode
 		if (blockModel != null) {
 			return blockModel.getParticleTexture();
 		}
-		//TODO - just the same as getTextureMap?
-		return Minecraft.getInstance().getTextureMapBlocks().getMissingSprite();
+		return Minecraft.getInstance().getTextureMap().missingImage;
 	}
 
 	@Override

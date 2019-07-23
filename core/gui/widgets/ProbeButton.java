@@ -41,7 +41,7 @@ public class ProbeButton extends Widget {
 		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
-		blit(startX + xPos, startY + yPos, 228, pressed ? 47 : 22, width, height, 1.0f);	//TODO - work out zlevel and what it does
+		manager.gui.blit(startX + xPos, startY + yPos, 228, pressed ? 47 : 22, width, height);
 	}
 
 	@Override

@@ -10,7 +10,9 @@
  ******************************************************************************/
 package forestry.core.entities;
 
+import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.particles.ParticleTypes;
@@ -22,7 +24,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ParticleSmoke extends Particle {
-	private final float ignitionParticleScale;
+	private final float ignitionParticleScale = 1.0f;	//TODO particles
 
 	public ParticleSmoke(World world, double x, double y, double z) {
 		super(world, x, y, z, 0, 0, 0);
@@ -33,10 +35,10 @@ public class ParticleSmoke extends Particle {
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
 		//TODO - think width and height have to be changed now
 		//TODO - or multipleParticleScaleBy()
-		this.particleScale *= this.rand.nextFloat() / 4;
-		this.ignitionParticleScale = this.particleScale;
+//		this.particleScale *= this.rand.nextFloat() / 4;
+//		this.ignitionParticleScale = this.particleScale;
 		this.maxAge = (int) (16.0 / (Math.random() * 0.8 + 0.2));
-		this.setParticleTextureIndex(49);
+//		this.setParticleTextureIndex(49);
 	}
 
 	@Override
@@ -47,10 +49,17 @@ public class ParticleSmoke extends Particle {
 	}
 
 	@Override
-	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle(BufferBuilder buffer, ActiveRenderInfo entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		float f6 = (this.age + partialTicks) / this.maxAge;
-		this.particleScale = this.ignitionParticleScale * (1.0F - f6 * f6);
-		super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+		//TODO particles
+//		this.particleScale = this.ignitionParticleScale * (1.0F - f6 * f6);
+//		super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+		//TODO now abstract
+	}
+
+	@Override
+	public IParticleRenderType getRenderType() {
+		return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;	//TODO renderType
 	}
 
 	/**
@@ -69,7 +78,7 @@ public class ParticleSmoke extends Particle {
 		float f = (float) this.age / (float) this.maxAge;
 
 		if (this.rand.nextFloat() > f * 2) {
-			this.world.spawnParticle(ParticleTypes.LARGE_SMOKE, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
+			this.world.addParticle(ParticleTypes.LARGE_SMOKE, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
 		}
 
 		this.motionY -= 0.03D;

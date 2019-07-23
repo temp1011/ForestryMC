@@ -167,7 +167,7 @@ public class FarmLogicCocoa extends FarmLogic {
 
 		ICrop crop = null;
 		//TODO - probably needs tag
-		if (!block.isWood(world, position)) {
+		if (false){//!block.isWood(world, position)) {
 			crop = cocoa.getCropAt(world, position, blockState);
 			if (crop == null) {
 				return crops;
@@ -227,7 +227,7 @@ public class FarmLogicCocoa extends FarmLogic {
 						candidates.add(candidate);
 						seen.add(candidate);
 						//TODO - probably needs TAG
-					} else if (blockState.getBlock().isWood(world, candidate)) {
+					} else if (false) {//blockState.getBlock().isWood(world, candidate)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 					}

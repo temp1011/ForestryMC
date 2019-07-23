@@ -152,7 +152,7 @@ public class ParticleHelper {
 			Minecraft minecraft = Minecraft.getInstance();
 			BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRendererDispatcher();
 			BlockModelShapes blockModelShapes = blockRendererDispatcher.getBlockModelShapes();
-			fx.sprite = blockModelShapes.getTexture(state);	//TODO At on field SpriteTexturedParticle.sprite but it's protected so idk. Reflection?
+//			fx.sprite = blockModelShapes.getTexture(state);	//TODO At on field SpriteTexturedParticle.sprite but it's protected so idk. Reflection?
 		}
 	}
 }

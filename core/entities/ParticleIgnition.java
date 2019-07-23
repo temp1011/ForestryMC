@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.entities;
 
+import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -20,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+//TODO particles
 @OnlyIn(Dist.CLIENT)
 public class ParticleIgnition extends Particle {
 	private final float ignitionParticleScale;
@@ -31,10 +33,11 @@ public class ParticleIgnition extends Particle {
 		this.motionZ *= 0.8;
 		this.motionY = this.rand.nextFloat() * 0.4F + 0.05F;
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
-		this.particleScale *= this.rand.nextFloat() / 2 + 0.3F;
-		this.ignitionParticleScale = this.particleScale;
+		//TODO particle stuff
+//		this.particleScale *= this.rand.nextFloat() / 2 + 0.3F;
+		this.ignitionParticleScale = 1.0f;//this.particleScale;
 		this.maxAge = (int) (16.0 / (Math.random() * 0.8 + 0.2));
-		this.setParticleTextureIndex(49);
+//		this.setParticleTextureIndex(49);
 	}
 
 	@Override
@@ -48,8 +51,13 @@ public class ParticleIgnition extends Particle {
 	@Override
 	public void renderParticle(BufferBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		float f6 = (this.age + partialTicks) / this.maxAge;
-		this.particleScale = this.ignitionParticleScale * (1.0F - f6 * f6);
-		super.renderParticle(buffer, renderInfo, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+//		this.particleScale = this.ignitionParticleScale * (1.0F - f6 * f6);
+//		super.renderParticle(buffer, renderInfo, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+	}
+
+	@Override
+	public IParticleRenderType getRenderType() {
+		return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
 	}
 
 	/**

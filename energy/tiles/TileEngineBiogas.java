@@ -289,7 +289,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiEngineBiogas(player.inventory, this);
+		return new GuiEngineBiogas(player.inventory, this, data);	//TODO windowid
 	}
 
 	@Override

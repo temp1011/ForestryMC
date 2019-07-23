@@ -21,8 +21,8 @@ import forestry.core.render.EnumTankLevel;
 public class GuiAlveary extends GuiForestryTitled<ContainerAlveary> {
 	private final TileAlveary tile;
 
-	public GuiAlveary(PlayerInventory inventory, TileAlveary tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/alveary.png", new ContainerAlveary(inventory, tile), tile);
+	public GuiAlveary(PlayerInventory inventory, TileAlveary tile, int id) {	//TODO windowid
+		super(Constants.TEXTURE_PATH_GUI + "/alveary.png", new ContainerAlveary(inventory, tile, id), inventory, tile);
 		this.tile = tile;
 		this.ySize = 190;
 	}

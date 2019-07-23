@@ -258,6 +258,7 @@ public class ModuleFactory extends BlankForestryModule {
 
 		FluidStack liquidGlass = Fluids.GLASS.getFluid(500);
 		if (liquidGlass != null) {
+			//TODO json
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.COPPER, 4), new Object[]{
 				" X ",
 				"#X#",

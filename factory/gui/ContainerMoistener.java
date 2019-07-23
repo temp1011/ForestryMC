@@ -27,27 +27,27 @@ import forestry.factory.tiles.TileMoistener;
 
 public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> implements ISlotChangeWatcher {
 
-	public ContainerMoistener(PlayerInventory player, TileMoistener tile) {
-		super(tile, player, 8, 84);
+	public ContainerMoistener(PlayerInventory player, TileMoistener tile, int id) {	//TODO windowid
+		super(tile, player, 8, 84, id);
 
 		// Stash
 		for (int l = 0; l < 2; l++) {
 			for (int k1 = 0; k1 < 3; k1++) {
-				addSlotToContainer(new SlotFiltered(tile, k1 + l * 3, 39 + k1 * 18, 16 + l * 18));
+				addSlot(new SlotFiltered(tile, k1 + l * 3, 39 + k1 * 18, 16 + l * 18));
 			}
 		}
 		// Reservoir
 		for (int k1 = 0; k1 < 3; k1++) {
-			addSlotToContainer(new SlotFiltered(tile, k1 + 6, 39 + k1 * 18, 22 + 36));
+			addSlot(new SlotFiltered(tile, k1 + 6, 39 + k1 * 18, 22 + 36));
 		}
 
 		// Working slot
-		this.addSlotToContainer(new SlotWorking(tile, 9, 105, 37));
+		this.addSlot(new SlotWorking(tile, 9, 105, 37));
 
 		// Product slot
-		this.addSlotToContainer(new SlotFiltered(tile, 10, 143, 55));
+		this.addSlot(new SlotFiltered(tile, 10, 143, 55));
 		// Boxes
-		this.addSlotToContainer(new SlotWatched(tile, 11, 143, 19).setChangeWatcher(this));
+		this.addSlot(new SlotWatched(tile, 11, 143, 19).setChangeWatcher(this));
 	}
 
 	@Override

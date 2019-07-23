@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import forestry.api.multiblock.IMultiblockLogicFarm;
