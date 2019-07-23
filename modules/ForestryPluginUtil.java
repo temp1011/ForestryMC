@@ -10,6 +10,7 @@ import java.util.Set;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.forgespi.language.ModFileScanData;
 
@@ -40,8 +41,8 @@ public class ForestryPluginUtil {
 	public static String getComment(IForestryModule module) {
 		ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 
-		//TODO - check this is only called on the client
-		String comment = I18n.format(info.unlocalizedDescription());
+		//TODO - check this is only called on the client. I don't think it is at the moment
+		String comment = new TranslationTextComponent(info.unlocalizedDescription()).getUnformattedComponentText();
 		Set<ResourceLocation> dependencies = module.getDependencyUids();
 		if (!dependencies.isEmpty()) {
 			Iterator<ResourceLocation> iDependencies = dependencies.iterator();

@@ -40,7 +40,8 @@ import forestry.core.inventory.ItemInventoryAlyzer;
 public class ItemAlyzer extends ItemWithGui {
 	public ItemAlyzer() {
 		super((new Item.Properties())
-		.group(ItemGroups.tabApiculture));
+		.group(ItemGroups.tabApiculture)
+		.maxStackSize(1));
 	}
 
 	@Override

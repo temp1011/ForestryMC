@@ -40,7 +40,7 @@ public class BlockRegistryCore extends BlockRegistry {
 
 		bogEarth = new BlockBogEarth();
 		registerBlock(bogEarth, new ItemBlockForestry<>(bogEarth), "bog_earth");
-//		bogEarth.setHarvestLevel("shovel", 0);
+//		bogEarth.setHarvestLevel("shovel", 0); TODO done in item
 
 		humus = new BlockHumus();
 		registerBlock(humus, new ItemBlockForestry<>(humus), "humus");

@@ -26,9 +26,6 @@ import forestry.modules.ModuleManager;
 
 public abstract class BlockRegistry {
 	protected <T extends Block> void registerBlock(T block, @Nullable BlockItem itemBlock, String name) {
-		if (ModuleManager.getInternalHandler().getStage() != InternalModuleHandler.Stage.REGISTER) {
-			throw new RuntimeException("Tried to register Block outside of REGISTER");
-		}
 
 		if (!name.equals(name.toLowerCase(Locale.ENGLISH))) {
 			Log.error("Name must be lowercase");

@@ -26,9 +26,6 @@ import forestry.modules.ModuleManager;
 
 public abstract class ItemRegistry {
 	protected static <T extends Item> T registerItem(T item, String name) {
-		if (ModuleManager.getInternalHandler().getStage() != InternalModuleHandler.Stage.REGISTER) {
-			throw new RuntimeException("Tried to register Item outside of REGISTER");
-		}
 
 		if (!name.equals(name.toLowerCase(Locale.ENGLISH))) {
 			Log.error("Name must be lowercase");
@@ -40,7 +37,7 @@ public abstract class ItemRegistry {
 
 
 		ForgeRegistries.ITEMS.register(item);
-		Proxies.common.registerItem(item);
+//		Proxies.common.registerItem(item); TODO distexecutor
 		return item;
 	}
 

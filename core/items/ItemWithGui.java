@@ -25,7 +25,7 @@ import forestry.core.gui.IGuiHandlerItem;
 
 public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerItem {
 	public ItemWithGui(Item.Properties properties) {
-		super(properties.maxStackSize(1));
+		super(properties);
 	}
 
 	@Override

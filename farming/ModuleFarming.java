@@ -125,7 +125,8 @@ public class ModuleFarming extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
-		ItemRegistryCore coreItems = ModuleCore.getItems();
+		//TODO ordering issues
+//		ItemRegistryCore coreItems = ModuleCore.getItems();
 		BlockRegistryFarming blocks = getBlocks();
 
 		MinecraftForge.EVENT_BUS.register(this);

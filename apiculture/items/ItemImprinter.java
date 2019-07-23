@@ -28,7 +28,7 @@ import forestry.core.items.ItemWithGui;
 
 public class ItemImprinter extends ItemWithGui {
 	public ItemImprinter() {
-		super((new Item.Properties()).group(ItemGroups.tabApiculture));
+		super((new Item.Properties()).group(ItemGroups.tabApiculture).maxStackSize(1));
 	}
 
 	//TODO window id

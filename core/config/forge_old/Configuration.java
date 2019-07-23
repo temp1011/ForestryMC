@@ -48,6 +48,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 
+import forestry.Forestry;
+
 import static forestry.core.config.forge_old.Property.Type.BOOLEAN;
 import static forestry.core.config.forge_old.Property.Type.DOUBLE;
 import static forestry.core.config.forge_old.Property.Type.INTEGER;
@@ -740,10 +742,15 @@ public class Configuration {
 		if (PARENT != null && PARENT != this) {
 			return;
 		}
-
+		if(file == null) {	//TODO config needs to be migrated anyway
+			file = Forestry.instance.getConfigFolder();
+		}
 		BufferedReader buffer = null;
 		UnicodeInputStreamReader input = null;
 		try {
+			if(file == null) {
+				return;	//TODO - I really don't know any more. Sandboxing?
+			}
 			if (file.getParentFile() != null) {
 				file.getParentFile().mkdirs();
 			}
