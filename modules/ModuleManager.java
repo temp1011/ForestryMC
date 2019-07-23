@@ -221,7 +221,7 @@ public class ModuleManager implements IModuleManager {
 		Locale.setDefault(locale);
 	}
 
-	//TODO - Is this still called early enough?
+	//TODO - Is this still called early enough? I don't think modules are getting recognised
 	public static void runSetup() {
 		Map<String, List<IForestryModule>> forestryModules = ForestryPluginUtil.getForestryModules();
 

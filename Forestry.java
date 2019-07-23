@@ -112,7 +112,8 @@ public class Forestry {
 		FluidRegistry.enableUniversalBucket();
 		ModuleManager moduleManager = ModuleManager.getInstance();
 		ForestryAPI.moduleManager = moduleManager;
-//		moduleManager.registerContainers(new ForestryModules(), new ForestryCompatPlugins());
+		ModuleManager.runSetup();
+		//		moduleManager.registerContainers(new ForestryModules(), new ForestryCompatPlugins());
 		NetworkHandler networkHandler = new NetworkHandler();
 //		DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
 		// Register the setup method for modloading
@@ -136,6 +137,7 @@ public class Forestry {
 	}
 
 	public void setup(FMLCommonSetupEvent event) {
+		instance = this;
 		packetHandler = new PacketHandlerServer();
 
 		// Register event handler
@@ -143,12 +145,11 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 		MinecraftForge.EVENT_BUS.register(Config.class);
-		Proxies.common.registerEventHandlers();
+//		Proxies.common.registerEventHandlers(); TODO DistExecutor
 		configFolder = new File("."); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - DistExecutor
 		Config.load(Dist.DEDICATED_SERVER);
 
-		ModuleManager.runSetup();
 		ModuleManager.getInternalHandler().runSetup();
 
 		String gameMode = Config.gameMode;
@@ -181,7 +182,7 @@ public class Forestry {
 	//client
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
-		Proxies.render.registerModels();
+//		Proxies.render.registerModels(); TODO DistExecutor
 	}
 
 	//split

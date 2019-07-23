@@ -52,6 +52,7 @@ public class LocalizedConfiguration extends Configuration {
 		return getStringLocalized(category, name, defaultValue, new String[0]);
 	}
 
+	//TODO - called on wrong side.
 	public String getStringLocalized(String category, String name, String defaultValue, String[] validValues) {
 		return getStringLocalizedFormatted(category, name, defaultValue, validValues, "");
 	}

@@ -372,6 +372,9 @@ public class Config {
 
 	private static void copyFileToFS(File destination, String resourcePath) {
 		InputStream stream = Config.class.getResourceAsStream(resourcePath);
+		if(stream == null) {
+			return;	//TODO config needs to be migrated anyway
+		}
 		OutputStream outstream;
 		int readBytes;
 		byte[] buffer = new byte[4096];

@@ -975,6 +975,9 @@ public class Configuration {
 		}
 
 		try {
+			if(file == null) {
+				return;
+			}
 			if (file.getParentFile() != null) {
 				file.getParentFile().mkdirs();
 			}
