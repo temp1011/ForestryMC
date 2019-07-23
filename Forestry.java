@@ -52,6 +52,8 @@ import forestry.core.network.NetworkHandler;
 import forestry.core.network.PacketHandlerServer;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
+
+import sun.security.pkcs11.Secmod;
 //import forestry.plugins.ForestryCompatPlugins;
 //import forestry.plugins.PluginBuildCraftFuels;
 //import forestry.plugins.PluginIC2;
@@ -156,14 +158,13 @@ public class Forestry {
 	public static class RegistryEvents {
 		//TODO use registry events (although how this works with bee combs etc is tricky)
 		@SubscribeEvent
-		public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
-			// register a new block here
-			LOGGER.info("HELLO from Register Block");
+		public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
+			ModuleManager.getInternalHandler().registerBlocks();
 		}
 
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event) {
-			ModuleManager.internalHandler.registerItemsAndBlocks();
+			ModuleManager.internalHandler.registerItems();
 
 			ModuleManager.getInternalHandler().runRegisterBackpacksAndCrates();
 		}

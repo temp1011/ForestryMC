@@ -131,7 +131,7 @@ public class ModuleFactory extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItemsAndBlocks() {
+	public void registerBlocks() {
 		blocks = new BlockRegistryFactory();
 	}
 

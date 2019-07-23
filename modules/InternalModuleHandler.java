@@ -8,11 +8,13 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.RegistryEvent;
 
 import net.minecraftforge.fml.InterModComms;
 
@@ -83,12 +85,15 @@ public class InternalModuleHandler {
 
 	}
 
-	//TODO try and hack in registry events for now
-	public void registerItemsAndBlocks() {
+	public void registerBlocks() {
 		for (IForestryModule module : modules) {
-			Log.debug("Register Items and Blocks Start: {}", module);
-			module.registerItemsAndBlocks();
-			Log.debug("Register Items and Blocks Complete: {}", module);
+			module.registerBlocks();
+		}
+	}
+
+	public void registerItems() {
+		for (IForestryModule module : modules) {
+			module.registerItems();
 		}
 	}
 

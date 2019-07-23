@@ -210,9 +210,13 @@ public class ModuleApiculture extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItemsAndBlocks() {
-		items = new ItemRegistryApiculture();
+	public void registerBlocks() {
 		blocks = new BlockRegistryApiculture();
+	}
+
+	@Override
+	public void registerItems() {
+		items = new ItemRegistryApiculture();
 	}
 
 	@Override

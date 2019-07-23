@@ -124,9 +124,13 @@ public class ModuleCore extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItemsAndBlocks() {
-		items = new ItemRegistryCore();
+	public void registerBlocks() {
 		blocks = new BlockRegistryCore();
+	}
+
+	@Override
+	public void registerItems() {
+		items = new ItemRegistryCore();
 	}
 
 	@Override

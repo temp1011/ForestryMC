@@ -39,7 +39,7 @@ public class ModuleEnergy extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItemsAndBlocks() {
+	public void registerBlocks() {
 		blocks = new BlockRegistryEnergy();
 	}
 

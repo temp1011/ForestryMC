@@ -112,11 +112,14 @@ public class ModuleFluids extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItemsAndBlocks() {
+	public void registerBlocks() {
 		for (Fluids fluidType : Fluids.values()) {
 			createFluid(fluidType);
 		}
+	}
 
+	@Override
+	public void registerItems() {
 		items = new ItemRegistryFluids();
 	}
 
