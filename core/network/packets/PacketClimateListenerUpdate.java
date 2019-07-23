@@ -1,9 +1,6 @@
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 
 

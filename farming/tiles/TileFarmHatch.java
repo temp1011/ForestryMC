@@ -10,13 +10,10 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -29,11 +26,9 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 //import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.multiblock.IFarmComponent;
-import forestry.core.config.Constants;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.utils.InventoryUtil;
-import forestry.farming.triggers.FarmingTriggers;
 
 //import buildcraft.api.statements.IStatementContainer;
 //import buildcraft.api.statements.ITriggerExternal;

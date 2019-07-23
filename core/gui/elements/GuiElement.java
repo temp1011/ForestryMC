@@ -23,7 +23,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IGuiElement;
-import forestry.api.gui.ITextElement;
 import forestry.api.gui.ITooltipSupplier;
 import forestry.api.gui.IWindowElement;
 import forestry.api.gui.events.ElementEvent;

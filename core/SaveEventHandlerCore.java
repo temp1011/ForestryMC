@@ -11,7 +11,6 @@
 package forestry.core;
 
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 
 public class SaveEventHandlerCore implements ISaveEventHandler {
 

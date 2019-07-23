@@ -27,7 +27,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.Forestry;
+
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketServer;
 

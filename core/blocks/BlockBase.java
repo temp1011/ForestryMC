@@ -24,11 +24,11 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -38,7 +38,6 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidUtil;
 
 
@@ -54,7 +53,6 @@ import forestry.core.circuits.ISocketable;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.render.MachineParticleCallback;
-import forestry.core.render.MachineStateMapper;
 import forestry.core.render.ParticleHelper;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileForestry;
@@ -75,6 +73,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	public BlockBase(P blockType, Block.Properties properties) {
 		super(properties);
+		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
 
 		this.blockType = blockType;
 		blockType.getMachineProperties().setBlock(this);
@@ -83,10 +82,15 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		this.hasCustom = blockType instanceof IBlockTypeCustom;
 //		this.lightOpacity = (!hasTESR && !hasCustom) ? 255 : 0;
 		//TODO opacity
-		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
 
 		particleCallback = new MachineParticleCallback<>(this, blockType);
 
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(FACING);
 	}
 
 	public BlockBase(P blockType, Material material) {

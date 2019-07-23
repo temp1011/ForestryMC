@@ -11,7 +11,6 @@
 package forestry.apiculture;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.util.LazyOptional;

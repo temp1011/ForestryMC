@@ -4,14 +4,10 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.merchant.IMerchant;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MerchantOffer;
 
-import forestry.api.apiculture.EnumBeeType;
-import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.items.ItemHoneyComb;
 
 //TODO - trades once things are a little less obsfucated

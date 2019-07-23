@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui.tooltips;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

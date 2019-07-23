@@ -25,7 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.ChipsetManager;
@@ -45,7 +44,6 @@ import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.ModuleCore;
 import forestry.core.ModuleFluids;
-import forestry.core.blocks.BlockBogEarth;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.Circuits;

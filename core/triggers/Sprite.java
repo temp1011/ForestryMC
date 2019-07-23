@@ -1,6 +1,5 @@
 package forestry.core.triggers;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 //import buildcraft.api.core.render.ISprite;

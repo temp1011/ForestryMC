@@ -21,12 +21,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
@@ -35,34 +34,20 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraftforge.client.model.ModelLoader;
-
 
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.core.IModelManager;
-import forestry.core.models.IStateMapperRegister;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.multiblock.IAlvearyControllerInternal;
 import forestry.apiculture.multiblock.TileAlveary;
-import forestry.apiculture.multiblock.TileAlvearyFan;
-import forestry.apiculture.multiblock.TileAlvearyHeater;
-import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
-import forestry.apiculture.multiblock.TileAlvearyPlain;
-import forestry.apiculture.multiblock.TileAlvearySieve;
-import forestry.apiculture.multiblock.TileAlvearyStabiliser;
-import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.packets.PacketAlvearyChange;
 import forestry.core.blocks.BlockStructure;
-import forestry.core.tiles.IActivatable;
 import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.Translator;
 
 public abstract class BlockAlveary extends BlockStructure {//implements IStateMapperRegister {
 	private static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
@@ -116,6 +101,12 @@ public abstract class BlockAlveary extends BlockStructure {//implements IStateMa
 
 //		setCreativeTab(ItemGroups.tabApiculture);
 //		setHarvestLevel("axe", 0);
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(PLAIN_TYPE, STATE);
 	}
 
 	public abstract BlockAlvearyType getAlvearyType();

@@ -1,14 +1,9 @@
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
-import net.minecraftforge.common.util.LazyOptional;
-
 import forestry.api.climate.ClimateCapabilities;
-import forestry.api.climate.IClimateListener;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;

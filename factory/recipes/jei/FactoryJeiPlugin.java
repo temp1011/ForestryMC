@@ -1,32 +1,10 @@
 package forestry.factory.recipes.jei;
 
-import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
-
 
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.core.gui.GuiForestry;
-import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 //import forestry.core.utils.JeiUtil;
-import forestry.factory.MachineUIDs;
-import forestry.factory.ModuleFactory;
-import forestry.factory.blocks.BlockRegistryFactory;
-import forestry.factory.gui.GuiBottler;
-import forestry.factory.gui.GuiCarpenter;
-import forestry.factory.gui.GuiCentrifuge;
-import forestry.factory.gui.GuiFabricator;
-import forestry.factory.gui.GuiFermenter;
-import forestry.factory.gui.GuiMoistener;
-import forestry.factory.gui.GuiSqueezer;
-import forestry.factory.gui.GuiStill;
 //import forestry.factory.recipes.jei.bottler.BottlerRecipeCategory;
 //import forestry.factory.recipes.jei.bottler.BottlerRecipeMaker;
 //import forestry.factory.recipes.jei.carpenter.CarpenterRecipeCategory;
@@ -47,8 +25,7 @@ import forestry.factory.gui.GuiStill;
 //import forestry.factory.recipes.jei.squeezer.SqueezerRecipeMaker;
 //import forestry.factory.recipes.jei.still.StillRecipeCategory;
 //import forestry.factory.recipes.jei.still.StillRecipeMaker;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
+
 
 //import mezz.jei.api.IGuiHelper;
 //import mezz.jei.api.IJeiHelpers;

@@ -29,8 +29,6 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 
 import forestry.core.ModuleCore;
@@ -42,7 +40,6 @@ public class ItemForestryTool extends ItemForestry {
 
 	public ItemForestryTool(ItemStack remnants, Item.Properties properties) {
 		super((properties)
-		.maxStackSize(1)
 		.maxDamage(200));
 		efficiencyOnProperMaterial = 6F;
 		this.remnants = remnants;

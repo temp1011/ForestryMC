@@ -11,7 +11,6 @@
 package forestry.farming.blocks;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -20,7 +19,6 @@ import net.minecraft.block.material.Material;
 //import net.minecraft.block.properties.EnumProperty;
 //import net.minecraft.block.BlockStateContainer;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,7 +26,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.EnumProperty;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
@@ -37,11 +35,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.BlockStateContainer;
-import net.minecraft.world.storage.loot.LootContext;
 
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.data.ModelProperty;
 //import net.minecraftforge.common.property.ExtendedBlockState;
 //import net.minecraftforge.common.property.IExtendedBlockState;
 //import net.minecraftforge.common.property.IUnlistedProperty;
@@ -51,19 +45,10 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IModelManager;
-import forestry.api.core.ItemGroups;
 import forestry.core.blocks.BlockStructure;
-import forestry.core.blocks.properties.UnlistedBlockAccess;
-import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.tiles.TileFarm;
-import forestry.farming.tiles.TileFarmControl;
-import forestry.farming.tiles.TileFarmGearbox;
-import forestry.farming.tiles.TileFarmHatch;
-import forestry.farming.tiles.TileFarmPlain;
-import forestry.farming.tiles.TileFarmValve;
 
 public class BlockFarm extends BlockStructure {
 
@@ -75,6 +60,12 @@ public class BlockFarm extends BlockStructure {
 //		setHarvestLevel("pickaxe", 0); TODO set in item
 		setDefaultState(this.getStateContainer().getBaseState().with(META, EnumFarmBlockType.PLAIN));
 //		setCreativeTab(ItemGroups.tabAgriculture); TODO set in item I think
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(META);
 	}
 
 	//TODO - either flatten or work out how extended states work

@@ -25,7 +25,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 
@@ -52,8 +51,6 @@ import forestry.core.network.NetworkHandler;
 import forestry.core.network.PacketHandlerServer;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
-
-import sun.security.pkcs11.Secmod;
 //import forestry.plugins.ForestryCompatPlugins;
 //import forestry.plugins.PluginBuildCraftFuels;
 //import forestry.plugins.PluginIC2;

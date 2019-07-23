@@ -10,16 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import javax.annotation.Nonnull;
-import java.util.Collection;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-
 //import net.minecraftforge.fml.common.Optional;
 
-import forestry.apiculture.trigger.ApicultureTriggers;
-import forestry.core.config.Constants;
 
 //import buildcraft.api.statements.IStatementContainer;
 //import buildcraft.api.statements.ITriggerExternal;

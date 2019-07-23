@@ -1,7 +1,5 @@
 package forestry.energy;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 
@@ -17,16 +15,8 @@ import forestry.core.config.Config;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.energy.compat.EnergyStorageWrapper;
-import forestry.energy.compat.mj.MjConnectorWrapper;
 import forestry.energy.compat.mj.MjHelper;
-import forestry.energy.compat.mj.MjPassiveProviderWrapper;
-import forestry.energy.compat.mj.MjReadableWrapper;
-import forestry.energy.compat.mj.MjReceiverWrapper;
-import forestry.energy.compat.mj.MjRedstoneReceiverWrapper;
-import forestry.energy.compat.tesla.TeslaConsumerWrapper;
 import forestry.energy.compat.tesla.TeslaHelper;
-import forestry.energy.compat.tesla.TeslaHolderWrapper;
-import forestry.energy.compat.tesla.TeslaProducerWrapper;
 
 //import buildcraft.api.mj.IMjConnector;
 //import buildcraft.api.mj.IMjPassiveProvider;

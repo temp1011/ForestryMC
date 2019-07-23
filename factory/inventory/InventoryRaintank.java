@@ -15,10 +15,8 @@ import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import forestry.core.inventory.InventoryAdapterTile;

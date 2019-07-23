@@ -1,7 +1,7 @@
 package forestry.core.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
@@ -10,8 +10,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import net.minecraftforge.fml.client.config.GuiUtils;
 
 @OnlyIn(Dist.CLIENT)
 public class Drawable {

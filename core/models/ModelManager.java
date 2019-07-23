@@ -34,12 +34,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IEnviromentBlockReader;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.model.IModelState;
 
 

@@ -2,7 +2,6 @@ package forestry.core.multiblock;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import forestry.api.multiblock.IMultiblockComponent;

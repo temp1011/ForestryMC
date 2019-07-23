@@ -11,7 +11,6 @@
 package forestry.core.climate;
 
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 
 import forestry.api.climate.ClimateType;

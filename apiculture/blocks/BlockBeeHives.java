@@ -24,6 +24,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
@@ -43,7 +44,6 @@ import forestry.api.apiculture.IHiveTile;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.api.core.ItemGroups;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileHive;
@@ -61,11 +61,12 @@ public class BlockBeeHives extends ContainerBlock implements IItemModelRegister,
 		//		setHarvestLevel("scoop", 0); TODO harvest level, addToolType in item?
 		setDefaultState(this.getStateContainer().getBaseState().with(HIVE_TYPES, HiveType.FOREST));
 	}
-	//
-	//	@Override
-	//	protected BlockStateContainer createBlockState() {
-	//		return new BlockStateContainer(this, HIVE_TYPES);
-	//	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(HIVE_TYPES);
+	}
 
 	public BlockState getStateForType(HiveType type) {
 		return getDefaultState().with(HIVE_TYPES, type);

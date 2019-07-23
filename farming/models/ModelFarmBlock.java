@@ -1,31 +1,20 @@
 package forestry.farming.models;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
 
 
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.core.blocks.properties.UnlistedBlockAccess;
-import forestry.core.blocks.properties.UnlistedBlockPos;
+
 import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
-import forestry.core.tiles.TileUtil;
 import forestry.farming.blocks.BlockFarm;
 import forestry.farming.blocks.EnumFarmBlockType;
-import forestry.farming.tiles.TileFarm;
 
 //TODO - I think the farm block nneds flattening
 @OnlyIn(Dist.CLIENT)

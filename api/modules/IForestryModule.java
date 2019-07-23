@@ -9,12 +9,9 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
-import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 
 import com.mojang.brigadier.Command;
-
-import net.minecraftforge.event.RegistryEvent;
 
 /**
  * Defines a Forestry module.

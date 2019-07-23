@@ -12,8 +12,6 @@ package forestry.energy.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
 
-import net.minecraftforge.fml.client.config.GuiUtils;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;

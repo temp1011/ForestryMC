@@ -11,7 +11,6 @@
 package forestry.core.commands;
 
 import net.minecraft.command.CommandException;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class SpeciesNotFoundException extends CommandException {

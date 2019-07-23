@@ -15,14 +15,11 @@ import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
-import forestry.modules.InternalModuleHandler;
-import forestry.modules.ModuleManager;
 
 public abstract class BlockRegistry {
 	protected <T extends Block> void registerBlock(T block, @Nullable BlockItem itemBlock, String name) {
@@ -36,13 +33,13 @@ public abstract class BlockRegistry {
 //		block.setTranslationKey("for." + name);
 		block.setRegistryName(name);
 		ForgeRegistries.BLOCKS.register(block);
-		Proxies.common.registerBlock(block);
+//		Proxies.common.registerBlock(block); TODO distexecutor
 
 
 		if (itemBlock != null) {
 			itemBlock.setRegistryName(name);
 			ForgeRegistries.ITEMS.register(itemBlock);
-			Proxies.common.registerItem(itemBlock);
+//			Proxies.common.registerItem(itemBlock);	TODO distexecutor
 		}
 	}
 

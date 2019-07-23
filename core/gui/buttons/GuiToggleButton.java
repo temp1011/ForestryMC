@@ -1,6 +1,5 @@
 package forestry.core.gui.buttons;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 
 import forestry.core.gui.Drawable;

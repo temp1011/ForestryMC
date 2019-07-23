@@ -11,20 +11,14 @@
 package forestry.core.utils;
 
 import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;

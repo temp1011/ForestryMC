@@ -18,7 +18,6 @@ import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.play.server.SPlayerPositionLookPacket;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.Vec3d;

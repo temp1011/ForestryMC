@@ -11,9 +11,6 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.StringTextComponent;
-
-import net.minecraftforge.fml.client.config.GuiUtils;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;

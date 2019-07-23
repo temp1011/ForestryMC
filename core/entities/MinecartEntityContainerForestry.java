@@ -22,8 +22,6 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 
-import net.minecraftforge.registries.ForgeRegistries;
-
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
 import forestry.core.utils.InventoryUtil;

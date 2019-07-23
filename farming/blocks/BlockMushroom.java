@@ -29,7 +29,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
-import net.minecraft.util.Direction;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -91,6 +91,12 @@ public class BlockMushroom extends BushBlock implements IItemModelRegister, IGro
 		this.generators = new Feature[]{Feature.HUGE_BROWN_MUSHROOM, Feature.HUGE_RED_MUSHROOM};
 		//		setCreativeTab(null); TODO - done in item
 		setDefaultState(this.getStateContainer().getBaseState().with(VARIANT, MushroomType.BROWN).with(MATURE, false));
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(VARIANT, MATURE);
 	}
 
 	//TODO - idk

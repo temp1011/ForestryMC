@@ -8,19 +8,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 //import net.minecraft.block.BlockStateContainer;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 //import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.chunk.BlockStateContainer;
-
-import net.minecraftforge.client.model.ModelLoader;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,22 +25,21 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.api.core.ItemGroups;
-import forestry.core.models.IStateMapperRegister;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.config.Config;
-import forestry.core.config.Constants;
 
 //TODO - flatten
 public abstract class BlockHoneyComb extends Block implements IItemModelRegister, IBlockWithMeta, IColoredBlock{//{, IStateMapperRegister {
 	public final int minMeta;
 
 	public static final BlockHoneyComb[] create() {
-		BlockHoneyComb[] blocks = new BlockHoneyComb[2];
+		//TODO this is useful to backport too
+		BlockHoneyComb[] blocks = new BlockHoneyComb[EnumHoneyComb.values().length / 16];
 		for (int i = 0; i < blocks.length; i++) {
 			HoneyCombPredicate filter = new HoneyCombPredicate(i, 16);
+			//TODO - forge throws on <= 1 values which can happen with this. Basically just needs flattening...
 			EnumProperty<EnumHoneyComb> variant = EnumProperty.create("type", EnumHoneyComb.class, filter);
 			blocks[i] = new BlockHoneyComb(filter.minMeta) {
 				@Override
@@ -61,6 +57,12 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 //		setCreativeTab(ItemGroups.tabApiculture); TODO - done in item
 		setDefaultState(this.getStateContainer().getBaseState().with(getVariant(), getVariant().getAllowedValues().iterator().next()));
 		this.minMeta = minMeta;
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(getVariant());
 	}
 
 	protected abstract EnumProperty<EnumHoneyComb> getVariant();

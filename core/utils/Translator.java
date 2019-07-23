@@ -1,8 +1,6 @@
 package forestry.core.utils;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 
 //TODO - sides issues
 public class Translator {

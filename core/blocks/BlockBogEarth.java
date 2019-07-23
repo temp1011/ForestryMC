@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
@@ -78,6 +79,12 @@ public class BlockBogEarth extends Block implements IItemModelRegister {
 		//setCreativeTab(CreativeTabForestry.tabForestry);
 
 		setDefaultState(this.getStateContainer().getBaseState().with(MATURITY, 0));
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(MATURITY);
 	}
 
 	@Override

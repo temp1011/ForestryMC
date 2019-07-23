@@ -30,8 +30,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
-import net.minecraftforge.fml.client.config.GuiUtils;
-
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
 import forestry.api.gui.IGuiElement;

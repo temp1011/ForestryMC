@@ -18,7 +18,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
-import forestry.core.utils.Translator;
 
 public abstract class Circuit implements ICircuit {
 	private final String uid;

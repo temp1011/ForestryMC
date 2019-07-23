@@ -12,7 +12,6 @@ package forestry.core.items;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BoneMealItem;
-import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;

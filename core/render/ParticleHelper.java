@@ -17,7 +17,6 @@ import net.minecraft.client.particle.DiggingParticle;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;

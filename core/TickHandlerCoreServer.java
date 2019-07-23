@@ -24,7 +24,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.chunk.ServerChunkProvider;
@@ -33,7 +32,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
@@ -43,9 +41,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.modules.ModuleManager;
-
-import it.unimi.dsi.fastutil.ints.IntArraySet;
-import it.unimi.dsi.fastutil.ints.IntSet;
 
 public class TickHandlerCoreServer {
 

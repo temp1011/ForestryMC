@@ -10,18 +10,12 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import com.google.common.base.Preconditions;
-
 import java.io.IOException;
-import java.util.EnumMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.play.ServerPlayNetHandler;
 //import net.minecraft.util.IThreadListener;
 import net.minecraft.util.ResourceLocation;
 
@@ -32,16 +26,8 @@ import net.minecraft.util.ResourceLocation;
 //import net.minecraftforge.fml.common.network.NetworkRegistry;
 //import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.event.EventNetworkChannel;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.config.Constants;
-import forestry.core.utils.Log;
 
 //TODO - can we get away with simple channel?
 public class PacketHandlerServer {

@@ -2,7 +2,6 @@ package forestry.core.multiblock;
 
 import java.util.Set;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.platform.GlStateManager;

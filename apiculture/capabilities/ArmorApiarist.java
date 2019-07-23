@@ -3,7 +3,6 @@ package forestry.apiculture.capabilities;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IArmorApiarist;

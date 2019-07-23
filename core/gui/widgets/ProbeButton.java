@@ -15,14 +15,11 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraftforge.fml.client.config.GuiUtils;
-
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;
-import forestry.core.utils.Translator;
 
 public class ProbeButton extends Widget {
 

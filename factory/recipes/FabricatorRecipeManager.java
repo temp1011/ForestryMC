@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -26,7 +25,6 @@ import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.core.recipes.RecipePair;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorRecipeManager implements IFabricatorManager {

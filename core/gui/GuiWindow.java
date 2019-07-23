@@ -1,7 +1,5 @@
 package forestry.core.gui;
 
-import java.io.IOException;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -14,8 +12,6 @@ import forestry.api.gui.IGuiElement;
 import forestry.api.gui.events.GuiEvent;
 import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.gui.elements.Window;
-
-import net.java.games.input.Mouse;
 
 /**
  * GuiScreen implementation of a gui that contains {@link forestry.api.gui.IGuiElement}s.

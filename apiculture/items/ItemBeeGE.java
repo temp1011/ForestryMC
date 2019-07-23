@@ -14,7 +14,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
@@ -41,7 +40,6 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeGenome;
-import forestry.apiculture.genetics.DefaultBeeModelProvider;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
@@ -120,7 +118,9 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	}
 
 	public void addCreativeItems(NonNullList<ItemStack> subItems, boolean hideSecrets) {
-		for (IBee bee : BeeManager.beeRoot.getIndividualTemplates()) {
+		//TODO beeRoot only set in setupAPI but this is called earlier
+		//so need to adjust init sequence
+		for (IBee bee : new IBee[0]) {//BeeManager.beeRoot.getIndividualTemplates()) {
 			// Don't show secret bees unless ordered to.
 			if (hideSecrets && bee.isSecret() && !Config.isDebug) {
 				continue;

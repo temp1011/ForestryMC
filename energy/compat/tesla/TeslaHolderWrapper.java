@@ -2,7 +2,6 @@ package forestry.energy.compat.tesla;
 
 //import net.minecraftforge.fml.common.Optional;
 
-import forestry.core.config.Constants;
 import forestry.energy.EnergyManager;
 
 //import net.darkhax.tesla.api.ITeslaHolder;

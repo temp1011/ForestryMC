@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.utils.OreDictUtil;
 
 //TODO - tags, harvest levels
 public class BlockRegistryCore extends BlockRegistry {

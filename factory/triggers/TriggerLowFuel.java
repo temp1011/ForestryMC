@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.factory.triggers;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-
-import forestry.core.tiles.TileEngine;
-import forestry.core.tiles.TilePowered;
 import forestry.core.triggers.Trigger;
 
 //import buildcraft.api.statements.IStatementContainer;

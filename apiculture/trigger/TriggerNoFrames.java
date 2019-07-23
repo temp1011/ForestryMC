@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.trigger;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-
-import forestry.apiculture.inventory.InventoryApiary;
-import forestry.apiculture.tiles.TileApiary;
 import forestry.core.triggers.Trigger;
 
 //import buildcraft.api.statements.IStatementContainer;

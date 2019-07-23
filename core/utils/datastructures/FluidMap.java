@@ -11,7 +11,6 @@
 package forestry.core.utils.datastructures;
 
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class FluidMap<T> extends StackMap<Fluid, T> {

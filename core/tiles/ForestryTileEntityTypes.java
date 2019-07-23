@@ -1,9 +1,5 @@
 package forestry.core.tiles;
 
-import net.minecraft.tileentity.TileEntityType;
-
-import forestry.api.multiblock.MultiblockTileEntityBase;
-
 public class ForestryTileEntityTypes {
 
 	//TODO actually have own TileEntityTypes

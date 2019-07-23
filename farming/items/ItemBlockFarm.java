@@ -21,7 +21,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -30,7 +29,6 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.core.utils.Translator;
 import forestry.farming.models.EnumFarmBlockTexture;
 
 public class ItemBlockFarm extends BlockItem {

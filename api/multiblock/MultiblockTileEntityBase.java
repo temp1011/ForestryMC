@@ -17,8 +17,6 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.tiles.ForestryTileEntityTypes;
-
 /**
  * Base logic class for Multiblock-connected tile entities.
  * Most multiblock components should derive from this.

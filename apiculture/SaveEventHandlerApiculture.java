@@ -11,7 +11,6 @@
 package forestry.apiculture;
 
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.core.ISaveEventHandler;

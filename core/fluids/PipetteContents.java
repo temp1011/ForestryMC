@@ -27,7 +27,8 @@ public class PipetteContents {
 
 	@Nullable
 	public static PipetteContents create(ItemStack itemStack) {
-		FluidStack contents = FluidUtil.getFluidContained(itemStack).orElse(null);
+		//TODO fluids, forge is broken here as far as I can tell
+		FluidStack contents = null;//FluidUtil.getFluidContained(itemStack).orElse(null);
 		if (contents == null) {
 			return null;
 		}

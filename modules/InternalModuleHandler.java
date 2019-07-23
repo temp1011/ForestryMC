@@ -8,13 +8,11 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.RegistryEvent;
 
 import net.minecraftforge.fml.InterModComms;
 

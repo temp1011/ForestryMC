@@ -15,6 +15,7 @@ import com.google.common.collect.Multimap;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.gui.screen.Screen;
@@ -86,7 +87,9 @@ public class ItemElectronTube extends ItemOverlay {
 
 	private static Multimap<ICircuitLayout, ICircuit> getCircuits(ItemStack itemStack) {
 		Multimap<ICircuitLayout, ICircuit> circuits = ArrayListMultimap.create();
-		Collection<ICircuitLayout> allLayouts = ChipsetManager.circuitRegistry.getRegisteredLayouts().values();
+		//TODO circuitRegistry is populated at setupAPI which is called after this is used to fill creative tab
+		//so perhaps needs to be initialised earlier
+		Collection<ICircuitLayout> allLayouts = Collections.emptyList();//ChipsetManager.circuitRegistry.getRegisteredLayouts().values();
 		for (ICircuitLayout circuitLayout : allLayouts) {
 			ICircuit circuit = SolderManager.getCircuit(circuitLayout, itemStack);
 			if (circuit != null) {

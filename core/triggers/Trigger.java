@@ -10,17 +10,6 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.util.ResourceLocation;
-
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.core.config.Constants;
-import forestry.core.utils.Translator;
-
 //import buildcraft.api.core.render.ISprite;
 //import buildcraft.api.statements.IStatement;
 //import buildcraft.api.statements.IStatementParameter;

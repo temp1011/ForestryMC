@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -42,6 +43,12 @@ public class BlockHumus extends Block implements IItemModelRegister {
 //		setCreativeTab(CreativeTabForestry.tabForestry);
 
 		setDefaultState(this.getStateContainer().getBaseState().with(DEGRADE, 0));
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(DEGRADE);
 	}
 
 	@Override

@@ -26,7 +26,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
-import forestry.core.utils.Translator;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

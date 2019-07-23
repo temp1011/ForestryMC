@@ -17,14 +17,12 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.network.IForestryPacketClient;
-import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SlotUtil;
 
 //import invtweaks.api.container.ContainerSection;

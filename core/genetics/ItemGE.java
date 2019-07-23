@@ -20,7 +20,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -31,7 +30,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.items.ItemForestry;
-import forestry.core.utils.Translator;
 
 public abstract class ItemGE extends ItemForestry {
 	protected ItemGE(ItemGroup creativeTab) {

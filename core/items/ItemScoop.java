@@ -19,9 +19,8 @@ import forestry.api.core.ItemGroups;
 public class ItemScoop extends ItemForestryTool implements IToolScoop {
 	public ItemScoop() {
 		super(ItemStack.EMPTY, (new Item.Properties())
-		.maxDamage(10)
-		.group(ItemGroups.tabApiculture)
-		.maxStackSize(1));
+		.maxDamage(10)	//TODO this is then set to another value further up. So probably need to reduce inheritance a bit
+		.group(ItemGroups.tabApiculture));
 		setEfficiencyOnProperMaterial(2.0f);
 	}
 }

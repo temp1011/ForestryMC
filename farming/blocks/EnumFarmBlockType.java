@@ -8,13 +8,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
 
 
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.core.config.Constants;
 
 public enum EnumFarmBlockType implements IStringSerializable {
 	PLAIN,

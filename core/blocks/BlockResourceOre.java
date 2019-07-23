@@ -19,6 +19,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -39,6 +40,12 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 				.hardnessAndResistance(3f, 5f));
 //		setCreativeTab(CreativeTabForestry.tabForestry);
 		setDefaultState(this.getStateContainer().getBaseState().with(ORE_RESOURCES, EnumResourceType.APATITE));
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(ORE_RESOURCES);
 	}
 
 	@Override

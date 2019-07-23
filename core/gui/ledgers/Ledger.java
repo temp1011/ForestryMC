@@ -24,13 +24,10 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraftforge.fml.client.config.GuiUtils;
-
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
-import forestry.core.gui.GuiUtil;
 import forestry.core.render.ForestryResource;
 import forestry.core.render.TextureManagerForestry;
 

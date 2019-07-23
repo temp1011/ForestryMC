@@ -19,10 +19,7 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
-import forestry.modules.InternalModuleHandler;
-import forestry.modules.ModuleManager;
 
 public abstract class ItemRegistry {
 	protected static <T extends Item> T registerItem(T item, String name) {

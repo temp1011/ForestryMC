@@ -1,10 +1,7 @@
 package forestry.energy.compat.mj;
 
-import javax.annotation.Nonnull;
-
 //import net.minecraftforge.fml.common.Optional;
 
-import forestry.core.config.Constants;
 import forestry.energy.EnergyManager;
 
 //import buildcraft.api.mj.IMjConnector;

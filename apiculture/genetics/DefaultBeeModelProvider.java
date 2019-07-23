@@ -14,10 +14,8 @@ import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.Locale;
 
-import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 
 
 import net.minecraftforge.api.distmarker.Dist;

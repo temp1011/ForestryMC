@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.trigger;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-
-import forestry.api.core.IErrorLogicSource;
-import forestry.core.errors.EnumErrorCode;
 import forestry.core.triggers.Trigger;
 
 //import buildcraft.api.statements.IStatementContainer;

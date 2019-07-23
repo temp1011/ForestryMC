@@ -11,14 +11,8 @@
 package forestry.core.proxy;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.client.model.ModelLoader;
 
 
 import net.minecraftforge.api.distmarker.Dist;

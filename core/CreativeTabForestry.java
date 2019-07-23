@@ -19,11 +19,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ItemGroups;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.genetics.BeeDefinition;
 //import forestry.arboriculture.genetics.Tree;

@@ -2,7 +2,6 @@ package forestry.energy.compat.mj;
 
 //import net.minecraftforge.fml.common.Optional;
 
-import forestry.core.config.Constants;
 import forestry.energy.EnergyManager;
 
 //import buildcraft.api.mj.IMjPassiveProvider;

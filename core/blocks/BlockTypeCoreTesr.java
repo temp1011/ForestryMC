@@ -11,7 +11,6 @@
 package forestry.core.blocks;
 
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 

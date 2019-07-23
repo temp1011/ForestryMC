@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.IAllele;

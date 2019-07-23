@@ -32,8 +32,6 @@ import forestry.core.circuits.ISocketable;
 import forestry.core.inventory.ItemHandlerInventoryManipulator;
 import forestry.core.inventory.StandardStackFilters;
 import forestry.core.tiles.AdjacentTileCache;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 //import forestry.plugins.ForestryCompatPlugins;
 
 public abstract class InventoryUtil {

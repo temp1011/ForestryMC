@@ -1,19 +1,14 @@
 package forestry.core.render;
 
-import com.google.common.collect.Maps;
-
 import java.io.IOException;
-import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.PngSizeInfo;
 import net.minecraft.client.renderer.texture.Stitcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 //import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.resources.ClientResourcePackInfo;
 //import net.minecraft.client.resources.IResource;
 //import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.crash.CrashReport;
@@ -25,7 +20,6 @@ import net.minecraft.util.ResourceLocation;
 
 import com.mojang.blaze3d.platform.TextureUtil;
 
-import net.minecraftforge.fml.client.ClientHooks;
 //import net.minecraftforge.fml.client.FMLClientHandler;
 //import net.minecraftforge.fml.common.ProgressManager;
 

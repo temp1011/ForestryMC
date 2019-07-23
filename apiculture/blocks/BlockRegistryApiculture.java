@@ -15,7 +15,6 @@ import java.util.Map;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.core.ItemGroups;
 import forestry.apiculture.items.ItemBlockCandle;
 import forestry.apiculture.items.ItemBlockHoneyComb;
 import forestry.core.blocks.BlockBase;

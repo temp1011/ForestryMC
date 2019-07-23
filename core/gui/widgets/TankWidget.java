@@ -35,11 +35,8 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraftforge.fml.client.config.GuiUtils;
-
 import forestry.api.core.IToolPipette;
 import forestry.core.fluids.StandardTank;
-import forestry.core.gui.GuiUtil;
 import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.farming.gui.ContainerFarm;

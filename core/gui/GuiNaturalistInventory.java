@@ -11,10 +11,8 @@
 package forestry.core.gui;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.HashMap;
 
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;

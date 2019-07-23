@@ -163,7 +163,8 @@ public class ModuleFarming extends BlankForestryModule {
 		//TODO - tags
 //		registry.registerFertilizer(new ItemStack(coreItems.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
 
-		proxy.initializeModels();
+		//TODO distexecutor
+//		proxy.initializeModels();
 
 		// Layouts
 		ICircuitLayout layoutManaged = new CircuitLayout("farms.managed", CircuitSocketType.FARM);

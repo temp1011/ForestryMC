@@ -1,7 +1,5 @@
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
 import net.minecraft.entity.player.PlayerEntity;
 
 import forestry.api.climate.IClimateState;

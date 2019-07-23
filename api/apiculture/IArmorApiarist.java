@@ -8,7 +8,6 @@ package forestry.api.apiculture;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 
 /**

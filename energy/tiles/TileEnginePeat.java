@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -21,7 +20,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 
 import net.minecraftforge.items.IItemHandler;
@@ -47,7 +45,6 @@ import forestry.core.utils.InventoryUtil;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
-import forestry.factory.triggers.FactoryTriggers;
 
 //import buildcraft.api.statements.ITriggerExternal;
 

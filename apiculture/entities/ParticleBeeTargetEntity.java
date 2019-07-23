@@ -18,8 +18,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import forestry.apiculture.ModuleApiculture;
-
 public class ParticleBeeTargetEntity extends Particle {
 	private final Vec3d origin;
 	private final Entity entity;

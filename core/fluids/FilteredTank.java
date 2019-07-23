@@ -16,14 +16,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.Rarity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 
@@ -31,7 +29,6 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.utils.Translator;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

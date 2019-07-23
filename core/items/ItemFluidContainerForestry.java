@@ -11,11 +11,8 @@
 package forestry.core.items;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.Locale;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,7 +27,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
@@ -39,11 +35,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -57,7 +51,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.Config;
-import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Translator;
 

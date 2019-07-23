@@ -10,11 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.Tags;
 
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.core.ItemGroups;
@@ -22,7 +18,6 @@ import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemRegistry;
 import forestry.core.items.ItemScoop;
-import forestry.core.utils.OreDictUtil;
 
 public class ItemRegistryApiculture extends ItemRegistry {
 	public final ItemBeeGE beeQueenGE;

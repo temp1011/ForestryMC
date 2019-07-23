@@ -13,13 +13,10 @@ package forestry.core.tiles;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.gui.GuiHandler;

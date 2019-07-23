@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
-import java.util.Arrays;
-import java.util.List;
-
 import forestry.core.triggers.Trigger;
 
 //import buildcraft.api.statements.ITriggerExternal;

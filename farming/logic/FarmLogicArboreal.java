@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

@@ -22,7 +22,6 @@ import net.minecraft.world.World;
 
 import forestry.core.gui.IGuiHandlerEntity;
 import forestry.core.tiles.ITitled;
-import forestry.core.utils.Translator;
 
 public abstract class MinecartEntityForestry extends MinecartEntity implements ITitled, IGuiHandlerEntity {
 

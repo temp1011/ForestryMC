@@ -21,14 +21,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;

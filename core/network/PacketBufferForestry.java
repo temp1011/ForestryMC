@@ -12,7 +12,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.climate.IClimateState;

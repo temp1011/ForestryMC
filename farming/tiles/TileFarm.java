@@ -12,14 +12,12 @@ package forestry.farming.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -38,7 +36,6 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.ITitled;
-import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.gui.ContainerFarm;
 import forestry.farming.gui.GuiFarm;
 import forestry.farming.models.EnumFarmBlockTexture;

@@ -90,7 +90,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
-		ICircuitBoard circuitboard = ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
+		ICircuitBoard circuitboard = null;//TODO init order ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
 		if (circuitboard != null) {
 			circuitboard.addTooltip(list);
 		}
