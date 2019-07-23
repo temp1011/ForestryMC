@@ -19,7 +19,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.core.utils.Log;
 
-import jdk.internal.org.objectweb.asm.Type;
+import org.objectweb.asm.Type;
 
 public class ForestryPluginUtil {
 	private ForestryPluginUtil() {

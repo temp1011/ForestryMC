@@ -35,9 +35,7 @@ import forestry.api.core.ItemGroups;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
-import forestry.core.utils.Translator;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 public class ItemAlyzer extends ItemWithGui {
 	public ItemAlyzer() {
