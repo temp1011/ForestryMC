@@ -38,7 +38,8 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 
 	public ItemOverlay(ItemGroup tab, IOverlayInfo[] overlays) {
 		super((new Item.Properties()).maxDamage(0)
-		.group(tab));
+		.group(tab)
+		.setNoRepair());
 //		setHasSubtypes(true); TODO flatten?
 
 		this.overlays = overlays;
@@ -46,11 +47,6 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 
 	@Override
 	public boolean isDamageable() {
-		return false;
-	}
-
-	@Override
-	public boolean isRepairable() {
 		return false;
 	}
 

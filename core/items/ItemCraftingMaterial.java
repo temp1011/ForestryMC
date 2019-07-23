@@ -27,17 +27,13 @@ public class ItemCraftingMaterial extends ItemForestry {
 
 	public ItemCraftingMaterial() {
 		super((new Item.Properties())
-		.maxDamage(0));
+		.maxDamage(0)
+		.setNoRepair());
 //		setHasSubtypes(true); TODO flatten?
 	}
 
 	@Override
 	public boolean isDamageable() {
-		return false;
-	}
-
-	@Override
-	public boolean isRepairable() {
 		return false;
 	}
 

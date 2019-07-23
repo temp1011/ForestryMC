@@ -34,17 +34,13 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 	public ItemHoneyComb() {
 		super((new Item.Properties())
 		.maxDamage(0)
-		.group(ItemGroups.tabApiculture));
+		.group(ItemGroups.tabApiculture)
+		.setNoRepair());
 //		setHasSubtypes(true); TODO - flatten?
 	}
 
 	@Override
 	public boolean isDamageable() {
-		return false;
-	}
-
-	@Override
-	public boolean isRepairable() {
 		return false;
 	}
 

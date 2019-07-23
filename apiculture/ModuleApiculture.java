@@ -630,11 +630,11 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		// BREWING RECIPES
 		BrewingRecipeRegistry.addRecipe(
-				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD),
+				Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD)),
 				Ingredient.fromStacks(items.pollenCluster.get(EnumPollenCluster.NORMAL, 1)),
 				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.HEALING));
 		BrewingRecipeRegistry.addRecipe(
-				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD),
+				Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD)),
 				Ingredient.fromStacks(items.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1)),
 				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.REGENERATION));
 

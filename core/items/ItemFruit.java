@@ -68,17 +68,12 @@ public class ItemFruit extends ItemForestryFood {
 	}
 
 	public ItemFruit() {
-		super(1, 0.2f, (new Item.Properties()).maxDamage(0));
+		super(1, 0.2f, (new Item.Properties()).maxDamage(0).setNoRepair());
 //		setHasSubtypes(true); flatten
 	}
 
 	@Override
 	public boolean isDamageable() {
-		return false;
-	}
-
-	@Override
-	public boolean isRepairable() {
 		return false;
 	}
 

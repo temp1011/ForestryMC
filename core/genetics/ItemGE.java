@@ -35,7 +35,7 @@ import forestry.core.utils.Translator;
 
 public abstract class ItemGE extends ItemForestry {
 	protected ItemGE(ItemGroup creativeTab) {
-		super((new Item.Properties()).group(creativeTab));
+		super((new Item.Properties()).group(creativeTab).setNoRepair());
 		//TODO - properties
 //		setHasSubtypes(true);
 	}
@@ -47,11 +47,6 @@ public abstract class ItemGE extends ItemForestry {
 
 	@Override
 	public boolean isDamageable() {
-		return false;
-	}
-
-	@Override
-	public boolean isRepairable() {
 		return false;
 	}
 
