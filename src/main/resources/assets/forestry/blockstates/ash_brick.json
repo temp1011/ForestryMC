@@ -1,5 +1,5 @@
 {
     "variants": {
-        "": { "model": "forestry:ash_brick" }
+        "": { "model": "forestry:block/ash_brick" }
 	}
 }

@@ -243,9 +243,9 @@ public class ModuleCore extends BlankForestryModule {
 		ItemRegistryCore items = getItems();
 
 		/* SMELTING RECIPES */
-		RecipeUtil.addSmelting(blocks.resources.get(EnumResourceType.APATITE, 1), items.apatite, 0.5f);
-		RecipeUtil.addSmelting(blocks.resources.get(EnumResourceType.COPPER, 1), items.ingotCopper, 0.5f);
-		RecipeUtil.addSmelting(blocks.resources.get(EnumResourceType.TIN, 1), items.ingotTin, 0.5f);
+		RecipeUtil.addSmelting(blocks.getOre(EnumResourceType.APATITE, 1), items.apatite, 0.5f);
+		RecipeUtil.addSmelting(blocks.getOre(EnumResourceType.COPPER, 1), items.ingotCopper, 0.5f);
+		RecipeUtil.addSmelting(blocks.getOre(EnumResourceType.TIN, 1), items.ingotTin, 0.5f);
 		RecipeUtil.addSmelting(new ItemStack(items.peat), items.ash, 0.0f);
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / CARPENTER

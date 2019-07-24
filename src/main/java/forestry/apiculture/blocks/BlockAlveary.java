@@ -49,7 +49,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.NetworkUtil;
 
-public abstract class BlockAlveary extends BlockStructure {//implements IStateMapperRegister {
+public class BlockAlveary extends BlockStructure {
 	private static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 	private static final EnumProperty<AlvearyPlainType> PLAIN_TYPE = EnumProperty.create("type", AlvearyPlainType.class);
 
@@ -71,30 +71,17 @@ public abstract class BlockAlveary extends BlockStructure {//implements IStateMa
 		}
 	}
 
-	public static Map<BlockAlvearyType, BlockAlveary> create() {
-		Map<BlockAlvearyType, BlockAlveary> blockMap = new EnumMap<>(BlockAlvearyType.class);
-		for (final BlockAlvearyType type : BlockAlvearyType.VALUES) {
-			BlockAlveary block = new BlockAlveary() {
-				@Override
-				public BlockAlvearyType getAlvearyType() {
-					return type;
-				}
-			};
-			blockMap.put(type, block);
-		}
-		return blockMap;
-	}
+	private final BlockAlvearyType type;
 
-	public BlockAlveary() {
+	public BlockAlveary(BlockAlvearyType type) {
 		super(Block.Properties.create(MaterialBeehive.BEEHIVE_ALVEARY)
 				.hardnessAndResistance(1f)
 				.sound(SoundType.WOOD));
-
-		BlockAlvearyType alvearyType = getAlvearyType();
+		this.type = type;
 		BlockState defaultState = this.getStateContainer().getBaseState();
-		if (alvearyType == BlockAlvearyType.PLAIN) {
+		if (type == BlockAlvearyType.PLAIN) {
 			defaultState = defaultState.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
-		} else if (alvearyType.activatable) {
+		} else if (type.activatable) {
 			defaultState = defaultState.with(STATE, State.OFF);
 		}
 		setDefaultState(defaultState);
@@ -109,7 +96,9 @@ public abstract class BlockAlveary extends BlockStructure {//implements IStateMa
 		builder.add(PLAIN_TYPE, STATE);
 	}
 
-	public abstract BlockAlvearyType getAlvearyType();
+	public BlockAlvearyType getType() {
+		return type;
+	}
 
 	@Override
 	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
@@ -119,7 +108,7 @@ public abstract class BlockAlveary extends BlockStructure {//implements IStateMa
 	//TODO - idk
 	/*@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		BlockAlvearyType type = getAlvearyType();
+		BlockAlvearyType type = getType();
 		switch (type) {
 			case SWARMER:
 				return new TileAlvearySwarmer();
@@ -139,26 +128,13 @@ public abstract class BlockAlveary extends BlockStructure {//implements IStateMa
 		}
 	}*/
 
+	//TODO needed?
 	/* ITEM MODELS */
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "apiculture/alveary." + getAlvearyType());
+		manager.registerItemModel(item, 0, "apiculture/alveary." + getType());
 	}
-
-	//probably not needed
-//	@Override
-//	protected BlockStateContainer createBlockState() {
-//		BlockAlvearyType alvearyType = getAlvearyType();
-//
-//		if (alvearyType == BlockAlvearyType.PLAIN) {
-//			return new BlockStateContainer(this, PLAIN_TYPE);
-//		} else if (alvearyType.activatable) {
-//			return new BlockStateContainer(this, STATE);
-//		} else {
-//			return new BlockStateContainer(this);
-//		}
-//	}
 
 	//TODO not sure how actual state works anymore, probably just means flattening
 //	@Override
@@ -174,7 +150,7 @@ public abstract class BlockAlveary extends BlockStructure {//implements IStateMa
 //			} else {
 //				state = state.with(STATE, State.OFF);
 //			}
-//		} else if (getAlvearyType() == BlockAlvearyType.PLAIN) {
+//		} else if (getType() == BlockAlvearyType.PLAIN) {
 //			if (!tile.getMultiblockLogic().getController().isAssembled()) {
 //				state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
 //			} else {
@@ -222,7 +198,7 @@ public abstract class BlockAlveary extends BlockStructure {//implements IStateMa
 //	@Override
 //	@OnlyIn(Dist.CLIENT)
 //	public void registerStateMapper() {
-//		ModelLoader.setCustomStateMapper(this, new AlvearyStateMapper(getAlvearyType()));
+//		ModelLoader.setCustomStateMapper(this, new AlvearyStateMapper(getType()));
 //	}
 //
 //	@OnlyIn(Dist.CLIENT)

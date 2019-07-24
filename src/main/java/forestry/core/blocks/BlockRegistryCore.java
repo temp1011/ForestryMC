@@ -26,11 +26,11 @@ public class BlockRegistryCore extends BlockRegistry {
 	public final BlockCore escritoire;
 	public final BlockBogEarth bogEarth;
 	public final BlockHumus humus;
-	public final BlockResourceOre resources;
 	public final BlockAshBrick ashBrick;
 	public final StairsBlock ashStairs;
 	public final Map<EnumResourceType, BlockResourceStorage> resourceStorage = new EnumMap<>(EnumResourceType.class);
-//	public final ItemStack resourceStorageApatite;	//TODO just access these though get
+	public final Map<EnumResourceType, BlockResourceOre> resourceOre = new EnumMap<>(EnumResourceType.class);
+	//	public final ItemStack resourceStorageApatite;	//TODO just access these though get
 //	public final ItemStack resourceStorageTin;
 //	public final ItemStack resourceStorageCopper;
 //	public final ItemStack resourceStorageBronze;
@@ -50,14 +50,15 @@ public class BlockRegistryCore extends BlockRegistry {
 		registerBlock(humus, new ItemBlockForestry<>(humus), "humus");
 //		humus.setHarvestLevel("shovel", 0);
 
-		resources = new BlockResourceOre();
-		registerBlock(resources, new ItemBlockForestry<>(resources), "resources");
-//		resources.setHarvestLevel("pickaxe", 1);
-//		OreDictionary.registerOre(OreDictUtil.ORE_APATITE, resources.get(EnumResourceType.APATITE, 1));
-//		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.get(EnumResourceType.COPPER, 1));
-//		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.get(EnumResourceType.TIN, 1));
-
-
+		for(EnumResourceType type : EnumResourceType.VALUES) {
+			if(type == EnumResourceType.BRONZE) {
+				continue;	//there is no bronze ore
+			}
+			BlockResourceOre block = new BlockResourceOre(type);
+			registerBlock(block, new ItemBlockForestry<>(block), "resource_ore_" + type.getName());
+			resourceOre.put(type, block);
+		}
+		//TODO register tag for these
 
 		for(EnumResourceType type : EnumResourceType.VALUES) {
 			BlockResourceStorage block = new BlockResourceStorage(type);
@@ -65,6 +66,11 @@ public class BlockRegistryCore extends BlockRegistry {
 			resourceStorage.put(type, block);
 		}
 		//TODO register tag for these
+
+		//		resources.setHarvestLevel("pickaxe", 1);
+		//		OreDictionary.registerOre(OreDictUtil.ORE_APATITE, resources.get(EnumResourceType.APATITE, 1));
+		//		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.get(EnumResourceType.COPPER, 1));
+		//		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.get(EnumResourceType.TIN, 1));
 
 //		BlockResourceStorage resourceStorage = new BlockResourceStorage();
 //		registerBlock(resourceStorage, new ItemBlockForestry<>(resourceStorage), "resource_storage");
@@ -94,7 +100,16 @@ public class BlockRegistryCore extends BlockRegistry {
 	}
 
 
-	public ItemStack get(EnumResourceType type) {
+	public ItemStack getStorage(EnumResourceType type) {
 		return new ItemStack(resourceStorage.get(type));
 	}
+
+	public ItemStack getOre(EnumResourceType type) {
+		return getOre(type, 1);
+	}
+
+	public ItemStack getOre(EnumResourceType type, int amount) {
+		return new ItemStack(resourceOre.get(type), amount);
+	}
+
 }

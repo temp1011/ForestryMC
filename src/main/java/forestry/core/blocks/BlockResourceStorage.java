@@ -27,6 +27,7 @@ public class BlockResourceStorage extends Block implements IItemModelRegister {
 //		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
+	//TODO needed?
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 import net.minecraft.block.material.Material;
@@ -29,7 +30,7 @@ public class BlockRegistryApiculture extends BlockRegistry {
 	public final BlockCandle candle;
 	public final BlockStump stump;
 	public final BlockHoneyComb[] beeCombs;
-	private final Map<BlockAlvearyType, BlockAlveary> alvearyBlockMap;
+	private final Map<BlockAlvearyType, BlockAlveary> alvearyBlockMap = new EnumMap<>(BlockAlvearyType.class);
 
 	public BlockRegistryApiculture() {
 		apiary = new BlockApiculture(BlockTypeApiculture.APIARY);
@@ -57,9 +58,10 @@ public class BlockRegistryApiculture extends BlockRegistry {
 			registerBlock(block, new ItemBlockHoneyComb(block), "bee_combs_" + i);
 		}
 
-		alvearyBlockMap = BlockAlveary.create();
-		for (BlockAlveary block : alvearyBlockMap.values()) {
-			registerBlock(block, new ItemBlockForestry<>(block), "alveary." + block.getAlvearyType());
+		for(BlockAlvearyType type : BlockAlvearyType.VALUES) {
+			BlockAlveary block = new BlockAlveary(type);
+			registerBlock(block, new ItemBlockForestry<>(block), "alveary_" + block.getType());
+			alvearyBlockMap.put(type, block);
 		}
 	}
 

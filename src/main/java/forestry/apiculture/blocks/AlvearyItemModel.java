@@ -9,6 +9,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 
+//TODO unused
 public class AlvearyItemModel implements IItemModelRegister {
 	private final BlockAlveary blockAlveary;
 
@@ -19,6 +20,6 @@ public class AlvearyItemModel implements IItemModelRegister {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "apiculture/alveary." + blockAlveary.getAlvearyType());
+		manager.registerItemModel(item, 0, "apiculture/alveary." + blockAlveary.getType());
 	}
 }

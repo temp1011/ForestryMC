@@ -107,7 +107,6 @@ public class BlockBogEarth extends Block implements IItemModelRegister {
 	//		return new ArrayList<>();
 	//	}
 
-	//TODO - this is deprecated. Is it the right method?
 	@Override
 	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
 		if (world.isRemote || world.rand.nextInt(13) != 0) {

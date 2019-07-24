@@ -35,23 +35,19 @@ import forestry.api.core.IModelManager;
 public class BlockResourceOre extends Block implements IItemModelRegister {
 	public static final EnumProperty<EnumResourceType> ORE_RESOURCES = EnumProperty.create("resource", EnumResourceType.class, input -> input != null && input.hasOre());
 
-	public BlockResourceOre() {
+	private final EnumResourceType type;
+
+	public BlockResourceOre(EnumResourceType type) {
 		super(Block.Properties.create(Material.ROCK)
 				.hardnessAndResistance(3f, 5f));
-//		setCreativeTab(CreativeTabForestry.tabForestry);
-		setDefaultState(this.getStateContainer().getBaseState().with(ORE_RESOURCES, EnumResourceType.APATITE));
-	}
-
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
-		builder.add(ORE_RESOURCES);
+		this.type = type;
+//		setCreativeTab(CreativeTabForestry.tabForestry);	TODO item
 	}
 
 	@Override
 	public int getExpDrop(BlockState state, IWorldReader reader, BlockPos pos, int fortune, int silktouch) {
 		Random rand = reader instanceof World ? ((World) reader).rand : new Random();
-		if (state.get(ORE_RESOURCES) == EnumResourceType.APATITE) {
+		if (type == EnumResourceType.APATITE) {
 			return MathHelper.nextInt(rand, 1, 4);
 		}
 		return super.getExpDrop(state, reader, pos, fortune, silktouch);
@@ -85,13 +81,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 //		}
 //	}
 
-	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
-		for (EnumResourceType resourceType : ORE_RESOURCES.getAllowedValues()) {
-			list.add(get(resourceType, 1));
-		}
-	}
-
+	//TODO needed?
 	/* MODLES */
 	@OnlyIn(Dist.CLIENT)
 	@Override
@@ -99,10 +89,5 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 		manager.registerItemModel(item, 0, "ores/apatite");
 		manager.registerItemModel(item, 1, "ores/copper");
 		manager.registerItemModel(item, 2, "ores/tin");
-	}
-
-	//TODO - tbh just need to flatten everything
-	public ItemStack get(EnumResourceType type, int amount) {
-		return new ItemStack(this, amount);
 	}
 }
