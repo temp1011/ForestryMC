@@ -155,7 +155,8 @@ public class ModuleCore extends BlankForestryModule {
 
 		ForestryModEnvWarningCallable.register();
 
-		Proxies.render.initRendering();
+		//TODO distexecutor
+//		Proxies.render.initRendering();
 	}
 
 	@Override

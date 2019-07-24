@@ -147,6 +147,9 @@ public class Forestry {
 
 		//TODO - DistExecutor
 		ModuleManager.getInternalHandler().runPreInit(Dist.DEDICATED_SERVER);
+		//TODO put these here for now
+		ModuleManager.getInternalHandler().runInit();
+		ModuleManager.getInternalHandler().runPostInit();
 	}
 
 	// You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD

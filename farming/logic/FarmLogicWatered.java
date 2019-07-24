@@ -27,7 +27,8 @@ import forestry.api.farming.ISoil;
 import forestry.core.utils.BlockUtil;
 
 public abstract class FarmLogicWatered extends FarmLogicSoil {
-	private static final FluidStack STACK_WATER = new FluidStack((Fluid) null /*FluidRegistry.WATER*/, Fluid.BUCKET_VOLUME);
+	//TODO fluids
+//	private static final FluidStack STACK_WATER = new FluidStack((Fluid) null /*FluidRegistry.WATER*/, Fluid.BUCKET_VOLUME);
 
 	protected NonNullList<ItemStack> produce = NonNullList.create();
 
@@ -154,13 +155,13 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 			return false;
 		}
 
-		if (!farmHousing.hasLiquid(STACK_WATER)) {
+		if (false) {//!farmHousing.hasLiquid(STACK_WATER)) { TODO fluids
 			return false;
 		}
 
 		produce.addAll(BlockUtil.getBlockDrops(world, position));
 		BlockUtil.setBlockWithPlaceSound(world, position, Blocks.WATER.getDefaultState());
-		farmHousing.removeLiquid(STACK_WATER);
+//		farmHousing.removeLiquid(STACK_WATER); TODO fluids
 		return true;
 	}
 

@@ -73,7 +73,7 @@ public class CreativeTabForestry extends ItemGroup {
 			case 4:
 				return ItemStack.EMPTY;//ButterflyManager.butterflyRoot.getMemberStack(new Butterfly(ButterflyDefinition.Brimstone.getGenome()), EnumFlutterType.BUTTERFLY);
 			default:
-				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "fertilizerCompound"));
+				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "fertilizer_compound"));
 				break;
 		}
 		if (iconItem == null) {
