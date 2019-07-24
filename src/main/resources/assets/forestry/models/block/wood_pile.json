@@ -2,9 +2,9 @@
 	"parent": "block/block",
 	"uvlock": true,
 	"textures": {
-		"particle": "blocks/log_oak",
-		"texture": "blocks/log_oak",
-		"top": "blocks/log_oak_top"
+		"particle": "block/log_oak",
+		"texture": "block/log_oak",
+		"top": "block/log_oak_top"
 	},
 	"elements": [
 		{

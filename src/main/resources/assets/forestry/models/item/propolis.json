@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/propolis.0"
+        "layer0": "forestry:item/propolis.0"
     },
     "display": {
         "thirdperson": {

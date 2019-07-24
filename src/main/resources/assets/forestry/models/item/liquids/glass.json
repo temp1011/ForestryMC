@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/liquids/glass.bottle",
-		"layer1": "forestry:items/liquids/glass.contents"
+        "layer0": "forestry:item/liquids/glass.bottle",
+		"layer1": "forestry:item/liquids/glass.contents"
     }
 }

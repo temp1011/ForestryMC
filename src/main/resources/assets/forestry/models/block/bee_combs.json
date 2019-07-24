@@ -1,9 +1,9 @@
 {
     "parent": "block/block",
 	"textures": {
-		"particle": "forestry:blocks/bee_combs.0",
-		"texture": "forestry:blocks/bee_combs.0",
-		"overlay": "forestry:blocks/bee_combs.1"
+		"particle": "forestry:block/bee_combs.0",
+		"texture": "forestry:block/bee_combs.0",
+		"overlay": "forestry:block/bee_combs.1"
 	},
     "elements": [
         {   "from": [ 0, 0, 0 ],

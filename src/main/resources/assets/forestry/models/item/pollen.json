@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/pollen.0",
-		"layer1": "forestry:items/pollen.1"
+        "layer0": "forestry:item/pollen.0",
+		"layer1": "forestry:item/pollen.1"
     }
 }
