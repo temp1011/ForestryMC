@@ -1,5 +1,5 @@
 {
     "variants": {
-		"normal": { "model": "forestry:apiculture/alveary_hygro" }
+		"": { "model": "forestry:apiculture/alveary_hygro" }
 	}
 }

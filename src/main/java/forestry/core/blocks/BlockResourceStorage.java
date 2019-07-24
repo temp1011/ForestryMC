@@ -18,26 +18,13 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 
 public class BlockResourceStorage extends Block implements IItemModelRegister {
-	public static final EnumProperty<EnumResourceType> STORAGE_RESOURCES = EnumProperty.create("resource", EnumResourceType.class);
+	private EnumResourceType type;
 
-	public BlockResourceStorage() {
+	public BlockResourceStorage(EnumResourceType type) {
 		super(Block.Properties.create(Material.IRON)
 				.hardnessAndResistance(3f, 5f));
+		this.type = type;
 //		setCreativeTab(CreativeTabForestry.tabForestry);
-		setDefaultState(this.getStateContainer().getBaseState().with(STORAGE_RESOURCES, EnumResourceType.APATITE));
-	}
-
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
-		builder.add(STORAGE_RESOURCES);
-	}
-
-	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
-		for (EnumResourceType resourceType : EnumResourceType.VALUES) {
-			list.add(get(resourceType));
-		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -48,8 +35,7 @@ public class BlockResourceStorage extends Block implements IItemModelRegister {
 		}
 	}
 
-	//TODO - flatten
-	public ItemStack get(EnumResourceType type) {
-		return new ItemStack(this, 1);
+	public EnumResourceType getType() {
+		return this.type;
 	}
 }

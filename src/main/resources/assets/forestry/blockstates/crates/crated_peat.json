@@ -10,7 +10,7 @@
         "transform": "forge:default-item"
      },
     "variants": {
-      "normal": [{}],
+      "": [{}],
       "inventory": [{ }],
       "wood": [{
           "model": "oak_log",

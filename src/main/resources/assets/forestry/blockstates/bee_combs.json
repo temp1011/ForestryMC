@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "forestry:bee_combs" }
+        "": { "model": "forestry:bee_combs" }
 	}
 }

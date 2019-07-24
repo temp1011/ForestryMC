@@ -10,6 +10,11 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.item.ItemStack;
 
@@ -24,10 +29,11 @@ public class BlockRegistryCore extends BlockRegistry {
 	public final BlockResourceOre resources;
 	public final BlockAshBrick ashBrick;
 	public final StairsBlock ashStairs;
-	public final ItemStack resourceStorageApatite;
-	public final ItemStack resourceStorageTin;
-	public final ItemStack resourceStorageCopper;
-	public final ItemStack resourceStorageBronze;
+	public final Map<EnumResourceType, BlockResourceStorage> resourceStorage = new EnumMap<>(EnumResourceType.class);
+//	public final ItemStack resourceStorageApatite;	//TODO just access these though get
+//	public final ItemStack resourceStorageTin;
+//	public final ItemStack resourceStorageCopper;
+//	public final ItemStack resourceStorageBronze;
 
 	public BlockRegistryCore() {
 		analyzer = new BlockCore(BlockTypeCoreTesr.ANALYZER);
@@ -51,20 +57,29 @@ public class BlockRegistryCore extends BlockRegistry {
 //		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.get(EnumResourceType.COPPER, 1));
 //		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.get(EnumResourceType.TIN, 1));
 
-		BlockResourceStorage resourceStorage = new BlockResourceStorage();
-		registerBlock(resourceStorage, new ItemBlockForestry<>(resourceStorage), "resource_storage");
+
+
+		for(EnumResourceType type : EnumResourceType.VALUES) {
+			BlockResourceStorage block = new BlockResourceStorage(type);
+			registerBlock(block, new ItemBlockForestry<>(block), "resource_storage_" + type.getName());
+			resourceStorage.put(type, block);
+		}
+		//TODO register tag for these
+
+//		BlockResourceStorage resourceStorage = new BlockResourceStorage();
+//		registerBlock(resourceStorage, new ItemBlockForestry<>(resourceStorage), "resource_storage");
 //		resourceStorage.setHarvestLevel("pickaxe", 0);
 
-		resourceStorageApatite = resourceStorage.get(EnumResourceType.APATITE);
+//		resourceStorageApatite = resourceStorage.get(EnumResourceType.APATITE);
 //		OreDictionary.registerOre(OreDictUtil.BLOCK_APATITE, resourceStorageApatite);
 
-		resourceStorageCopper = resourceStorage.get(EnumResourceType.COPPER);
+//		resourceStorageCopper = resourceStorage.get(EnumResourceType.COPPER);
 //		OreDictionary.registerOre(OreDictUtil.BLOCK_COPPER, resourceStorageCopper);
 
-		resourceStorageTin = resourceStorage.get(EnumResourceType.TIN);
+//		resourceStorageTin = resourceStorage.get(EnumResourceType.TIN);
 //		OreDictionary.registerOre(OreDictUtil.BLOCK_TIN, resourceStorageTin);
 
-		resourceStorageBronze = resourceStorage.get(EnumResourceType.BRONZE);
+//		resourceStorageBronze = resourceStorage.get(EnumResourceType.BRONZE);
 //		OreDictionary.registerOre(OreDictUtil.BLOCK_BRONZE, resourceStorageBronze);
 
 		ashBrick = new BlockAshBrick();
@@ -76,5 +91,10 @@ public class BlockRegistryCore extends BlockRegistry {
 		// register some common oreDict names for our recipes
 //		OreDictionary.registerOre(OreDictUtil.CRAFTING_TABLE_WOOD, Blocks.CRAFTING_TABLE);
 //		OreDictionary.registerOre(OreDictUtil.TRAPDOOR_WOOD, Blocks.TRAPDOOR);
+	}
+
+
+	public ItemStack get(EnumResourceType type) {
+		return new ItemStack(resourceStorage.get(type));
 	}
 }
