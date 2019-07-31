@@ -39,7 +39,7 @@ public class ItemRegistryApiculture extends ItemRegistry {
 	public final ItemHiveFrame frameImpregnated;
 	public final ItemHiveFrame frameProven;
 
-	public final ItemOverlay honeyDrop;
+	public final Map<EnumHoneyDrop, ItemOverlay> honeyDrops = new EnumMap<>(EnumHoneyDrop.class);
 	public final Map<EnumPollenCluster, ItemPollenCluster> pollenClusters = new EnumMap<>(EnumPollenCluster.class);
 	public final Map<EnumPropolis, ItemPropolis> propolis = new EnumMap<>(EnumPropolis.class);
 	public final ItemForestry honeydew;
@@ -73,7 +73,11 @@ public class ItemRegistryApiculture extends ItemRegistry {
 		frameProven = registerItem(new ItemHiveFrame(720, 0.3f), "frame_proven");
 
 		// / BEE RESOURCES
-		honeyDrop = registerItem(new ItemOverlay(ItemGroups.tabApiculture, EnumHoneyDrop.VALUES), "honey_drop");
+		for(EnumHoneyDrop drop : EnumHoneyDrop.VALUES) {
+			ItemOverlay honeyDrop = new ItemOverlay(ItemGroups.tabApiculture, drop);
+			registerItem(honeyDrop, "honey_drop_" +  drop.getUid());
+			honeyDrops.put(drop, honeyDrop);
+		}	//TODO tag
 		//		OreDictionary.registerOre(OreDictUtil.DROP_HONEY, honeyDrop);
 
 		for(EnumPropolis type: EnumPropolis.VALUES) {
@@ -142,5 +146,9 @@ public class ItemRegistryApiculture extends ItemRegistry {
 
 	public ItemStack getPropolis(EnumPropolis prop, int amount) {
 		return new ItemStack(propolis.get(prop), amount);
+	}
+
+	public ItemStack getHoneyDrop(EnumHoneyDrop drop, int amount) {
+		return new ItemStack(honeyDrops.get(drop), amount);
 	}
 }

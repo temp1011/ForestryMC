@@ -34,6 +34,7 @@ import forestry.api.genetics.IMutation;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.ItemHoneyComb;
 import forestry.apiculture.items.ItemRegistryApiculture;
+import forestry.core.items.ItemOverlay;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
@@ -84,7 +85,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 			Item item = itemstack.getItem();
-			if (beeItems.honeyDrop == item) {
+			if ( item instanceof ItemOverlay && beeItems.honeyDrops.containsValue(item)) {
 				return 0.5f;
 			} else if (beeItems.honeydew == item) {
 				return 0.7f;

@@ -79,6 +79,7 @@ import forestry.apiculture.genetics.HiveDrop;
 import forestry.apiculture.genetics.JubilanceFactory;
 import forestry.apiculture.genetics.alleles.AlleleEffects;
 import forestry.apiculture.items.EnumHoneyComb;
+import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.items.ItemRegistryApiculture;
@@ -480,10 +481,12 @@ public class ModuleApiculture extends BlankForestryModule {
 		BlockRegistryApiculture blocks = getBlocks();
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
+
+			ItemStack honeyDrop = items.getHoneyDrop(EnumHoneyDrop.HONEY, 1);
 			// / SQUEEZER
 			FluidStack honeyDropFluid = Fluids.FOR_HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
 			if (honeyDropFluid != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, items.honeyDrop.getItemStack(), honeyDropFluid, items.getPropolis(EnumPropolis.NORMAL, 1), 5);
+				RecipeManagers.squeezerManager.addRecipe(10, honeyDrop, honeyDropFluid, items.getPropolis(EnumPropolis.NORMAL, 1), 5);
 				RecipeManagers.squeezerManager.addRecipe(10, items.honeydew.getItemStack(), honeyDropFluid);
 			}
 
@@ -527,7 +530,7 @@ public class ModuleApiculture extends BlankForestryModule {
 			// Honey combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.HONEY, 1), ImmutableMap.of(
 					coreItems.beeswax.getItemStack(), 1.0f,
-					items.honeyDrop.getItemStack(), 0.9f
+					honeyDrop, 0.9f
 			));
 
 			// Cocoa combs
@@ -545,39 +548,39 @@ public class ModuleApiculture extends BlankForestryModule {
 			// Stringy combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.STRINGY, 1), ImmutableMap.of(
 					items.getPropolis(EnumPropolis.NORMAL, 1), 1.0f,
-					items.honeyDrop.getItemStack(), 0.4f
+					honeyDrop, 0.4f
 			));
 
 			// Dripping combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.DRIPPING, 1), ImmutableMap.of(
 					items.honeydew.getItemStack(), 1.0f,
-					items.honeyDrop.getItemStack(), 0.4f
+					honeyDrop, 0.4f
 			));
 
 			// Frozen combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.FROZEN, 1), ImmutableMap.of(
 					coreItems.beeswax.getItemStack(), 0.8f,
-					items.honeyDrop.getItemStack(), 0.7f,
+					honeyDrop, 0.7f,
 					new ItemStack(Items.SNOWBALL), 0.4f,
 					items.getPollen(EnumPollenCluster.CRYSTALLINE, 1), 0.2f
 			));
 
 			// Silky combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.SILKY, 1), ImmutableMap.of(
-					items.honeyDrop.getItemStack(), 1.0f,
+					honeyDrop, 1.0f,
 					items.getPropolis(EnumPropolis.SILKY, 1), 0.8f
 			));
 
 			// Parched combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.PARCHED, 1), ImmutableMap.of(
 					coreItems.beeswax.getItemStack(), 1.0f,
-					items.honeyDrop.getItemStack(), 0.9f
+					honeyDrop, 0.9f
 			));
 
 			// Mysterious combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.MYSTERIOUS, 1), ImmutableMap.of(
 					items.getPropolis(EnumPropolis.PULSATING, 1), 1.0f,
-					items.honeyDrop.getItemStack(), 0.4f
+					honeyDrop, 0.4f
 			));
 
 			// Irradiated combs
@@ -586,14 +589,14 @@ public class ModuleApiculture extends BlankForestryModule {
 
 			// Powdery combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.POWDERY, 1), ImmutableMap.of(
-					items.honeyDrop.getItemStack(), 0.2f,
+					honeyDrop, 0.2f,
 					coreItems.beeswax.getItemStack(), 0.2f,
 					new ItemStack(Items.GUNPOWDER), 0.9f
 			));
 
 			// Wheaten Combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.WHEATEN, 1), ImmutableMap.of(
-					items.honeyDrop.getItemStack(), 0.2f,
+					honeyDrop, 0.2f,
 					coreItems.beeswax.getItemStack(), 0.2f,
 					new ItemStack(Items.WHEAT), 0.8f
 			));
@@ -601,7 +604,7 @@ public class ModuleApiculture extends BlankForestryModule {
 			// Mossy Combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.MOSSY, 1), ImmutableMap.of(
 					coreItems.beeswax.getItemStack(), 1.0f,
-					items.honeyDrop.getItemStack(), 0.9f
+					honeyDrop, 0.9f
 			));
 
 			// Mellow Combs

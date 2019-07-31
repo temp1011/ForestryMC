@@ -20,7 +20,7 @@ public class ItemPollenCluster extends ItemOverlay {
 	private final EnumPollenCluster type;
 
 	public ItemPollenCluster(EnumPollenCluster type) {
-		super(ItemGroups.tabApiculture, EnumPollenCluster.VALUES);
+		super(ItemGroups.tabApiculture, type);
 		this.type = type;
 	}
 }

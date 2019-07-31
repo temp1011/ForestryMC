@@ -128,11 +128,6 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 	}
 
 //	@Override
-//	protected BlockStateContainer createBlockState() {
-//		return new BlockStateContainer(this, FACING, STATE);
-//	}
-
-//	@Override
 //	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
 //		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
 //		if (tileCandle != null && tileCandle.isLit()) {

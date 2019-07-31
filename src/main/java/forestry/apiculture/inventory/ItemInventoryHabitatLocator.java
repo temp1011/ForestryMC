@@ -28,6 +28,7 @@ import forestry.apiculture.items.HabitatLocatorLogic;
 import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.ItemInventory;
+import forestry.core.items.ItemOverlay;
 
 public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource {
 
@@ -49,7 +50,7 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 		}
 
 		Item item = itemstack.getItem();
-		return ModuleApiculture.getItems().honeyDrop == item || ModuleApiculture.getItems().honeydew == item;
+		return (item instanceof ItemOverlay && ModuleApiculture.getItems().honeyDrops.containsValue(item)) || ModuleApiculture.getItems().honeydew == item;
 	}
 
 	@Override

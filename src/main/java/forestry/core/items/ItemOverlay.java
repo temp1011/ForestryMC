@@ -22,7 +22,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IModelManager;
 import forestry.core.config.Config;
 
-//TODO needs refactoring for the flattened world
 public class ItemOverlay extends ItemForestry implements IColoredItem {
 
 	public interface IOverlayInfo {
@@ -35,15 +34,14 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 		boolean isSecret();
 	}
 
-	protected final IOverlayInfo[] overlays;
+	protected final IOverlayInfo overlay;
 
-	public ItemOverlay(ItemGroup tab, IOverlayInfo[] overlays) {
+	public ItemOverlay(ItemGroup tab, IOverlayInfo overlay) {
 		super((new Item.Properties()).maxDamage(0)
 		.group(tab)
 		.setNoRepair());
-//		setHasSubtypes(true); TODO flatten?
 
-		this.overlays = overlays;
+		this.overlay = overlay;
 	}
 
 	@Override
@@ -54,45 +52,43 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 	@Override
 	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
 		if (this.isInGroup(tab)) {
-			for (int i = 0; i < overlays.length; i++) {
-				if (Config.isDebug || !overlays[i].isSecret()) {
-//					subItems.add(new ItemStack(this, 1, i)); TODO flatten
-				}
+			if(Config.isDebug || !overlay.isSecret()) {
+				subItems.add(new ItemStack(this));
 			}
 		}
 	}
 
-	/* Models */
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		for (int i = 0; i < overlays.length; i++) {
-			manager.registerItemModel(item, i);
-		}
-	}
-
-	@Override
-	public String getTranslationKey(ItemStack stack) {
-//		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= overlays.length) {
-//			return super.getTranslationKey(stack);
+//	/* Models */
+//	@OnlyIn(Dist.CLIENT)
+//	@Override
+//	public void registerModel(Item item, IModelManager manager) {
+//		for (int i = 0; i < overlays.length; i++) {
+//			manager.registerItemModel(item, i);
 //		}
-//
-//		return super.getTranslationKey(stack) + "." + overlays[stack.getItemDamage()].getUid();
-		return super.getTranslationKey(stack); //TODO flatten
-	}
+//	}
+
+//	@Override
+//	public String getTranslationKey(ItemStack stack) {
+////		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= overlays.length) {
+////			return super.getTranslationKey(stack);
+////		}
+////
+////		return super.getTranslationKey(stack) + "." + overlays[stack.getItemDamage()].getUid();
+//		return super.getTranslationKey(stack); //TODO flatten
+//	}
 
 	@Override
 	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-		int meta = -1;//TODO flatten stack.getMetadata();
-		if (meta < 0 || meta >= overlays.length) {
-			return 0xffffff;
-		}
+//		int meta = -1;//TODO flatten stack.getMetadata();
+//		if (meta < 0 || meta >= overlays.length) {
+//			return 0xffffff;
+//		}
 
-		IOverlayInfo overlayInfo = overlays[meta];
-		if (tintIndex == 0 || overlayInfo.getSecondaryColor() == 0) {
-			return overlayInfo.getPrimaryColor();
+//		IOverlayInfo overlayInfo = overlays[meta];
+		if (tintIndex == 0 || overlay.getSecondaryColor() == 0) {
+			return overlay.getPrimaryColor();
 		} else {
-			return overlayInfo.getSecondaryColor();
+			return overlay.getSecondaryColor();
 		}
 	}
 }

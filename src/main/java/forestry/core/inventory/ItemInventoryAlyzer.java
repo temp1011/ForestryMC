@@ -26,6 +26,7 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.items.ItemOverlay;
 import forestry.core.utils.GeneticsUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -52,7 +53,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 
 			Item item = itemstack.getItem();
-			return beeItems.honeyDrop == item || beeItems.honeydew == item;
+			return (item instanceof ItemOverlay && beeItems.honeyDrops.containsValue(item)) || beeItems.honeydew == item;
 		}
 
 		return false;

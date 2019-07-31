@@ -45,7 +45,7 @@ public class ItemElectronTube extends ItemOverlay {
 	private EnumElectronTube type;
 
 	public ItemElectronTube(EnumElectronTube type) {
-		super(CreativeTabForestry.tabForestry, EnumElectronTube.VALUES);
+		super(CreativeTabForestry.tabForestry, type);
 		this.type = type;
 	}
 

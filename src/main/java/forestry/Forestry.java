@@ -111,7 +111,7 @@ public class Forestry {
 		moduleManager.registerContainers(new ForestryModules());//TODO compat, new ForestryCompatPlugins());
 		ModuleManager.runSetup();
 		NetworkHandler networkHandler = new NetworkHandler();
-//				DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
+		//				DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
 		// Register the setup method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		// Register the enqueueIMC method for modloading
@@ -143,7 +143,7 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 		MinecraftForge.EVENT_BUS.register(Config.class);
-				Proxies.common.registerEventHandlers();
+		Proxies.common.registerEventHandlers();
 		configFolder = new File("."); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - DistExecutor
 		Config.load(Dist.DEDICATED_SERVER);
@@ -162,11 +162,8 @@ public class Forestry {
 		ModuleManager.getInternalHandler().runPostInit();
 	}
 
-	// You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
-	// Event bus for receiving Registry Events)
 	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 	public static class RegistryEvents {
-		//TODO use registry events (although how this works with bee combs etc is tricky)
 		@SubscribeEvent
 		public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
 			ModuleManager.getInternalHandler().registerBlocks();
@@ -184,7 +181,7 @@ public class Forestry {
 	//client
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
-				Proxies.render.registerModels();
+		Proxies.render.registerModels();
 	}
 
 	//split
