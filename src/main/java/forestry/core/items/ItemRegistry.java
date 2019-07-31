@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 
 public abstract class ItemRegistry {
@@ -34,7 +35,7 @@ public abstract class ItemRegistry {
 
 
 		ForgeRegistries.ITEMS.register(item);
-//		Proxies.common.registerItem(item); TODO distexecutor
+		Proxies.common.registerItem(item);
 		return item;
 	}
 

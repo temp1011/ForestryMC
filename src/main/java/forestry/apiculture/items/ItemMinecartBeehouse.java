@@ -45,7 +45,6 @@ public class ItemMinecartBeehouse extends MinecartItem implements IItemModelRegi
 		super(MinecartEntity.Type.CHEST, (new Item.Properties()).maxDamage(0));
 //		setHasSubtypes(true);
 
-		//TODO - needs AT
 		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.put(this, dispenserMinecartBehavior);
 	}
 

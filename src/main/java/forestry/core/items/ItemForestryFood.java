@@ -23,7 +23,7 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.CreativeTabForestry;
 
-public class ItemForestryFood extends Item/*Food*/ implements IItemModelRegister {
+public class ItemForestryFood extends Item implements IItemModelRegister {
 
 	private boolean isDrink = false;
 

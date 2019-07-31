@@ -56,7 +56,7 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 	//TODO - loot tables (or whatever is necessary for ore
 //	@Override
 //	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
-//		EnumResourceType type = state.get(ORE_RESOURCES);
+//		EnumResourceType type = state.getComb(ORE_RESOURCES);
 //		switch (type) {
 //			case APATITE: {
 //				int fortuneModifier = RANDOM.nextInt(fortune + 2) - 1;

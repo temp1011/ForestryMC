@@ -62,8 +62,8 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 	@Override
 	protected Key getWorldKey(BlockState state) {
 //		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-//		IBlockReader world = stateExtended.get(UnlistedBlockAccess.BLOCKACCESS);
-//		BlockPos pos = stateExtended.get(UnlistedBlockPos.POS);
+//		IBlockReader world = stateExtended.getComb(UnlistedBlockAccess.BLOCKACCESS);
+//		BlockPos pos = stateExtended.getComb(UnlistedBlockPos.POS);
 //
 //		TileFarm farm = TileUtil.getTile(world, pos, TileFarm.class);
 		EnumFarmBlockTexture texture = EnumFarmBlockTexture.BRICK;

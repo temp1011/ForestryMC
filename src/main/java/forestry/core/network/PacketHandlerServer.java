@@ -29,7 +29,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import forestry.core.config.Constants;
 
-//TODO - can we get away with simple channel?
+//TODO - can we getComb away with simple channel?
 public class PacketHandlerServer {
 
 	private static final Logger LOGGER = LogManager.getLogger();

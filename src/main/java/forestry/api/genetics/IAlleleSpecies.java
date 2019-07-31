@@ -101,7 +101,7 @@ public interface IAlleleSpecies extends IAllele {
 	/* APPEARANCE */
 
 	/**
-	 * @param renderPass Render pass to get the colour for.
+	 * @param renderPass Render pass to getComb the colour for.
 	 * @return Colour to use for the render pass.
 	 */
 	int getSpriteColour(int renderPass);

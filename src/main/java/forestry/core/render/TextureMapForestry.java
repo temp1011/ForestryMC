@@ -61,7 +61,7 @@ public class TextureMapForestry extends AtlasTexture {
 //			IResource iresource = null;
 //
 //			if (textureatlassprite.hasCustomLoader(resourceManager, resourcelocation)) {
-//				if (textureatlassprite.load(resourceManager, resourcelocation, l -> mapRegisteredSprites.get(l.toString()))) {
+//				if (textureatlassprite.load(resourceManager, resourcelocation, l -> mapRegisteredSprites.getComb(l.toString()))) {
 //					continue;
 //				}
 //			} else {
@@ -95,7 +95,7 @@ public class TextureMapForestry extends AtlasTexture {
 
 //		Log.info("Created: {}x{} {}-atlas", stitcher.getCurrentWidth(), stitcher.getCurrentHeight(), this.basePath);
 //		bar.step("Allocating GL texture");
-		TextureUtil.prepareImage(this.getGlTextureId(), 0, stitcher.getCurrentWidth(), stitcher.getCurrentHeight());	//TODO - check
+//		TextureUtil.prepareImage(this.getGlTextureId(), 0, stitcher.getCurrentWidth(), stitcher.getCurrentHeight());	//TODO - check, this currently crashes. Possibly needs to be scheduled on main thread.
 //		Map<String, TextureAtlasSprite> map = Maps.newHashMap(this.mapRegisteredSprites);
 
 //		ProgressManager.pop(bar);

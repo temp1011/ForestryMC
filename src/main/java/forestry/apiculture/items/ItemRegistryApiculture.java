@@ -10,7 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Random;
+
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.core.ItemGroups;
@@ -35,12 +40,12 @@ public class ItemRegistryApiculture extends ItemRegistry {
 	public final ItemHiveFrame frameProven;
 
 	public final ItemOverlay honeyDrop;
-	public final ItemPollenCluster pollenCluster;
-	public final ItemPropolis propolis;
+	public final Map<EnumPollenCluster, ItemPollenCluster> pollenClusters = new EnumMap<>(EnumPollenCluster.class);
+	public final Map<EnumPropolis, ItemPropolis> propolis = new EnumMap<>(EnumPropolis.class);
 	public final ItemForestry honeydew;
 	public final ItemForestry royalJelly;
 	public final ItemForestry waxCast;
-	public final ItemHoneyComb beeComb;
+	public final Map<EnumHoneyComb, ItemHoneyComb> beeCombs = new EnumMap<>(EnumHoneyComb.class);
 
 	public final ItemArmorApiarist apiaristHat;
 	public final ItemArmorApiarist apiaristChest;
@@ -69,25 +74,38 @@ public class ItemRegistryApiculture extends ItemRegistry {
 
 		// / BEE RESOURCES
 		honeyDrop = registerItem(new ItemOverlay(ItemGroups.tabApiculture, EnumHoneyDrop.VALUES), "honey_drop");
-//		OreDictionary.registerOre(OreDictUtil.DROP_HONEY, honeyDrop);
+		//		OreDictionary.registerOre(OreDictUtil.DROP_HONEY, honeyDrop);
 
-		pollenCluster = registerItem(new ItemPollenCluster(), "pollen");
-//		OreDictionary.registerOre(OreDictUtil.ITEM_POLLEN, pollenCluster);
+		for(EnumPropolis type: EnumPropolis.VALUES) {
+			ItemPropolis prop = new ItemPropolis(type);
+			registerItem(prop, "propolis_" + type.getUid());
+			propolis.put(type, prop);
+		}	//TODO tag
 
-		propolis = registerItem(new ItemPropolis(), "propolis");
 
 		honeydew = registerItem(new ItemForestry(ItemGroups.tabApiculture), "honeydew");
-//		OreDictionary.registerOre(OreDictUtil.DROP_HONEYDEW, honeydew);
+		//		OreDictionary.registerOre(OreDictUtil.DROP_HONEYDEW, honeydew);
 
 		royalJelly = registerItem(new ItemForestry(ItemGroups.tabApiculture), "royal_jelly");
-//		OreDictionary.registerOre(OreDictUtil.DROP_ROYAL_JELLY, royalJelly);
+		//		OreDictionary.registerOre(OreDictUtil.DROP_ROYAL_JELLY, royalJelly);
 
 		waxCast = registerItem(new ItemWaxCast(), "wax_cast");
 
+		for(EnumPollenCluster type: EnumPollenCluster.VALUES) {
+			ItemPollenCluster pollen = new ItemPollenCluster(type);
+			registerItem(pollen, "pollen_cluster_" + type.getUid());
+			pollenClusters.put(type, pollen);
+		}	//TODO tag
+
+
 		// / BEE COMBS
-		beeComb = registerItem(new ItemHoneyComb(), "bee_combs");
-//		OreDictionary.registerOre(OreDictUtil.BEE_COMB, beeComb.getWildcard());
-//TODO - tags
+		for (EnumHoneyComb type : EnumHoneyComb.VALUES) {
+			ItemHoneyComb comb = new ItemHoneyComb(type);
+			registerItem(comb, "bee_comb_" + type.getName());
+			beeCombs.put(type, comb);
+		}
+		//		OreDictionary.registerOre(OreDictUtil.BEE_COMB, beeComb.getWildcard());
+		//TODO - tags
 
 		// / APIARIST'S CLOTHES
 		apiaristHat = registerItem(new ItemArmorApiarist(EquipmentSlotType.HEAD), "apiarist_helmet");
@@ -97,11 +115,32 @@ public class ItemRegistryApiculture extends ItemRegistry {
 
 		// TOOLS
 		scoop = registerItem(new ItemScoop(), "scoop");
-//		scoop.setHarvestLevel("scoop", 3);
-//TODO - harvest stuff
+		//		scoop.setHarvestLevel("scoop", 3);
+		//TODO - harvest stuff
 		smoker = registerItem(new ItemSmoker(), "smoker");
 
 		// register some common oreDict names for our recipes
-//		OreDictionary.registerOre(OreDictUtil.BLOCK_WOOL, new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
+		//		OreDictionary.registerOre(OreDictUtil.BLOCK_WOOL, new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
+	}
+
+	public ItemStack getRandomComb(int amount, Random random, boolean includeSecret) {
+		EnumHoneyComb honeyComb = ItemHoneyComb.getRandomCombType(random, includeSecret);
+		if (honeyComb == null) {
+			return ItemStack.EMPTY;
+		}
+		return getComb(honeyComb, amount);
+
+	}
+
+	public ItemStack getComb(EnumHoneyComb honeyComb, int amount) {
+		return new ItemStack(beeCombs.get(honeyComb), amount);
+	}
+
+	public ItemStack getPollen(EnumPollenCluster pollenCluster, int amount) {
+		return new ItemStack(pollenClusters.get(pollenCluster), amount);
+	}
+
+	public ItemStack getPropolis(EnumPropolis prop, int amount) {
+		return new ItemStack(propolis.get(prop), amount);
 	}
 }

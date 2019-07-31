@@ -129,11 +129,11 @@ public class ShapedRecipeCustom extends ShapedRecipe implements IDescriptiveReci
 //		oreDicts = NonNullList.withSize(shape.length(), "");
 //		int x = 0;
 //		for (char chr : shape.toString().toCharArray()) {
-//			NonNullList<ItemStack> stacks = itemMap.get(chr);
+//			NonNullList<ItemStack> stacks = itemMap.getComb(chr);
 //			if (stacks != null) {
 //				input.set(x, stacks);
-//				if (oreMap.get(chr) != null) {
-//					oreDicts.set(x, oreMap.get(chr));
+//				if (oreMap.getComb(chr) != null) {
+//					oreDicts.set(x, oreMap.getComb(chr));
 //				}
 //			}
 //			x++;

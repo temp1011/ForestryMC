@@ -32,6 +32,7 @@ import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.items.ItemHoneyComb;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -87,7 +88,8 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 				return 0.5f;
 			} else if (beeItems.honeydew == item) {
 				return 0.7f;
-			} else if (beeItems.beeComb == item) {
+				//TODO tag lookup?
+			} else if (item instanceof ItemHoneyComb) {
 				return 0.4f;
 			}
 		}

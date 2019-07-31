@@ -52,6 +52,7 @@ import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
+import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemElectronTube;
 import forestry.core.items.ItemRegistryCore;
@@ -204,7 +205,7 @@ public class ModuleFactory extends BlankForestryModule {
 
 		// Set rain substrates
 		ItemStack iodineCharge = coreItems.iodineCharge.getItemStack();
-		ItemStack dissipationCharge = coreItems.craftingMaterial.getDissipationCharge();
+		ItemStack dissipationCharge = coreItems.getCraftingMaterial(EnumCraftingMaterial.DISSIPATION_CHARGE, 1);
 		FuelManager.rainSubstrate.put(iodineCharge, new RainSubstrate(iodineCharge, Constants.RAINMAKER_RAIN_DURATION_IODINE, 0.01f));
 		FuelManager.rainSubstrate.put(dissipationCharge, new RainSubstrate(dissipationCharge, 0.075f));
 
@@ -252,84 +253,82 @@ public class ModuleFactory extends BlankForestryModule {
 		ItemRegistryFluids fluidItems = ModuleFluids.getItems();
 		BlockRegistryFactory blocks = getBlocks();
 
-		ItemElectronTube electronTube = coreItems.tubes;
-
 		FluidStack liquidGlass = Fluids.GLASS.getFluid(500);
 		if (liquidGlass != null) {
 			//TODO json
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.COPPER, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.COPPER, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', "dustRedstone",
 				'X', "ingotCopper"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.TIN, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.TIN, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', "dustRedstone",
 				'X', "ingotTin"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.BRONZE, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.BRONZE, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', "dustRedstone",
 				'X', "ingotBronze"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.IRON, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.IRON, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', "dustRedstone",
 				'X', "ingotIron"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.GOLD, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.GOLD, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', "dustRedstone",
 				'X', "ingotGold"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.DIAMOND, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.DIAMOND, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', "dustRedstone",
 				'X', "gemDiamond"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.OBSIDIAN, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.OBSIDIAN, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', "dustRedstone",
 				'X', Blocks.OBSIDIAN});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.BLAZE, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.BLAZE, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', "dustRedstone",
 				'X', Items.BLAZE_POWDER});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.EMERALD, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.EMERALD, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', "dustRedstone",
 				'X', "gemEmerald"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.APATITE, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.APATITE, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', "dustRedstone",
 				'X', "gemApatite"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.LAPIS, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.LAPIS, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', "dustRedstone",
 				'X', new ItemStack(Items.LAPIS_LAZULI)});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.ENDER, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.ENDER, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', new ItemStack(Items.ENDER_EYE),
 				'X', new ItemStack(Blocks.END_STONE)});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, electronTube.get(EnumElectronTube.ORCHID, 4), new Object[]{
+			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, coreItems.getElectronTube(EnumElectronTube.ORCHID, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
@@ -360,9 +359,9 @@ public class ModuleFactory extends BlankForestryModule {
 //						'#', dyes[i],
 //						'X', beeItems.propolis.getWildcard()});
 				}
-				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.GLASS), new Object[]{
-					"X",
-					'X', beeItems.propolis.getWildcard()});
+//				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.GLASS), new Object[]{
+//					"X",
+//					'X', beeItems.propolis.getWildcard()});	//TODO needs tag
 			}
 		}
 
@@ -394,7 +393,7 @@ public class ModuleFactory extends BlankForestryModule {
 
 		NonNullList<ItemStack> iceRecipeResources = NonNullList.create();
 		iceRecipeResources.add(new ItemStack(Items.SNOWBALL));
-		iceRecipeResources.add(coreItems.craftingMaterial.getIceShard(4));
+		iceRecipeResources.add(coreItems.getCraftingMaterial(EnumCraftingMaterial.ICE_SHARD, 4));
 		FluidStack liquidIce = Fluids.ICE.getFluid(4000);
 		if (liquidIce != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, iceRecipeResources, liquidIce);
@@ -469,7 +468,7 @@ public class ModuleFactory extends BlankForestryModule {
 //			'#', Blocks.DIRT,
 //			'X', coreItems.mulch);
 //		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(FluidRegistry.WATER, 1000), ItemStack.EMPTY,
-//			coreBlocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 8),
+//			coreBlocks.bogEarth.getComb(BlockBogEarth.SoilType.BOG_EARTH, 8),
 //			"#X#",
 //			"XYX", "#X#",
 //			'#', Blocks.DIRT,
@@ -527,7 +526,7 @@ public class ModuleFactory extends BlankForestryModule {
 
 		// Ender pearl
 		RecipeManagers.carpenterManager.addRecipe(100, ItemStack.EMPTY, new ItemStack(Items.ENDER_PEARL, 1), " # ", "###", " # ", '#',
-			coreItems.craftingMaterial.getPulsatingMesh());
+			coreItems.getCraftingMaterial(EnumCraftingMaterial.PULSATING_MESH, 1));
 
 		// Woven Silk
 //		RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 500), ItemStack.EMPTY, coreItems.craftingMaterial.getWovenSilk(),
@@ -568,9 +567,9 @@ public class ModuleFactory extends BlankForestryModule {
 
 		// / Solder Manager
 		if (layout != null) {
-			ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.EMERALD, 1), Circuits.machineSpeedUpgrade1);
-			ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.BLAZE, 1), Circuits.machineSpeedUpgrade2);
-			ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.machineEfficiencyUpgrade1);
+			ChipsetManager.solderManager.addRecipe(layout, coreItems.getElectronTube(EnumElectronTube.EMERALD, 1), Circuits.machineSpeedUpgrade1);
+			ChipsetManager.solderManager.addRecipe(layout, coreItems.getElectronTube(EnumElectronTube.BLAZE, 1), Circuits.machineSpeedUpgrade2);
+			ChipsetManager.solderManager.addRecipe(layout, coreItems.getElectronTube(EnumElectronTube.GOLD, 1), Circuits.machineEfficiencyUpgrade1);
 		}
 	}
 

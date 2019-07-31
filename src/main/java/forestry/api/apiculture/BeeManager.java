@@ -58,7 +58,7 @@ public class BeeManager {
 	public static IBeeMutationFactory beeMutationFactory;
 
 	/**
-	 * Used to get Forestry's jubilance implementations.
+	 * Used to getComb Forestry's jubilance implementations.
 	 *
 	 * @implNote Only null if the "apiculture" module is not enabled.
 	 */

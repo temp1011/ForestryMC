@@ -24,7 +24,7 @@ public class BlockResourceStorage extends Block implements IItemModelRegister {
 		super(Block.Properties.create(Material.IRON)
 				.hardnessAndResistance(3f, 5f));
 		this.type = type;
-//		setCreativeTab(CreativeTabForestry.tabForestry);
+//		setCreativeTab(CreativeTabForestry.tabForestry);	TODO done in item.
 	}
 
 	//TODO needed?

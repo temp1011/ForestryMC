@@ -108,7 +108,7 @@ public enum HiveDescription implements IHiveDescription {
 	private final IHiveRegistry.HiveType hiveType;
 
 	HiveDescription(IHiveRegistry.HiveType hiveType, float genChance, BeeDefinition beeTemplate, IHiveGen hiveGen) {
-		this.blockState = ModuleApiculture.getBlocks().beehives.getStateForType(hiveType);
+		this.blockState = ModuleApiculture.getBlocks().beehives.get(hiveType).getDefaultState();
 		this.genChance = genChance;
 		this.beeGenome = beeTemplate.getGenome();
 		this.hiveGen = hiveGen;

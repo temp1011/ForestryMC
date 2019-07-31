@@ -9,7 +9,7 @@
 // * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
 // ******************************************************************************/
 //package forestry.apiculture.recipes;
-//
+//	//TODO auto gen these with data run like forge does?
 //import com.google.gson.JsonObject;
 //
 //import javax.annotation.Nonnull;

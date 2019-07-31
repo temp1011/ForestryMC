@@ -42,15 +42,13 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
 
 	<T extends TileBase> BlockTypeFactoryTesr(Class<T> teClass, String name) {
 		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks/" + name + ".0");
-//		Proxies.render.setRenderDefaultMachine(machineProperties, Constants.TEXTURE_PATH_BLOCKS + "/" + name + "_");
-		//TODO distexecutor
+		Proxies.render.setRenderDefaultMachine(machineProperties, Constants.TEXTURE_PATH_BLOCKS + "/" + name + "_");
 		this.machineProperties = machineProperties;
 	}
 
 	<T extends TileMill> BlockTypeFactoryTesr(Class<T> teClass, String name, String renderMillTexture) {
 		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks/" + name + ".0");
-//		Proxies.render.setRenderMill(machineProperties, renderMillTexture);
-		//TODO distexecutor
+		Proxies.render.setRenderMill(machineProperties, renderMillTexture);
 		this.machineProperties = machineProperties;
 	}
 

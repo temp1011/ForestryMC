@@ -16,6 +16,8 @@ import java.util.Map;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 
+import forestry.api.apiculture.hives.IHiveRegistry;
+import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.ItemBlockCandle;
 import forestry.apiculture.items.ItemBlockHoneyComb;
 import forestry.core.blocks.BlockBase;
@@ -26,10 +28,10 @@ public class BlockRegistryApiculture extends BlockRegistry {
 	public final BlockApiculture apiary;
 	public final BlockApiculture beeHouse;
 	public final BlockBase<BlockTypeApicultureTesr> beeChest;
-	public final BlockBeeHives beehives;
+	public final Map<IHiveRegistry.HiveType, BlockBeeHive> beehives = new EnumMap<>(IHiveRegistry.HiveType.class);
 	public final BlockCandle candle;
 	public final BlockStump stump;
-	public final BlockHoneyComb[] beeCombs;
+	public final Map<EnumHoneyComb, BlockHoneyComb> beeCombs = new EnumMap<>(EnumHoneyComb.class);
 	private final Map<BlockAlvearyType, BlockAlveary> alvearyBlockMap = new EnumMap<>(BlockAlvearyType.class);
 
 	public BlockRegistryApiculture() {
@@ -41,28 +43,35 @@ public class BlockRegistryApiculture extends BlockRegistry {
 
 		beeChest = new BlockBase<>(BlockTypeApicultureTesr.APIARIST_CHEST, Material.WOOD);
 		registerBlock(beeChest, new ItemBlockForestry<>(beeChest), "bee_chest");
-//		beeChest.setCreativeTab(ItemGroups.tabApiculture);	//TODO done in item
-//		beeChest.setHarvestLevel("axe", 0);	//TODO done in item
+		//		beeChest.setCreativeTab(ItemGroups.tabApiculture);	//TODO done in item
+		//		beeChest.setHarvestLevel("axe", 0);	//TODO done in item
 
-		beehives = new BlockBeeHives();
-		registerBlock(beehives, new ItemBlockForestry<>(beehives), "beehives");
+		//TODO tag?
+		for (IHiveRegistry.HiveType type : IHiveRegistry.HiveType.VALUES) {
+			BlockBeeHive hive = new BlockBeeHive(type);
+			registerBlock(hive, new ItemBlockForestry<>(hive), "beehive_" + type.getName());    //TODO would use type.getUUid() but seems that might cause issues with resourcelocations
+			beehives.put(type, hive);
+		}
 
 		candle = new BlockCandle();
 		registerBlock(candle, new ItemBlockCandle(candle), "candle");
 		stump = new BlockStump();
 		registerBlock(stump, new ItemBlockForestry<>(stump), "stump");
 
-		beeCombs = BlockHoneyComb.create();
-		for (int i = 0; i < beeCombs.length; i++) {
-			BlockHoneyComb block = beeCombs[i];
-			registerBlock(block, new ItemBlockHoneyComb(block), "bee_combs_" + i);
-		}
+		for (EnumHoneyComb type : EnumHoneyComb.VALUES) {
+			BlockHoneyComb block = new BlockHoneyComb(type);
+			registerBlock(block, new ItemBlockHoneyComb(block), "block_bee_combs_" + type.getName());
+		}    //TODO tag?
 
-		for(BlockAlvearyType type : BlockAlvearyType.VALUES) {
+		for (BlockAlvearyType type : BlockAlvearyType.VALUES) {
 			BlockAlveary block = new BlockAlveary(type);
 			registerBlock(block, new ItemBlockForestry<>(block), "alveary_" + block.getType());
 			alvearyBlockMap.put(type, block);
 		}
+	}
+
+	public ItemStack getCombBlock(EnumHoneyComb honeyComb) {
+		return new ItemStack(beeCombs.get(honeyComb));
 	}
 
 	public BlockAlveary getAlvearyBlock(BlockAlvearyType type) {

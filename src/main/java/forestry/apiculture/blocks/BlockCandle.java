@@ -237,7 +237,7 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 
 	//TODO - is this fixed?
 	/* DROP HANDLING */
-	// Hack: 	When harvesting we need to get the drops in onBlockHarvested,
+	// Hack: 	When harvesting we need to getComb the drops in onBlockHarvested,
 	// 			because Mojang destroys the block and tile before calling getDrops.
 	private final ThreadLocal<ItemStack> drop = new ThreadLocal<>();
 
@@ -256,7 +256,7 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 		drop.remove();
 		List<ItemStack> drops = new ArrayList<>();
 
-		// not harvested, get drops normally
+		// not harvested, getComb drops normally
 		if (dropStack == null) {
 			dropStack = getCandleDrop(builder.getWorld(), builder.assertPresent(LootParameters.POSITION));
 		}

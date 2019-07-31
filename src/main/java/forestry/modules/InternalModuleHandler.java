@@ -28,7 +28,7 @@ import forestry.core.utils.Log;
 //TODO - most of this needs tearing up and replacing
 public class InternalModuleHandler {
 
-	//TODO use toposort for sorting dependancies
+	//TODO use toposort for sorting dependancies?
 	public enum Stage {
 		SETUP, // setup API to make it functional. GameMode Configs are not yet accessible
 		SETUP_DISABLED, // setup fallback API to avoid crashes

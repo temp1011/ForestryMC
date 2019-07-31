@@ -29,7 +29,7 @@ public enum BlockTypeApicultureTesr implements IBlockTypeTesr {
 
 	<T extends TileApiaristChest> BlockTypeApicultureTesr(Class<T> teClass, String name, String textureName, AxisAlignedBB boundingBox) {
 		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0", false);
-//		Proxies.render.setRenderChest(machineProperties, textureName);	TODO distexecutor
+		Proxies.render.setRenderChest(machineProperties, textureName);
 		this.machineProperties = machineProperties;
 	}
 

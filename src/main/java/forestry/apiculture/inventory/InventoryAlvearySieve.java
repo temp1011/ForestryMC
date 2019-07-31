@@ -17,6 +17,7 @@ import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.core.ModuleCore;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
+import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.utils.ItemStackUtil;
 
 public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve> implements ISlotPickupWatcher {
@@ -30,7 +31,7 @@ public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return ItemStackUtil.isIdenticalItem(ModuleCore.getItems().craftingMaterial.getWovenSilk(), itemStack);
+		return ItemStackUtil.isIdenticalItem(ModuleCore.getItems().getCraftingMaterial(EnumCraftingMaterial.WOVEN_SILK, 1), itemStack);
 	}
 
 	public boolean canStorePollen() {

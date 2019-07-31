@@ -170,7 +170,7 @@ public class ModelManager implements IModelManager {
 		BlockColors blockColors = minecraft.getBlockColors();
 		for (IColoredBlock blockColor : blockColorList) {
 			if (blockColor instanceof Block) {
-//				blockColors.registerBlockColorHandler(ColoredBlockBlockColor.INSTANCE, (Block) blockColor);
+				blockColors.register(ColoredBlockBlockColor.INSTANCE, (Block) blockColor);
 				//TODO models
 			}
 		}
@@ -178,7 +178,7 @@ public class ModelManager implements IModelManager {
 		ItemColors itemColors = minecraft.getItemColors();
 		for (IColoredItem itemColor : itemColorList) {
 			if (itemColor instanceof Item) {
-//				itemColors.registerItemColorHandler(ColoredItemItemColor.INSTANCE, (Item) itemColor);
+				itemColors.register(ColoredItemItemColor.INSTANCE, (Item) itemColor);
 				//TODO models
 			}
 		}

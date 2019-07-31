@@ -285,28 +285,28 @@ public class ModuleFarming extends BlankForestryModule {
 			return;
 		}
 
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.farmArborealManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.farmSucculentManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuits.farmPeatManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuits.farmCropsManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.BLAZE, 1), Circuits.farmInfernalManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.farmPoalesManual);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.LAPIS, 1), Circuits.farmGourdManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.APATITE, 1), Circuits.farmShroomManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.DIAMOND, 1), Circuits.farmCocoaManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.EMERALD, 1), Circuits.farmOrchardManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.GOLD, 1), Circuits.farmArborealManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.COPPER, 1), Circuits.farmSucculentManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.OBSIDIAN, 1), Circuits.farmPeatManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.BRONZE, 1), Circuits.farmCropsManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.BLAZE, 1), Circuits.farmInfernalManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.TIN, 1), Circuits.farmPoalesManual);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.LAPIS, 1), Circuits.farmGourdManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.APATITE, 1), Circuits.farmShroomManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.DIAMOND, 1), Circuits.farmCocoaManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.EMERALD, 1), Circuits.farmOrchardManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.ENDER, 1), Circuits.farmEnderManaged);
 
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.farmArborealManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.farmSucculentManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuits.farmPeatManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuits.farmCropsManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.farmPoalesManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.LAPIS, 1), Circuits.farmGourdManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.APATITE, 1), Circuits.farmShroomManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.DIAMOND, 1), Circuits.farmCocoaManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.EMERALD, 1), Circuits.farmOrchardManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.GOLD, 1), Circuits.farmArborealManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.COPPER, 1), Circuits.farmSucculentManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.OBSIDIAN, 1), Circuits.farmPeatManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.BRONZE, 1), Circuits.farmCropsManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.TIN, 1), Circuits.farmPoalesManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.LAPIS, 1), Circuits.farmGourdManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.APATITE, 1), Circuits.farmShroomManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.DIAMOND, 1), Circuits.farmCocoaManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.EMERALD, 1), Circuits.farmOrchardManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.ENDER, 1), Circuits.farmEnderManual);
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IModelManager;
 import forestry.core.config.Config;
 
+//TODO needs refactoring for the flattened world
 public class ItemOverlay extends ItemForestry implements IColoredItem {
 
 	public interface IOverlayInfo {

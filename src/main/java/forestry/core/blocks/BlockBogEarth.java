@@ -95,7 +95,7 @@ public class BlockBogEarth extends Block implements IItemModelRegister {
 	//TODO - loot tables for drops (at least for easy cases like this
 	//	@Override
 	//	public List<ItemStack> getDrops(BlockState state, ServerWorld world, BlockPos pos, TileEntity te) {
-	//		Integer maturity = state.get(MATURITY);
+	//		Integer maturity = state.getComb(MATURITY);
 	//		SoilType type = SoilType.fromMaturity(maturity);
 	//
 	//		if (type == SoilType.PEAT) {
@@ -156,6 +156,7 @@ public class BlockBogEarth extends Block implements IItemModelRegister {
 		list.add(new ItemStack(this, 1));
 	}
 
+	//TODO still needed?
 	/* MODELS */
 	@Override
 	@OnlyIn(Dist.CLIENT)
@@ -166,7 +167,7 @@ public class BlockBogEarth extends Block implements IItemModelRegister {
 		manager.registerItemModel(item, 3, "soil/peat");
 	}
 
-	//TODO - loot tables
+	//TODO - loot tables or flatten
 	//	@Override
 	//	public int damageDropped(BlockState state) {
 	//		return 0;

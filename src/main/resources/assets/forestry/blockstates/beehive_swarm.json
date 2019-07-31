@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "forestry:block/beehives/swarm" }
+	}
+}

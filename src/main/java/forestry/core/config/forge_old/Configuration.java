@@ -1545,7 +1545,7 @@ public class Configuration {
 			float parseFloat = Float.parseFloat(prop.getString());
 			return Floats.constrainToRange(parseFloat, minValue, maxValue);
 		} catch (Exception e) {
-			LogManager.getLogger().error("Failed to get float for {}/{}", name, category, e);
+			LogManager.getLogger().error("Failed to getComb float for {}/{}", name, category, e);
 		}
 		return defaultValue;
 	}

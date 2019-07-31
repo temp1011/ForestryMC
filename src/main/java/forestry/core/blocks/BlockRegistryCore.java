@@ -30,7 +30,7 @@ public class BlockRegistryCore extends BlockRegistry {
 	public final StairsBlock ashStairs;
 	public final Map<EnumResourceType, BlockResourceStorage> resourceStorage = new EnumMap<>(EnumResourceType.class);
 	public final Map<EnumResourceType, BlockResourceOre> resourceOre = new EnumMap<>(EnumResourceType.class);
-	//	public final ItemStack resourceStorageApatite;	//TODO just access these though get
+	//	public final ItemStack resourceStorageApatite;	//TODO just access these though getComb
 //	public final ItemStack resourceStorageTin;
 //	public final ItemStack resourceStorageCopper;
 //	public final ItemStack resourceStorageBronze;
@@ -68,24 +68,24 @@ public class BlockRegistryCore extends BlockRegistry {
 		//TODO register tag for these
 
 		//		resources.setHarvestLevel("pickaxe", 1);
-		//		OreDictionary.registerOre(OreDictUtil.ORE_APATITE, resources.get(EnumResourceType.APATITE, 1));
-		//		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.get(EnumResourceType.COPPER, 1));
-		//		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.get(EnumResourceType.TIN, 1));
+		//		OreDictionary.registerOre(OreDictUtil.ORE_APATITE, resources.getComb(EnumResourceType.APATITE, 1));
+		//		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.getComb(EnumResourceType.COPPER, 1));
+		//		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.getComb(EnumResourceType.TIN, 1));
 
 //		BlockResourceStorage resourceStorage = new BlockResourceStorage();
 //		registerBlock(resourceStorage, new ItemBlockForestry<>(resourceStorage), "resource_storage");
 //		resourceStorage.setHarvestLevel("pickaxe", 0);
 
-//		resourceStorageApatite = resourceStorage.get(EnumResourceType.APATITE);
+//		resourceStorageApatite = resourceStorage.getComb(EnumResourceType.APATITE);
 //		OreDictionary.registerOre(OreDictUtil.BLOCK_APATITE, resourceStorageApatite);
 
-//		resourceStorageCopper = resourceStorage.get(EnumResourceType.COPPER);
+//		resourceStorageCopper = resourceStorage.getComb(EnumResourceType.COPPER);
 //		OreDictionary.registerOre(OreDictUtil.BLOCK_COPPER, resourceStorageCopper);
 
-//		resourceStorageTin = resourceStorage.get(EnumResourceType.TIN);
+//		resourceStorageTin = resourceStorage.getComb(EnumResourceType.TIN);
 //		OreDictionary.registerOre(OreDictUtil.BLOCK_TIN, resourceStorageTin);
 
-//		resourceStorageBronze = resourceStorage.get(EnumResourceType.BRONZE);
+//		resourceStorageBronze = resourceStorage.getComb(EnumResourceType.BRONZE);
 //		OreDictionary.registerOre(OreDictUtil.BLOCK_BRONZE, resourceStorageBronze);
 
 		ashBrick = new BlockAshBrick();

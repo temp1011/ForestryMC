@@ -33,7 +33,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.CreativeTabForestry;
@@ -43,8 +42,15 @@ import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemElectronTube extends ItemOverlay {
 
-	public ItemElectronTube() {
+	private EnumElectronTube type;
+
+	public ItemElectronTube(EnumElectronTube type) {
 		super(CreativeTabForestry.tabForestry, EnumElectronTube.VALUES);
+		this.type = type;
+	}
+
+	public EnumElectronTube getType() {
+		return type;
 	}
 
 	@Override
@@ -74,21 +80,22 @@ public class ItemElectronTube extends ItemOverlay {
 	@Override
 	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
 		if (this.isInGroup(tab)) {
-			for (IOverlayInfo overlay : overlays) {
-				if (Config.isDebug || !overlay.isSecret()) {
-					ItemStack itemStack = new ItemStack(this, 1);//TODO - flatten, i);
-					if (Config.isDebug || !getCircuits(itemStack).isEmpty()) {
-						subItems.add(itemStack);
-					}
+			if (Config.isDebug || !this.getType().isSecret()) {
+				ItemStack stack = new ItemStack(this);
+				if (!getCircuits(stack).isEmpty()) {
+					subItems.add(new ItemStack(this));
 				}
 			}
 		}
 	}
 
+
+	//TODO can this not be static now?
 	private static Multimap<ICircuitLayout, ICircuit> getCircuits(ItemStack itemStack) {
 		Multimap<ICircuitLayout, ICircuit> circuits = ArrayListMultimap.create();
 		//TODO circuitRegistry is populated at setupAPI which is called after this is used to fill creative tab
-		//so perhaps needs to be initialised earlier
+		//TODO so perhaps needs to be initialised earlier
+		//of course, or we could flatten...
 		Collection<ICircuitLayout> allLayouts = Collections.emptyList();//ChipsetManager.circuitRegistry.getRegisteredLayouts().values();
 		for (ICircuitLayout circuitLayout : allLayouts) {
 			ICircuit circuit = SolderManager.getCircuit(circuitLayout, itemStack);
@@ -97,9 +104,5 @@ public class ItemElectronTube extends ItemOverlay {
 			}
 		}
 		return circuits;
-	}
-
-	public ItemStack get(EnumElectronTube type, int amount) {
-		return new ItemStack(this, amount);//TODO - flatten, type.ordinal());
 	}
 }

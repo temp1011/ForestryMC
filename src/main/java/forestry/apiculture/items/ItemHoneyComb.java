@@ -31,12 +31,17 @@ import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 
 public class ItemHoneyComb extends ItemForestry implements IColoredItem {
-	public ItemHoneyComb() {
+
+	private final EnumHoneyComb type;
+
+	public ItemHoneyComb(EnumHoneyComb type) {
 		super((new Item.Properties())
 		.maxDamage(0)
 		.group(ItemGroups.tabApiculture)
 		.setNoRepair());
 //		setHasSubtypes(true); TODO - flatten?
+
+		this.type = type;
 	}
 
 	@Override
@@ -44,34 +49,8 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 		return false;
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
-			manager.registerItemModel(item, i, "beecombs/" + EnumHoneyComb.get(i).name);
-		}
-	}
-
-	@Override
-	public String getTranslationKey(ItemStack stack) {
-		EnumHoneyComb honeyComb = EnumHoneyComb.get(0);// TODO - flatten stack.getItemDamage());
-		return super.getTranslationKey(stack) + "." + honeyComb.name;
-	}
-
-	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInGroup(tab)) {
-			for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
-				EnumHoneyComb honeyComb = EnumHoneyComb.get(i);
-				if (!honeyComb.isSecret() || Config.isDebug) {
-					subItems.add(new ItemStack(this));	//TODO - flatten?
-				}
-			}
-		}
-	}
-
 	@Nullable
-	private static EnumHoneyComb getRandomCombType(Random random, boolean includeSecret) {
+	public static EnumHoneyComb getRandomCombType(Random random, boolean includeSecret) {
 		List<EnumHoneyComb> validCombs = new ArrayList<>(EnumHoneyComb.VALUES.length);
 		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
 			EnumHoneyComb honeyComb = EnumHoneyComb.get(i);
@@ -87,21 +66,9 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 		}
 	}
 
-	public ItemStack getRandomComb(int amount, Random random, boolean includeSecret) {
-		EnumHoneyComb honeyComb = getRandomCombType(random, includeSecret);
-		if (honeyComb == null) {
-			return ItemStack.EMPTY;
-		}
-		return get(honeyComb, amount);
-	}
-
-	public ItemStack get(EnumHoneyComb honeyComb, int amount) {
-		return new ItemStack(this);//TODO - flatten , amount, honeyComb.ordinal());
-	}
-
 	@Override
 	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
-		EnumHoneyComb honeyComb = EnumHoneyComb.get(0);//TODO - flatten itemstack.getItemDamage());
+		EnumHoneyComb honeyComb = this.type;
 		if (tintIndex == 1) {
 			return honeyComb.primaryColor;
 		} else {

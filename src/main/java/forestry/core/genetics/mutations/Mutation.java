@@ -172,7 +172,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 		} else if (species1.getUID().equals(allele.getUID())) {
 			return species0;
 		} else {
-			throw new IllegalArgumentException("Tried to get partner for allele that is not part of this mutation.");
+			throw new IllegalArgumentException("Tried to getComb partner for allele that is not part of this mutation.");
 		}
 	}
 

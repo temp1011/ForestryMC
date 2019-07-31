@@ -41,6 +41,7 @@ import forestry.api.core.ItemGroups;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
+import forestry.core.items.EnumCraftingMaterial;
 
 public class ItemArmorApiarist extends ArmorItem implements IItemModelRegister {
 
@@ -70,7 +71,7 @@ public class ItemArmorApiarist extends ArmorItem implements IItemModelRegister {
 
 		@Override
 		public Ingredient getRepairMaterial() {
-			return Ingredient.fromStacks(ModuleCore.getItems().craftingMaterial.getWovenSilk());
+			return Ingredient.fromStacks(ModuleCore.getItems().getCraftingMaterial(EnumCraftingMaterial.WOVEN_SILK, 1));
 		}
 
 		@Override

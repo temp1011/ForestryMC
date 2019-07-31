@@ -120,11 +120,6 @@ public class BlockHumus extends Block implements IItemModelRegister {
 	//		return false;
 	//	}
 
-	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this));
-	}
-
 	/* MODELS */
 	@Override
 	@OnlyIn(Dist.CLIENT)

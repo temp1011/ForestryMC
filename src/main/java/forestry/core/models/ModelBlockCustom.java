@@ -45,8 +45,8 @@ public abstract class ModelBlockCustom<B extends Block, K> implements IBakedMode
 	protected IBakedModel bakeModel(BlockState state, K key, B block) {
 		if (false){//TODO extended statesstate instanceof IExtendedBlockState) {
 //			IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-//			IBlockReader world = stateExtended.get(UnlistedBlockAccess.BLOCKACCESS);
-//			BlockPos pos = stateExtended.get(UnlistedBlockPos.POS);
+//			IBlockReader world = stateExtended.getComb(UnlistedBlockAccess.BLOCKACCESS);
+//			BlockPos pos = stateExtended.getComb(UnlistedBlockPos.POS);
 		}
 		return blockModel = bakeBlock(block, key, false);
 	}

@@ -53,19 +53,14 @@ import forestry.farming.tiles.TileFarm;
 public class BlockFarm extends BlockStructure {
 
 	public static final EnumProperty<EnumFarmBlockType> META = EnumProperty.create("meta", EnumFarmBlockType.class);
+	private final EnumFarmBlockType type;
 
-	public BlockFarm() {
+	public BlockFarm(EnumFarmBlockType type) {
 		super(Block.Properties.create(Material.ROCK)
 		.hardnessAndResistance(1.0f));
 //		setHarvestLevel("pickaxe", 0); TODO set in item
-		setDefaultState(this.getStateContainer().getBaseState().with(META, EnumFarmBlockType.PLAIN));
 //		setCreativeTab(ItemGroups.tabAgriculture); TODO set in item I think
-	}
-
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
-		builder.add(META);
+		this.type = type;
 	}
 
 	//TODO - either flatten or work out how extended states work
@@ -89,13 +84,17 @@ public class BlockFarm extends BlockStructure {
 			}
 
 			for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
-				ItemStack stack = new ItemStack(this, 1);	//TODO - more meta stuff
+				ItemStack stack = new ItemStack(this);
 				CompoundNBT compound = new CompoundNBT();
 				block.saveToCompound(compound);
 				stack.setTag(compound);
 				list.add(stack);
 			}
 		}
+	}
+
+	public EnumFarmBlockType getType() {
+		return type;
 	}
 
 	@Override
@@ -189,10 +188,6 @@ public class BlockFarm extends BlockStructure {
 
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
-		return state.get(META) == EnumFarmBlockType.CONTROL;
-	}
-
-	public ItemStack get(EnumFarmBlockType type, int amount) {
-		return new ItemStack(this, amount);//TODO, type.ordinal());
+		return getType() == EnumFarmBlockType.CONTROL;
 	}
 }

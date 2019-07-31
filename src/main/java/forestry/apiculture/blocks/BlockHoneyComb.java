@@ -30,56 +30,18 @@ import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.config.Config;
 
-//TODO - flatten
-public abstract class BlockHoneyComb extends Block implements IItemModelRegister, IBlockWithMeta, IColoredBlock{//{, IStateMapperRegister {
-	public final int minMeta;
+public class BlockHoneyComb extends Block implements IColoredBlock {
+	public final EnumHoneyComb type;
 
-	public static final BlockHoneyComb[] create() {
-		//TODO this is useful to backport too
-		BlockHoneyComb[] blocks = new BlockHoneyComb[EnumHoneyComb.values().length / 16];
-		for (int i = 0; i < blocks.length; i++) {
-			HoneyCombPredicate filter = new HoneyCombPredicate(i, 16);
-			//TODO - forge throws on <= 1 values which can happen with this. Basically just needs flattening...
-			EnumProperty<EnumHoneyComb> variant = EnumProperty.create("type", EnumHoneyComb.class, filter);
-			blocks[i] = new BlockHoneyComb(filter.minMeta) {
-				@Override
-				protected EnumProperty<EnumHoneyComb> getVariant() {
-					return variant;
-				}
-			};
-		}
-		return blocks;
-	}
-
-	public BlockHoneyComb(int minMeta) {
-		super(Block.Properties.create(Material.WOOL)	//Material.WOOL?
+	public BlockHoneyComb(EnumHoneyComb type) {
+		super(Block.Properties.create(Material.WOOL)
 		.hardnessAndResistance(1F));
 //		setCreativeTab(ItemGroups.tabApiculture); TODO - done in item
-		setDefaultState(this.getStateContainer().getBaseState().with(getVariant(), getVariant().getAllowedValues().iterator().next()));
-		this.minMeta = minMeta;
+		this.type = type;
 	}
 
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
-		builder.add(getVariant());
-	}
-
-	protected abstract EnumProperty<EnumHoneyComb> getVariant();
-
-//	@Override
-//	protected BlockStateContainer createBlockState() {
-//		new BlockStateContainer()
-//		return new BlockStateContainer(this, getVariant());
-//	}
-
-	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
-		for (EnumHoneyComb honeyComb : getVariant().getAllowedValues()) {
-			if (!honeyComb.isSecret() || Config.isDebug) {
-				list.add(get(honeyComb));
-			}
-		}
+	public EnumHoneyComb getType() {
+		return type;
 	}
 
 	@Override
@@ -93,67 +55,23 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 		return BlockRenderLayer.CUTOUT;
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		for (EnumHoneyComb comb : getVariant().getAllowedValues()) {
-			manager.registerItemModel(item, comb.ordinal() - minMeta, "block_bee_combs");
-		}
-	}
-
-	public ItemStack get(EnumHoneyComb honeyComb) {
-		return new ItemStack(this, 1);}//, honeyComb.ordinal() - minMeta);
+//	@OnlyIn(Dist.CLIENT)
+//	@Override
+//	public void registerModel(Item item, IModelManager manager) {
+//		for (EnumHoneyComb comb : getVariant().getAllowedValues()) {
+//			manager.registerItemModel(item, comb.ordinal() - minMeta, "block_bee_combs");
+//		}
 //	}
 
-	@Override
-	public String getNameFromMeta(int meta) {
-		EnumHoneyComb honeyComb = EnumHoneyComb.get(minMeta + meta);
-		return honeyComb.name;
-	}
-
+	//TODO how this is used???
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public int colorMultiplier(BlockState state, IBlockReader worldIn, BlockPos pos, int tintIndex) {
-//		int meta = getMetaFromState(state);
-		//TODO - flatten
-		EnumHoneyComb honeyComb = EnumHoneyComb.get(minMeta);
+		EnumHoneyComb honeyComb = type;
 		if (tintIndex == 1) {
 			return honeyComb.primaryColor;
 		} else {
 			return honeyComb.secondaryColor;
 		}
 	}
-
-	//TODO flatten
-//	@OnlyIn(Dist.CLIENT)
-//	@Override
-//	public void registerStateMapper() {
-//		ModelLoader.setCustomStateMapper(this, new HoneyCombStateMapper());
-//	}
-
-	private static class HoneyCombPredicate implements Predicate<EnumHoneyComb> {
-		private final int minMeta;
-		private final int maxMeta;
-
-		public HoneyCombPredicate(int blockNumber, int variantsPerBlock) {
-			this.minMeta = blockNumber * variantsPerBlock;
-			this.maxMeta = minMeta + variantsPerBlock - 1;
-		}
-
-		@Override
-		public boolean apply(@Nullable EnumHoneyComb honeyComb) {
-			return honeyComb != null && honeyComb.ordinal() >= minMeta && honeyComb.ordinal() <= maxMeta;
-		}
-	}
-
-	//TODO flatten
-//	@OnlyIn(Dist.CLIENT)
-//	private static class HoneyCombStateMapper extends StateMapperBase {
-//
-//		@Override
-//		protected ModelResourceLocation getModelResourceLocation(BlockState state) {
-//			return new ModelResourceLocation(Constants.MOD_ID + ":bee_combs", "normal");
-//		}
-//
-//	}
 }

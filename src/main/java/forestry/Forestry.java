@@ -28,6 +28,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
@@ -49,6 +50,11 @@ import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.NetworkHandler;
 import forestry.core.network.PacketHandlerServer;
+import forestry.core.proxy.Proxies;
+import forestry.core.proxy.ProxyClient;
+import forestry.core.proxy.ProxyCommon;
+import forestry.core.proxy.ProxyRender;
+import forestry.core.proxy.ProxyRenderClient;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
 //import forestry.plugins.ForestryCompatPlugins;
@@ -105,7 +111,7 @@ public class Forestry {
 		moduleManager.registerContainers(new ForestryModules());//TODO compat, new ForestryCompatPlugins());
 		ModuleManager.runSetup();
 		NetworkHandler networkHandler = new NetworkHandler();
-		//		DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
+//				DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
 		// Register the setup method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		// Register the enqueueIMC method for modloading
@@ -116,6 +122,9 @@ public class Forestry {
 		//		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 		FMLJavaModLoadingContext.get().getModEventBus().register(TickHandlerCoreServer.class);    //TODO - correct?
 		MinecraftForge.EVENT_BUS.register(this);
+		//TODO - I think this is how it works
+		Proxies.render = DistExecutor.runForDist(() -> () -> new ProxyRenderClient(), () -> () -> new ProxyRender());
+		Proxies.common = DistExecutor.runForDist(() -> () -> new ProxyClient(), () -> () -> new ProxyCommon());
 	}
 
 	@Nullable
@@ -134,7 +143,7 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 		MinecraftForge.EVENT_BUS.register(Config.class);
-		//		Proxies.common.registerEventHandlers(); TODO DistExecutor
+				Proxies.common.registerEventHandlers();
 		configFolder = new File("."); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - DistExecutor
 		Config.load(Dist.DEDICATED_SERVER);
@@ -147,6 +156,7 @@ public class Forestry {
 
 		//TODO - DistExecutor
 		ModuleManager.getInternalHandler().runPreInit(Dist.DEDICATED_SERVER);
+		Proxies.render.registerItemAndBlockColors();
 		//TODO put these here for now
 		ModuleManager.getInternalHandler().runInit();
 		ModuleManager.getInternalHandler().runPostInit();
@@ -164,7 +174,7 @@ public class Forestry {
 
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event) {
-			ModuleManager.internalHandler.registerItems();
+			ModuleManager.getInternalHandler().registerItems();
 
 			ModuleManager.getInternalHandler().runRegisterBackpacksAndCrates();
 		}
@@ -174,7 +184,7 @@ public class Forestry {
 	//client
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
-		//		Proxies.render.registerModels(); TODO DistExecutor
+				Proxies.render.registerModels();
 	}
 
 	//split
@@ -186,7 +196,6 @@ public class Forestry {
 	//
 	//		ModuleManager.getInternalHandler().runInit();
 	//
-	//		Proxies.render.registerItemAndBlockColors();
 	//		AdvancementManager.registerTriggers();
 	//	}
 	//

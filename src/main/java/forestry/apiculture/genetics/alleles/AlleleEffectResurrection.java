@@ -79,9 +79,9 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		return list;
 	}
 
-	private final List<Resurrectable<?>> resurrectables;
+	private final List<Resurrectable<? extends MobEntity>> resurrectables;
 
-	public AlleleEffectResurrection(String name, List<Resurrectable<?>> resurrectables) {
+	public AlleleEffectResurrection(String name, List<Resurrectable<? extends MobEntity>> resurrectables) {
 		super(name, true, 40, true, true);
 		this.resurrectables = resurrectables;
 	}
@@ -110,7 +110,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		}
 
 		ItemStack contained = entity.getItem();
-		for (Resurrectable<?> entry : resurrectables) {
+		for (Resurrectable<? extends MobEntity> entry : resurrectables) {
 			if (ItemStackUtil.isIdenticalItem(entry.res, contained)) {
 				if(entry.spawnAndTransform(entity)) {
 					contained.shrink(1);

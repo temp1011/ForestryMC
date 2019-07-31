@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -68,7 +71,7 @@ public class ItemRegistryCore extends ItemRegistry {
 	/* Soldering */
 	public final ItemSolderingIron solderingIron;
 	public final ItemCircuitBoard circuitboards;
-	public final ItemElectronTube tubes;
+	public final Map<EnumElectronTube, ItemElectronTube> electronTubes = new EnumMap<>(EnumElectronTube.class);
 
 	/* Armor */
 	public final ItemArmorNaturalist spectacles;
@@ -88,12 +91,12 @@ public class ItemRegistryCore extends ItemRegistry {
 	public final ItemForestry phosphor;
 
 	/* Misc */
-	public final ItemCraftingMaterial craftingMaterial;
+	public final Map<EnumCraftingMaterial, ItemCraftingMaterial> craftingMaterials = new EnumMap<>(EnumCraftingMaterial.class);
 	public final ItemForestry stickImpregnated;
 	public final ItemForestry woodPulp;
 	public final ItemForestry beeswax;
 	public final ItemForestry refractoryWax;
-	public final ItemFruit fruits;
+	public final Map<ItemFruit.EnumFruit, ItemFruit> fruits = new EnumMap<>(ItemFruit.EnumFruit.class);
 
 	public ItemRegistryCore() {
 		compost = registerItem(new ItemForestry(), "fertilizer_bio");
@@ -118,7 +121,11 @@ public class ItemRegistryCore extends ItemRegistry {
 		impregnatedCasing = registerItem(new ItemForestry(), "impregnated_casing");
 		flexibleCasing = registerItem(new ItemForestry(), "flexible_casing");
 
-		craftingMaterial = registerItem(new ItemCraftingMaterial(), "crafting_material");
+		for(EnumCraftingMaterial type: EnumCraftingMaterial.VALUES) {
+			ItemCraftingMaterial item = new ItemCraftingMaterial(type);
+			registerItem(item, type.getName());
+			craftingMaterials.put(type, item);
+		}
 
 		spectacles = registerItem(new ItemArmorNaturalist(), "naturalist_helmet");
 
@@ -152,7 +159,11 @@ public class ItemRegistryCore extends ItemRegistry {
 //		solderingIron.setFull3D(); TODO
 		registerItem(solderingIron, "soldering_iron");
 
-		tubes = registerItem(new ItemElectronTube(), "thermionic_tubes");
+		for (EnumElectronTube def : EnumElectronTube.VALUES) {
+			ItemElectronTube tube = new ItemElectronTube(def);
+			registerItem(tube, "electron_tube_" + def.getUid());
+			electronTubes.put(def, tube);
+		}	//TODO tags?
 
 		// / CARTONS
 		carton = registerItem(new ItemForestry(), "carton");
@@ -201,12 +212,24 @@ public class ItemRegistryCore extends ItemRegistry {
 		refractoryWax = registerItem(new ItemForestry(), "refractory_wax");
 
 		// FRUITS
-		fruits = registerItem(new ItemFruit(), "fruits");
 		for (ItemFruit.EnumFruit def : ItemFruit.EnumFruit.values()) {
-//			ItemStack fruit = new ItemStack(fruits, 1, def.ordinal());
-//			OreDictionary.registerOre(def.getOreDict(), fruit);
-//			OreDictionary.registerOre(OreDictUtil.FRUIT_FORESTRY, fruit);
-		}
+			ItemFruit fruit = new ItemFruit(def);
+			registerItem(fruit, "fruit_" + def.getName());
+			fruits.put(def, fruit);
+		}	//TODO tags
+	}
+
+	public ItemStack getCraftingMaterial(EnumCraftingMaterial type, int amount) {
+		return new ItemStack(craftingMaterials.get(type), amount);
+	}
+
+
+	public ItemStack getElectronTube(EnumElectronTube type, int amount) {
+		return new ItemStack(electronTubes.get(type), amount);
+	}
+
+	public ItemStack getFruit(ItemFruit.EnumFruit type, int amount) {
+		return new ItemStack(fruits.get(type), amount);
 	}
 
 }

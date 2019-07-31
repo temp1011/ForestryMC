@@ -19,6 +19,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.models.BlockModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.farming.ModuleFarming;
+import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.models.ModelFarmBlock;
 
 @SuppressWarnings("unused")
@@ -29,6 +30,6 @@ public class ProxyFarmingClient extends ProxyFarming {
 	public void initializeModels() {
 		ModelManager.getInstance().registerCustomBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:ffarm"),
 			new ModelResourceLocation("forestry:ffarm", "inventory"), new ModelFarmBlock(),
-			ModuleFarming.getBlocks().farm));
+			ModuleFarming.getBlocks().farms.get(EnumFarmBlockType.PLAIN)));	//TODO need to register all of them here?
 	}
 }

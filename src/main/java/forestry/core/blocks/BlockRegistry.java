@@ -33,13 +33,13 @@ public abstract class BlockRegistry {
 //		block.setTranslationKey("for." + name);
 		block.setRegistryName(name);
 		ForgeRegistries.BLOCKS.register(block);
-//		Proxies.common.registerBlock(block); TODO distexecutor
+		Proxies.common.registerBlock(block);
 
 
 		if (itemBlock != null) {
 			itemBlock.setRegistryName(name);
 			ForgeRegistries.ITEMS.register(itemBlock);
-//			Proxies.common.registerItem(itemBlock);	TODO distexecutor
+			Proxies.common.registerItem(itemBlock);
 		}
 	}
 

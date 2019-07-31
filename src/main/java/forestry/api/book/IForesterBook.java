@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * IForesterBook is the interface that the forestry guide book class implements.
  * <p>
- * You can get the current instance of the guide book from {@link IBookLoader#loadBook()}.
+ * You can getComb the current instance of the guide book from {@link IBookLoader#loadBook()}.
  */
 @OnlyIn(Dist.CLIENT)
 public interface IForesterBook {

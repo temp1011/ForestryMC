@@ -41,6 +41,7 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.IHiveTile;
+import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
@@ -50,26 +51,18 @@ import forestry.apiculture.tiles.TileHive;
 import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.tiles.TileUtil;
 
-public class BlockBeeHives extends ContainerBlock implements IItemModelRegister, IBlockWithMeta {
+public class BlockBeeHive extends ContainerBlock {
 	private static final EnumProperty<HiveType> HIVE_TYPES = EnumProperty.create("hive", HiveType.class);
 
-	public BlockBeeHives() {
+	private final HiveType type;
+
+	public BlockBeeHive(HiveType type) {
 		super(Properties.create(MaterialBeehive.BEEHIVE_WORLD)
 				.lightValue((int) (0.4f * 15))    //TODO - correct?
 				.hardnessAndResistance(2.5f));
 		//		setCreativeTab(ItemGroups.tabApiculture); TODO done in item
 		//		setHarvestLevel("scoop", 0); TODO harvest level, addToolType in item?
-		setDefaultState(this.getStateContainer().getBaseState().with(HIVE_TYPES, HiveType.FOREST));
-	}
-
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
-		builder.add(HIVE_TYPES);
-	}
-
-	public BlockState getStateForType(HiveType type) {
-		return getDefaultState().with(HIVE_TYPES, type);
+		this.type = type;
 	}
 
 	@Override
@@ -89,12 +82,20 @@ public class BlockBeeHives extends ContainerBlock implements IItemModelRegister,
 		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onBroken(world, pos, player, canHarvest));
 	}
 
-	//TODO loot table drops things
-	//	@Override
+	private List<IHiveDrop> getDropsForHive() {
+		String hiveName = type.getHiveUid();
+		if (hiveName.equals(IHiveRegistry.HiveType.SWARM.getHiveUid())) {
+			return Collections.emptyList();
+		}
+		return ModuleApiculture.getHiveRegistry().getDrops(hiveName);
+	}
+
+	//TODO loot table drops things. But I need this here I think.
+//		@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
 		Random random = world instanceof World ? ((World) world).rand : RANDOM;
 
-		List<IHiveDrop> hiveDrops = getDropsForHive(0);//TODO flatten getMetaFromState(state));
+		List<IHiveDrop> hiveDrops = getDropsForHive();
 		Collections.shuffle(hiveDrops);
 
 		// Grab a princess
@@ -137,58 +138,13 @@ public class BlockBeeHives extends ContainerBlock implements IItemModelRegister,
 		}
 	}
 
-	// / CREATIVE INVENTORY
-	//	@Override
-	//	public int damageDropped(BlockState state) {
-	//		return getMetaFromState(state);
-	//	}
-
-	private static List<IHiveDrop> getDropsForHive(int meta) {
-		String hiveName = getHiveNameForMeta(meta);
-		if (hiveName == null || hiveName.equals(HiveType.SWARM.getHiveUid())) {
-			return Collections.emptyList();
-		}
-		return ModuleApiculture.getHiveRegistry().getDrops(hiveName);
-	}
-
-	@Nullable
-	private static String getHiveNameForMeta(int meta) {
-		if (meta < 0 || meta >= HiveType.VALUES.length) {
-			return null;
-		}
-		return HiveType.VALUES[meta].getHiveUid();
-	}
-
-	public static HiveType getHiveType(BlockState state) {
-		return state.get(HIVE_TYPES);
-	}
-
-	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
-		for (BlockState blockState : this.getStateContainer().getValidStates()) {
-			if (getHiveType(blockState) != HiveType.SWARM) {
-				list.add(new ItemStack(this, 1));//TODO flatten , meta));
-			}
-		}
-	}
-
-	/* ITEM MODELS */
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerModel(Item item, IModelManager manager) {
-		for (HiveType hiveType : HiveType.VALUES) {
-			manager.registerItemModel(item, hiveType.getMeta(), "beehives/" + hiveType.getName());
-		}
+	public HiveType getType() {
+		return type;
 	}
 
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {
 		return BlockRenderType.MODEL;
-	}
-
-	@Override
-	public String getNameFromMeta(int meta) {
-		return HiveType.VALUES[meta].getName();
 	}
 
 	@Override

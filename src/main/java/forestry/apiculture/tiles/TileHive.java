@@ -61,7 +61,7 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.genetics.IAllele;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.WorldgenBeekeepingLogic;
-import forestry.apiculture.blocks.BlockBeeHives;
+import forestry.apiculture.blocks.BlockBeeHive;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.core.config.Config;
@@ -166,8 +166,8 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 		if (world.isBlockLoaded(pos)) {
 			BlockState blockState = world.getBlockState(pos);
 			Block block = blockState.getBlock();
-			if (block instanceof BlockBeeHives) {
-				IHiveRegistry.HiveType hiveType = BlockBeeHives.getHiveType(blockState);
+			if (block instanceof BlockBeeHive) {
+				IHiveRegistry.HiveType hiveType = ((BlockBeeHive) block).getType();
 				String speciesUid = hiveType.getSpeciesUid();
 				IAllele[] template = BeeManager.beeRoot.getTemplate(speciesUid);
 				if (template != null) {

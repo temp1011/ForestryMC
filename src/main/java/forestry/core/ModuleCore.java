@@ -57,6 +57,7 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleRegistry;
+import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.loot.SetSpeciesNBT;
 import forestry.core.models.ModelManager;
@@ -155,8 +156,7 @@ public class ModuleCore extends BlankForestryModule {
 
 		ForestryModEnvWarningCallable.register();
 
-		//TODO distexecutor
-//		Proxies.render.initRendering();
+		Proxies.render.initRendering();
 	}
 
 	@Override
@@ -259,13 +259,13 @@ public class ModuleCore extends BlankForestryModule {
 			// Camouflaged Paneling
 			FluidStack biomass = Fluids.BIOMASS.getFluid(150);
 			if (biomass != null) {
-				RecipeManagers.squeezerManager.addRecipe(8, items.craftingMaterial.getCamouflagedPaneling(1), biomass);
+				RecipeManagers.squeezerManager.addRecipe(8, items.getCraftingMaterial(EnumCraftingMaterial.CAMOUFLAGED_PANELING, 1), biomass);
 			}
 		}
 		// alternate recipes
 		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(
-					items.craftingMaterial.getSilkWisp(), 0.15f
+					items.getCraftingMaterial(EnumCraftingMaterial.SILK_WISP, 1), 0.15f
 			));
 		}
 

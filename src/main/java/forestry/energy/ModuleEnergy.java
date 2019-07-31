@@ -14,11 +14,14 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
+import net.minecraftforge.fml.DistExecutor;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.energy.blocks.BlockRegistryEnergy;
 import forestry.energy.proxy.ProxyEnergy;
+import forestry.energy.proxy.ProxyEnergyClient;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
@@ -26,12 +29,16 @@ import forestry.modules.ForestryModuleUids;
 public class ModuleEnergy extends BlankForestryModule {
 
 	@SuppressWarnings("NullableProblems")
-//	@SidedProxy(clientSide = "forestry.energy.proxy.ProxyEnergyClient", serverSide = "forestry.energy.proxy.ProxyEnergy")
-	//TODO - DistExecutor
 	public static ProxyEnergy proxy;
 
 	@Nullable
 	public static BlockRegistryEnergy blocks;
+
+	//TODO do constructors work with annotation scanning?
+	public ModuleEnergy() {
+		//set up proxies as early as possible
+		proxy = DistExecutor.runForDist(() -> () -> new ProxyEnergyClient(), () -> () -> new ProxyEnergy());
+	}
 
 	public static BlockRegistryEnergy getBlocks() {
 		Preconditions.checkNotNull(blocks);

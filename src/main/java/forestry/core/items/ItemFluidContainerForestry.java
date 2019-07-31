@@ -196,11 +196,10 @@ public class ItemFluidContainerForestry extends ItemForestry {
 			}
 		} else {
 			if (Config.CapsuleFluidPickup) {
-				RayTraceResult target = this.rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
+				RayTraceResult target = rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
 				if (target.getType() != RayTraceResult.Type.BLOCK) {
 					return ActionResult.newResult(ActionResultType.PASS, heldItem);
 				}
-				//TODO - I believe this is safe if  the type is BLOCK
 				BlockRayTraceResult blockTarget = (BlockRayTraceResult) target;
 				ItemStack singleBucket = heldItem.copy();
 				singleBucket.setCount(1);

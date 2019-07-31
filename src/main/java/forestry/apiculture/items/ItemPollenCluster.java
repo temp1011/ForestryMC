@@ -16,11 +16,11 @@ import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemOverlay;
 
 public class ItemPollenCluster extends ItemOverlay {
-	public ItemPollenCluster() {
-		super(ItemGroups.tabApiculture, EnumPollenCluster.VALUES);
-	}
 
-	public ItemStack get(EnumPollenCluster pollenCluster, int amount) {
-		return new ItemStack(this, amount);//TODO flatten, pollenCluster.ordinal());
+	private final EnumPollenCluster type;
+
+	public ItemPollenCluster(EnumPollenCluster type) {
+		super(ItemGroups.tabApiculture, EnumPollenCluster.VALUES);
+		this.type = type;
 	}
 }
