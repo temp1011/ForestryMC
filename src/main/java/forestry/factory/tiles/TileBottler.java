@@ -48,6 +48,7 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
+import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerBottler;
 import forestry.factory.gui.GuiBottler;
 import forestry.factory.inventory.InventoryBottler;
@@ -71,7 +72,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	public boolean isFillRecipe;
 
 	public TileBottler() {
-		super(1100, 4000);
+		super(ModuleFactory.getTiles().bottler, 1100, 4000);
 
 		setInternalInventory(new InventoryBottler(this));
 

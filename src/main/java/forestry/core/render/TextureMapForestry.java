@@ -49,8 +49,8 @@ public class TextureMapForestry extends AtlasTexture {
 	public void loadTextureAtlas(IResourceManager resourceManager) {
 		int i = Minecraft.getGLMaximumTextureSize();
 		Stitcher stitcher = new Stitcher(i, i, 0);	//TODO check args correct
-		this.mapUploadedSprites.clear();	//TODO - needs AT
-		this.listAnimatedSprites.clear();	//TODO - needs AT
+		this.mapUploadedSprites.clear();
+		this.listAnimatedSprites.clear();
 
 //		ProgressManager.ProgressBar bar = ProgressManager.push("Texture stitching", this.mapRegisteredSprites.size());
 

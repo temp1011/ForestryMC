@@ -95,6 +95,12 @@ public class InternalModuleHandler {
 		}
 	}
 
+	public void registerTileEntities() {
+		for(IForestryModule module : modules) {
+			module.registerTiles();
+		}
+	}
+
 	public void runPreInit(Dist side) {
 		stage = Stage.PRE_INIT;
 		for (BlankForestryModule module : modules) {

@@ -55,8 +55,8 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	// CLIENT
 	private int breedingProgressPercent = 0;
 
-	protected TileBeeHousingBase(String hintKey) {
-		super(TileEntityType.CHEST);	//TODO tileentitytypes
+	protected TileBeeHousingBase(TileEntityType<?> type, String hintKey) {
+		super(type);
 		this.hintKey = hintKey;
 		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 

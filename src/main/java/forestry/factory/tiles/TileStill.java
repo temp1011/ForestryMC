@@ -42,6 +42,7 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
+import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerStill;
 import forestry.factory.gui.GuiStill;
 import forestry.factory.inventory.InventoryStill;
@@ -60,7 +61,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	private FluidStack bufferedLiquid;
 
 	public TileStill() {
-		super(1100, 8000);
+		super(ModuleFactory.getTiles().still, 1100, 8000);
 		setInternalInventory(new InventoryStill(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, false);
 		resourceTank.setFilters(StillRecipeManager.recipeFluidInputs);

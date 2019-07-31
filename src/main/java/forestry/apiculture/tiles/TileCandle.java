@@ -20,12 +20,15 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.apiculture.ModuleApiculture;
+
 public class TileCandle extends TileEntity {
 	private int colour;
 	private boolean lit;
 
-	public TileCandle(TileEntityType<?> tileEntityTypeIn) {
-		super(tileEntityTypeIn);
+	public TileCandle() {
+		super(ModuleApiculture.getTiles().candle);
 	}
 
 	@Override

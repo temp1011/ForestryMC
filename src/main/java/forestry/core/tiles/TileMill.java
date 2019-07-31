@@ -20,6 +20,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.network.PacketBufferForestry;
 
+//TODO - move to factory?
 public abstract class TileMill extends TileBase {
 
 	protected float speed;
@@ -27,8 +28,8 @@ public abstract class TileMill extends TileBase {
 	public int charge = 0;
 	public float progress;
 
-	protected TileMill() {
-		super(TileEntityType.DISPENSER);	//TODO tileentitytypes
+	protected TileMill(TileEntityType<?> type) {
+		super(type);
 		speed = 0.01F;
 	}
 

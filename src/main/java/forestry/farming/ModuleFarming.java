@@ -33,6 +33,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import net.minecraftforge.fml.DistExecutor;
+
 import forestry.Forestry;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IFruitProvider;
@@ -82,26 +84,41 @@ import forestry.farming.logic.farmables.FarmableStacked;
 import forestry.farming.logic.farmables.FarmableVanillaMushroom;
 import forestry.farming.logic.farmables.FarmableVanillaSapling;
 import forestry.farming.proxy.ProxyFarming;
+import forestry.farming.proxy.ProxyFarmingClient;
 import forestry.farming.tiles.TileFarmControl;
 import forestry.farming.tiles.TileFarmGearbox;
 import forestry.farming.tiles.TileFarmHatch;
 import forestry.farming.tiles.TileFarmPlain;
 import forestry.farming.tiles.TileFarmValve;
+import forestry.farming.tiles.TileRegistryFarming;
 import forestry.farming.triggers.FarmingTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
+import afu.org.checkerframework.checker.oigj.qual.O;
+
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.farming.description")
 public class ModuleFarming extends BlankForestryModule {
 
 	@SuppressWarnings("NullableProblems")
-	//TODO - distexecutor
-//	@SidedProxy(clientSide = "forestry.farming.proxy.ProxyFarmingClient", serverSide = "forestry.farming.proxy.ProxyFarming")
 	public static ProxyFarming proxy;
 
 	@Nullable
 	private static BlockRegistryFarming blocks;
+	@Nullable
+	private static TileRegistryFarming tiles;
+
+	public ModuleFarming() {
+		proxy = DistExecutor.runForDist(() -> () -> new ProxyFarmingClient(), () -> () -> new ProxyFarming());
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+
+	public static TileRegistryFarming getTiles() {
+		Preconditions.checkNotNull(tiles);
+		return tiles;
+	}
 
 	public static BlockRegistryFarming getBlocks() {
 		Preconditions.checkNotNull(blocks);
@@ -124,9 +141,13 @@ public class ModuleFarming extends BlankForestryModule {
 	}
 
 	@Override
+	public void registerTiles() {
+		tiles = new TileRegistryFarming();
+	}
+
+	@Override
 	public void preInit() {
-		//TODO ordering issues
-//		ItemRegistryCore coreItems = ModuleCore.getItems();
+		ItemRegistryCore coreItems = ModuleCore.getItems();
 		BlockRegistryFarming blocks = getBlocks();
 
 		MinecraftForge.EVENT_BUS.register(this);
@@ -161,10 +182,9 @@ public class ModuleFarming extends BlankForestryModule {
 
 		//Forestry fertilizer
 		//TODO - tags
-//		registry.registerFertilizer(new ItemStack(coreItems.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
+		registry.registerFertilizer(new ItemStack(coreItems.fertilizerCompound), 500);
 
-		//TODO distexecutor
-//		proxy.initializeModels();
+		proxy.initializeModels();
 
 		// Layouts
 		ICircuitLayout layoutManaged = new CircuitLayout("farms.managed", CircuitSocketType.FARM);
@@ -186,12 +206,6 @@ public class ModuleFarming extends BlankForestryModule {
 		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
 		FarmRegistry.getInstance().loadConfig(config);
 		config.save();
-
-		TileUtil.registerTile(TileFarmPlain.class, "farm");
-		TileUtil.registerTile(TileFarmGearbox.class, "farm_gearbox");
-		TileUtil.registerTile(TileFarmHatch.class, "farm_hatch");
-		TileUtil.registerTile(TileFarmValve.class, "farm_valve");
-		TileUtil.registerTile(TileFarmControl.class, "farm_control");
 
 		IFarmRegistry registry = FarmRegistry.getInstance();
 		BlockRegistryCore coreBlocks = ModuleCore.getBlocks();
@@ -334,7 +348,6 @@ public class ModuleFarming extends BlankForestryModule {
 		//TODO - tag
 	}
 
-	//TODO - register events
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {

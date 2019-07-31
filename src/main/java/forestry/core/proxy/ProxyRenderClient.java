@@ -18,6 +18,8 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelBakeEvent;
+
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
@@ -85,8 +87,8 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void registerModels() {
-		ModelManager.getInstance().registerModels();
+	public void registerModels(ModelBakeEvent event) {
+		ModelManager.getInstance().registerModels(event);
 	}
 
 	@Override

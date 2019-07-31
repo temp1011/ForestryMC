@@ -63,6 +63,10 @@ public interface IForestryModule {
 
 	}
 
+	default void registerTiles() {
+
+	}
+
 	/**
 	 * Must be called by the mod that registers the container.
 	 */

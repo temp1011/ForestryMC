@@ -42,8 +42,8 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	public float prevLidAngle;
 	private int numPlayersUsing;
 
-	public TileNaturalistChest(ISpeciesRoot speciesRoot) {
-		super(TileEntityType.DISPENSER);	//TODO tilentitytypes
+	public TileNaturalistChest(TileEntityType type, ISpeciesRoot speciesRoot) {
+		super(type);
 		this.speciesRoot = speciesRoot;
 		setInternalInventory(new InventoryNaturalistChest(this, speciesRoot));
 	}

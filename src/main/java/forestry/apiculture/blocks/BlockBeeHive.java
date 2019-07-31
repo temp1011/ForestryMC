@@ -52,7 +52,6 @@ import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.tiles.TileUtil;
 
 public class BlockBeeHive extends ContainerBlock {
-	private static final EnumProperty<HiveType> HIVE_TYPES = EnumProperty.create("hive", HiveType.class);
 
 	private final HiveType type;
 
@@ -65,7 +64,7 @@ public class BlockBeeHive extends ContainerBlock {
 		this.type = type;
 	}
 
-	@Override
+	@Override	//TODO remove
 	public TileEntity createNewTileEntity(IBlockReader world) {
 		return new TileHive();
 	}

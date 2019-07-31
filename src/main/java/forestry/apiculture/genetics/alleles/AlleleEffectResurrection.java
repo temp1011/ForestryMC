@@ -66,7 +66,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		return list;
 	}
 
-	public static List<Resurrectable<?>> getResurrectionList() {
+	public static List<Resurrectable<? extends MobEntity>> getResurrectionList() {
 		ArrayList<Resurrectable<?>> list = new ArrayList<>();
 		list.add(new Resurrectable<>(new ItemStack(Items.GUNPOWDER), EntityType.CREEPER));
 		list.add(new Resurrectable<>(new ItemStack(Items.ENDER_PEARL), EntityType.ENDERMAN));

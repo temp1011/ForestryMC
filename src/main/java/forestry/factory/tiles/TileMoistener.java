@@ -49,6 +49,7 @@ import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerMoistener;
 import forestry.factory.gui.GuiMoistener;
 import forestry.factory.inventory.InventoryMoistener;
@@ -70,7 +71,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	private ItemStack pendingProduct;
 
 	public TileMoistener() {
-		super(TileEntityType.DISPENSER);	//TODO tileentitytypes
+		super(ModuleFactory.getTiles().moistener);
 		setInternalInventory(new InventoryMoistener(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(/* TODO fluids FluidRegistry.WATER*/);
 		tankManager = new TankManager(this, resourceTank);

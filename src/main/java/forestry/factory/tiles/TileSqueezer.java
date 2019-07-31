@@ -49,6 +49,7 @@ import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.ItemStackUtil;
+import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerSqueezer;
 import forestry.factory.gui.GuiSqueezer;
 import forestry.factory.inventory.InventorySqueezer;
@@ -68,7 +69,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	private ISqueezerRecipe currentRecipe;
 
 	public TileSqueezer() {
-		super(1100, Constants.MACHINE_MAX_ENERGY);
+		super(ModuleFactory.getTiles().squeezer, 1100, Constants.MACHINE_MAX_ENERGY);
 		this.inventory = new InventorySqueezer(this);
 		setInternalInventory(this.inventory);
 		this.productTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);

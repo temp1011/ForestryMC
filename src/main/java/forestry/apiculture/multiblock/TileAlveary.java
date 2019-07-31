@@ -55,14 +55,14 @@ import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
 
-public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised {
+public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised {
 	private final String unlocalizedTitle;
 
-	protected TileAlveary() {
+	public TileAlveary() {
 		this(BlockAlvearyType.PLAIN);
 	}
 
-	protected TileAlveary(BlockAlvearyType type) {
+	public TileAlveary(BlockAlvearyType type) {
 		super(new MultiblockLogicAlveary());
 		this.unlocalizedTitle = "tile.for.alveary." + type + ".name";
 	}

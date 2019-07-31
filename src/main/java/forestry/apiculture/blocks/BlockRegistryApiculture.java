@@ -32,7 +32,7 @@ public class BlockRegistryApiculture extends BlockRegistry {
 	public final BlockCandle candle;
 	public final BlockStump stump;
 	public final Map<EnumHoneyComb, BlockHoneyComb> beeCombs = new EnumMap<>(EnumHoneyComb.class);
-	private final Map<BlockAlvearyType, BlockAlveary> alvearyBlockMap = new EnumMap<>(BlockAlvearyType.class);
+	public final Map<BlockAlvearyType, BlockAlveary> alvearyBlockMap = new EnumMap<>(BlockAlvearyType.class);
 
 	public BlockRegistryApiculture() {
 		apiary = new BlockApiculture(BlockTypeApiculture.APIARY);

@@ -12,8 +12,8 @@ package forestry.core.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -34,18 +34,13 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 public abstract class TileUtil {
 
-	public static void registerTile(Class<? extends TileEntity> tileClass, String key) {
-//		ForgeRegistries.TILE_ENTITIES.register();	//TODO tileentitytype
-//		GameRegistry.registerTileEntity(tileClass, new ResourceLocation(Constants.MOD_ID, key));
-	}
-
 	public static boolean isUsableByPlayer(PlayerEntity player, TileEntity tile) {
 		BlockPos pos = tile.getPos();
 		World world = tile.getWorld();
 
 		return !tile.isRemoved() &&
-			getTile(world, pos) == tile &&
-			player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
+				getTile(world, pos) == tile &&
+				player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	/**
@@ -117,7 +112,7 @@ public abstract class TileUtil {
 
 
 		LazyOptional<IItemHandler> itemCap = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);
-		if(itemCap.isPresent()) {
+		if (itemCap.isPresent()) {
 			return itemCap.orElse(null);
 		}
 

@@ -74,6 +74,7 @@ import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.recipes.MoistenerRecipeManager;
 import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.recipes.StillRecipeManager;
+import forestry.factory.tiles.TileRegistryFactory;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -86,10 +87,17 @@ public class ModuleFactory extends BlankForestryModule {
 
 	@Nullable
 	private static BlockRegistryFactory blocks;
+	@Nullable
+	private static TileRegistryFactory tiles;
 
 	public static BlockRegistryFactory getBlocks() {
 		Preconditions.checkNotNull(blocks);
 		return blocks;
+	}
+
+	public static TileRegistryFactory getTiles() {
+		Preconditions.checkNotNull(tiles);
+		return tiles;
 	}
 
 	@Override
@@ -132,6 +140,11 @@ public class ModuleFactory extends BlankForestryModule {
 	@Override
 	public void registerBlocks() {
 		blocks = new BlockRegistryFactory();
+	}
+
+	@Override
+	public void registerTiles() {
+		tiles = new TileRegistryFactory();
 	}
 
 	@Override

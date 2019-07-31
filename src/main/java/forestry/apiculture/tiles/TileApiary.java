@@ -33,10 +33,12 @@ import forestry.api.apiculture.IHiveFrame;
 import forestry.apiculture.ApiaryBeeListener;
 import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
+import forestry.core.ModuleCore;
 
 //import buildcraft.api.statements.ITriggerExternal;
 
@@ -46,7 +48,7 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	private final InventoryApiary inventory = new InventoryApiary();
 
 	public TileApiary() {
-		super("apiary");
+		super(ModuleApiculture.getTiles().apiary, "apiary");
 		setInternalInventory(inventory);
 	}
 

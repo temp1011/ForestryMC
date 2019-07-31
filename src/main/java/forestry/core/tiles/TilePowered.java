@@ -54,8 +54,8 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	// the number of work ticks that this tile has had no power
 	private int noPowerTime = 0;
 
-	protected TilePowered(int maxTransfer, int capacity) {
-		super(TileEntityType.CHEST);	//TODO tileentitytype hierarchy
+	protected TilePowered(TileEntityType<?> type, int maxTransfer, int capacity) {
+		super(type);
 		this.energyManager = new EnergyManager(maxTransfer, capacity);
 		this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
 

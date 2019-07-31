@@ -19,9 +19,11 @@ import net.minecraftforge.fml.DistExecutor;
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
+import forestry.core.tiles.TileRegistryCore;
 import forestry.energy.blocks.BlockRegistryEnergy;
 import forestry.energy.proxy.ProxyEnergy;
 import forestry.energy.proxy.ProxyEnergyClient;
+import forestry.energy.tiles.TileRegistryEnergy;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
@@ -33,8 +35,9 @@ public class ModuleEnergy extends BlankForestryModule {
 
 	@Nullable
 	public static BlockRegistryEnergy blocks;
+	@Nullable
+	public static TileRegistryEnergy tiles;
 
-	//TODO do constructors work with annotation scanning?
 	public ModuleEnergy() {
 		//set up proxies as early as possible
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyEnergyClient(), () -> () -> new ProxyEnergy());
@@ -45,9 +48,19 @@ public class ModuleEnergy extends BlankForestryModule {
 		return blocks;
 	}
 
+	public static TileRegistryEnergy getTiles() {
+		Preconditions.checkNotNull(tiles);
+		return tiles;
+	}
+
 	@Override
 	public void registerBlocks() {
 		blocks = new BlockRegistryEnergy();
+	}
+
+	@Override
+	public void registerTiles() {
+		tiles = new TileRegistryEnergy();
 	}
 
 	@Override

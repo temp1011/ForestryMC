@@ -31,6 +31,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.EventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -69,6 +70,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManagerForestry;
+import forestry.core.tiles.TileRegistryCore;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.OreDictUtil;
@@ -76,14 +78,19 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
-//TODO - register event handlers
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
 //	public static final RootCommand rootCommand = new RootCommand();
 	@Nullable
-	public static ItemRegistryCore items;
+	private static ItemRegistryCore items;
 	@Nullable
 	private static BlockRegistryCore blocks;
+	@Nullable
+	private static TileRegistryCore tiles;
+
+	public ModuleCore() {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
 
 	public static ItemRegistryCore getItems() {
 		Preconditions.checkNotNull(items);
@@ -93,6 +100,11 @@ public class ModuleCore extends BlankForestryModule {
 	public static BlockRegistryCore getBlocks() {
 		Preconditions.checkNotNull(blocks);
 		return blocks;
+	}
+
+	public static TileRegistryCore getTiles() {
+		Preconditions.checkNotNull(tiles);
+		return tiles;
 	}
 
 	@Override
@@ -132,6 +144,11 @@ public class ModuleCore extends BlankForestryModule {
 	@Override
 	public void registerItems() {
 		items = new ItemRegistryCore();
+	}
+
+	@Override
+	public void registerTiles() {
+		tiles = new TileRegistryCore();
 	}
 
 	@Override

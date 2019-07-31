@@ -93,6 +93,7 @@ import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.apiculture.tiles.TileHive;
+import forestry.apiculture.tiles.TileRegistryApiculture;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescription;
@@ -131,6 +132,8 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Nullable
 	private static BlockRegistryApiculture blocks;
 	@Nullable
+	private static TileRegistryApiculture tiles;
+	@Nullable
 	private static HiveRegistry hiveRegistry;
 
 	public static String beekeepingMode = "NORMAL";
@@ -159,6 +162,11 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static BlockRegistryApiculture getBlocks() {
 		Preconditions.checkNotNull(blocks);
 		return blocks;
+	}
+
+	public static TileRegistryApiculture getTiles() {
+		Preconditions.checkNotNull(tiles);
+		return tiles;
 	}
 
 	public static HiveRegistry getHiveRegistry() {
@@ -211,6 +219,11 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public void registerItems() {
 		items = new ItemRegistryApiculture();
+	}
+
+	@Override
+	public void registerTiles() {
+		tiles = new TileRegistryApiculture();
 	}
 
 	@Override
@@ -299,16 +312,6 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		// Inducers for swarmer
 		BeeManager.inducers.put(items.royalJelly.getItemStack(), 10);
-
-		TileUtil.registerTile(TileAlvearyPlain.class, "alveary_plain");
-		TileUtil.registerTile(TileHive.class, "hive_wild");
-		TileUtil.registerTile(TileAlvearySwarmer.class, "alveary_swarmer");
-		TileUtil.registerTile(TileAlvearyHeater.class, "alveary_heater");
-		TileUtil.registerTile(TileAlvearyFan.class, "alveary_fan");
-		TileUtil.registerTile(TileAlvearyHygroregulator.class, "alveary_hygro");
-		TileUtil.registerTile(TileAlvearyStabiliser.class, "alveary_stabiliser");
-		TileUtil.registerTile(TileAlvearySieve.class, "alveary_sieve");
-		TileUtil.registerTile(TileCandle.class, "candle");
 
 		//TODO EntityType.MinecatyEntity or similar
 		ResourceLocation beeHouseCartResource = new ResourceLocation(Constants.MOD_ID, "cart.beehouse");

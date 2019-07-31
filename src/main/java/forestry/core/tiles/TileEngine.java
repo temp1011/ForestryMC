@@ -39,6 +39,7 @@ import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
 
+//TODO - move to energy module?
 public abstract class TileEngine extends TileBase implements IActivatable, IStreamableGui {
 	private static final int CANT_SEND_ENERGY_TIME = 20;
 
@@ -62,8 +63,8 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	protected final EnergyManager energyManager;
 	private final String hintKey;
 
-	protected TileEngine(String hintKey, int maxHeat, int maxEnergy) {
-		super(TileEntityType.BLAST_FURNACE);	//TODO tileentitytypes
+	protected TileEngine(TileEntityType<?> type, String hintKey, int maxHeat, int maxEnergy) {
+		super(type);
 		this.hintKey = hintKey;
 		this.maxHeat = maxHeat;
 		energyManager = new EnergyManager(2000, maxEnergy);

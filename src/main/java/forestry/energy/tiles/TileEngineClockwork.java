@@ -25,10 +25,13 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.DamageSourceForestry;
+import forestry.energy.ModuleEnergy;
 
 public class TileEngineClockwork extends TileEngine {
 
@@ -46,7 +49,7 @@ public class TileEngineClockwork extends TileEngine {
 	private short delay = 0;
 
 	public TileEngineClockwork() {
-		super("", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
+		super(ModuleEnergy.getTiles().clockworkEngine, "", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
 	}
 
 	@Override

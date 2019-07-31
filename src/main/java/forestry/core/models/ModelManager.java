@@ -144,7 +144,7 @@ public class ModelManager implements IModelManager {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void registerModels() {
+	public void registerModels(ModelBakeEvent event) {
 		for (IItemModelRegister itemModelRegister : itemModelRegisters) {
 			Item item = null;
 			if (itemModelRegister instanceof Block) {

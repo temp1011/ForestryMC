@@ -26,6 +26,7 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
 
@@ -36,7 +37,7 @@ public class TileBeeHouse extends TileBeeHousingBase {
 	private final InventoryBeeHousing beeInventory;
 
 	public TileBeeHouse() {
-		super("bee.house");
+		super(ModuleApiculture.getTiles().beeHouse, "bee.house");
 		this.beeListener = new DefaultBeeListener();
 
 		beeInventory = new InventoryBeeHousing(12);

@@ -20,8 +20,10 @@ import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntityType;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -175,13 +177,19 @@ public class Forestry {
 
 			ModuleManager.getInternalHandler().runRegisterBackpacksAndCrates();
 		}
+
+		@SubscribeEvent
+		public static void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event) {
+			ModuleManager.getInternalHandler().registerTileEntities();
+		}
+
 	}
 
 
 	//client
 	@SubscribeEvent
-	public void registerModels(ModelRegistryEvent event) {
-		Proxies.render.registerModels();
+	public void registerModels(ModelBakeEvent event) {
+		Proxies.render.registerModels(event);
 	}
 
 	//split

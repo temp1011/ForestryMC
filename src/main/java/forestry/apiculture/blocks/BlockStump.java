@@ -65,7 +65,7 @@ public class BlockStump extends TorchBlock implements IItemModelRegister {
 		if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
 			BlockState activatedState = ModuleApiculture.getBlocks().candle.getDefaultState().with(BlockCandle.STATE, BlockCandle.State.ON);
 			worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
-			TileCandle tc = new TileCandle(TileEntityType.DISPENSER);	//TODO constructors shouldn't take tileentitytypes anyway probably
+			TileCandle tc = new TileCandle();
 			tc.setColour(16777215); // default to white
 			tc.setLit(true);
 			worldIn.setTileEntity(pos, tc);

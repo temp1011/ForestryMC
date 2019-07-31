@@ -19,6 +19,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -64,7 +65,8 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 //	private BasicSink ic2EnergySink;
 
 	public TileEngineElectric() {
-		super("engine.tin", Constants.ENGINE_ELECTRIC_HEAT_MAX, 100000);
+		//TODO tileentitytypes
+		super(TileEntityType.BLAST_FURNACE, "engine.tin", Constants.ENGINE_ELECTRIC_HEAT_MAX, 100000);
 
 		setInternalInventory(new InventoryEngineElectric(this));
 
