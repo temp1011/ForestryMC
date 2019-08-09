@@ -17,6 +17,8 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.farming.ModuleFarming;
+
 /**
  * Base logic class for Multiblock-connected tile entities.
  * Most multiblock components should derive from this.
@@ -26,7 +28,7 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	private final T multiblockLogic;
 
 	public MultiblockTileEntityBase(T multiblockLogic) {
-		super(TileEntityType.DISPENSER);	//TODO tileentitytype
+		super(ModuleFarming.getTiles().plain);	//TODO tileentitytype?
 		this.multiblockLogic = multiblockLogic;
 	}
 

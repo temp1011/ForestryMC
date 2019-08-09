@@ -16,7 +16,7 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;

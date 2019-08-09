@@ -22,19 +22,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerChunkProvider;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.chunk.ServerChunkProvider;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.core.config.Config;
@@ -53,8 +52,8 @@ public class TickHandlerCoreServer {
 	}
 
 	@SubscribeEvent
-	public void onWorldTick(WorldTickEvent event) {
-		if (event.phase != Phase.END) {
+	public void onWorldTick(TickEvent.WorldTickEvent event) {
+		if (event.phase != TickEvent.Phase.END) {
 			return;
 		}
 

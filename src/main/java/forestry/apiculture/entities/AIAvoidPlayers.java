@@ -70,7 +70,7 @@ public class AIAvoidPlayers extends Goal {
 			return false;
 		}
 
-		path = pathNavigator.getPathToXYZ(randomTarget.x, randomTarget.y, randomTarget.z);
+		path = pathNavigator.func_225466_a(randomTarget.x, randomTarget.y, randomTarget.z, 0);	//TODO what does the 4th param mean?
 		return path != null;
 	}
 

@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 
 public interface ICircuitRegistry {
 

@@ -24,14 +24,15 @@ import net.minecraft.tileentity.TileEntityType;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
@@ -57,6 +58,8 @@ import forestry.core.proxy.ProxyClient;
 import forestry.core.proxy.ProxyCommon;
 import forestry.core.proxy.ProxyRender;
 import forestry.core.proxy.ProxyRenderClient;
+import forestry.core.render.RenderAnalyzer;
+import forestry.core.tiles.TileAnalyzer;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
 //import forestry.plugins.ForestryCompatPlugins;
@@ -121,12 +124,17 @@ public class Forestry {
 		// Register the processIMC method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMCMessages);
 		// Register the doClientStuff method for modloading
-		//		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+				FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientStuff);
 		FMLJavaModLoadingContext.get().getModEventBus().register(TickHandlerCoreServer.class);    //TODO - correct?
 		MinecraftForge.EVENT_BUS.register(this);
 		//TODO - I think this is how it works
 		Proxies.render = DistExecutor.runForDist(() -> () -> new ProxyRenderClient(), () -> () -> new ProxyRender());
 		Proxies.common = DistExecutor.runForDist(() -> () -> new ProxyClient(), () -> () -> new ProxyCommon());
+	}
+
+	public void clientStuff(FMLClientSetupEvent e) {
+		//TODO
+		ClientRegistry.bindTileEntitySpecialRenderer(TileAnalyzer.class, new RenderAnalyzer(Constants.TEXTURE_PATH_BLOCK + "/analyzer"));
 	}
 
 	@Nullable

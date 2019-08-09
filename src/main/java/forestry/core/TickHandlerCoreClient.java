@@ -14,12 +14,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import forestry.core.utils.GeneticsUtil;
@@ -32,7 +30,7 @@ public class TickHandlerCoreClient {
 	//TODO - register event handlers
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
-		if (event.phase == Phase.END) {
+		if (event.phase == TickEvent.Phase.END) {
 			Minecraft minecraft = Minecraft.getInstance();
 			if (minecraft != null) {
 				PlayerEntity player = minecraft.player;

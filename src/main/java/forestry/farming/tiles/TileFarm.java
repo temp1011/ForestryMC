@@ -12,6 +12,7 @@ package forestry.farming.tiles;
 
 import java.io.IOException;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -90,7 +91,7 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	public void setFarmBlockTexture(EnumFarmBlockTexture farmBlockTexture) {
 		if (this.farmBlockTexture != farmBlockTexture) {
 			this.farmBlockTexture = farmBlockTexture;
-			world.markForRerender(getPos());
+			Minecraft.getInstance().worldRenderer.markForRerender(getPos().getX(), getPos().getY(), getPos().getZ());	//TODO correct?
 		}
 	}
 

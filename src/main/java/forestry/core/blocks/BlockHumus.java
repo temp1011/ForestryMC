@@ -9,6 +9,7 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.LogBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -105,7 +106,10 @@ public class BlockHumus extends Block implements IItemModelRegister {
 		} else {
 			world.setBlockState(pos, blockState.with(DEGRADE, degrade), Constants.FLAG_BLOCK_SYNC);
 		}
-		world.markForRerender(pos);
+		//TODO
+		Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+
+		//		world.markForRerender(pos);
 	}
 
 	@Override

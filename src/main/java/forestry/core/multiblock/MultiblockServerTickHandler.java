@@ -1,8 +1,7 @@
 package forestry.core.multiblock;
 
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 /**
  * This is a generic multiblock tick handler. If you are using this code on your own,

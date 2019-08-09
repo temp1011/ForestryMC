@@ -23,7 +23,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ModelEscritoire extends Model {
 
-	//TODO - is RendererModel in the right place given entity package?????
 	//fields
 	private final RendererModel desk;
 	private final RendererModel standRB;
@@ -186,7 +185,7 @@ public class ModelEscritoire extends Model {
 		model.rotateAngleZ = z;
 	}
 
-	//TODO model rotations
+	//TODO model rotations. This method is now in EntityModel
 //	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
 		setRotation(desk, f + 0.0872665f, f1, f2);

@@ -77,7 +77,7 @@ public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
-		RenderAnalyzer renderAnalyzer = new RenderAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_");
+		RenderAnalyzer renderAnalyzer = new RenderAnalyzer(Constants.TEXTURE_PATH_BLOCK + "/analyzer");
 		machineProperties.setRenderer(renderAnalyzer);
 	}
 

@@ -33,7 +33,7 @@ import forestry.core.tiles.TileEscritoire;
 
 public class RenderEscritoire extends TileEntityRenderer<TileEscritoire> {
 
-	private static final ResourceLocation texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/escritoire.png");
+	private static final ResourceLocation texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/escritoire.png");
 	private final ModelEscritoire modelEscritoire = new ModelEscritoire();
 	@Nullable
 	private ItemEntity dummyEntityItem;

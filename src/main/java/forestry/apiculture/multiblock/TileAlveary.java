@@ -13,7 +13,9 @@ package forestry.apiculture.multiblock;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.Direction;
@@ -71,7 +73,9 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		// Re-render this block on the client
 		if (world.isRemote) {
-			this.world.markForRerender(getPos());
+			ClientWorld cworld = (ClientWorld) this.world;	//TODO safe?
+//			cworld.renderer.markForRerender(getPos());	TODO AT on worldRenderer?
+			Minecraft.getInstance().worldRenderer.markForRerender(getPos().getX(), getPos().getY(), getPos().getZ());
 		}
 		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO check third bool, false);
 	}
@@ -86,7 +90,10 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 	public void onMachineBroken() {
 		// Re-render this block on the client
 		if (world.isRemote) {
-			this.world.markForRerender(getPos());
+			//TODO
+			BlockPos pos = getPos();
+			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+//			this.world.markForRerender(getPos());
 		}
 		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO 3rd bool, false);
 		markDirty();

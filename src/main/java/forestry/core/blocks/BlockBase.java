@@ -34,6 +34,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -125,6 +126,16 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		} else {
 			return BlockRenderType.MODEL;
 		}
+	}
+
+	@Override
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
+
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+		return getDefinition().createTileEntity();
 	}
 
 

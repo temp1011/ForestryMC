@@ -12,8 +12,10 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -117,7 +119,10 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 		if (world != null) {
 			if (world.isRemote) {
-				world.markForRerender(getPos());
+				//TODO
+				BlockPos pos = getPos();
+				Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+//				world.markForRerender(getPos());
 			} else {
 				NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
 			}

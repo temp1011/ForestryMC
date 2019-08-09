@@ -30,12 +30,11 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleRegistry;

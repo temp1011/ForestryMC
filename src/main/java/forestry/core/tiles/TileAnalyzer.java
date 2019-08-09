@@ -13,6 +13,7 @@ package forestry.core.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -21,6 +22,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -173,7 +175,10 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public void handleItemStackForDisplay(ItemStack itemStack) {
 		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
 			individualOnDisplayClient = itemStack;
-			world.markForRerender(getPos());	//TODO - correct call?
+			//TODO
+			BlockPos pos = getPos();
+			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+//			world.markForRerender(getPos());
 		}
 	}
 

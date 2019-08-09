@@ -29,7 +29,7 @@ public class RenderNaturalistChest extends TileEntityRenderer<TileNaturalistChes
 	private final ResourceLocation texture;
 
 	public RenderNaturalistChest(String textureName) {
-		texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/" + textureName + ".png");
+		texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/" + textureName + ".png");
 	}
 
 	/**

@@ -27,6 +27,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -194,7 +195,9 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 			} else {
 				boolean dyed = tryDye(heldItem, isLit, tileCandle);
 				if (dyed) {
-					worldIn.markForRerender(pos);
+					//TODO
+					Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+//					worldIn.markForRerender(pos);
 					toggleLitState = false;
 					flag = true;
 				}
@@ -203,7 +206,9 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 
 		if (toggleLitState) {
 			tileCandle.setLit(!isLit);
-			worldIn.markForRerender(pos);
+			//TODO
+			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+//			worldIn.markForRerender(pos);
 			worldIn.getProfiler().startSection("checkLight");
 			worldIn.getChunkProvider().getLightManager().checkBlock(pos);
 			worldIn.getProfiler().endSection();

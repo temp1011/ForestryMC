@@ -12,6 +12,7 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -29,6 +30,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
+import forestry.core.ModuleCore;
 import forestry.core.gui.ContainerEscritoire;
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.inventory.InventoryAnalyzer;
@@ -46,7 +48,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	private ItemStack individualOnDisplayClient = ItemStack.EMPTY;
 
 	public TileEscritoire() {
-		super(TileEntityType.CHEST);	//TODO - tileEntityTypes
+		super(ModuleCore.getTiles().escritoire);
 		setInternalInventory(new InventoryEscritoire(this));
 	}
 
@@ -175,7 +177,9 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	public void handleItemStackForDisplay(ItemStack itemStack) {
 		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
 			individualOnDisplayClient = itemStack;
-			world.markForRerender(getPos());
+			//TODO
+			Minecraft.getInstance().worldRenderer.markForRerender(getPos().getX(), getPos().getY(), getPos().getZ());
+//			world.markForRerender(getPos());
 		}
 	}
 

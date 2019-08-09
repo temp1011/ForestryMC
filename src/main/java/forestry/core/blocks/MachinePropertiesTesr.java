@@ -59,7 +59,7 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 			ClientRegistry.bindTileEntitySpecialRenderer(getTeClass(), renderer);
 			Item item = Item.getItemFromBlock(block);
 			if (item != Items.AIR) {
-				//TODO - how to register
+				//TODO - how to register, possibly     ItemStackTileEntityRenderer getTileEntityItemStackRenderer(); now
 //				ForgeHooksClient.registerTESRItemStack(item, 0, getTeClass());
 			}
 		}
