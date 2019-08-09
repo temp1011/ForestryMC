@@ -23,7 +23,6 @@ import net.minecraftforge.common.crafting.IConditionSerializer;
 
 import forestry.api.core.ForestryAPI;
 
-@SuppressWarnings("unused")
 public class DisableRecipe implements IConditionSerializer
 {
 

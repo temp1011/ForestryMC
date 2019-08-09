@@ -21,10 +21,12 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -58,6 +60,7 @@ import forestry.core.proxy.ProxyClient;
 import forestry.core.proxy.ProxyCommon;
 import forestry.core.proxy.ProxyRender;
 import forestry.core.proxy.ProxyRenderClient;
+import forestry.core.recipes.DisableRecipe;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.modules.ForestryModules;
@@ -157,7 +160,7 @@ public class Forestry {
 		configFolder = new File("."); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - DistExecutor
 		Config.load(Dist.DEDICATED_SERVER);
-
+		CraftingHelper.register(new ResourceLocation(Constants.MOD_ID, "module"), new DisableRecipe());
 		ModuleManager.getInternalHandler().runSetup();
 
 		String gameMode = Config.gameMode;
