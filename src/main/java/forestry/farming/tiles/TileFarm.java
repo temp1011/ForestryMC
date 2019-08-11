@@ -13,12 +13,14 @@ package forestry.farming.tiles;
 import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -38,7 +40,6 @@ import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.ITitled;
 import forestry.farming.gui.ContainerFarm;
-import forestry.farming.gui.GuiFarm;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.multiblock.MultiblockLogicFarm;
 
@@ -169,13 +170,12 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiFarm(player, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerFarm(windowId, inv, this);
 	}
 
 	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerFarm(player.inventory, this, data);	//TODO windowid
+	public ITextComponent getDisplayName() {
+		return new TranslationTextComponent(this.getUnlocalizedTitle());
 	}
 }

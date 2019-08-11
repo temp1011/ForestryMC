@@ -11,6 +11,7 @@
 package forestry.energy.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -21,10 +22,10 @@ public class GuiGenerator extends GuiForestryTitled<ContainerGenerator> {
 
 	private final TileEuGenerator tile;
 
-	public GuiGenerator(PlayerInventory inventory, TileEuGenerator tile, int id) {
-		super(Constants.TEXTURE_PATH_GUI + "/generator.png", new ContainerGenerator(inventory, tile, id), inventory, tile);
+	public GuiGenerator(ContainerGenerator container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/generator.png", container, inventory, container.getTile());
 		widgetManager.add(new TankWidget(this.widgetManager, 49, 17, 0));
-		this.tile = tile;
+		this.tile = container.getTile();
 	}
 
 	@Override

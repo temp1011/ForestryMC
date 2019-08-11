@@ -14,8 +14,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.CompoundNBT;
@@ -27,9 +27,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.core.config.Constants;
@@ -45,7 +42,6 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
 import forestry.energy.gui.ContainerGenerator;
-import forestry.energy.gui.GuiGenerator;
 import forestry.energy.inventory.InventoryGenerator;
 //import forestry.plugins.ForestryCompatPlugins;
 
@@ -205,15 +201,9 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 //		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@Override
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiGenerator(player.inventory, this, data);	//TODO windowid
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerGenerator(player.inventory, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerGenerator(windowId, inv, this);
 	}
 
 	@Nonnull

@@ -12,18 +12,26 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.api.climate.IClimateListener;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.multiblock.TileAlveary;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.gui.ContainerTile;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.packets.PacketGuiUpdate;
+import forestry.core.tiles.TileUtil;
 
 public class ContainerAlveary extends ContainerTile<TileAlveary> {
 
-	public ContainerAlveary(PlayerInventory player, TileAlveary tile, int windowid) {	//TODO windowid
-		super(tile, player, 8, 108, windowid);
+	public static ContainerAlveary fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileAlveary tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlveary.class);
+		return new ContainerAlveary(windowId, inv, tile);	//TODO nullability.
+	}
+
+	public ContainerAlveary(int windowid, PlayerInventory player, TileAlveary tile) {
+		super(windowid, ModuleApiculture.getContainerTypes().ALVEARY, player, tile, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, false);
 
 		tile.getBeekeepingLogic().clearCachedValues();

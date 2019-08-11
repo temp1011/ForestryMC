@@ -12,6 +12,7 @@ package forestry.core.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
@@ -25,9 +26,9 @@ public abstract class ContainerSocketed<T extends TileEntity & ISocketable> exte
 
 	private final ContainerSocketedHelper<T> helper;
 
-	protected ContainerSocketed(T tile, PlayerInventory playerInventory, int xInv, int yInv, int id) {	//TODO windowid
-		super(tile, playerInventory, xInv, yInv, id);
-		this.helper = new ContainerSocketedHelper<>(tile);
+	protected ContainerSocketed(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+		super(windowId, type, playerInventory, tile, xInv, yInv);
+		this.helper = new ContainerSocketedHelper<>(this.tile);
 	}
 
 	@Override

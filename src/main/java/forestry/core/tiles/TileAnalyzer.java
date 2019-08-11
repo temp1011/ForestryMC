@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -45,7 +45,6 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.gui.ContainerAnalyzer;
-import forestry.core.gui.GuiAnalyzer;
 import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.PacketBufferForestry;
@@ -272,13 +271,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiAnalyzer(player.inventory, this,data);	//TODO windowid
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerAnalyzer(player.inventory, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerAnalyzer(windowId, player.inventory, this);
 	}
 }

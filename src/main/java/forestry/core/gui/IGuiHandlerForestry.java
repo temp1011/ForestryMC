@@ -10,5 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+@Deprecated //TODO I don't think this is needed any more.
 public interface IGuiHandlerForestry {
 }

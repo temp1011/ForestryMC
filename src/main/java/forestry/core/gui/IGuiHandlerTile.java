@@ -10,23 +10,19 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.ILocatable;
 
-public interface IGuiHandlerTile extends IGuiHandlerForestry, ILocatable {
-	@Nullable
-	@OnlyIn(Dist.CLIENT)
-	ContainerScreen getGui(PlayerEntity player, int data);
+public interface IGuiHandlerTile extends IGuiHandlerForestry, ILocatable, INamedContainerProvider {
+//	@Nullable
+//	Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player);
 
-	@Nullable
-	Container getContainer(PlayerEntity player, int data);
+//	//TODO inline this
+//	@Nullable
+//	@Override
+//	default Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+//		return getContainer(windowId, playerInventory, playerEntity);
+//	}
 }

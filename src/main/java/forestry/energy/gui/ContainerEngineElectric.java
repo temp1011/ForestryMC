@@ -11,17 +11,25 @@
 package forestry.energy.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.network.packets.PacketGuiUpdate;
+import forestry.core.tiles.TileUtil;
+import forestry.energy.ModuleEnergy;
 import forestry.energy.inventory.InventoryEngineElectric;
 import forestry.energy.tiles.TileEngineElectric;
 
 public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectric> {
 
-	public ContainerEngineElectric(PlayerInventory player, TileEngineElectric tile, int id) {
-		super(tile, player, 8, 84, id);
+	//TODO dedupe
+	public static ContainerEngineElectric fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+		TileEngineElectric tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEngineElectric.class);
+		return new ContainerEngineElectric(windowId, inv, tile);
+	}
+	public ContainerEngineElectric(int windowId, PlayerInventory player, TileEngineElectric tile) {
+		super(windowId, ModuleEnergy.getContainerTypes().ENGINE_ELECTRIC, player, tile, 8, 84);
 
 		this.addSlot(new SlotFiltered(tile, InventoryEngineElectric.SLOT_BATTERY, 84, 53));
 	}

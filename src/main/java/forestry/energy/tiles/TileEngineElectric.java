@@ -13,8 +13,8 @@ package forestry.energy.tiles;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -22,9 +22,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
@@ -38,7 +35,6 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineElectric;
-import forestry.energy.gui.GuiEngineElectric;
 import forestry.energy.inventory.InventoryEngineElectric;
 //import forestry.plugins.ForestryCompatPlugins;
 
@@ -310,14 +306,8 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		return CircuitSocketType.ELECTRIC_ENGINE;
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@Override
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiEngineElectric(player.inventory, this, data);	//TODO windowid
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerEngineElectric(player.inventory, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerEngineElectric(windowId, player.inventory, this);
 	}
 }

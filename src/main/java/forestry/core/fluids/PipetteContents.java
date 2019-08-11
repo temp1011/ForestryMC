@@ -19,7 +19,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 
 public class PipetteContents {
 

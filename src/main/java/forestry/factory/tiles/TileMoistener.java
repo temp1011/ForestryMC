@@ -14,14 +14,13 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -51,7 +50,6 @@ import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerMoistener;
-import forestry.factory.gui.GuiMoistener;
 import forestry.factory.inventory.InventoryMoistener;
 import forestry.factory.recipes.MoistenerRecipeManager;
 
@@ -517,14 +515,8 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiMoistener(player.inventory, this, data);	//TODO windowid
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerMoistener(player.inventory, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerMoistener(windowId, inv, this);
 	}
 
 	@Override

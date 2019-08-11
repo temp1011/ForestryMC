@@ -30,31 +30,31 @@ import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
-public class CreativeTabForestry extends ItemGroup {
+public class ItemGroupForestry extends ItemGroup {
 
 	static {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
-			ItemGroups.tabAgriculture = new CreativeTabForestry(1, "agriculture");
+			ItemGroups.tabAgriculture = new ItemGroupForestry(1, "agriculture");
 		}
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			ItemGroups.tabApiculture = new CreativeTabForestry(2, "apiculture");
+			ItemGroups.tabApiculture = new ItemGroupForestry(2, "apiculture");
 		}
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			ItemGroups.tabArboriculture = new CreativeTabForestry(3, "arboriculture");
+			ItemGroups.tabArboriculture = new ItemGroupForestry(3, "arboriculture");
 		}
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-			ItemGroups.tabLepidopterology = new CreativeTabForestry(4, "lepidopterology");
+			ItemGroups.tabLepidopterology = new ItemGroupForestry(4, "lepidopterology");
 		}
 	}
 
-	public static final ItemGroup tabForestry = new CreativeTabForestry(0, Constants.MOD_ID);
+	public static final ItemGroup tabForestry = new ItemGroupForestry(0, Constants.MOD_ID);
 
 	private final int icon;
 
-	private CreativeTabForestry(int icon, String label) {
+	private ItemGroupForestry(int icon, String label) {
 		super(label);
 		this.icon = icon;
 	}

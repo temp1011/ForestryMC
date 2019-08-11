@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Stack;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
@@ -44,7 +44,6 @@ import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
 import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerCentrifuge;
-import forestry.factory.gui.GuiCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
 
@@ -268,14 +267,8 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiCentrifuge(player.inventory, this, data);	//TODO windowid
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerCentrifuge(player.inventory, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerCentrifuge(windowId, player.inventory, this);
 	}
 
 	public IInventory getCraftPreviewInventory() {

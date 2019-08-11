@@ -13,16 +13,13 @@ package forestry.apiculture.entities;
 import java.util.Collections;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -31,7 +28,6 @@ import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.gui.ContainerMinecartBeehouse;
-import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.core.inventory.IInventoryAdapter;
 
 public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
@@ -87,14 +83,7 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		ContainerMinecartBeehouse container = new ContainerMinecartBeehouse(player.inventory, this, false, data);	//TODO windowid
-		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.BEE_HOUSE);
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerMinecartBeehouse(player.inventory, this, false, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerMinecartBeehouse(windowId, player.inventory, this, false);
 	}
 }

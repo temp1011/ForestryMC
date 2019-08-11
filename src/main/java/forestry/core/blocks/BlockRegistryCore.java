@@ -11,10 +11,8 @@
 package forestry.core.blocks;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.item.ItemStack;
 

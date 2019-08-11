@@ -21,8 +21,9 @@ import java.util.Locale;
 import java.util.Set;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
@@ -57,10 +58,10 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	private int startX;
 	private int startY;
 
-	public GuiHabitatLocator(PlayerEntity player, ItemInventoryHabitatLocator itemInventory, int id) {
-		super(Constants.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(player, itemInventory, id), player.inventory, new StringTextComponent("HABITAT_LOCATER_TEST_TITLE"));
+	public GuiHabitatLocator(ContainerHabitatLocator container, PlayerInventory playerInv, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/biomefinder.png", container, playerInv, title);
 
-		this.itemInventory = itemInventory;
+		this.itemInventory = container.getItemInventory();
 		xSize = 176;
 		ySize = 184;
 

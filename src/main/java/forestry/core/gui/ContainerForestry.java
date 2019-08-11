@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
@@ -34,8 +32,8 @@ public abstract class ContainerForestry extends Container {
 	public static final int PLAYER_INV_SLOTS = PLAYER_HOTBAR_OFFSET + 9;
 	private int transferCount = 0; // number of items that have been shift-click-transfered during this click
 
-	protected ContainerForestry(@Nullable ContainerType<?> type, int id) {
-		super(type, id);
+	protected ContainerForestry(int windowId, ContainerType<?> type) {
+		super(type, windowId);
 	}
 
 	protected final void addPlayerInventory(PlayerInventory playerInventory, int xInv, int yInv) {

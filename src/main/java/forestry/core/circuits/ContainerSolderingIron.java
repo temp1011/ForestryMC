@@ -32,7 +32,7 @@ import forestry.core.utils.NetworkUtil;
 public class ContainerSolderingIron extends ContainerItemInventory<ItemInventorySolderingIron> implements IGuiSelectable {
 
 	public ContainerSolderingIron(PlayerEntity player, ItemInventorySolderingIron inventory) {
-		super(inventory, player.inventory, 8, 123, null, 0); //TODO
+		super(0, inventory, player.inventory, 8, 123, null); //TODO
 
 		// Input
 		this.addSlot(new SlotFiltered(inventory, 0, 152, 12));

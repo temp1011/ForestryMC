@@ -11,6 +11,7 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -20,9 +21,9 @@ import forestry.factory.tiles.TileCentrifuge;
 public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge> {
 	private final TileCentrifuge tile;
 
-	public GuiCentrifuge(PlayerInventory inventory, TileCentrifuge tile, int id) {	//TODO windowid
-		super(Constants.TEXTURE_PATH_GUI + "/centrifugesocket2.png", new ContainerCentrifuge(inventory, tile, id), inventory, tile);
-		this.tile = tile;
+	public GuiCentrifuge(ContainerCentrifuge container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/centrifugesocket2.png", container, inventory, container.getTile());
+		this.tile = container.getTile();
 		widgetManager.add(new SocketWidget(this.widgetManager, 79, 37, tile, 0));
 	}
 

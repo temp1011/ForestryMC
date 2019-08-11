@@ -20,6 +20,7 @@ import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -181,7 +182,8 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 				}
 
 				if (!worldIn.isRemote) {
-					tile.openGui(playerIn, heldItem);
+					ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;	//TODO - hopefully safe because it's the server?
+					tile.openGui(sPlayer, heldItem, pos);
 				}
 				return true;
 			}

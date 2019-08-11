@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 
-import forestry.core.CreativeTabForestry;
+import forestry.core.ItemGroupForestry;
 import forestry.core.config.Constants;
 import forestry.core.items.ItemForestryFood;
 
@@ -24,7 +24,7 @@ public class ItemAmbrosia extends ItemForestryFood {
 
 	public ItemAmbrosia() {
 		super((new Item.Properties())
-				.group(CreativeTabForestry.tabForestry)
+				.group(ItemGroupForestry.tabForestry)
 				.food(new Food.Builder()
 						.setAlwaysEdible()
 						.hunger(Constants.FOOD_AMBROSIA_HEAL)

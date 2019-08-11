@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.EnumMap;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
@@ -50,7 +50,6 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerBottler;
-import forestry.factory.gui.GuiBottler;
 import forestry.factory.inventory.InventoryBottler;
 import forestry.factory.recipes.BottlerRecipe;
 //import forestry.factory.triggers.FactoryTriggers;
@@ -370,13 +369,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 //	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiBottler(player.inventory, this, data);	//TODO windowid
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerBottler(player.inventory, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerBottler(windowId, player.inventory, this);
 	}
 }

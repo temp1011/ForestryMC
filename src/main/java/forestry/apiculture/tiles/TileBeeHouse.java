@@ -12,14 +12,11 @@ package forestry.apiculture.tiles;
 
 import java.util.Collections;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -28,7 +25,6 @@ import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.gui.ContainerBeeHousing;
-import forestry.apiculture.gui.GuiBeeHousing;
 
 public class TileBeeHouse extends TileBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
@@ -61,14 +57,7 @@ public class TileBeeHouse extends TileBeeHousingBase {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		ContainerBeeHousing container = new ContainerBeeHousing(player.inventory, this, false, data);	//TODO windowid
-		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.BEE_HOUSE);
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerBeeHousing(player.inventory, this, false, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerBeeHousing(windowId, player.inventory, this, false);
 	}
 }

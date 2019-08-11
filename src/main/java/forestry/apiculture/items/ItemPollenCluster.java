@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemOverlay;
 

@@ -11,14 +11,15 @@
 package forestry.energy.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.energy.tiles.TileEngineBiogas;
 
 public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngineBiogas> {
-	public GuiEngineBiogas(PlayerInventory inventory, TileEngineBiogas tile, int windowid) {	//TODO windowid
-		super(Constants.TEXTURE_PATH_GUI + "/bioengine.png", new ContainerEngineBiogas(inventory, tile, windowid), inventory, tile);
+	public GuiEngineBiogas(ContainerEngineBiogas container,PlayerInventory inventory, ITextComponent title) {	//TODO title
+		super(Constants.TEXTURE_PATH_GUI + "/bioengine.png", container, inventory, container.getTile());
 		widgetManager.add(new TankWidget(widgetManager, 89, 19, 0));
 		widgetManager.add(new TankWidget(widgetManager, 107, 19, 1));
 

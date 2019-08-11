@@ -10,21 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
@@ -33,9 +27,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
@@ -43,12 +34,9 @@ import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.IHiveTile;
 import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileHive;
-import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.tiles.TileUtil;
 
 public class BlockBeeHive extends ContainerBlock {

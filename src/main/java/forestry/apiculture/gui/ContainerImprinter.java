@@ -10,10 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Hand;
 
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.apiculture.network.packets.PacketImprintSelectionResponse;
 import forestry.core.gui.ContainerItemInventory;
@@ -24,8 +27,16 @@ import forestry.core.utils.NetworkUtil;
 
 public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImprinter> implements IGuiSelectable {
 
-	public ContainerImprinter(PlayerInventory inventoryplayer, ItemInventoryImprinter inventory, int id) {
-		super(inventory, inventoryplayer, 8, 103, ContainerType.BLAST_FURNACE, id);	//TODO ContainerTypes
+	//TODO dedupe this
+	public static ContainerImprinter fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;	//TODO write this to data
+		PlayerEntity player = playerInv.player;
+		ItemInventoryImprinter inv = new ItemInventoryImprinter(player, player.getHeldItem(hand));
+		return new ContainerImprinter(windowId, player.inventory, inv);
+	}
+
+	public ContainerImprinter(int windowId, PlayerInventory inventoryplayer, ItemInventoryImprinter inventory) {
+		super(windowId, inventory, inventoryplayer, 8, 103, ModuleApiculture.getContainerTypes().IMPRINTER);
 
 		// Input
 		this.addSlot(new SlotFiltered(inventory, 0, 152, 12));

@@ -13,10 +13,12 @@ package forestry.core.multiblock;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -43,8 +45,8 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	/**
 	 * Called by a structure block when it is right clicked by a player.
 	 */
-	public void openGui(PlayerEntity player) {
-		GuiHandler.openGui(player, this);
+	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+		GuiHandler.openGui(player, this, pos);
 	}
 
 	@Override

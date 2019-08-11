@@ -11,17 +11,26 @@
 package forestry.energy.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.packets.PacketGuiUpdate;
+import forestry.core.tiles.TileUtil;
+import forestry.energy.ModuleEnergy;
 import forestry.energy.tiles.TileEnginePeat;
 
 public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
 
-	public ContainerEnginePeat(PlayerInventory player, TileEnginePeat tile, int id) {
-		super(tile, player, 8, 84, id);
+	//TODO dedupe
+	public static ContainerEnginePeat fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+		TileEnginePeat tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEnginePeat.class);
+		return new ContainerEnginePeat(windowId, inv, tile);
+	}
+
+	public ContainerEnginePeat(int id, PlayerInventory player, TileEnginePeat tile) {
+		super(id, ModuleEnergy.getContainerTypes().ENGINE_PEAT, player, tile, 8, 84);
 
 		this.addSlot(new SlotFiltered(tile, 0, 44, 46));
 

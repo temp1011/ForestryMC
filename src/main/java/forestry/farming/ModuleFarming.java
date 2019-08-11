@@ -22,6 +22,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.NetherWartBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 
@@ -32,6 +34,7 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
 
@@ -59,11 +62,12 @@ import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
-import forestry.core.tiles.TileUtil;
 import forestry.farming.blocks.BlockMushroom;
 import forestry.farming.blocks.BlockRegistryFarming;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.circuits.CircuitFarmLogic;
+import forestry.farming.gui.FarmingContainerTypes;
+import forestry.farming.gui.GuiFarm;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.logic.FarmLogicCocoa;
 import forestry.farming.logic.FarmLogicCrops;
@@ -85,18 +89,11 @@ import forestry.farming.logic.farmables.FarmableVanillaMushroom;
 import forestry.farming.logic.farmables.FarmableVanillaSapling;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.proxy.ProxyFarmingClient;
-import forestry.farming.tiles.TileFarmControl;
-import forestry.farming.tiles.TileFarmGearbox;
-import forestry.farming.tiles.TileFarmHatch;
-import forestry.farming.tiles.TileFarmPlain;
-import forestry.farming.tiles.TileFarmValve;
 import forestry.farming.tiles.TileRegistryFarming;
 import forestry.farming.triggers.FarmingTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
-
-import afu.org.checkerframework.checker.oigj.qual.O;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.farming.description")
 public class ModuleFarming extends BlankForestryModule {
@@ -108,6 +105,8 @@ public class ModuleFarming extends BlankForestryModule {
 	private static BlockRegistryFarming blocks;
 	@Nullable
 	private static TileRegistryFarming tiles;
+	@Nullable
+	private static FarmingContainerTypes containerTypes;
 
 	public ModuleFarming() {
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyFarmingClient(), () -> () -> new ProxyFarming());
@@ -124,6 +123,12 @@ public class ModuleFarming extends BlankForestryModule {
 		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
+
+	public static FarmingContainerTypes getContainerTypes() {
+		Preconditions.checkNotNull(containerTypes);
+		return containerTypes;
+	}
+
 
 	@Override
 	public void setupAPI() {
@@ -143,6 +148,17 @@ public class ModuleFarming extends BlankForestryModule {
 	@Override
 	public void registerTiles() {
 		tiles = new TileRegistryFarming();
+	}
+
+	@Override
+	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+		containerTypes = new FarmingContainerTypes(registry);
+	}
+
+	@Override
+	public void registerGuiFactories() {
+		FarmingContainerTypes containerTypes = getContainerTypes();
+		ScreenManager.registerFactory(containerTypes.FARM, GuiFarm::new);
 	}
 
 	@Override

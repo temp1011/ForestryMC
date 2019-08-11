@@ -11,6 +11,7 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -20,9 +21,9 @@ import forestry.factory.tiles.TileStill;
 public class GuiStill extends GuiForestryTitled<ContainerStill> {
 	private final TileStill tile;
 
-	public GuiStill(PlayerInventory inventory, TileStill tile, int id) {	//TODO windowid
-		super(Constants.TEXTURE_PATH_GUI + "/still.png", new ContainerStill(inventory, tile, id), inventory, tile);
-		this.tile = tile;
+	public GuiStill(ContainerStill container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/still.png", container, inventory, container.getTile());
+		this.tile = container.getTile();
 		widgetManager.add(new TankWidget(this.widgetManager, 35, 15, 0));
 		widgetManager.add(new TankWidget(this.widgetManager, 125, 15, 1));
 	}

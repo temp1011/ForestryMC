@@ -56,6 +56,7 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 		super.registerTileEntity();
 		Block block = getBlock();
 		if (FMLEnvironment.dist == Dist.CLIENT && renderer != null && block != null) {
+			//TODO - I believe this now has threading issues
 			ClientRegistry.bindTileEntitySpecialRenderer(getTeClass(), renderer);
 			Item item = Item.getItemFromBlock(block);
 			if (item != Items.AIR) {

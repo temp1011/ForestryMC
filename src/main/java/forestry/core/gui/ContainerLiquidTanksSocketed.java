@@ -13,6 +13,7 @@ package forestry.core.gui;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -31,10 +32,10 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 	private final ContainerSocketedHelper<T> socketedHelper;
 	private final ContainerLiquidTanksHelper<T> tanksHelper;
 
-	protected ContainerLiquidTanksSocketed(T tile, PlayerInventory playerInventory, int xInv, int yInv, int id) {
-		super(tile, playerInventory, xInv, yInv, id);
-		this.socketedHelper = new ContainerSocketedHelper<>(tile);
-		this.tanksHelper = new ContainerLiquidTanksHelper<>(tile);
+	protected ContainerLiquidTanksSocketed(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+		super(windowId, type, playerInventory, tile, xInv, yInv);
+		this.socketedHelper = new ContainerSocketedHelper<>(this.tile);
+		this.tanksHelper = new ContainerLiquidTanksHelper<>(this.tile);
 	}
 
 	/* IContainerLiquidTanks */

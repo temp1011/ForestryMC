@@ -21,7 +21,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IModelManager;
 import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {

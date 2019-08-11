@@ -14,11 +14,10 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -36,19 +35,19 @@ import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 
-public class GuiNaturalistInventory extends GuiForestry<Container> {
+public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInventory> {
 	private final ISpeciesRoot speciesRoot;
 	private final IBreedingTracker breedingTracker;
 	private final HashMap<String, ItemStack> iconStacks = new HashMap<>();
 	private final int pageCurrent, pageMax;
 
-	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, PlayerEntity player, Container container, int page, int maxPages) {
-		super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, player.inventory, new StringTextComponent("NATURALIST_GUI_INVENTORY_TEST_TITLE"));
+	public GuiNaturalistInventory(ContainerNaturalistInventory container, PlayerInventory playerInv, ITextComponent name) {
+		super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, playerInv, name);
 
-		this.speciesRoot = speciesRoot;
+		this.speciesRoot = container.tile.getSpeciesRoot();
 
-		this.pageCurrent = page;
-		this.pageMax = maxPages;
+		this.pageCurrent = container.getPage();
+		this.pageMax = container.getMaxPage();
 
 		xSize = 196;
 		ySize = 202;
@@ -57,7 +56,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container> {
 			iconStacks.put(individual.getIdent(), speciesRoot.getMemberStack(individual, speciesRoot.getIconType()));
 		}
 
-		breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
+		breedingTracker = speciesRoot.getBreedingTracker(playerInv.player.world, playerInv.player.getGameProfile());
 	}
 
 	@Override

@@ -13,8 +13,8 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
@@ -46,7 +46,6 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerFermenter;
-import forestry.factory.gui.GuiFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.recipes.FermenterRecipeManager;
 
@@ -321,14 +320,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	//	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiFermenter(player.inventory, this, data);
-	} //TODO windowid
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerFermenter(player.inventory, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerFermenter(windowId, inv, this);
 	}
 
 	@Override

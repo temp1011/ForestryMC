@@ -13,8 +13,8 @@ package forestry.energy.tiles;
 import java.io.IOException;
 import java.util.Collection;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -27,9 +27,6 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 
 //import net.minecraftforge.fml.common.Optional;
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.fuels.FuelManager;
 import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBase;
@@ -44,7 +41,6 @@ import forestry.core.tiles.TileEngine;
 import forestry.core.utils.InventoryUtil;
 import forestry.energy.ModuleEnergy;
 import forestry.energy.gui.ContainerEnginePeat;
-import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
 
 //import buildcraft.api.statements.ITriggerExternal;
@@ -324,13 +320,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 //	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiEnginePeat(player.inventory, this, data);	//TODO windowid
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerEnginePeat(player.inventory, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerEnginePeat(windowId, player.inventory, this);
 	}
 }

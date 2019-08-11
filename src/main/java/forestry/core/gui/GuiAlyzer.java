@@ -23,7 +23,9 @@ import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -57,10 +59,10 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 	private final ItemInventoryAlyzer itemInventory;
 
-	public GuiAlyzer(PlayerEntity player, ItemInventoryAlyzer itemInventory, int id) {	//TODO windowid
-		super(Constants.TEXTURE_PATH_GUI + "/portablealyzer.png", new ContainerAlyzer(itemInventory, player, id), player.inventory, new StringTextComponent("GUI_ALYZER_TEST_TITLE"));
+	public GuiAlyzer(ContainerAlyzer container, PlayerInventory playerInv, ITextComponent name) {
+		super(Constants.TEXTURE_PATH_GUI + "/portablealyzer.png", container, playerInv, new StringTextComponent("GUI_ALYZER_TEST_TITLE"));
 
-		this.itemInventory = itemInventory;
+		this.itemInventory = container.inventory;
 		this.xSize = 246;
 		this.ySize = 238;
 	}

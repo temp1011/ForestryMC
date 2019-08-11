@@ -13,7 +13,6 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -27,13 +26,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.core.ItemGroups;
 import forestry.core.gui.ContainerAlyzer;
-import forestry.core.gui.GuiAlyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
 
 
@@ -50,14 +44,8 @@ public class ItemAlyzer extends ItemWithGui {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int data) {
-		return new GuiAlyzer(player, new ItemInventoryAlyzer(player, heldItem), data);	//TODO windowid
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, ItemStack heldItem, int data) {
-		return new ContainerAlyzer(new ItemInventoryAlyzer(player, heldItem), player, data);	//TODO windowid
+	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+		return new ContainerAlyzer(windowId, new ItemInventoryAlyzer(player, heldItem), player);	//TODO windowid
 	}
 
 	@Override

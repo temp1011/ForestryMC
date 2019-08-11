@@ -16,6 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -90,7 +91,7 @@ public abstract class BlockStructure extends BlockForestry {
 		}
 
 		if (!worldIn.isRemote) {
-			part.openGui(playerIn);
+			part.openGui((ServerPlayerEntity) playerIn, pos);	//TODO cast is safe because on server?
 		}
 		return true;
 	}

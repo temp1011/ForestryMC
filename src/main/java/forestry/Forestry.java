@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.Block;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -32,7 +33,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -61,8 +61,6 @@ import forestry.core.proxy.ProxyCommon;
 import forestry.core.proxy.ProxyRender;
 import forestry.core.proxy.ProxyRenderClient;
 import forestry.core.recipes.DisableRecipe;
-import forestry.core.render.RenderAnalyzer;
-import forestry.core.tiles.TileAnalyzer;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
 //import forestry.plugins.ForestryCompatPlugins;
@@ -137,7 +135,8 @@ public class Forestry {
 
 	public void clientStuff(FMLClientSetupEvent e) {
 		//TODO
-		ClientRegistry.bindTileEntitySpecialRenderer(TileAnalyzer.class, new RenderAnalyzer(Constants.TEXTURE_PATH_BLOCK + "/analyzer"));
+//		ClientRegistry.bindTileEntitySpecialRenderer(TileAnalyzer.class, new RenderAnalyzer(Constants.TEXTURE_PATH_BLOCK + "/analyzer"));
+		ModuleManager.getInternalHandler().registerGuiFactories();
 	}
 
 	@Nullable
@@ -158,7 +157,7 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.register(Config.class);
 		Proxies.common.registerEventHandlers();
 		configFolder = new File("."); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
-		//TODO - DistExecutor
+		//TODO - config
 		Config.load(Dist.DEDICATED_SERVER);
 		CraftingHelper.register(new ResourceLocation(Constants.MOD_ID, "module"), new DisableRecipe());
 		ModuleManager.getInternalHandler().runSetup();
@@ -194,6 +193,11 @@ public class Forestry {
 			ModuleManager.getInternalHandler().registerTileEntities();
 		}
 
+		@SubscribeEvent
+		public static void registerContainerTypes(RegistryEvent.Register<ContainerType<?>> event) {
+			ModuleManager.getInternalHandler().registerContainerTypes(event.getRegistry());
+		}
+
 	}
 
 
@@ -205,15 +209,15 @@ public class Forestry {
 
 	//split
 	//TODO - when to run these events
-	//	@EventHandler
-	//	public void init(FMLInitializationEvent event) {
-	//		// Register gui handler
-	//		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-	//
-	//		ModuleManager.getInternalHandler().runInit();
-	//
-	//		AdvancementManager.registerTriggers();
-	//	}
+//		@EventHandler
+//		public void init(FMLInitializationEvent event) {
+//			// Register gui handler
+//			NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+//
+//			ModuleManager.getInternalHandler().runInit();
+//
+//			AdvancementManager.registerTriggers();
+//		}
 	//
 	////	@EventHandler
 	//	public void postInit(FMLPostInitializationEvent event) {

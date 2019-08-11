@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.IContainerCrafting;
@@ -23,13 +24,20 @@ import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.packets.PacketItemStackDisplay;
+import forestry.core.tiles.TileUtil;
+import forestry.factory.ModuleFactory;
 import forestry.factory.inventory.InventoryCarpenter;
 import forestry.factory.tiles.TileCarpenter;
 
 public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> implements IContainerCrafting {
 
-	public ContainerCarpenter(PlayerInventory inventoryplayer, TileCarpenter tile, int id) {	//TODO windowid
-		super(tile, inventoryplayer, 8, 136, id);
+	public static ContainerCarpenter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileCarpenter tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileCarpenter.class);
+		return new ContainerCarpenter(windowId, inv, tile);	//TODO nullability.
+	}
+	
+	public ContainerCarpenter(int windowId, PlayerInventory inventoryplayer, TileCarpenter tile) {
+		super(windowId, ModuleFactory.getContainerTypes().CARPENTER, inventoryplayer, tile, 8, 136);
 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {

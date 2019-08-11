@@ -11,6 +11,7 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -20,9 +21,9 @@ import forestry.factory.tiles.TileMoistener;
 public class GuiMoistener extends GuiForestryTitled<ContainerMoistener> {
 	private final TileMoistener tile;
 
-	public GuiMoistener(PlayerInventory inventory, TileMoistener tile, int id) {	//TODO windowid
-		super(Constants.TEXTURE_PATH_GUI + "/moistener.png", new ContainerMoistener(inventory, tile, id), inventory, tile);
-		this.tile = tile;
+	public GuiMoistener(ContainerMoistener container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/moistener.png", container, inventory, container.getTile());
+		this.tile = container.getTile();
 		widgetManager.add(new TankWidget(this.widgetManager, 16, 16, 0));
 	}
 

@@ -14,6 +14,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -22,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -29,16 +32,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.tiles.TileUtil;
 
+//TODO needed?
 public class GuiHandler implements IGuiHandler {
-	public static void openGui(PlayerEntity PlayerEntity, IGuiHandlerEntity guiHandler) {
-		openGui(PlayerEntity, guiHandler, (short) 0);
+	public static void openGui(ServerPlayerEntity player, IGuiHandlerEntity guiHandler) {
+		openGui(player, guiHandler, (short) 0);
 	}
 
-	public static void openGui(PlayerEntity playerEntity, IGuiHandlerEntity guiHandler, short data) {
+	public static void openGui(ServerPlayerEntity playerEntity, IGuiHandlerEntity guiHandler, short data) {
 		int guiData = encodeGuiData(guiHandler, data);
 		//TODO - can only be called on server?
 		//TODO gui
-//		NetworkHooks.openGui(playerEntity, () -> guiHandler.getContainer(playerEntity, guiData));
+		NetworkHooks.openGui(playerEntity, guiHandler);
 //		playerEntity.openGui(ForestryAPI.instance, guiData, playerEntity.world, guiHandler.getIdOfEntity(), 0, 0);
 	}
 
@@ -52,14 +56,15 @@ public class GuiHandler implements IGuiHandler {
 //		playerEntity.openGui(ForestryAPI.instance, guiData, playerEntity.world, 0, 0, 0);
 	}
 
-	public static void openGui(PlayerEntity playerEntity, IGuiHandlerTile guiHandler) {
-		openGui(playerEntity, guiHandler, (short) 0);
+	public static void openGui(ServerPlayerEntity playerEntity, INamedContainerProvider guiHandler, BlockPos pos) {
+		openGui(playerEntity, guiHandler, (short) 0, pos);
 	}
 
-	public static void openGui(PlayerEntity playerEntity, IGuiHandlerTile guiHandler, short data) {
-		int guiData = encodeGuiData(guiHandler, data);
-		BlockPos coordinates = guiHandler.getCoordinates();
+	public static void openGui(ServerPlayerEntity playerEntity, INamedContainerProvider guiHandler, short data, BlockPos pos) {
+//		int guiData = encodeGuiData(guiHandler, data);
+//		BlockPos coordinates = guiHandler.getCoordinates();
 		//TODO gui
+		NetworkHooks.openGui(playerEntity, guiHandler, pos);
 //		playerEntity.openGui(ForestryAPI.instance, guiData, playerEntity.world, coordinates.getX(), coordinates.getY(), coordinates.getZ());
 	}
 
@@ -78,47 +83,54 @@ public class GuiHandler implements IGuiHandler {
 		return (short) (guiId >> 16);
 	}
 
+	//TODO
 	@Override
-	@Nullable
-	@OnlyIn(Dist.CLIENT)
-	public Object getClientGuiElement(int guiData, PlayerEntity player, World world, int x, int y, int z) {
-		GuiId guiId = decodeGuiID(guiData);
-		if (guiId == null) {
-			return null;
-		}
-		short data = decodeGuiData(guiData);
-		BlockPos pos = new BlockPos(x, y, z);
+		@Nullable
+		@OnlyIn(Dist.CLIENT)
+		public Object getClientGuiElement(int guiData, PlayerEntity player, World world, int x, int y, int z) {return null; }
 
-		switch (guiId.getGuiType()) {
-			case Item: {
-				for (Hand hand : Hand.values()) {
-					ItemStack heldItem = player.getHeldItem(hand);
-					if (!heldItem.isEmpty()) {
-						Item item = heldItem.getItem();
-						if (guiId.getGuiHandlerClass().isInstance(item)) {
-							return ((IGuiHandlerItem) item).getGui(player, heldItem, data);
-						}
-					}
-				}
-				break;
-			}
-			case Tile: {
-				TileEntity tileEntity = TileUtil.getTile(world, pos);
-				if (guiId.getGuiHandlerClass().isInstance(tileEntity)) {
-					return ((IGuiHandlerTile) tileEntity).getGui(player, data);
-				}
-				break;
-			}
-			case Entity: {
-				Entity entity = world.getEntityByID(x);
-				if (guiId.getGuiHandlerClass().isInstance(entity)) {
-					return ((IGuiHandlerEntity) entity).getGui(player, data);
-				}
-				break;
-			}
-		}
-		return null;
-	}
+
+	//	@Override
+//	@Nullable
+//	@OnlyIn(Dist.CLIENT)
+//	public Object getClientGuiElement(int guiData, PlayerEntity player, World world, int x, int y, int z) {
+//		GuiId guiId = decodeGuiID(guiData);
+//		if (guiId == null) {
+//			return null;
+//		}
+//		short data = decodeGuiData(guiData);
+//		BlockPos pos = new BlockPos(x, y, z);
+//
+//		switch (guiId.getGuiType()) {
+//			case Item: {
+//				for (Hand hand : Hand.values()) {
+//					ItemStack heldItem = player.getHeldItem(hand);
+//					if (!heldItem.isEmpty()) {
+//						Item item = heldItem.getItem();
+//						if (guiId.getGuiHandlerClass().isInstance(item)) {
+//							return ((IGuiHandlerItem) item).getGui(player, heldItem, data);
+//						}
+//					}
+//				}
+//				break;
+//			}
+//			case Tile: {
+//				TileEntity tileEntity = TileUtil.getTile(world, pos);
+//				if (guiId.getGuiHandlerClass().isInstance(tileEntity)) {
+//					return null; //TODO this all should go IMO ((IGuiHandlerTile) tileEntity).getGui(player, data);
+//				}
+//				break;
+//			}
+//			case Entity: {
+//				Entity entity = world.getEntityByID(x);
+//				if (guiId.getGuiHandlerClass().isInstance(entity)) {
+//					return ((IGuiHandlerEntity) entity).getGui(player, data);
+//				}
+//				break;
+//			}
+//		}
+//		return null;
+//	}
 
 	@Override
 	@Nullable
@@ -137,7 +149,7 @@ public class GuiHandler implements IGuiHandler {
 					if (!heldItem.isEmpty()) {
 						Item item = heldItem.getItem();
 						if (guiId.getGuiHandlerClass().isInstance(item)) {
-							return ((IGuiHandlerItem) item).getContainer(player, heldItem, data);
+							return ((IGuiHandlerItem) item).getContainer(guiId.getId(), player, heldItem);
 						}
 					}
 				}
@@ -146,14 +158,14 @@ public class GuiHandler implements IGuiHandler {
 			case Tile: {
 				TileEntity tileEntity = TileUtil.getTile(world, pos);
 				if (guiId.getGuiHandlerClass().isInstance(tileEntity)) {
-					return ((IGuiHandlerTile) tileEntity).getContainer(player, data);
+					return ((IGuiHandlerTile) tileEntity).createMenu(data, player.inventory, player);
 				}
 				break;
 			}
 			case Entity: {
 				Entity entity = world.getEntityByID(x);
 				if (guiId.getGuiHandlerClass().isInstance(entity)) {
-					return ((IGuiHandlerEntity) entity).getContainer(player, data);
+					return ((IGuiHandlerEntity) entity).createMenu(guiId.getId(), player.inventory, player);
 				}
 				break;
 			}

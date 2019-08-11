@@ -37,7 +37,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
+import forestry.core.ItemGroupForestry;
 import forestry.core.config.Constants;
 import forestry.core.utils.ItemTooltipUtil;
 
@@ -46,7 +46,7 @@ public class ItemArmorNaturalist extends ArmorItem implements IItemModelRegister
 	public ItemArmorNaturalist() {
 		super(ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, (new Item.Properties())
 		.maxDamage(100)
-		.group(CreativeTabForestry.tabForestry));
+		.group(ItemGroupForestry.tabForestry));
 	}
 
 	@Override

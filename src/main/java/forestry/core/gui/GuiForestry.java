@@ -51,7 +51,7 @@ import forestry.core.render.ForestryResource;
 import forestry.core.tiles.IClimatised;
 import forestry.energy.EnergyManager;
 
-public abstract class GuiForestry<C extends Container> extends ContainerScreen implements IGuiSizable {
+public abstract class GuiForestry<C extends Container> extends ContainerScreen<C> implements IGuiSizable {
 	protected final C container;
 
 	public final ResourceLocation textureFile;

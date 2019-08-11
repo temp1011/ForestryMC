@@ -11,15 +11,23 @@
 package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.tiles.TileUtil;
 
 public class ContainerAlvearySwarmer extends ContainerTile<TileAlvearySwarmer> {
 
-	public ContainerAlvearySwarmer(PlayerInventory player, TileAlvearySwarmer tile, int id) {
-		super(tile, player, 8, 87, id);	//TODO windowid
+	public static ContainerAlvearySwarmer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileAlvearySwarmer tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlvearySwarmer.class);
+		return new ContainerAlvearySwarmer(windowId, inv, tile);	//TODO nullability.
+	}
+
+	public ContainerAlvearySwarmer(int windowId, PlayerInventory player, TileAlvearySwarmer tile) {
+		super(windowId, ModuleApiculture.getContainerTypes().ALVEARY_SWARMER, player, tile, 8, 87);
 
 		this.addSlot(new SlotFiltered(tile, 0, 79, 52));
 		this.addSlot(new SlotFiltered(tile, 1, 100, 39));

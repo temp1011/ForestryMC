@@ -14,13 +14,22 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.inventory.container.ContainerType;
+
+import net.minecraftforge.registries.IForgeRegistry;
+
 import net.minecraftforge.fml.DistExecutor;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
-import forestry.core.tiles.TileRegistryCore;
 import forestry.energy.blocks.BlockRegistryEnergy;
+import forestry.energy.gui.EnergyContainerTypes;
+import forestry.energy.gui.GuiEngineBiogas;
+import forestry.energy.gui.GuiEngineElectric;
+import forestry.energy.gui.GuiEnginePeat;
+import forestry.energy.gui.GuiGenerator;
 import forestry.energy.proxy.ProxyEnergy;
 import forestry.energy.proxy.ProxyEnergyClient;
 import forestry.energy.tiles.TileRegistryEnergy;
@@ -37,6 +46,8 @@ public class ModuleEnergy extends BlankForestryModule {
 	public static BlockRegistryEnergy blocks;
 	@Nullable
 	public static TileRegistryEnergy tiles;
+	@Nullable
+	public static EnergyContainerTypes containerTypes;
 
 	public ModuleEnergy() {
 		//set up proxies as early as possible
@@ -53,6 +64,11 @@ public class ModuleEnergy extends BlankForestryModule {
 		return tiles;
 	}
 
+	public static EnergyContainerTypes getContainerTypes() {
+		Preconditions.checkNotNull(containerTypes);
+		return containerTypes;
+	}
+
 	@Override
 	public void registerBlocks() {
 		blocks = new BlockRegistryEnergy();
@@ -61,6 +77,20 @@ public class ModuleEnergy extends BlankForestryModule {
 	@Override
 	public void registerTiles() {
 		tiles = new TileRegistryEnergy();
+	}
+
+	@Override
+	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+		containerTypes = new EnergyContainerTypes(registry);
+	}
+
+	@Override
+	public void registerGuiFactories() {
+		EnergyContainerTypes containerTypes = getContainerTypes();
+		ScreenManager.registerFactory(containerTypes.ENGINE_ELECTRIC, GuiEngineElectric::new);
+		ScreenManager.registerFactory(containerTypes.ENGINE_BIOGAS, GuiEngineBiogas::new);
+		ScreenManager.registerFactory(containerTypes.ENGINE_PEAT, GuiEnginePeat::new);
+		ScreenManager.registerFactory(containerTypes.GENERATOR, GuiGenerator::new);
 	}
 
 	@Override

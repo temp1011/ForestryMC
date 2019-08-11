@@ -13,6 +13,7 @@ package forestry.factory.gui;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -24,9 +25,9 @@ import forestry.factory.tiles.TileBottler;
 public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
 	private final TileBottler tile;
 
-	public GuiBottler(PlayerInventory inventory, TileBottler tile, int id) {	//TODO windowid
-		super(Constants.TEXTURE_PATH_GUI + "/bottler.png", new ContainerBottler(inventory, tile, id), inventory, tile);
-		this.tile = tile;
+	public GuiBottler(ContainerBottler container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/bottler.png", container, inventory, container.getTile());
+		this.tile = container.getTile();
 		widgetManager.add(new TankWidget(this.widgetManager, 80, 14, 0));
 	}
 

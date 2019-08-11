@@ -13,6 +13,7 @@ package forestry.core.gui;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.tileentity.TileEntity;
 
@@ -28,8 +29,8 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 
 	private final ContainerLiquidTanksHelper<T> helper;
 
-	protected ContainerLiquidTanks(T tile, PlayerInventory playerInventory, int xInv, int yInv, int id) {
-		super(tile, playerInventory, xInv, yInv, id);
+	protected ContainerLiquidTanks(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+		super(windowId, type, playerInventory, tile, xInv, yInv);
 		this.helper = new ContainerLiquidTanksHelper<>(tile);
 	}
 

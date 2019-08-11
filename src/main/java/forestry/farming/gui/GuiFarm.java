@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.farming.FarmDirection;
 import forestry.core.config.Constants;
@@ -23,9 +24,9 @@ import forestry.farming.tiles.TileFarm;
 public class GuiFarm extends GuiForestryTitled<ContainerFarm> {
 	private final TileFarm tile;
 
-	public GuiFarm(PlayerEntity player, TileFarm tile, int id) {	//TODO windowid
-		super(Constants.TEXTURE_PATH_GUI + "/mfarm.png", new ContainerFarm(player.inventory, tile, id), player.inventory, tile);
-		this.tile = tile;
+	public GuiFarm(ContainerFarm container, PlayerInventory inv, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/mfarm.png", container, inv, container.getTile());
+		this.tile = container.getTile();
 
 		widgetManager.add(new TankWidget(widgetManager, 15, 19, 0).setOverlayOrigin(216, 18));
 

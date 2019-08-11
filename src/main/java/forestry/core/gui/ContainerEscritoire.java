@@ -11,20 +11,30 @@
 package forestry.core.gui;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
 
+import forestry.core.ModuleCore;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
+import forestry.core.tiles.TileUtil;
 
 public class ContainerEscritoire extends ContainerTile<TileEscritoire> implements IGuiSelectable {
 	private long lastUpdate;
 
-	public ContainerEscritoire(PlayerEntity player, TileEscritoire tile, int id) {
-		super(tile, player.inventory, 34, 153, id);
+	//TODO duplicated code with every other ContainerTile, refactor at some point
+	public static ContainerEscritoire fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+		TileEscritoire tile = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileEscritoire.class);
+		return new ContainerEscritoire(windowId, playerInv.player, tile);
+	}
+
+	public ContainerEscritoire(int id, PlayerEntity player, TileEscritoire tile) {
+		super(id, ModuleCore.getContainerTypes().ESCRITOIRE, player.inventory, tile,34, 153);
 
 		// Analyze slot
 		addSlot(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_ANALYZE, 97, 67).setPickupWatcher(this.tile).setStackLimit(1));

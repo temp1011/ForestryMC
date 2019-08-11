@@ -16,7 +16,7 @@ import java.util.Map;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.apiculture.ModuleApiculture;
@@ -37,10 +37,10 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 
 	private final Map<String, ItemStack> iconStacks = new HashMap<>();
 
-	public GuiImprinter(PlayerInventory inventoryplayer, ItemInventoryImprinter itemInventory, int id) {	//TODO window id, should this create the container here anymore
-		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, itemInventory, id), inventoryplayer, new StringTextComponent("TEXT_COMPONENT_TITLE"));
+	public GuiImprinter(ContainerImprinter container, PlayerInventory inventoryplayer, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", container, inventoryplayer, title);
 
-		this.itemInventory = itemInventory;
+		this.itemInventory = container.getItemInventory();
 		this.xSize = 176;
 		this.ySize = 185;
 

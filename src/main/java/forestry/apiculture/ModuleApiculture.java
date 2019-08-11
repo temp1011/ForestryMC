@@ -23,9 +23,11 @@ import java.util.Set;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -48,6 +50,7 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
 
@@ -78,21 +81,19 @@ import forestry.apiculture.genetics.BeekeepingMode;
 import forestry.apiculture.genetics.HiveDrop;
 import forestry.apiculture.genetics.JubilanceFactory;
 import forestry.apiculture.genetics.alleles.AlleleEffects;
+import forestry.apiculture.gui.ApicultureContainerTypes;
+import forestry.apiculture.gui.GuiAlveary;
+import forestry.apiculture.gui.GuiAlvearyHygroregulator;
+import forestry.apiculture.gui.GuiAlvearySieve;
+import forestry.apiculture.gui.GuiAlvearySwarmer;
+import forestry.apiculture.gui.GuiHabitatLocator;
+import forestry.apiculture.gui.GuiImprinter;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.apiculture.multiblock.TileAlvearyFan;
-import forestry.apiculture.multiblock.TileAlvearyHeater;
-import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
-import forestry.apiculture.multiblock.TileAlvearyPlain;
-import forestry.apiculture.multiblock.TileAlvearySieve;
-import forestry.apiculture.multiblock.TileAlvearyStabiliser;
-import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.PacketRegistryApiculture;
-import forestry.apiculture.tiles.TileCandle;
-import forestry.apiculture.tiles.TileHive;
 import forestry.apiculture.tiles.TileRegistryApiculture;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.worldgen.HiveDecorator;
@@ -110,7 +111,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.tiles.TileUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.Log;
@@ -133,6 +133,8 @@ public class ModuleApiculture extends BlankForestryModule {
 	private static BlockRegistryApiculture blocks;
 	@Nullable
 	private static TileRegistryApiculture tiles;
+	@Nullable
+	private static ApicultureContainerTypes containerTypes;
 	@Nullable
 	private static HiveRegistry hiveRegistry;
 
@@ -167,6 +169,11 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static TileRegistryApiculture getTiles() {
 		Preconditions.checkNotNull(tiles);
 		return tiles;
+	}
+
+	public static ApicultureContainerTypes getContainerTypes() {
+		Preconditions.checkNotNull(containerTypes);
+		return containerTypes;
 	}
 
 	public static HiveRegistry getHiveRegistry() {
@@ -224,6 +231,24 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public void registerTiles() {
 		tiles = new TileRegistryApiculture();
+	}
+
+	@Override
+	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+		containerTypes = new ApicultureContainerTypes(registry);
+	}
+
+	@Override
+	public void registerGuiFactories() {
+		ApicultureContainerTypes containerTypes = getContainerTypes();
+		ScreenManager.registerFactory(containerTypes.ALVEARY, GuiAlveary::new);
+		ScreenManager.registerFactory(containerTypes.ALVEARY_HYGROREGULATOR, GuiAlvearyHygroregulator::new);
+		ScreenManager.registerFactory(containerTypes.ALVEARY_SIEVE, GuiAlvearySieve::new);
+		ScreenManager.registerFactory(containerTypes.ALVEARY_SWARMER, GuiAlvearySwarmer::new);
+//		ScreenManager.registerFactory(containerTypes.BEE_HOUSING, GuiBeeHousing::new);	//TODO - need to move stuff from gui to container
+		ScreenManager.registerFactory(containerTypes.HABITAT_LOCATOR, GuiHabitatLocator::new);
+		ScreenManager.registerFactory(containerTypes.IMPRINTER, GuiImprinter::new);
+//		ScreenManager.registerFactory(containerTypes.BEEHOUSE_MINECART, GuiBeeHousing::new);	//TODO see above
 	}
 
 	@Override

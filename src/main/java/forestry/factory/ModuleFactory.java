@@ -20,12 +20,15 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -54,7 +57,6 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
-import forestry.core.items.ItemElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.network.IPacketRegistry;
@@ -65,6 +67,16 @@ import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.blocks.BlockRegistryFactory;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
+import forestry.factory.gui.FactoryContainerTypes;
+import forestry.factory.gui.GuiBottler;
+import forestry.factory.gui.GuiCarpenter;
+import forestry.factory.gui.GuiCentrifuge;
+import forestry.factory.gui.GuiFabricator;
+import forestry.factory.gui.GuiFermenter;
+import forestry.factory.gui.GuiMoistener;
+import forestry.factory.gui.GuiRaintank;
+import forestry.factory.gui.GuiSqueezer;
+import forestry.factory.gui.GuiStill;
 import forestry.factory.network.PacketRegistryFactory;
 import forestry.factory.recipes.CarpenterRecipeManager;
 import forestry.factory.recipes.CentrifugeRecipeManager;
@@ -89,6 +101,8 @@ public class ModuleFactory extends BlankForestryModule {
 	private static BlockRegistryFactory blocks;
 	@Nullable
 	private static TileRegistryFactory tiles;
+	@Nullable
+	private static FactoryContainerTypes containerTypes;
 
 	public static BlockRegistryFactory getBlocks() {
 		Preconditions.checkNotNull(blocks);
@@ -98,6 +112,10 @@ public class ModuleFactory extends BlankForestryModule {
 	public static TileRegistryFactory getTiles() {
 		Preconditions.checkNotNull(tiles);
 		return tiles;
+	}
+
+	public static FactoryContainerTypes getContainerTypes() {
+		return containerTypes;
 	}
 
 	@Override
@@ -145,6 +163,25 @@ public class ModuleFactory extends BlankForestryModule {
 	@Override
 	public void registerTiles() {
 		tiles = new TileRegistryFactory();
+	}
+
+	@Override
+	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+		containerTypes = new FactoryContainerTypes(registry);
+	}
+
+	@Override
+	public void registerGuiFactories() {
+		FactoryContainerTypes containerTypes = getContainerTypes();
+		ScreenManager.registerFactory(containerTypes.BOTTLER, GuiBottler::new);
+		ScreenManager.registerFactory(containerTypes.CARPENTER, GuiCarpenter::new);
+		ScreenManager.registerFactory(containerTypes.CENTRIFUGE, GuiCentrifuge::new);
+		ScreenManager.registerFactory(containerTypes.FABRICATOR, GuiFabricator::new);
+		ScreenManager.registerFactory(containerTypes.FERMENTER, GuiFermenter::new);
+		ScreenManager.registerFactory(containerTypes.MOISTENER, GuiMoistener::new);
+		ScreenManager.registerFactory(containerTypes.RAINTANK, GuiRaintank::new);
+		ScreenManager.registerFactory(containerTypes.SQUEEZER, GuiSqueezer::new);
+		ScreenManager.registerFactory(containerTypes.STILL, GuiStill::new);
 	}
 
 	@Override

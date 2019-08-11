@@ -12,20 +12,24 @@ package forestry.core.gui;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.item.ItemStack;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
-public interface IGuiHandlerItem extends IGuiHandlerForestry {
-	@Nullable
-	@OnlyIn(Dist.CLIENT)
-	Screen getGui(PlayerEntity player, ItemStack heldItem, int data);
+public interface IGuiHandlerItem extends IGuiHandlerForestry, IContainerProvider {	//TODO INamedContainerProvider?
+//	@Nullable	TODO inner class for ContainerProvider then register gui as normal.
+//	@OnlyIn(Dist.CLIENT)
+//	Screen getGui(PlayerEntity player, ItemStack heldItem, int data);
 
 	@Nullable
-	Container getContainer(PlayerEntity player, ItemStack heldItem, int data);
+	Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem);
+
+	//TODO inline?
+	@Nullable
+	@Override
+	default Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+		return getContainer(windowId, playerEntity, playerEntity.getHeldItem(playerEntity.getActiveHand()));
+	}
 }

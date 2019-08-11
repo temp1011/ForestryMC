@@ -15,18 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.core.IModelManager;
 import forestry.api.core.ItemGroups;
-import forestry.core.config.Config;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 

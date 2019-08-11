@@ -29,13 +29,13 @@ public class ContainerEntity<T extends Entity & IInventory> extends ContainerFor
 	@Nullable
 	private ImmutableSet<IErrorState> previousErrorStates;
 
-	protected ContainerEntity(T entity, int id) {	//TODO containertypes, windowid
-		super(ContainerType.BLAST_FURNACE, id);
+	protected ContainerEntity(int windowId, ContainerType<?> type, T entity) {
+		super(windowId, type);
 		this.entity = entity;
 	}
 
-	protected ContainerEntity(T entity, PlayerInventory playerInventory, int xInv, int yInv, int id) {
-		this(entity, id);
+	protected ContainerEntity(int windowId, ContainerType<?> type, T entity, PlayerInventory playerInventory, int xInv, int yInv) {
+		this(windowId, type, entity);
 		addPlayerInventory(playerInventory, xInv, yInv);
 	}
 

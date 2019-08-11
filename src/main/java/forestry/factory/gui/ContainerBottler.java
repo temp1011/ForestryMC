@@ -11,18 +11,26 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotEmptyLiquidContainerIn;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.core.tiles.TileUtil;
+import forestry.factory.ModuleFactory;
 import forestry.factory.inventory.InventoryBottler;
 import forestry.factory.tiles.TileBottler;
 
 public class ContainerBottler extends ContainerLiquidTanks<TileBottler> {
 
-	public ContainerBottler(PlayerInventory player, TileBottler tile, int id) {	//TODO windowid
-		super(tile, player, 8, 84, id);
+	public static ContainerBottler fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileBottler tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileBottler.class);
+		return new ContainerBottler(windowId, inv, tile);	//TODO nullability.
+	}
+
+	public ContainerBottler(int windowId, PlayerInventory player, TileBottler tile) {
+		super(windowId, ModuleFactory.getContainerTypes().BOTTLER, player, tile, 8, 84);
 
 		this.addSlot(new SlotLiquidIn(tile, InventoryBottler.SLOT_INPUT_FULL_CONTAINER, 18, 7));
 		this.addSlot(new SlotOutput(tile, InventoryBottler.SLOT_EMPTYING_PROCESSING, 18, 35).setPickupWatcher(tile));

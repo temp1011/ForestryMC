@@ -13,8 +13,8 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -51,7 +51,6 @@ import forestry.core.tiles.TilePowered;
 import forestry.core.utils.ItemStackUtil;
 import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerSqueezer;
-import forestry.factory.gui.GuiSqueezer;
 import forestry.factory.inventory.InventorySqueezer;
 import forestry.factory.recipes.SqueezerRecipeManager;
 
@@ -274,13 +273,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiSqueezer(player.inventory, this, data);	//TODO windowid
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerSqueezer(player.inventory, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerSqueezer(windowId, inv, this);
 	}
 }

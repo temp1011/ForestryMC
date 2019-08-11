@@ -11,6 +11,7 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -20,9 +21,9 @@ import forestry.factory.tiles.TileFermenter;
 public class GuiFermenter extends GuiForestryTitled<ContainerFermenter> {
 	private final TileFermenter tile;
 
-	public GuiFermenter(PlayerInventory inventory, TileFermenter tile, int id) {
-		super(Constants.TEXTURE_PATH_GUI + "/fermenter.png", new ContainerFermenter(inventory, tile, id), inventory, tile);
-		this.tile = tile;
+	public GuiFermenter(ContainerFermenter container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/fermenter.png", container, inventory, container.getTile());
+		this.tile = container.getTile();
 		widgetManager.add(new TankWidget(this.widgetManager, 35, 19, 0));
 		widgetManager.add(new TankWidget(this.widgetManager, 125, 19, 1));
 	}

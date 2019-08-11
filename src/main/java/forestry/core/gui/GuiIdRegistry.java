@@ -20,34 +20,13 @@ import forestry.apiculture.entities.MinecartEntityApiary;
 import forestry.apiculture.entities.MinecartEntityBeehouse;
 import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.apiculture.items.ItemImprinter;
-import forestry.apiculture.multiblock.TileAlveary;
-import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
-import forestry.apiculture.multiblock.TileAlvearySieve;
-import forestry.apiculture.tiles.TileApiary;
-import forestry.apiculture.tiles.TileBeeHouse;
 //import forestry.book.items.ItemForesterBook;
 //import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.items.ItemAlyzer;
 import forestry.core.items.ItemSolderingIron;
-import forestry.core.tiles.TileAnalyzer;
-import forestry.core.tiles.TileEscritoire;
-import forestry.core.tiles.TileNaturalistChest;
 //import forestry.cultivation.tiles.TilePlanter;
 //import forestry.database.tiles.TileDatabase;
-import forestry.energy.tiles.TileEngineBiogas;
-import forestry.energy.tiles.TileEngineElectric;
-import forestry.energy.tiles.TileEnginePeat;
-import forestry.energy.tiles.TileEuGenerator;
-import forestry.factory.tiles.TileBottler;
-import forestry.factory.tiles.TileCarpenter;
-import forestry.factory.tiles.TileCentrifuge;
-import forestry.factory.tiles.TileFabricator;
-import forestry.factory.tiles.TileFermenter;
-import forestry.factory.tiles.TileMoistener;
-import forestry.factory.tiles.TileRaintank;
-import forestry.factory.tiles.TileSqueezer;
-import forestry.factory.tiles.TileStill;
-import forestry.farming.tiles.TileFarm;
+
 //import forestry.mail.items.ItemCatalogue;
 //import forestry.mail.items.ItemLetter;
 //import forestry.mail.tiles.TileMailbox;
@@ -57,66 +36,66 @@ import forestry.farming.tiles.TileFarm;
 //import forestry.storage.items.ItemBackpack;
 //import forestry.storage.items.ItemBackpackNaturalist;
 //import forestry.worktable.tiles.TileWorktable;
-
+//TODO I think this can be removed
 public class GuiIdRegistry {
 	private static final Map<Class<? extends IGuiHandlerForestry>, GuiId> classMap = new HashMap<>();
 	private static final Map<Integer, GuiId> idMap = new HashMap<>();
 	private static int nextId = 0;
 
 	static {
-		registerGuiHandlers(GuiType.Tile, Arrays.asList(
-			//Apiculture Module
-			TileAlveary.class,
-			TileAlvearyHygroregulator.class,
-			TileAlvearySieve.class,
-			TileApiary.class,
-			TileBeeHouse.class,
-
-			//Core Module
-			TileAnalyzer.class,
-			TileEscritoire.class,
-			TileNaturalistChest.class,
-
-			//Worktable Module
-//			TileWorktable.class,
-
-			//Database Module
-//			TileDatabase.class,
-
-			//Factory Module
-			TileBottler.class,
-			TileCarpenter.class,
-			TileCentrifuge.class,
-			TileFabricator.class,
-			TileFermenter.class,
-			TileMoistener.class,
-			TileSqueezer.class,
-			TileStill.class,
-			TileRaintank.class,
-
-			//Farm Module
-			TileFarm.class,
-
-			//Climatology
-//			TileHabitatFormer.class,
-
-			//Sorting Module
-//			TileGeneticFilter.class,
-
-			//Cultivation Module
-//			TilePlanter.class,
-
-			//Power Module
-			TileEngineBiogas.class,
-			TileEngineElectric.class,
-			TileEnginePeat.class,
-			TileEuGenerator.class//,
-
-			//Mail Module
-//			TileMailbox.class,
-//			TileStampCollector.class,
-//			TileTrader.class
-		));
+//		registerGuiHandlers(GuiType.Tile, Arrays.asList(
+//			//Apiculture Module
+//			TileAlveary.class,
+//			TileAlvearyHygroregulator.class,
+//			TileAlvearySieve.class,
+//			TileApiary.class,
+//			TileBeeHouse.class,
+//
+//			//Core Module
+//			TileAnalyzer.class,
+//			TileEscritoire.class,
+//			TileNaturalistChest.class,
+//
+//			//Worktable Module
+////			TileWorktable.class,
+//
+//			//Database Module
+////			TileDatabase.class,
+//
+//			//Factory Module
+//			TileBottler.class,
+//			TileCarpenter.class,
+//			TileCentrifuge.class,
+//			TileFabricator.class,
+//			TileFermenter.class,
+//			TileMoistener.class,
+//			TileSqueezer.class,
+//			TileStill.class,
+//			TileRaintank.class,
+//
+//			//Farm Module
+//			TileFarm.class,
+//
+//			//Climatology
+////			TileHabitatFormer.class,
+//
+//			//Sorting Module
+////			TileGeneticFilter.class,
+//
+//			//Cultivation Module
+////			TilePlanter.class,
+//
+//			//Power Module
+//			TileEngineBiogas.class,
+//			TileEngineElectric.class,
+//			TileEnginePeat.class,
+//			TileEuGenerator.class//,
+//
+//			//Mail Module
+////			TileMailbox.class,
+////			TileStampCollector.class,
+////			TileTrader.class
+//		));
 
 		registerGuiHandlers(GuiType.Item, Arrays.asList(
 //			ItemBackpack.class,

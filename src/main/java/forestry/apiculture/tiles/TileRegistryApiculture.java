@@ -1,6 +1,5 @@
 package forestry.apiculture.tiles;
 
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 
 import forestry.apiculture.ModuleApiculture;

@@ -27,13 +27,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
+import forestry.core.ItemGroupForestry;
 import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemForestry extends Item implements IItemModelRegister {
 	public ItemForestry(Item.Properties properties) {
 		//TODO - do the below at registration
-		super(properties.group(CreativeTabForestry.tabForestry));
+		super(properties.group(ItemGroupForestry.tabForestry));
 	}
 
 	public ItemForestry(ItemGroup group) {

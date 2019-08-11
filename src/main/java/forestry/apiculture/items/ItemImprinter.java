@@ -10,19 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.gui.ContainerImprinter;
-import forestry.apiculture.gui.GuiImprinter;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.core.items.ItemWithGui;
 
@@ -32,15 +27,14 @@ public class ItemImprinter extends ItemWithGui {
 	}
 
 	//TODO window id
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int data) {
-		return new GuiImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem), data);
-	}
+//	@Override
+//	@OnlyIn(Dist.CLIENT)
+//	public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int data) {
+//		return new GuiImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem), data);
+//	}
 
-	//TODO window id
 	@Override
-	public Container getContainer(PlayerEntity player, ItemStack heldItem, int data) {
-		return new ContainerImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem), data);
+	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+		return new ContainerImprinter(windowId, player.inventory, new ItemInventoryImprinter(player, heldItem));
 	}
 }

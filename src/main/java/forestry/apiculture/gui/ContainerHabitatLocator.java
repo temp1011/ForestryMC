@@ -11,8 +11,11 @@
 package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Hand;
 
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
@@ -20,8 +23,15 @@ import forestry.core.gui.slots.SlotOutput;
 
 public class ContainerHabitatLocator extends ContainerItemInventory<ItemInventoryHabitatLocator> {
 
-	public ContainerHabitatLocator(PlayerEntity player, ItemInventoryHabitatLocator inventory, int id) {
-		super(inventory, player.inventory, 8, 102, ContainerType.BLAST_FURNACE, id);	//TODO container types
+	public static ContainerHabitatLocator fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;	//TODO write this to data
+		PlayerEntity player = playerInv.player;
+		ItemInventoryHabitatLocator inv = new ItemInventoryHabitatLocator(player, player.getHeldItem(hand));
+		return new ContainerHabitatLocator(windowId, player, inv);
+	}
+
+	public ContainerHabitatLocator(int windowId, PlayerEntity player, ItemInventoryHabitatLocator inventory) {
+		super(windowId, inventory, player.inventory, 8, 102, ModuleApiculture.getContainerTypes().HABITAT_LOCATOR);
 
 		// Energy
 		this.addSlot(new SlotFiltered(inventory, 2, 152, 8));

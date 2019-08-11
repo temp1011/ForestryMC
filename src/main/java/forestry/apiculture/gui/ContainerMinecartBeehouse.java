@@ -12,23 +12,34 @@ package forestry.apiculture.gui;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.network.PacketBuffer;
 
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
 import forestry.core.gui.ContainerAnalyzerProviderHelper;
 import forestry.core.gui.ContainerEntity;
 import forestry.core.gui.slots.SlotLockable;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketGuiUpdateEntity;
 
 public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBeeHousingBase> implements IContainerBeeHousing {
 	/* Attributes - Final*/
 	private final ContainerAnalyzerProviderHelper providerHelper;
 
-	public ContainerMinecartBeehouse(PlayerInventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames, int id) {
-		super(entity, player, 8, 108, id);
+	public static ContainerMinecartBeehouse fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+		PacketBufferForestry buf = new PacketBufferForestry(extraData);
+		MinecartEntityBeeHousingBase e = (MinecartEntityBeeHousingBase) buf.readEntityById(playerInv.player.world);	//TODO cast
+		PlayerEntity player = playerInv.player;
+		return new ContainerMinecartBeehouse(windowId, player.inventory, e, buf.readBoolean());
+	}
+
+	public ContainerMinecartBeehouse(int windowId, PlayerInventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames) {
+		super(windowId, ModuleApiculture.getContainerTypes().BEEHOUSE_MINECART, entity, player, 8, 108);
 		providerHelper = new ContainerAnalyzerProviderHelper(this, player);
 
 		ContainerBeeHelper.addSlots(this, entity, hasFrames);

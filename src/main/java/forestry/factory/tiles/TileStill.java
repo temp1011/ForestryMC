@@ -15,8 +15,8 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.CompoundNBT;
@@ -44,7 +44,6 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerStill;
-import forestry.factory.gui.GuiStill;
 import forestry.factory.inventory.InventoryStill;
 import forestry.factory.recipes.StillRecipeManager;
 
@@ -207,14 +206,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiStill(player.inventory, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerStill(windowId, player.inventory, this);
 	}
 
-	//TODO windowId stuff again
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerStill(player.inventory, this, data);
-	}
 }

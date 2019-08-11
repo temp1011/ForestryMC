@@ -9,9 +9,12 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.ResourceLocation;
 
 import com.mojang.brigadier.Command;
+
+import net.minecraftforge.registries.IForgeRegistry;
 
 /**
  * Defines a Forestry module.
@@ -64,6 +67,14 @@ public interface IForestryModule {
 	}
 
 	default void registerTiles() {
+
+	}
+
+	default void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+
+	}
+
+	default void registerGuiFactories() {
 
 	}
 

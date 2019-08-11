@@ -11,6 +11,7 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -20,9 +21,10 @@ import forestry.factory.tiles.TileFabricator;
 public class GuiFabricator extends GuiForestryTitled<ContainerFabricator> {
 	private final TileFabricator tile;
 
-	public GuiFabricator(PlayerInventory player, TileFabricator tile, int id) {
-		super(Constants.TEXTURE_PATH_GUI + "/fabricator.png", new ContainerFabricator(player, tile, id), player, tile);
-		this.tile = tile;
+	public GuiFabricator(ContainerFabricator container, PlayerInventory player, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/fabricator.png", container, player, container.getTile());
+
+		this.tile = container.getTile();
 		this.ySize = 211;
 		this.widgetManager.add(new ReservoirWidget(this.widgetManager, 26, 48, 0));
 	}

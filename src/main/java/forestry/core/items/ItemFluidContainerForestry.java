@@ -49,7 +49,7 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
+import forestry.core.ItemGroupForestry;
 import forestry.core.config.Config;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Translator;
@@ -58,7 +58,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
 
 	public ItemFluidContainerForestry(EnumContainerType type) {
-		super((new Item.Properties()).group(CreativeTabForestry.tabForestry));
+		super((new Item.Properties()).group(ItemGroupForestry.tabForestry));
 		this.type = type;
 	}
 

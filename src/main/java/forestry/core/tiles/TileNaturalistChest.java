@@ -12,8 +12,9 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.inventory.container.Container;
@@ -28,7 +29,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiHandler;
-import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.InventoryNaturalistChest;
 import forestry.core.network.PacketBufferForestry;
@@ -100,8 +100,8 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	@Override
-	public void flipPage(PlayerEntity player, short page) {
-		GuiHandler.openGui(player, this, page);
+	public void flipPage(ServerPlayerEntity player, short page) {
+		GuiHandler.openGui(player, this, page, this.pos);	//TODO this is going to need to encode more data
 	}
 
 	/* IStreamable */
@@ -119,14 +119,11 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int page) {
-		ContainerNaturalistInventory container = new ContainerNaturalistInventory(player.inventory, this, page, page);	//TODO Windowid
-		return new GuiNaturalistInventory(speciesRoot, player, container, page, 5);
+	public Container createMenu(int page, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerNaturalistInventory(0, player.inventory, this, page, 5);	//TODO windowid
 	}
 
-	@Override
-	public Container getContainer(PlayerEntity player, int page) {
-		return new ContainerNaturalistInventory(player.inventory, this, page, page);	//TODO windowid
+	public ISpeciesRoot getSpeciesRoot() {
+		return speciesRoot;
 	}
 }

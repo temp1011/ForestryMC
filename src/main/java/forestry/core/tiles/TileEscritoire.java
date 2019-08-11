@@ -13,13 +13,12 @@ package forestry.core.tiles;
 import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
 
 import com.mojang.authlib.GameProfile;
 
@@ -32,7 +31,6 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.ModuleCore;
 import forestry.core.gui.ContainerEscritoire;
-import forestry.core.gui.GuiEscritoire;
 import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
@@ -161,16 +159,9 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 		}
 	}
 
-	//TODO  - not sure this data is the windowId. Else need to add it to packets etc
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiEscritoire(player, this, data);
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerEscritoire(player, this, data);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerEscritoire(windowId, player, this);
 	}
 
 	@Override

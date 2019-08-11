@@ -26,7 +26,6 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 
 import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockRegistryCore;
-import forestry.core.blocks.BlockResourceOre;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.config.Config;
 import forestry.modules.ModuleManager;

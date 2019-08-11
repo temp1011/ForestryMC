@@ -10,20 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
-public interface IGuiHandlerEntity extends IGuiHandlerForestry {
-	@OnlyIn(Dist.CLIENT)
-	ContainerScreen getGui(PlayerEntity player, int data);
-
-	Container getContainer(PlayerEntity player, int data);
+public interface IGuiHandlerEntity extends IGuiHandlerForestry, INamedContainerProvider {
 
 	// can't be named getEntityId() for obfuscation reasons
-	int getIdOfEntity();
+	int getIdOfEntity();	//TODO needed? check once other modules are back.
 }

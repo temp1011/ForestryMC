@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
@@ -31,9 +33,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.EventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
 
@@ -58,6 +60,11 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleRegistry;
+import forestry.core.gui.CoreContainerTypes;
+import forestry.core.gui.GuiAlyzer;
+import forestry.core.gui.GuiAnalyzer;
+import forestry.core.gui.GuiEscritoire;
+import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.loot.SetSpeciesNBT;
@@ -87,6 +94,8 @@ public class ModuleCore extends BlankForestryModule {
 	private static BlockRegistryCore blocks;
 	@Nullable
 	private static TileRegistryCore tiles;
+	@Nullable	//TODO - there are lots of these. Make helper class/map or something?
+	private static CoreContainerTypes containerTypes;
 
 	public ModuleCore() {
 		MinecraftForge.EVENT_BUS.register(this);
@@ -105,6 +114,11 @@ public class ModuleCore extends BlankForestryModule {
 	public static TileRegistryCore getTiles() {
 		Preconditions.checkNotNull(tiles);
 		return tiles;
+	}
+
+	public static CoreContainerTypes getContainerTypes() {
+		Preconditions.checkNotNull(containerTypes);
+		return containerTypes;
 	}
 
 	@Override
@@ -150,6 +164,21 @@ public class ModuleCore extends BlankForestryModule {
 	public void registerTiles() {
 		tiles = new TileRegistryCore();
 	}
+
+	@Override
+	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+		containerTypes = new CoreContainerTypes(registry);
+	}
+
+	@Override
+	public void registerGuiFactories() {
+		CoreContainerTypes containerTypes = getContainerTypes();
+		ScreenManager.registerFactory(containerTypes.ALYZER, GuiAlyzer::new);
+		ScreenManager.registerFactory(containerTypes.ANALYZER, GuiAnalyzer::new);
+		ScreenManager.registerFactory(containerTypes.NATURALIST_INVENTORY, GuiNaturalistInventory::new);
+		ScreenManager.registerFactory(containerTypes.ESCRITOIRE, GuiEscritoire::new);
+	}
+
 
 	@Override
 	public void preInit() {

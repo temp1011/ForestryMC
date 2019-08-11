@@ -18,8 +18,6 @@ import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
-import com.mojang.blaze3d.platform.TextureUtil;
-
 //import net.minecraftforge.fml.client.FMLClientHandler;
 //import net.minecraftforge.fml.common.ProgressManager;
 

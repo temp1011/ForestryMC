@@ -12,15 +12,13 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
 
-import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.render.ParticleRender;
 import forestry.core.tiles.TileMill;
@@ -37,20 +35,20 @@ public class TileMillRainmaker extends TileMill {
 		setInternalInventory(new InventoryRainmaker(this));
 	}
 
-	@Override
-	public void openGui(PlayerEntity player, ItemStack heldItem) {
-		if (!player.world.isRemote && !heldItem.isEmpty()) {
-			// We don't have a gui, but we can be activated
-			if (FuelManager.rainSubstrate.containsKey(heldItem) && charge == 0) {
-				RainSubstrate substrate = FuelManager.rainSubstrate.get(heldItem);
-				if (substrate.getItem().isItemEqual(heldItem)) {
-					addCharge(substrate);
-					heldItem.shrink(1);
-				}
-			}
-			sendNetworkUpdate();
-		}
-	}
+//	@Override	//TODO this needs to be in onactivated or similar
+//	public void openGui(PlayerEntity player, ItemStack heldItem) {
+//		if (!player.world.isRemote && !heldItem.isEmpty()) {
+//			// We don't have a gui, but we can be activated
+//			if (FuelManager.rainSubstrate.containsKey(heldItem) && charge == 0) {
+//				RainSubstrate substrate = FuelManager.rainSubstrate.get(heldItem);
+//				if (substrate.getItem().isItemEqual(heldItem)) {
+//					addCharge(substrate);
+//					heldItem.shrink(1);
+//				}
+//			}
+//			sendNetworkUpdate();
+//		}
+//	}
 
 	@Override
 	public void read(CompoundNBT compoundNBT) {
@@ -115,13 +113,7 @@ public class TileMillRainmaker extends TileMill {
 
 	@Override
 	@Nullable
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return null;
-	}
-
-	@Override
-	@Nullable
-	public Container getContainer(PlayerEntity player, int data) {
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
 		return null;
 	}
 }

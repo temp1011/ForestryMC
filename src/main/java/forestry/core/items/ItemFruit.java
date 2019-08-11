@@ -12,18 +12,10 @@ package forestry.core.items;
 
 import java.util.Locale;
 
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.core.IModelManager;
-import forestry.core.ModuleCore;
 import forestry.core.utils.OreDictUtil;
 
 public class ItemFruit extends ItemForestryFood {

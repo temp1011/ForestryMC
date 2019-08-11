@@ -15,7 +15,6 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -39,7 +38,6 @@ import forestry.api.core.ITextureManager;
 import forestry.api.core.ItemGroups;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.gui.ContainerHabitatLocator;
-import forestry.apiculture.gui.GuiHabitatLocator;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.items.ItemWithGui;
@@ -101,14 +99,15 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 		}
 	}
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int data) {
-		return new GuiHabitatLocator(player, new ItemInventoryHabitatLocator(player, heldItem), data);	//TODO windowid
-	}
+	//TODO subclass for containerProvider and register that.
+//	@Override
+//	@OnlyIn(Dist.CLIENT)
+//	public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int data) {
+//		return new GuiHabitatLocator(player, new ItemInventoryHabitatLocator(player, heldItem), data);	//TODO windowid
+//	}
 
 	@Override
-	public Container getContainer(PlayerEntity player, ItemStack heldItem, int data) {
-		return new ContainerHabitatLocator(player, new ItemInventoryHabitatLocator(player, heldItem), data);	//TODO windowid
+	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+		return new ContainerHabitatLocator(windowId, player, new ItemInventoryHabitatLocator(player, heldItem));
 	}
 }

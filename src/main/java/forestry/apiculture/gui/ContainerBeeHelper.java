@@ -20,7 +20,6 @@ import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.IFilterSlotDelegate;
 
 public abstract class ContainerBeeHelper {
-	//TODO - addSlot protected, so make this a superclass?
 	public static <T extends IInventory & IFilterSlotDelegate> void addSlots(ContainerForestry container, T inventory, boolean hasFrames) {
 		// Queen/Princess
 		container.addSlot(new SlotFiltered(inventory, InventoryBeeHousing.SLOT_QUEEN, 29, 39));

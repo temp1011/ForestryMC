@@ -14,7 +14,7 @@
       "type": "forestry:module"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "key": {
     "T": {
       "item": "forestry:portable_alyzer"

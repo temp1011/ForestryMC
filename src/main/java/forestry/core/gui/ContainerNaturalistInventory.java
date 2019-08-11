@@ -15,19 +15,34 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.network.PacketBuffer;
 
+import forestry.core.ModuleCore;
 import forestry.core.gui.slots.SlotFilteredInventory;
 import forestry.core.tiles.IFilterSlotDelegate;
 import forestry.core.tiles.TileNaturalistChest;
+import forestry.core.tiles.TileUtil;
 
 public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistChest> implements IGuiSelectable {
 
-	public ContainerNaturalistInventory(PlayerInventory player, TileNaturalistChest tile, int page, int id) {	//TODO windowid
-		super(tile, player, 18, 120, id);
-
-		addInventory(this, tile, page);
+	//TODO more duped code
+	public static ContainerNaturalistInventory fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+		TileNaturalistChest tile = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileNaturalistChest.class);	//TODO think this is OK for inheritance
+		return new ContainerNaturalistInventory(windowId, playerInv, tile, extraData.readVarInt(), extraData.readVarInt());
 	}
 
+	private int page;
+	private int maxPage;
+
+	public ContainerNaturalistInventory(int windowId, PlayerInventory player, TileNaturalistChest tile, int page, int maxPage) {
+		super(windowId, ModuleCore.getContainerTypes().NATURALIST_INVENTORY, player, tile, 18, 120);
+
+		addInventory(this, tile, page);
+		this.page = page;
+		this.maxPage = maxPage;
+	}
+
+	//TODO this is hardcoded to max page. So is the maxPage field needed??
 	public static <T extends IInventory & IFilterSlotDelegate> void addInventory(ContainerForestry container, T inventory, int selectedPage) {
 		for (int page = 0; page < 5; page++) {
 			for (int x = 0; x < 5; x++) {
@@ -46,6 +61,14 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 	@Override
 	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
 		tile.flipPage(player, (short) primary);
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public int getMaxPage() {
+		return maxPage;
 	}
 
 	@Override

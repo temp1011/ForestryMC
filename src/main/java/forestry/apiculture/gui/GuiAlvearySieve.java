@@ -11,6 +11,7 @@
 package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.core.config.Constants;
@@ -19,9 +20,9 @@ import forestry.core.gui.GuiForestryTitled;
 public class GuiAlvearySieve extends GuiForestryTitled<ContainerAlvearySieve> {
 	private final TileAlvearySieve tile;
 
-	public GuiAlvearySieve(PlayerInventory inventory, TileAlvearySieve tile, int id) {
-		super(Constants.TEXTURE_PATH_GUI + "/sieve.png", new ContainerAlvearySieve(inventory, tile, id), inventory, tile);
-		this.tile = tile;
+	public GuiAlvearySieve(ContainerAlvearySieve container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/sieve.png", container, inventory, container.getTile());
+		this.tile = container.getTile();
 	}
 
 	@Override

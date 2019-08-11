@@ -42,16 +42,10 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 	private int previousWorkCounter = 0;
 	private int previousTicksPerWorkCycle = 0;
 
-	protected ContainerTile(T tile, int id) {
-		//TODO ContainerTypes
-		super(ContainerType.CRAFTING, id);
-		this.tile = tile;
-	}
-
-	protected ContainerTile(T tileForestry, PlayerInventory playerInventory, int xInv, int yInv, int id) {
-		this(tileForestry, id);
-
+	protected ContainerTile(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+		super(windowId, type);
 		addPlayerInventory(playerInventory, xInv, yInv);
+		this.tile = tile;
 	}
 
 	@Override
@@ -72,7 +66,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 			IErrorLogicSource errorLogicSource = (IErrorLogicSource) tile;
 			ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
 
-			if (previousErrorStates == null || !errorStates.equals(previousErrorStates)) {
+			if (!errorStates.equals(previousErrorStates)) {
 				PacketErrorUpdate packet = new PacketErrorUpdate(tile, errorLogicSource);
 				sendPacketToListeners(packet);
 			}
@@ -121,5 +115,9 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
 			energyManager.setEnergyStored(energyStored);
 		}
+	}
+
+	public T getTile() {
+		return tile;
 	}
 }

@@ -11,6 +11,7 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -20,10 +21,10 @@ import forestry.factory.tiles.TileCarpenter;
 public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter> {
 	private final TileCarpenter tile;
 
-	public GuiCarpenter(PlayerInventory inventory, TileCarpenter tile, int id) {	//TODO windowid
-		super(Constants.TEXTURE_PATH_GUI + "/carpenter.png", new ContainerCarpenter(inventory, tile, id), inventory, tile);
+	public GuiCarpenter(ContainerCarpenter container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/carpenter.png", container, inventory, container.getTile());
 
-		this.tile = tile;
+		this.tile = container.getTile();
 		this.ySize = 218;
 		this.widgetManager.add(new TankWidget(this.widgetManager, 150, 17, 0));
 	}

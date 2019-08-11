@@ -13,8 +13,8 @@ package forestry.energy.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.CompoundNBT;
@@ -44,7 +44,6 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileEngine;
 import forestry.energy.ModuleEnergy;
 import forestry.energy.gui.ContainerEngineBiogas;
-import forestry.energy.gui.GuiEngineBiogas;
 import forestry.energy.inventory.InventoryEngineBiogas;
 
 public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILiquidTankTile {
@@ -287,13 +286,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiEngineBiogas(player.inventory, this, data);	//TODO windowid
-	}
-
-	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerEngineBiogas(player.inventory, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerEngineBiogas(windowId, player.inventory, this);	//TODO windowid
 	}
 }

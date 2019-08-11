@@ -21,7 +21,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
+import forestry.core.ItemGroupForestry;
 
 public class ItemForestryFood extends Item implements IItemModelRegister {
 
@@ -41,7 +41,7 @@ public class ItemForestryFood extends Item implements IItemModelRegister {
 
 	public ItemForestryFood(int heal, float saturation, Item.Properties properties) {
 		super(properties
-		.group(CreativeTabForestry.tabForestry)
+		.group(ItemGroupForestry.tabForestry)
 		.food((new Food.Builder())
 				.hunger(heal)
 				.saturation(saturation)

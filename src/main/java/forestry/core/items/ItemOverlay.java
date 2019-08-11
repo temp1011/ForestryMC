@@ -16,10 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.core.IModelManager;
 import forestry.core.config.Config;
 
 public class ItemOverlay extends ItemForestry implements IColoredItem {

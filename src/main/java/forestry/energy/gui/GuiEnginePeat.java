@@ -11,14 +11,15 @@
 package forestry.energy.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.energy.tiles.TileEnginePeat;
 
 public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat> {
 
-	public GuiEnginePeat(PlayerInventory inventory, TileEnginePeat tile, int id) {
-		super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEnginePeat(inventory, tile, id), inventory, tile);
+	public GuiEnginePeat(ContainerEnginePeat container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", container, inventory, container.getTile());
 	}
 
 	@Override

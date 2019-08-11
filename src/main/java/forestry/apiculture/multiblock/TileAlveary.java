@@ -14,13 +14,15 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -47,7 +49,6 @@ import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlveary;
-import forestry.apiculture.gui.GuiAlveary;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.network.IStreamableGui;
@@ -224,13 +225,12 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ContainerScreen getGui(PlayerEntity player, int data) {
-		return new GuiAlveary(player.inventory, this, data);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerAlveary(windowId, player.inventory, this);
 	}
 
 	@Override
-	public Container getContainer(PlayerEntity player, int data) {
-		return new ContainerAlveary(player.inventory, this, data);	//TODO windowid
+	public ITextComponent getDisplayName() {
+		return new TranslationTextComponent(this.getUnlocalizedTitle());
 	}
 }

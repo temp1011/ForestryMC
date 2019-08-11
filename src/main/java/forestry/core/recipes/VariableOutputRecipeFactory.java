@@ -35,7 +35,7 @@
 //import forestry.api.core.ForestryAPI;
 //import forestry.core.utils.Log;
 //
-//@SuppressWarnings("unused")
+//@SuppressWarnings("unused") //TODO IRecipeSerializer. Or use custom ingredient now?8
 //public class VariableOutputRecipeFactory implements IRecipeFactory {
 //
 //	@Override

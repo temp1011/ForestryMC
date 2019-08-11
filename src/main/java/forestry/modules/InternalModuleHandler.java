@@ -8,11 +8,13 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
 
@@ -95,9 +97,23 @@ public class InternalModuleHandler {
 		}
 	}
 
+	//TODO generics or something on these registry events
+	//TODO possible to do this for modules too?
 	public void registerTileEntities() {
 		for(IForestryModule module : modules) {
 			module.registerTiles();
+		}
+	}
+
+	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+		for(IForestryModule module : modules) {
+			module.registerContainerTypes(registry);
+		}
+	}
+
+	public void registerGuiFactories() {
+		for(IForestryModule module : modules) {
+			module.registerGuiFactories();
 		}
 	}
 

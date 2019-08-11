@@ -80,7 +80,7 @@ public class RenderMachine extends TileEntityRenderer<TileBase> {
 				continue;
 			}
 			String tankLevelString = tankLevel.toString().toLowerCase(Locale.ENGLISH);
-			texturesTankLevels.put(tankLevel, new ForestryResource("textures/blocks/machine_tank_" + tankLevelString + ".png"));
+			texturesTankLevels.put(tankLevel, new ForestryResource("textures/block/machine_tank_" + tankLevelString + ".png"));
 		}
 	}
 

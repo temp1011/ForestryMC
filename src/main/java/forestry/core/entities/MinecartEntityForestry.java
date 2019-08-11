@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.minecart.MinecartEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
@@ -23,7 +24,7 @@ import net.minecraft.world.World;
 import forestry.core.gui.IGuiHandlerEntity;
 import forestry.core.tiles.ITitled;
 
-public abstract class MinecartEntityForestry extends MinecartEntity implements ITitled, IGuiHandlerEntity {
+public abstract class MinecartEntityForestry extends MinecartEntity implements ITitled, INamedContainerProvider, IGuiHandlerEntity {
 
 	//TODO - create entity type?
 	@SuppressWarnings("unused")

@@ -13,10 +13,11 @@ package forestry.core.tiles;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.gui.GuiHandler;
@@ -27,8 +28,8 @@ public abstract class TileBase extends TileForestry {
 		super(tileEntityTypeIn);
 	}
 
-	public void openGui(PlayerEntity player, ItemStack heldItem) {
-		GuiHandler.openGui(player, this);
+	public void openGui(ServerPlayerEntity player, ItemStack heldItem, BlockPos pos) {
+		GuiHandler.openGui(player, this, pos);
 	}
 
 	@Override

@@ -12,18 +12,27 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.api.climate.IClimateListener;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileBeeHousingBase;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.gui.ContainerAnalyzerProvider;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.packets.PacketGuiUpdate;
+import forestry.core.tiles.TileUtil;
 
 public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousingBase> implements IContainerBeeHousing {
 
-	public ContainerBeeHousing(PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames, int id) {	//TODO windowid
-		super(tile, player, 8, 108, id);
+	public static ContainerBeeHousing fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileBeeHousingBase tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileBeeHousingBase.class);
+		return new ContainerBeeHousing(windowId, inv, tile, data.readBoolean());	//TODO nullability.
+	}
+
+	//TODO will need hasFrames written to packet.
+	public ContainerBeeHousing(int windowId, PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames) {
+		super(windowId, ModuleApiculture.getContainerTypes().BEE_HOUSING, player, tile, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 
 		tile.getBeekeepingLogic().clearCachedValues();
