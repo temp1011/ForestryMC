@@ -29,7 +29,7 @@ public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImpr
 
 	//TODO dedupe this
 	public static ContainerImprinter fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;	//TODO write this to data
+		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
 		PlayerEntity player = playerInv.player;
 		ItemInventoryImprinter inv = new ItemInventoryImprinter(player, player.getHeldItem(hand));
 		return new ContainerImprinter(windowId, player.inventory, inv);

@@ -287,6 +287,6 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerEngineBiogas(windowId, player.inventory, this);	//TODO windowid
+		return new ContainerEngineBiogas(windowId, inv, this);
 	}
 }

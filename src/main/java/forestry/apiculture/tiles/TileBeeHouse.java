@@ -14,8 +14,12 @@ import java.util.Collections;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.util.math.BlockPos;
 
+
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -26,6 +30,7 @@ import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
+import forestry.core.network.PacketBufferForestry;
 
 public class TileBeeHouse extends TileBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
@@ -60,5 +65,15 @@ public class TileBeeHouse extends TileBeeHousingBase {
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
 		return new ContainerBeeHousing(windowId, player.inventory, this, false, GuiBeeHousing.Icon.BEE_HOUSE);
+	}
+
+	@Override
+	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+		NetworkHooks.openGui(player, this, p -> {
+			PacketBufferForestry forestryP = new PacketBufferForestry(p);
+			forestryP.writeBlockPos(pos);
+			forestryP.writeBoolean(false);
+			forestryP.writeEnum(GuiBeeHousing.Icon.BEE_HOUSE, GuiBeeHousing.Icon.values());
+		});
 	}
 }

@@ -19,6 +19,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -37,13 +38,6 @@ public class ItemImprinter extends ItemWithGui {
 		super((new Item.Properties()).group(ItemGroups.tabApiculture).maxStackSize(1));
 	}
 
-	//TODO window id
-//	@Override
-//	@OnlyIn(Dist.CLIENT)
-//	public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int data) {
-//		return new GuiImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem), data);
-//	}
-
 	@Override
 	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
 		return new ContainerImprinter(windowId, player.inventory, new ItemInventoryImprinter(player, heldItem));
@@ -51,7 +45,7 @@ public class ItemImprinter extends ItemWithGui {
 
 	@Override
 	public void openGui(ServerPlayerEntity player, ItemStack stack) {
-		NetworkHooks.openGui(player, new ContainerProvider(stack));
+		NetworkHooks.openGui(player, new ContainerProvider(stack), p -> p.writeBoolean(player.getActiveHand() == Hand.MAIN_HAND));
 	}
 
 	//TODO see if this can be deduped. Given we pass in the held item etc.

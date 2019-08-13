@@ -39,7 +39,9 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 		PacketBufferForestry buf = new PacketBufferForestry(extraData);
 		MinecartEntityBeeHousingBase e = (MinecartEntityBeeHousingBase) buf.readEntityById(playerInv.player.world);	//TODO cast
 		PlayerEntity player = playerInv.player;
-		return new ContainerMinecartBeehouse(windowId, player.inventory, e, buf.readBoolean(), buf.readEnum(GuiBeeHousing.Icon.values()));
+		boolean hasFrames = buf.readBoolean();
+		GuiBeeHousing.Icon icon = buf.readEnum(GuiBeeHousing.Icon.values());
+		return new ContainerMinecartBeehouse(windowId, player.inventory, e, hasFrames, icon);
 	}
 
 	public ContainerMinecartBeehouse(int windowId, PlayerInventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames, GuiBeeHousing.Icon icon) {

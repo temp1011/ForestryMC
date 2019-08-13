@@ -46,9 +46,6 @@ import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.gui.ContainerHabitatLocator;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.apiculture.render.TextureHabitatLocator;
-import forestry.core.gui.ContainerAlyzer;
-import forestry.core.inventory.ItemInventoryAlyzer;
-import forestry.core.items.ItemAlyzer;
 import forestry.core.items.ItemWithGui;
 
 public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
@@ -77,7 +74,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	@OnlyIn(Dist.CLIENT)
 	public void registerSprites(ITextureManager manager) {
 		TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
-//		Minecraft.getInstance().getTextureMap().setTextureEntry(texture);
+		//		Minecraft.getInstance().getTextureMap().setTextureEntry(texture);
 		//TODO textures
 	}
 
@@ -108,13 +105,6 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 		}
 	}
 
-	//TODO subclass for containerProvider and register that.
-//	@Override
-//	@OnlyIn(Dist.CLIENT)
-//	public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int data) {
-//		return new GuiHabitatLocator(player, new ItemInventoryHabitatLocator(player, heldItem), data);	//TODO windowid
-//	}
-
 	@Override
 	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
 		return new ContainerHabitatLocator(windowId, player, new ItemInventoryHabitatLocator(player, heldItem));
@@ -137,7 +127,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 		@Override
 		public ITextComponent getDisplayName() {
-			return new StringTextComponent("ITEM_GUI_TITLE");	//TODO needs to be overriden individually
+			return new StringTextComponent("ITEM_GUI_TITLE");    //TODO needs to be overriden individually
 		}
 
 		@Nullable

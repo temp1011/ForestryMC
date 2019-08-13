@@ -24,7 +24,7 @@ import forestry.core.gui.slots.SlotOutput;
 public class ContainerHabitatLocator extends ContainerItemInventory<ItemInventoryHabitatLocator> {
 
 	public static ContainerHabitatLocator fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;	//TODO write this to data
+		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
 		PlayerEntity player = playerInv.player;
 		ItemInventoryHabitatLocator inv = new ItemInventoryHabitatLocator(player, player.getHeldItem(hand));
 		return new ContainerHabitatLocator(windowId, player, inv);

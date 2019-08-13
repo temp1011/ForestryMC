@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
@@ -49,19 +50,19 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	private boolean dirty = true;
 
 	/* Constructors */
-	public GuiAnalyzerProvider(String texture, C container, ITitled titled, int buttonX, int buttonY, int slots, int firstSlot) {
-		this(texture, container, titled, buttonX, buttonY, 0, false, slots, firstSlot);
+	public GuiAnalyzerProvider(String texture, C container, PlayerInventory inv, ITitled titled, int buttonX, int buttonY, int slots, int firstSlot) {
+		this(texture, container, inv, titled, buttonX, buttonY, 0, false, slots, firstSlot);
 	}
 
-	public GuiAnalyzerProvider(String texture, C container, ITitled titled, int buttonX, int buttonY, int screenDistance, boolean hasBoarder, int slots, int firstSlot) {
-		super(texture, container, null, titled);	//TODO refactor to take PlayerInventory
+	public GuiAnalyzerProvider(String texture, C container, PlayerInventory inv, ITitled titled, int buttonX, int buttonY, int screenDistance, boolean hasBorder, int slots, int firstSlot) {
+		super(texture, container, inv, titled);
 		this.buttonX = buttonX;
 		this.buttonY = buttonY;
 		this.screenDistance = screenDistance;
 		this.slots = slots;
 		this.firstSlot = firstSlot;
 
-		this.analyzer = GuiElementFactory.INSTANCE.createAnalyzer(window, -189 - screenDistance, 0, hasBoarder, this);
+		this.analyzer = GuiElementFactory.INSTANCE.createAnalyzer(window, -189 - screenDistance, 0, hasBorder, this);
 		updateVisibility();
 
 		SlotAnalyzer analyzerSlot = null;

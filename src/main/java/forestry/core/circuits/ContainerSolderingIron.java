@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Hand;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,9 +34,9 @@ import forestry.core.utils.NetworkUtil;
 public class ContainerSolderingIron extends ContainerItemInventory<ItemInventorySolderingIron> implements IGuiSelectable {
 
 	public static ContainerSolderingIron fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		//		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;	//TODO write this to data
+		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
 		PlayerEntity player = playerInv.player;
-		ItemInventorySolderingIron inv = new ItemInventorySolderingIron(player, player.getHeldItem(player.getActiveHand()));    //TODO does this work?
+		ItemInventorySolderingIron inv = new ItemInventorySolderingIron(player, player.getHeldItem(hand));
 		return new ContainerSolderingIron(windowId, player, inv);
 	}
 

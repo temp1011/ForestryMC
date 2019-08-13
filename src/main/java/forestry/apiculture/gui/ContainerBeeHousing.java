@@ -30,13 +30,14 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 	private final GuiBeeHousing.Icon icon;
 
 	public static ContainerBeeHousing fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileBeeHousingBase tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileBeeHousingBase.class);
 		PacketBufferForestry buf = new PacketBufferForestry(data);
-		return new ContainerBeeHousing(windowId, inv, tile, data.readBoolean(), buf.readEnum(GuiBeeHousing.Icon.values()));	//TODO nullability.
-		//TODO write enum
+		TileBeeHousingBase tile = TileUtil.getTile(inv.player.world, buf.readBlockPos(), TileBeeHousingBase.class);
+		boolean hasFrames = buf.readBoolean();
+		GuiBeeHousing.Icon icon = buf.readEnum(GuiBeeHousing.Icon.values());
+		return new ContainerBeeHousing(windowId, inv, tile, hasFrames, icon);	//TODO nullability.
 	}
 
-	//TODO will need hasFrames written to packet.
+	//TODO hack icon in GUI by checking title. Then it isn't needed here.
 	public ContainerBeeHousing(int windowId, PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames, GuiBeeHousing.Icon icon) {
 		super(windowId, ModuleApiculture.getContainerTypes().BEE_HOUSING, player, tile, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);

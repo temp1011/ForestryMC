@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -25,8 +26,8 @@ import net.minecraft.world.dimension.DimensionType;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
 import forestry.core.utils.InventoryUtil;
-
-public abstract class MinecartEntityContainerForestry extends MinecartEntityForestry implements ISidedInventory, IFilterSlotDelegate {
+//TODO: large type hierarchy here. If no other modules use other than apiculture then compress this.
+public abstract class MinecartEntityContainerForestry extends MinecartEntityForestry implements ISidedInventory, IFilterSlotDelegate, INamedContainerProvider {
 	/**
 	 * When set to true, the minecart will drop all items when setDead() is called. When false (such as when travelling
 	 * dimensions) it preserves its contents.

@@ -18,6 +18,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -42,9 +43,10 @@ public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
 		return new ContainerSolderingIron(windowId, player, new ItemInventorySolderingIron(player, heldItem));
 	}
 
+	//TODO see about deduping this too.
 	@Override
 	public void openGui(ServerPlayerEntity player, ItemStack stack) {
-		NetworkHooks.openGui(player, new ContainerProvider(stack));
+		NetworkHooks.openGui(player, new ContainerProvider(stack), p -> p.writeBoolean(player.getActiveHand() == Hand.MAIN_HAND));
 	}
 
 	//TODO see if this can be deduped. Given we pass in the held item etc.

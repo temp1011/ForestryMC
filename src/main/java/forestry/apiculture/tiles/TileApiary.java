@@ -17,11 +17,15 @@ import java.util.List;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
 
 //import net.minecraftforge.fml.common.Optional;
+
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -35,6 +39,7 @@ import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
+import forestry.core.network.PacketBufferForestry;
 
 //import buildcraft.api.statements.ITriggerExternal;
 
@@ -92,5 +97,15 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
 		return new ContainerBeeHousing(windowId, player.inventory, this, true, GuiBeeHousing.Icon.APIARY);
+	}
+
+	@Override
+	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+		NetworkHooks.openGui(player, this, p -> {
+			PacketBufferForestry forestryP = new PacketBufferForestry(p);
+			forestryP.writeBlockPos(pos);
+			forestryP.writeBoolean(true);
+			forestryP.writeEnum(GuiBeeHousing.Icon.APIARY, GuiBeeHousing.Icon.values());
+		});
 	}
 }

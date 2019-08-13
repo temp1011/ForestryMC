@@ -14,7 +14,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.minecart.MinecartEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
@@ -23,7 +22,7 @@ import net.minecraft.world.World;
 
 import forestry.core.tiles.ITitled;
 
-public abstract class MinecartEntityForestry extends MinecartEntity implements ITitled, INamedContainerProvider {
+public abstract class MinecartEntityForestry extends MinecartEntity implements ITitled {
 
 	//TODO - create entity type?
 	@SuppressWarnings("unused")
@@ -37,18 +36,16 @@ public abstract class MinecartEntityForestry extends MinecartEntity implements I
 		setHasDisplayTile(true);
 	}
 
-	//TODO - event not in forge atm
-//	@Override
-//	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
-//		if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, hand))) {
-//			return true;
-//		}
-//
-//		if (!world.isRemote) {
-//			GuiHandler.openGui(player, this);
-//		}
-//		return true;
-//	}
+//	//TODO - check
+	//	@Override
+	//	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+	//		if(super.processInitialInteract(player, hand)) {
+	//			return true;
+	//		}
+	//		//TODO sides
+	//		NetworkHooks.openGui((ServerPlayerEntity) player, );
+	//		return true;
+	//	}
 
 	/* MinecartEntity */
 	@Override
