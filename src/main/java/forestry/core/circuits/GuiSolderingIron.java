@@ -14,7 +14,9 @@ import java.util.Locale;
 
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import forestry.api.circuits.CircuitSocketType;
@@ -30,10 +32,10 @@ import forestry.core.utils.Translator;
 public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	private final ItemInventorySolderingIron itemInventory;
 
-	public GuiSolderingIron(PlayerEntity player, ItemInventorySolderingIron itemInventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/solder.png", new ContainerSolderingIron(player, itemInventory), player.inventory, new StringTextComponent("TEST_SOLDERING_IRON_TITLE"));
+	public GuiSolderingIron(ContainerSolderingIron container, PlayerInventory inv, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/solder.png", container, inv, title);
 
-		this.itemInventory = itemInventory;
+		this.itemInventory = container.getItemInventory();
 		this.xSize = 176;
 		this.ySize = 205;
 	}
@@ -42,7 +44,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		ICircuitLayout layout = ((ContainerSolderingIron) container).getLayout();
+		ICircuitLayout layout = container.getLayout();
 		String title = layout.getName();
 		getFontRenderer().drawString(title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
@@ -75,38 +77,9 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	public void init() {
 		super.init();
 
-//		buttons.add(new Button(1, guiLeft + 12, guiTop + 10, 12, 18, "<"));
-//		buttons.add(new Button(2, guiLeft + 130, guiTop + 10, 12, 18, ">"));
-		buttons.add(new Button(guiLeft + 12, guiTop + 10, 12, 18, "<", new RegressSelection()));
-		buttons.add(new Button(guiLeft + 130, guiTop + 10, 12, 18, ">", new AdvanceSelection()));
+		buttons.add(new Button(guiLeft + 12, guiTop + 10, 12, 18, "<", b -> ContainerSolderingIron.regressSelection(0)));
+		buttons.add(new Button(guiLeft + 130, guiTop + 10, 12, 18, ">", b -> ContainerSolderingIron.advanceSelection(0)));
 	}
-
-	class RegressSelection implements Button.IPressable {
-
-		@Override
-		public void onPress(Button button) {
-			ContainerSolderingIron.regressSelection(0);
-		}
-	}
-
-	class AdvanceSelection implements Button.IPressable {
-
-		@Override
-		public void onPress(Button p_onPress_1_) {
-			ContainerSolderingIron.advanceSelection(0);
-		}
-	}
-	//TODO idk, probably is now onPressed in IPressable????
-//	@Override
-//	protected void actionPerformed(Button button) throws IOException {
-//		super.actionPerformed(button);
-//
-//		if (button.id == 1) {
-//			ContainerSolderingIron.regressSelection(0);
-//		} else if (button.id == 2) {
-//			ContainerSolderingIron.advanceSelection(0);
-//		}
-//	}
 
 	@Override
 	protected void addLedgers() {

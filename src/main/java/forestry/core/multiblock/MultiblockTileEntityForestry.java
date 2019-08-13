@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -23,18 +24,18 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.fml.network.NetworkHooks;
+
 import forestry.api.core.ILocatable;
 import forestry.api.multiblock.IMultiblockLogic;
 import forestry.api.multiblock.MultiblockTileEntityBase;
 import forestry.core.config.Constants;
-import forestry.core.gui.GuiHandler;
-import forestry.core.gui.IGuiHandlerTile;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
 import forestry.core.utils.PlayerUtil;
 
-public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> extends MultiblockTileEntityBase<T> implements ISidedInventory, IFilterSlotDelegate, ILocatable, IGuiHandlerTile {
+public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> extends MultiblockTileEntityBase<T> implements ISidedInventory, IFilterSlotDelegate, ILocatable, INamedContainerProvider {
 	@Nullable
 	private GameProfile owner;
 
@@ -46,7 +47,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	 * Called by a structure block when it is right clicked by a player.
 	 */
 	public void openGui(ServerPlayerEntity player, BlockPos pos) {
-		GuiHandler.openGui(player, this, pos);
+		NetworkHooks.openGui(player, this, pos);
 	}
 
 	@Override
@@ -129,25 +130,25 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 		getInternalInventory().closeInventory(player);
 	}
 
-//	@Override TODO 1.14
-//	public final String getName() {
-//		return getInternalInventory().getName();
-//	}
-//
-//	@Override
-//	public ITextComponent getDisplayName() {
-//		return getInternalInventory().getDisplayName();
-//	}
+	//	@Override TODO 1.14
+	//	public final String getName() {
+	//		return getInternalInventory().getName();
+	//	}
+	//
+	//	@Override
+	//	public ITextComponent getDisplayName() {
+	//		return getInternalInventory().getDisplayName();
+	//	}
 
 	@Override
 	public final boolean isUsableByPlayer(PlayerEntity player) {
 		return getInternalInventory().isUsableByPlayer(player);
 	}
-// TODO 1.14
-//	@Override
-//	public final boolean hasCustomName() {
-//		return getInternalInventory().hasCustomName();
-//	}
+	// TODO 1.14
+	//	@Override
+	//	public final boolean hasCustomName() {
+	//		return getInternalInventory().hasCustomName();
+	//	}
 
 	@Override
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
@@ -203,20 +204,20 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 
 	//TODO 1.14
 	/* Fields */
-//	@Override
-//	public int getField(int id) {
-//		return getInternalInventory().getField(id);
-//	}
-//
-//	@Override
-//	public int getFieldCount() {
-//		return getInternalInventory().getFieldCount();
-//	}
-//
-//	@Override
-//	public void setField(int id, int value) {
-//		getInternalInventory().setField(id, value);
-//	}
+	//	@Override
+	//	public int getField(int id) {
+	//		return getInternalInventory().getField(id);
+	//	}
+	//
+	//	@Override
+	//	public int getFieldCount() {
+	//		return getInternalInventory().getFieldCount();
+	//	}
+	//
+	//	@Override
+	//	public void setField(int id, int value) {
+	//		getInternalInventory().setField(id, value);
+	//	}
 
 	@Override
 	public void clear() {

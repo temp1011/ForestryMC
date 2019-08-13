@@ -28,17 +28,17 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 	//TODO more duped code
 	public static ContainerNaturalistInventory fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
 		TileNaturalistChest tile = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileNaturalistChest.class);	//TODO think this is OK for inheritance
-		return new ContainerNaturalistInventory(windowId, playerInv, tile, extraData.readVarInt(), extraData.readVarInt());
+		return new ContainerNaturalistInventory(windowId, playerInv, tile, extraData.readVarInt());
 	}
 
 	private int page;
 	private int maxPage;
 
-	public ContainerNaturalistInventory(int windowId, PlayerInventory player, TileNaturalistChest tile, int page, int maxPage) {
+	public ContainerNaturalistInventory(int windowId, PlayerInventory player, TileNaturalistChest tile, int maxPage) {
 		super(windowId, ModuleCore.getContainerTypes().NATURALIST_INVENTORY, player, tile, 18, 120);
 
 		addInventory(this, tile, page);
-		this.page = page;
+		this.page = 0;	//TODO I think this is what we want. Open container aat page 0.
 		this.maxPage = maxPage;
 	}
 

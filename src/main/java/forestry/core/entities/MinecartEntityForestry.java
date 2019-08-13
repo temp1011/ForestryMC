@@ -21,10 +21,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import forestry.core.gui.IGuiHandlerEntity;
 import forestry.core.tiles.ITitled;
 
-public abstract class MinecartEntityForestry extends MinecartEntity implements ITitled, INamedContainerProvider, IGuiHandlerEntity {
+public abstract class MinecartEntityForestry extends MinecartEntity implements ITitled, INamedContainerProvider {
 
 	//TODO - create entity type?
 	@SuppressWarnings("unused")
@@ -97,7 +96,8 @@ public abstract class MinecartEntityForestry extends MinecartEntity implements I
 		return cartItem.getTranslationKey() + ".name";
 	}
 
-	@Override
+	//TODO see if something actually uses this.
+//	@Override
 	public int getIdOfEntity() {
 		return getEntityId();
 	}

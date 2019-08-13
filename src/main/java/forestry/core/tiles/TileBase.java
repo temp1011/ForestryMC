@@ -14,13 +14,13 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraftforge.fml.network.NetworkHooks;
+
 import forestry.core.blocks.BlockBase;
-import forestry.core.gui.GuiHandler;
 
 public abstract class TileBase extends TileForestry {
 
@@ -28,8 +28,8 @@ public abstract class TileBase extends TileForestry {
 		super(tileEntityTypeIn);
 	}
 
-	public void openGui(ServerPlayerEntity player, ItemStack heldItem, BlockPos pos) {
-		GuiHandler.openGui(player, this, pos);
+	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+		NetworkHooks.openGui(player, this, pos);
 	}
 
 	@Override
@@ -41,13 +41,13 @@ public abstract class TileBase extends TileForestry {
 		return super.getUnlocalizedTitle();
 	}
 
-	//TODO - I don't think this is  needed any more
-//	@Override
-//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
-//		Block oldBlock = oldState.getBlock();
-//		Block newBlock = newState.getBlock();
-//		return oldBlock != newBlock || !(oldBlock instanceof BlockBase) || !(newBlock instanceof BlockBase);
-//	}
+	//TODO
+	//	@Override
+	//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
+	//		Block oldBlock = oldState.getBlock();
+	//		Block newBlock = newState.getBlock();
+	//		return oldBlock != newBlock || !(oldBlock instanceof BlockBase) || !(newBlock instanceof BlockBase);
+	//	}
 
 	@Nonnull
 	public Direction getFacing() {

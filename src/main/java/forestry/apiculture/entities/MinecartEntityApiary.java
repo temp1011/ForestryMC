@@ -33,6 +33,7 @@ import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.gui.ContainerMinecartBeehouse;
+import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.core.inventory.IInventoryAdapter;
@@ -106,6 +107,6 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerMinecartBeehouse(windowId, player.inventory, this, true);
+		return new ContainerMinecartBeehouse(windowId, player.inventory, this, true, GuiBeeHousing.Icon.APIARY);
 	}
 }

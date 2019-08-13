@@ -82,10 +82,13 @@ import forestry.apiculture.genetics.HiveDrop;
 import forestry.apiculture.genetics.JubilanceFactory;
 import forestry.apiculture.genetics.alleles.AlleleEffects;
 import forestry.apiculture.gui.ApicultureContainerTypes;
+import forestry.apiculture.gui.ContainerBeeHousing;
+import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiAlveary;
 import forestry.apiculture.gui.GuiAlvearyHygroregulator;
 import forestry.apiculture.gui.GuiAlvearySieve;
 import forestry.apiculture.gui.GuiAlvearySwarmer;
+import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.gui.GuiHabitatLocator;
 import forestry.apiculture.gui.GuiImprinter;
 import forestry.apiculture.items.EnumHoneyComb;
@@ -245,10 +248,10 @@ public class ModuleApiculture extends BlankForestryModule {
 		ScreenManager.registerFactory(containerTypes.ALVEARY_HYGROREGULATOR, GuiAlvearyHygroregulator::new);
 		ScreenManager.registerFactory(containerTypes.ALVEARY_SIEVE, GuiAlvearySieve::new);
 		ScreenManager.registerFactory(containerTypes.ALVEARY_SWARMER, GuiAlvearySwarmer::new);
-//		ScreenManager.registerFactory(containerTypes.BEE_HOUSING, GuiBeeHousing::new);	//TODO - need to move stuff from gui to container
+		ScreenManager.registerFactory(containerTypes.BEE_HOUSING, GuiBeeHousing<ContainerBeeHousing>::new);
 		ScreenManager.registerFactory(containerTypes.HABITAT_LOCATOR, GuiHabitatLocator::new);
 		ScreenManager.registerFactory(containerTypes.IMPRINTER, GuiImprinter::new);
-//		ScreenManager.registerFactory(containerTypes.BEEHOUSE_MINECART, GuiBeeHousing::new);	//TODO see above
+		ScreenManager.registerFactory(containerTypes.BEEHOUSE_MINECART, GuiBeeHousing<ContainerMinecartBeehouse>::new);
 	}
 
 	@Override

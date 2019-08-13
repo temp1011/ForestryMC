@@ -15,19 +15,26 @@ import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 
+import net.minecraftforge.fml.network.NetworkHooks;
+
 import forestry.api.core.ItemGroups;
 import forestry.core.gui.ContainerAlyzer;
+import forestry.core.gui.ContainerAnalyzerProvider;
 import forestry.core.inventory.ItemInventoryAlyzer;
 
 
@@ -39,16 +46,6 @@ public class ItemAlyzer extends ItemWithGui {
 	}
 
 	@Override
-	public void openGui(PlayerEntity PlayerEntity) {
-		super.openGui(PlayerEntity);
-	}
-
-	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-		return new ContainerAlyzer(windowId, new ItemInventoryAlyzer(player, heldItem), player);	//TODO windowid
-	}
-
-	@Override
 	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 		int charges = 0;
@@ -57,5 +54,36 @@ public class ItemAlyzer extends ItemWithGui {
 			charges = compound.getInt("Charges");
 		}
 		tooltip.add(new TranslationTextComponent(stack.getTranslationKey() + ".charges", charges).setStyle((new Style()).setColor(TextFormatting.GOLD)));
+	}
+
+	@Override
+	public void openGui(ServerPlayerEntity player, ItemStack stack) {
+		NetworkHooks.openGui(player, new ContainerProvider(stack));
+	}
+
+	@Override
+	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+		return new ContainerAlyzer(windowId, new ItemInventoryAlyzer(player, heldItem), player);	//TODO windowid
+	}
+
+	//TODO see if this can be deduped. Given we pass in the held item etc.
+	public static class ContainerProvider implements INamedContainerProvider {
+
+		private ItemStack heldItem;
+
+		public ContainerProvider(ItemStack heldItem) {
+			this.heldItem = heldItem;
+		}
+
+		@Override
+		public ITextComponent getDisplayName() {
+			return new StringTextComponent("ITEM_GUI_TITLE");	//TODO needs to be overriden individually
+		}
+
+		@Nullable
+		@Override
+		public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+			return new ContainerAlyzer(windowId, new ItemInventoryAlyzer(playerEntity, heldItem), playerEntity);
+		}
 	}
 }

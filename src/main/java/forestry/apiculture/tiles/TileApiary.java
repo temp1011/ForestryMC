@@ -32,6 +32,7 @@ import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.gui.ContainerBeeHousing;
+import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
 
@@ -90,6 +91,6 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerBeeHousing(windowId, player.inventory, this, true);
+		return new ContainerBeeHousing(windowId, player.inventory, this, true, GuiBeeHousing.Icon.APIARY);
 	}
 }

@@ -11,8 +11,9 @@
 package forestry.core.circuits;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-
+import net.minecraft.network.PacketBuffer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -31,8 +32,15 @@ import forestry.core.utils.NetworkUtil;
 
 public class ContainerSolderingIron extends ContainerItemInventory<ItemInventorySolderingIron> implements IGuiSelectable {
 
-	public ContainerSolderingIron(PlayerEntity player, ItemInventorySolderingIron inventory) {
-		super(0, inventory, player.inventory, 8, 123, null); //TODO
+	public static ContainerSolderingIron fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+		//		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;	//TODO write this to data
+		PlayerEntity player = playerInv.player;
+		ItemInventorySolderingIron inv = new ItemInventorySolderingIron(player, player.getHeldItem(player.getActiveHand()));    //TODO does this work?
+		return new ContainerSolderingIron(windowId, player, inv);
+	}
+
+	public ContainerSolderingIron(int windowId, PlayerEntity player, ItemInventorySolderingIron inventory) {
+		super(windowId, inventory, player.inventory, 8, 123, null);
 
 		// Input
 		this.addSlot(new SlotFiltered(inventory, 0, 152, 12));

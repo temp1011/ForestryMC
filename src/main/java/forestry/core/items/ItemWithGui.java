@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -20,36 +23,39 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 import forestry.core.gui.ContainerItemInventory;
-import forestry.core.gui.GuiHandler;
-import forestry.core.gui.IGuiHandlerItem;
 
-public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerItem {
+public abstract class ItemWithGui extends ItemForestry {
 	public ItemWithGui(Item.Properties properties) {
 		super(properties);
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack stack = playerIn.getHeldItem(handIn);
+
 		if (!worldIn.isRemote) {
-			openGui(playerIn);
+			ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;    //TODO safe?
+			openGui(sPlayer, stack);
 		}
 
-		ItemStack stack = playerIn.getHeldItem(handIn);
 		return ActionResult.newResult(ActionResultType.SUCCESS, stack);
 	}
 
-	protected void openGui(PlayerEntity PlayerEntity) {
-		GuiHandler.openGui(PlayerEntity, this);
-	}
+	protected abstract void openGui(ServerPlayerEntity PlayerEntity, ItemStack stack);
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack itemstack, PlayerEntity player) {
 		if (itemstack != null &&
-			player instanceof ServerPlayerEntity &&
-			player.openContainer instanceof ContainerItemInventory) {
+				player instanceof ServerPlayerEntity &&
+				player.openContainer instanceof ContainerItemInventory) {
 			player.closeScreen();
 		}
 
 		return super.onDroppedByPlayer(itemstack, player);
 	}
+
+	@Nullable
+	public abstract Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem);
+
+
 }

@@ -4,6 +4,8 @@ import net.minecraft.inventory.container.ContainerType;
 
 import net.minecraftforge.registries.IForgeRegistry;
 
+import forestry.core.circuits.ContainerSolderingIron;
+
 public class CoreContainerTypes extends ContainerTypes {
 
 	public final ContainerType<ContainerAlyzer> ALYZER;
@@ -11,6 +13,7 @@ public class CoreContainerTypes extends ContainerTypes {
 	public final ContainerType<ContainerAnalyzerProvider<?>> ANALYZER_PROVIDER;
 	public final ContainerType<ContainerEscritoire> ESCRITOIRE;
 	public final ContainerType<ContainerNaturalistInventory> NATURALIST_INVENTORY;
+	public final ContainerType<ContainerSolderingIron> SOLDERING_IRON;
 
 	public CoreContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
 		super(registry);
@@ -19,5 +22,6 @@ public class CoreContainerTypes extends ContainerTypes {
 		ANALYZER_PROVIDER = register(ContainerAnalyzerProvider::fromNetwork, "analyzer_provider");
 		ESCRITOIRE = register(ContainerEscritoire::fromNetwork, "escritoire");
 		NATURALIST_INVENTORY = register(ContainerNaturalistInventory::fromNetwork, "naturalist_inventory");
+		SOLDERING_IRON = register(ContainerSolderingIron::fromNetwork, "soldering_iron");
 	}
 }

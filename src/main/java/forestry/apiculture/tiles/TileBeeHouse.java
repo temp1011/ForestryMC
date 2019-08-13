@@ -25,6 +25,7 @@ import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.gui.ContainerBeeHousing;
+import forestry.apiculture.gui.GuiBeeHousing;
 
 public class TileBeeHouse extends TileBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
@@ -58,6 +59,6 @@ public class TileBeeHouse extends TileBeeHousingBase {
 
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerBeeHousing(windowId, player.inventory, this, false);
+		return new ContainerBeeHousing(windowId, player.inventory, this, false, GuiBeeHousing.Icon.BEE_HOUSE);
 	}
 }

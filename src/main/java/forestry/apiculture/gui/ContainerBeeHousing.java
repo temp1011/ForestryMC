@@ -20,18 +20,24 @@ import forestry.apiculture.tiles.TileBeeHousingBase;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.gui.ContainerAnalyzerProvider;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.TileUtil;
 
 public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousingBase> implements IContainerBeeHousing {
 
+	private final IGuiBeeHousingDelegate delegate;
+	private final GuiBeeHousing.Icon icon;
+
 	public static ContainerBeeHousing fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
 		TileBeeHousingBase tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileBeeHousingBase.class);
-		return new ContainerBeeHousing(windowId, inv, tile, data.readBoolean());	//TODO nullability.
+		PacketBufferForestry buf = new PacketBufferForestry(data);
+		return new ContainerBeeHousing(windowId, inv, tile, data.readBoolean(), buf.readEnum(GuiBeeHousing.Icon.values()));	//TODO nullability.
+		//TODO write enum
 	}
 
 	//TODO will need hasFrames written to packet.
-	public ContainerBeeHousing(int windowId, PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames) {
+	public ContainerBeeHousing(int windowId, PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames, GuiBeeHousing.Icon icon) {
 		super(windowId, ModuleApiculture.getContainerTypes().BEE_HOUSING, player, tile, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 
@@ -40,6 +46,9 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 		if (listener != null && player.player instanceof ServerPlayerEntity) {
 			listener.syncToClient((ServerPlayerEntity) player.player);
 		}
+
+		delegate = tile;
+		this.icon = icon;
 	}
 
 	private int beeProgress = -1;
@@ -56,4 +65,13 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 		}
 	}
 
+	@Override
+	public IGuiBeeHousingDelegate getDelegate() {
+		return delegate;
+	}
+
+	@Override
+	public GuiBeeHousing.Icon getIcon() {
+		return icon;
+	}
 }

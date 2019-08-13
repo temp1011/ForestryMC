@@ -30,21 +30,27 @@ import forestry.core.network.packets.PacketGuiUpdateEntity;
 public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBeeHousingBase> implements IContainerBeeHousing {
 	/* Attributes - Final*/
 	private final ContainerAnalyzerProviderHelper providerHelper;
+	private final IGuiBeeHousingDelegate delegate;
+	private final GuiBeeHousing.Icon icon;
 
+
+	//TODO writing things to packets here
 	public static ContainerMinecartBeehouse fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
 		PacketBufferForestry buf = new PacketBufferForestry(extraData);
 		MinecartEntityBeeHousingBase e = (MinecartEntityBeeHousingBase) buf.readEntityById(playerInv.player.world);	//TODO cast
 		PlayerEntity player = playerInv.player;
-		return new ContainerMinecartBeehouse(windowId, player.inventory, e, buf.readBoolean());
+		return new ContainerMinecartBeehouse(windowId, player.inventory, e, buf.readBoolean(), buf.readEnum(GuiBeeHousing.Icon.values()));
 	}
 
-	public ContainerMinecartBeehouse(int windowId, PlayerInventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames) {
+	public ContainerMinecartBeehouse(int windowId, PlayerInventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames, GuiBeeHousing.Icon icon) {
 		super(windowId, ModuleApiculture.getContainerTypes().BEEHOUSE_MINECART, entity, player, 8, 108);
 		providerHelper = new ContainerAnalyzerProviderHelper(this, player);
 
 		ContainerBeeHelper.addSlots(this, entity, hasFrames);
 
 		entity.getBeekeepingLogic().clearCachedValues();
+		delegate = entity;
+		this.icon = icon;
 	}
 
 	private int beeProgress = -1;
@@ -84,4 +90,13 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 		providerHelper.analyzeSpecimen(secondary);
 	}
 
+	@Override
+	public IGuiBeeHousingDelegate getDelegate() {
+		return delegate;
+	}
+
+	@Override
+	public GuiBeeHousing.Icon getIcon() {
+		return icon;
+	}
 }

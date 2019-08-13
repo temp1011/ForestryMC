@@ -183,7 +183,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 				if (!worldIn.isRemote) {
 					ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;	//TODO - hopefully safe because it's the server?
-					tile.openGui(sPlayer, heldItem, pos);
+					tile.openGui(sPlayer, pos);
 				}
 				return true;
 			}

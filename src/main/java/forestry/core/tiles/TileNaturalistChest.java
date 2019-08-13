@@ -15,20 +15,20 @@ import java.io.IOException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import net.minecraftforge.fml.network.NetworkHooks;
+
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
-import forestry.core.gui.GuiHandler;
 import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.InventoryNaturalistChest;
 import forestry.core.network.PacketBufferForestry;
@@ -101,7 +101,10 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 
 	@Override
 	public void flipPage(ServerPlayerEntity player, short page) {
-		GuiHandler.openGui(player, this, page, this.pos);	//TODO this is going to need to encode more data
+		NetworkHooks.openGui(player, this, p -> {
+			p.writeBlockPos(this.pos);
+			p.writeVarInt(page);
+		});
 	}
 
 	/* IStreamable */
@@ -118,9 +121,10 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 		numPlayersUsing = data.readInt();
 	}
 
+	//TODO page stuff.
 	@Override
-	public Container createMenu(int page, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerNaturalistInventory(0, player.inventory, this, page, 5);	//TODO windowid
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerNaturalistInventory(windowId, inv, this, 5);
 	}
 
 	public ISpeciesRoot getSpeciesRoot() {
