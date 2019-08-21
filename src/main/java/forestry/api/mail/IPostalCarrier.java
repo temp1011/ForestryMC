@@ -8,6 +8,7 @@ package forestry.api.mail;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -51,6 +52,6 @@ public interface IPostalCarrier {
 	 * @param doDeliver   Whether or not the letter is supposed to actually be delivered or if delivery is only to be simulated.
 	 * @return {link IPostalState} holding information on success or failure for delivery.
 	 */
-	IPostalState deliverLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doDeliver);
+	IPostalState deliverLetter(ServerWorld world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doDeliver);
 
 }

@@ -48,6 +48,11 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 		this.tile = tile;
 	}
 
+	protected ContainerTile(int windowId, ContainerType<?> type, T tile) {
+		super(windowId, type);
+		this.tile = tile;
+	}
+
 	@Override
 	protected final boolean canAccess(PlayerEntity player) {
 		return true;

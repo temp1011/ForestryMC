@@ -41,7 +41,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	private final IItemHandler itemHandler = new InvWrapper(this);
 
 	protected final PlayerEntity player;
-	private final ItemStack parent;
+	private ItemStack parent;	//TODO not final any more. Is this a problem
 	private final NonNullList<ItemStack> inventoryStacks;
 
 	public ItemInventory(PlayerEntity player, int size, ItemStack parent) {
@@ -100,6 +100,10 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 			}
 		}
 		return parent;
+	}
+
+	protected void setParent(ItemStack parent) {
+		this.parent = parent;
 	}
 
 	@Nullable
