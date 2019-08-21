@@ -29,6 +29,7 @@ import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ItemStackUtil;
+import forestry.worktable.inventory.CraftingInventoryForestry;
 //import forestry.worktable.inventory.CraftingInventoryForestry;
 
 public abstract class RecipeUtil {
@@ -75,41 +76,41 @@ public abstract class RecipeUtil {
 //		}
 	}
 
-//	@Nullable
-//	public static CraftingInventoryForestry getCraftRecipe(CraftingInventory originalCrafting, NonNullList<ItemStack> availableItems, World world, IRecipe recipe) {
-//		if (!recipe.matches(originalCrafting, world)) {
-//			return null;
-//		}
-//
-//		ItemStack expectedOutput = recipe.getCraftingResult(originalCrafting);
-//		if (expectedOutput.isEmpty()) {
-//			return null;
-//		}
-//
-//		CraftingInventoryForestry crafting = new CraftingInventoryForestry();
-//		NonNullList<ItemStack> stockCopy = ItemStackUtil.condenseStacks(availableItems);
-//
-//		for (int slot = 0; slot < originalCrafting.getSizeInventory(); slot++) {
-//			ItemStack stackInSlot = originalCrafting.getStackInSlot(slot);
-//			if (!stackInSlot.isEmpty()) {
-//				ItemStack equivalent = getCraftingEquivalent(stockCopy, originalCrafting, slot, world, recipe, expectedOutput);
-//				if (equivalent.isEmpty()) {
-//					return null;
-//				} else {
-//					crafting.setInventorySlotContents(slot, equivalent);
-//				}
-//			}
-//		}
-//
-//		if (recipe.matches(crafting, world)) {
-//			ItemStack output = recipe.getCraftingResult(crafting);
-//			if (ItemStack.areItemStacksEqual(output, expectedOutput)) {
-//				return crafting;
-//			}
-//		}
-//
-//		return null;
-//	}
+	@Nullable
+	public static CraftingInventoryForestry getCraftRecipe(CraftingInventory originalCrafting, NonNullList<ItemStack> availableItems, World world, IRecipe recipe) {
+		if (!recipe.matches(originalCrafting, world)) {
+			return null;
+		}
+
+		ItemStack expectedOutput = recipe.getCraftingResult(originalCrafting);
+		if (expectedOutput.isEmpty()) {
+			return null;
+		}
+
+		CraftingInventoryForestry crafting = new CraftingInventoryForestry();
+		NonNullList<ItemStack> stockCopy = ItemStackUtil.condenseStacks(availableItems);
+
+		for (int slot = 0; slot < originalCrafting.getSizeInventory(); slot++) {
+			ItemStack stackInSlot = originalCrafting.getStackInSlot(slot);
+			if (!stackInSlot.isEmpty()) {
+				ItemStack equivalent = getCraftingEquivalent(stockCopy, originalCrafting, slot, world, recipe, expectedOutput);
+				if (equivalent.isEmpty()) {
+					return null;
+				} else {
+					crafting.setInventorySlotContents(slot, equivalent);
+				}
+			}
+		}
+
+		if (recipe.matches(crafting, world)) {
+			ItemStack output = recipe.getCraftingResult(crafting);
+			if (ItemStack.areItemStacksEqual(output, expectedOutput)) {
+				return crafting;
+			}
+		}
+
+		return null;
+	}
 
 	private static ItemStack getCraftingEquivalent(NonNullList<ItemStack> stockCopy, CraftingInventory crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput) {
 		ItemStack originalStack = crafting.getStackInSlot(slot);

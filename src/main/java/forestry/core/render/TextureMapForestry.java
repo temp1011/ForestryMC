@@ -1,16 +1,22 @@
 package forestry.core.render;
 
+import com.google.common.collect.Maps;
+
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.PngSizeInfo;
 import net.minecraft.client.renderer.texture.Stitcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 //import net.minecraft.client.renderer.texture.TextureUtil;
 //import net.minecraft.client.resources.IResource;
 //import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.data.AnimationMetadataSection;
+import net.minecraft.client.resources.data.AnimationMetadataSectionSerializer;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.crash.ReportedException;
@@ -21,10 +27,17 @@ import net.minecraft.util.ResourceLocation;
 //import net.minecraftforge.fml.client.FMLClientHandler;
 //import net.minecraftforge.fml.common.ProgressManager;
 
+import com.mojang.blaze3d.platform.TextureUtil;
+
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.model.animation.AnimationStateMachine;
+
+import net.minecraftforge.fml.client.ClientHooks;
+
 import forestry.core.utils.Log;
+
 
 //TODO - not sure this is possible yet, and I'm not 100% sure why it is needed, possibly because the other one only allows blocks
 //See https://github.com/MinecraftForge/MinecraftForge/issues/5555
@@ -38,13 +51,12 @@ public class TextureMapForestry extends AtlasTexture {
 
 	@Override
 	public void loadTexture(IResourceManager resourceManager) {
-//		this.initMissingImage();
 		this.deleteGlTexture();
-		this.loadTextureAtlas(resourceManager);
+//		this.upload(resourceManager);
 	}
 
-//	@Override
-	public void loadTextureAtlas(IResourceManager resourceManager) {
+	@Override
+	public void upload(AtlasTexture.SheetData data) {
 		int i = Minecraft.getGLMaximumTextureSize();
 		Stitcher stitcher = new Stitcher(i, i, 0);	//TODO check args correct
 		this.mapUploadedSprites.clear();
@@ -52,21 +64,23 @@ public class TextureMapForestry extends AtlasTexture {
 
 //		ProgressManager.ProgressBar bar = ProgressManager.push("Texture stitching", this.mapRegisteredSprites.size());
 
-//		for (Map.Entry<String, TextureAtlasSprite> entry : this.mapRegisteredSprites.entrySet()) {
-//			TextureAtlasSprite textureatlassprite = entry.getValue();
+		for (Map.Entry<ResourceLocation, TextureAtlasSprite> entry : this.mapUploadedSprites.entrySet()) {
+			TextureAtlasSprite textureatlassprite = entry.getValue();
+			ResourceLocation resourcelocation = entry.getKey();
 //			ResourceLocation resourcelocation = this.getResourceLocation(textureatlassprite);
 ////			bar.step(resourcelocation.getPath());
-//			IResource iresource = null;
+			IResource iresource = null;
 //
 //			if (textureatlassprite.hasCustomLoader(resourceManager, resourcelocation)) {
-//				if (textureatlassprite.load(resourceManager, resourcelocation, l -> mapRegisteredSprites.getComb(l.toString()))) {
+//				if (textureatlassprite.load(resourceManager, resourcelocation, l -> this.mapUploadedSprites.getComb(l.toString()))) {
 //					continue;
 //				}
 //			} else {
 //				try {
 //					PngSizeInfo pngsizeinfo = new PngSizeInfo("TEST FILE", resourceManager.getResource(resourcelocation).getInputStream());	//TODO - what to put as first param
 //					iresource = resourceManager.getResource(resourcelocation);
-//					boolean flag = iresource.getMetadata("animation") != null;
+//					boolean flag = iresource.getMetadata(AnimationMetadataSection.SERIALIZER) != null;
+//					TODO think I want the TextureAtlasSprite constructor here.
 //					textureatlassprite.loadSprite(pngsizeinfo, flag);
 //				} catch (RuntimeException runtimeexception) {
 //					ClientHooks.trackBrokenTexture(resourcelocation, runtimeexception.getMessage());
@@ -77,10 +91,10 @@ public class TextureMapForestry extends AtlasTexture {
 //				} finally {
 //					IOUtils.closeQuietly(iresource);
 //				}
-//			}
+			}
 //
 //			stitcher.addSprite(textureatlassprite);
-//		}
+		}
 
 //		ProgressManager.pop(bar);
 
@@ -89,45 +103,45 @@ public class TextureMapForestry extends AtlasTexture {
 //		bar = ProgressManager.push("Texture creation", 2);
 
 //		bar.step("Stitching");
-		stitcher.doStitch();
+//		stitcher.doStitch();
 
 //		Log.info("Created: {}x{} {}-atlas", stitcher.getCurrentWidth(), stitcher.getCurrentHeight(), this.basePath);
 //		bar.step("Allocating GL texture");
 //		TextureUtil.prepareImage(this.getGlTextureId(), 0, stitcher.getCurrentWidth(), stitcher.getCurrentHeight());	//TODO - check, this currently crashes. Possibly needs to be scheduled on main thread.
-//		Map<String, TextureAtlasSprite> map = Maps.newHashMap(this.mapRegisteredSprites);
+		Map<ResourceLocation, TextureAtlasSprite> map = Maps.newHashMap(this.mapUploadedSprites);
 
 //		ProgressManager.pop(bar);
 //		bar = ProgressManager.push("Texture mipmap and upload", stitcher.getStichSlots().size());
 
-		for (TextureAtlasSprite textureatlassprite1 : stitcher.getStichSlots()) {
+//		for (TextureAtlasSprite textureatlassprite1 : stitcher.getStichSlots()) {
 //			bar.step(textureatlassprite1.getIconName());
 //			if (textureatlassprite1 == this.missingImage || this.generateMipmaps(resourceManager, textureatlassprite1)) {
-//				String s = textureatlassprite1.getIconName();
-//				map.remove(s);
-//				this.mapUploadedSprites.put(s, textureatlassprite1);
-
-				try {
-//					TextureUtil.uploadTextureMipmap(textureatlassprite1.getFrameTextureData(0), textureatlassprite1.getIconWidth(), textureatlassprite1.getIconHeight(), textureatlassprite1.getOriginX(), textureatlassprite1.getOriginY(), false, false);
-				} catch (Throwable throwable) {
-					CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Stitching texture atlas");
-					CrashReportCategory crashreportcategory = crashreport.makeCategory("Texture being stitched together");
-//					crashreportcategory.addCrashSection("Atlas path", this.basePath);
-//					crashreportcategory.addCrashSection("Sprite", textureatlassprite1);
-					throw new ReportedException(crashreport);
-				}
-
-				if (textureatlassprite1.hasAnimationMetadata()) {
+//				ResourceLocation rl = textureatlassprite1.getName();
+//				map.remove(rl);
+//				this.mapUploadedSprites.put(rl, textureatlassprite1);
+//
+//				try {
+//					TextureUtil.uploadTextureMipmap(textureatlassprite1.getFrameTextureData(0), textureatlassprite1.getWidth(), textureatlassprite1.getHeight(), textureatlassprite1.getOriginX(), textureatlassprite1.getOriginY(), false, false);
+//				} catch (Throwable throwable) {
+//					CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Stitching texture atlas");
+//					CrashReportCategory crashreportcategory = crashreport.makeCategory("Texture being stitched together");
+//					crashreportcategory.addDetail("Atlas path", this.basePath);
+//					crashreportcategory.addDetail("Sprite", textureatlassprite1);
+//					throw new ReportedException(crashreport);
+//				}
+//
+//				if (textureatlassprite1.hasAnimationMetadata()) {
 //					this.listAnimatedSprites.add(textureatlassprite1);
-				}
+//				}
 //			}
-		}
-
+//		}
+//
 //		for (TextureAtlasSprite textureatlassprite2 : map.values()) {
 //			textureatlassprite2.copyFrom(this.missingImage);
 //		}
 
 //		ProgressManager.pop(bar);
-	}
+//	}
 
 	private boolean generateMipmaps(IResourceManager resourceManager, final TextureAtlasSprite texture) {
 		ResourceLocation resourcelocation = this.getResourceLocation(texture);
@@ -162,10 +176,10 @@ public class TextureMapForestry extends AtlasTexture {
 		} catch (Throwable throwable) {
 			CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Applying mipmap");
 			CrashReportCategory crashreportcategory = crashreport.makeCategory("Sprite being mipmapped");
-//			crashreportcategory.addDetail("Sprite name", texture::getIconName);
-//			crashreportcategory.addDetail("Sprite size", () -> texture.getIconWidth() + " x " + texture.getIconHeight());
-//			crashreportcategory.addDetail("Sprite frames", () -> texture.getFrameCount() + " frames");
-//			crashreportcategory.addCrashSection("Mipmap levels", 0);
+			crashreportcategory.addDetail("Sprite name", (texture.getName())::toString);
+			crashreportcategory.addDetail("Sprite size", () -> texture.getWidth() + " x " + texture.getHeight());
+			crashreportcategory.addDetail("Sprite frames", () -> texture.getFrameCount() + " frames");
+			crashreportcategory.addDetail("Mipmap levels", 0);
 			throw new ReportedException(crashreport);
 		}
 	}

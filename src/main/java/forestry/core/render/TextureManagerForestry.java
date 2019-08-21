@@ -100,7 +100,7 @@ public class TextureManagerForestry implements ITextureManager {
 
 	@Override
 	public TextureAtlasSprite registerGuiSprite(ResourceLocation location) {
-		return null; //TODO textures
+		return null; //TODO textures and maybe needs https://github.com/MinecraftForge/MinecraftForge/pull/6032?
 //		return getTextureMap().registerSprite(location);
 	}
 
