@@ -263,7 +263,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		if (Config.enableVillagers) {
 			// Register village components with the Structure registry.
-//			VillageCreationApiculture.registerVillageComponents();
+			//			VillageCreationApiculture.registerVillageComponents();
 			//TODO villages
 		}
 
@@ -271,11 +271,10 @@ public class ModuleApiculture extends BlankForestryModule {
 		//TODO - commands
 		//		ModuleCore.rootCommand.addChildCommand(new CommandBee());
 
-		//TODO - for now no sorting
-		//		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
-		//			ApicultureFilterRuleType.init();
-		//			ApicultureFilterRule.init();
-		//		}
+		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
+			ApicultureFilterRuleType.init();
+			ApicultureFilterRule.init();
+		}
 	}
 
 	@Override
@@ -406,7 +405,7 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public void postInit() {
 		//TODO loottable
-//		registerDungeonLoot();
+		//		registerDungeonLoot();
 	}
 
 	private void initFlowerRegistry() {
@@ -428,20 +427,20 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		// Register plantable plants
 		//TODO - this now uses the BlockTag SMALL_FLOWERS I believe
-//		for (FlowerType flowerType : FlowerType.values()) {
-//			BlockState blockState;
-//			switch (flowerType.getBlockType()) {
-//				case RED:
-//					blockState = Blocks.RED_FLOWER.getDefaultState().with(Blocks.RED_FLOWER.getTypeProperty(), flowerType);
-//					break;
-//				case YELLOW:
-//					blockState = Blocks.YELLOW_FLOWER.getDefaultState().with(Blocks.YELLOW_FLOWER.getTypeProperty(), flowerType);
-//					break;
-//				default:
-//					continue;
-//			}
-//			flowerRegistry.registerPlantableFlower(blockState, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-//		}
+		//		for (FlowerType flowerType : FlowerType.values()) {
+		//			BlockState blockState;
+		//			switch (flowerType.getBlockType()) {
+		//				case RED:
+		//					blockState = Blocks.RED_FLOWER.getDefaultState().with(Blocks.RED_FLOWER.getTypeProperty(), flowerType);
+		//					break;
+		//				case YELLOW:
+		//					blockState = Blocks.YELLOW_FLOWER.getDefaultState().with(Blocks.YELLOW_FLOWER.getTypeProperty(), flowerType);
+		//					break;
+		//				default:
+		//					continue;
+		//			}
+		//			flowerRegistry.registerPlantableFlower(blockState, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		//		}
 
 		flowerRegistry.registerPlantableFlower(Blocks.BROWN_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.RED_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
@@ -449,25 +448,25 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		//Flower Pots
 		BlockState flowerPot = Blocks.FLOWER_POT.getStateContainer().getBaseState();
-//		EnumProperty<FlowerPotBlock.EnumFlowerType> CONTENTS = FlowerPotBlock.CONTENTS;
-//		String[] standardTypes = new String[]{FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow};
-//
-//		for (FlowerPotBlock.EnumFlowerType flowerType : FlowerPotBlock.EnumFlowerType.values()) {
-//			if (flowerType == FlowerPotBlock.EnumFlowerType.EMPTY ||
-//					flowerType.getName().contains("sapling") ||
-//					flowerType == FlowerPotBlock.EnumFlowerType.DEAD_BUSH ||
-//					flowerType == FlowerPotBlock.EnumFlowerType.FERN) {
-//				//Don't register these as flowers
-//			} else if (flowerType == FlowerPotBlock.EnumFlowerType.MUSHROOM_RED ||
-//					flowerType == FlowerPotBlock.EnumFlowerType.MUSHROOM_BROWN) {
-//				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), FlowerManager.FlowerTypeMushrooms);
-//
-//			} else if (flowerType == FlowerPotBlock.EnumFlowerType.CACTUS) {
-//				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), FlowerManager.FlowerTypeCacti);
-//			} else {
-//				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), standardTypes);
-//			}
-//		}
+		//		EnumProperty<FlowerPotBlock.EnumFlowerType> CONTENTS = FlowerPotBlock.CONTENTS;
+		//		String[] standardTypes = new String[]{FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow};
+		//
+		//		for (FlowerPotBlock.EnumFlowerType flowerType : FlowerPotBlock.EnumFlowerType.values()) {
+		//			if (flowerType == FlowerPotBlock.EnumFlowerType.EMPTY ||
+		//					flowerType.getName().contains("sapling") ||
+		//					flowerType == FlowerPotBlock.EnumFlowerType.DEAD_BUSH ||
+		//					flowerType == FlowerPotBlock.EnumFlowerType.FERN) {
+		//				//Don't register these as flowers
+		//			} else if (flowerType == FlowerPotBlock.EnumFlowerType.MUSHROOM_RED ||
+		//					flowerType == FlowerPotBlock.EnumFlowerType.MUSHROOM_BROWN) {
+		//				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), FlowerManager.FlowerTypeMushrooms);
+		//
+		//			} else if (flowerType == FlowerPotBlock.EnumFlowerType.CACTUS) {
+		//				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), FlowerManager.FlowerTypeCacti);
+		//			} else {
+		//				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), standardTypes);
+		//			}
+		//		}
 	}
 
 	@Override
@@ -484,7 +483,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		crateRegistry.registerCrate(coreItems.beeswax.getItemStack());
 		crateRegistry.registerCrate(items.getPollen(EnumPollenCluster.NORMAL, 1));
 		crateRegistry.registerCrate(items.getPollen(EnumPollenCluster.CRYSTALLINE, 1));
-		crateRegistry.registerCrate(items.getPropolis(EnumPropolis.NORMAL, 1));	//TODO
+		crateRegistry.registerCrate(items.getPropolis(EnumPropolis.NORMAL, 1));    //TODO
 		crateRegistry.registerCrate(items.honeydew.getItemStack());
 		crateRegistry.registerCrate(items.royalJelly.getItemStack());
 
@@ -525,18 +524,18 @@ public class ModuleApiculture extends BlankForestryModule {
 			NonNullList<ItemStack> lavaIngredients = NonNullList.create();
 			lavaIngredients.add(phosphor);
 			lavaIngredients.add(new ItemStack(Blocks.SAND));
-//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 2000));
+			//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 2000));
 
 			lavaIngredients = NonNullList.create();
 			lavaIngredients.add(phosphor);
 			//TODO - sand or red sand?
-//			lavaIngredients.add(new ItemStack(Blocks.SAND, 1, 1));
-//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 2000));
+			//			lavaIngredients.add(new ItemStack(Blocks.SAND, 1, 1));
+			//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 2000));
 
 			lavaIngredients = NonNullList.create();
 			lavaIngredients.add(phosphor);
 			lavaIngredients.add(new ItemStack(Blocks.DIRT));
-//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 1600));
+			//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 1600));
 
 			// / CARPENTER
 			RecipeManagers.carpenterManager.addRecipe(50, Fluids.FOR_HONEY.getFluid(500), ItemStack.EMPTY, coreItems.getCraftingMaterial(EnumCraftingMaterial.SCENTED_PANELING, 1),
@@ -546,16 +545,16 @@ public class ModuleApiculture extends BlankForestryModule {
 					'W', coreItems.beeswax,
 					'P', items.getPollen(EnumPollenCluster.NORMAL, 1));
 
-//			RecipeManagers.carpenterManager.addRecipe(30, new FluidStack(FluidRegistry.WATER, 600), ItemStack.EMPTY, blocks.candle.getUnlitCandle(24),
-//					" X ",
-//					"###",
-//					"###",
-//					'#', coreItems.beeswax,
-//					'X', Items.STRING);
-//			RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 200), ItemStack.EMPTY, blocks.candle.getUnlitCandle(6),
-//					"#X#",
-//					'#', coreItems.beeswax,
-//					'X', coreItems.craftingMaterial.getSilkWisp());
+			//			RecipeManagers.carpenterManager.addRecipe(30, new FluidStack(FluidRegistry.WATER, 600), ItemStack.EMPTY, blocks.candle.getUnlitCandle(24),
+			//					" X ",
+			//					"###",
+			//					"###",
+			//					'#', coreItems.beeswax,
+			//					'X', Items.STRING);
+			//			RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 200), ItemStack.EMPTY, blocks.candle.getUnlitCandle(6),
+			//					"#X#",
+			//					'#', coreItems.beeswax,
+			//					'X', coreItems.craftingMaterial.getSilkWisp());
 
 			// / CENTRIFUGE
 			// Honey combs
@@ -718,9 +717,9 @@ public class ModuleApiculture extends BlankForestryModule {
 	}
 
 	//TODO - just done by datapacks now?
-//	private static void registerDungeonLoot() {
-//		LootTables.register(Constants.VILLAGE_NATURALIST_LOOT_KEY);
-//	}
+	//	private static void registerDungeonLoot() {
+	//		LootTables.register(Constants.VILLAGE_NATURALIST_LOOT_KEY);
+	//	}
 
 	@Override
 	public void addLootPoolNames(Set<String> lootPoolNames) {
@@ -803,46 +802,46 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	@Override
 	public boolean processIMCMessage(InterModComms.IMCMessage message) {
-//		if (message.getMethod().equals("add-candle-lighting-id")) {
-//			ItemStack value = message.getItemStackValue();
-//			if (value != null) {
-//				BlockCandle.addItemToLightingList(value.getItem());
-//			} else {
-//				IMCUtil.logInvalidIMCMessage(message);
-//			}
-//			return true;
-//		} else if (message.getMethod().equals("add-alveary-slab") && message.isStringMessage()) {
-//			String messageString = String.format("Received a '%s' request from mod '%s'. This IMC message has been replaced with the oreDictionary for 'slabWood'. Please contact the author and report this issue.", message.key, message.getSender());
-//			Log.warning(messageString);
-//			return true;
-//		} else if (message.getMethod().equals("blacklist-hives-dimension")) {
-//			int[] dims = message.getNBTValue().getIntArray("dimensions");
-//			for (int dim : dims) {
-//				HiveConfig.addBlacklistedDim(dim);
-//			}
-//			return true;
-//		} else if (message.getMethod().equals("add-plantable-flower")) {
-//			return addPlantableFlower(message);
-//		} else if (message.getMethod().equals("add-acceptable-flower")) {
-//			return addAcceptableFlower(message);
-//		}
-			//TODO new imc
+		//		if (message.getMethod().equals("add-candle-lighting-id")) {
+		//			ItemStack value = message.getItemStackValue();
+		//			if (value != null) {
+		//				BlockCandle.addItemToLightingList(value.getItem());
+		//			} else {
+		//				IMCUtil.logInvalidIMCMessage(message);
+		//			}
+		//			return true;
+		//		} else if (message.getMethod().equals("add-alveary-slab") && message.isStringMessage()) {
+		//			String messageString = String.format("Received a '%s' request from mod '%s'. This IMC message has been replaced with the oreDictionary for 'slabWood'. Please contact the author and report this issue.", message.key, message.getSender());
+		//			Log.warning(messageString);
+		//			return true;
+		//		} else if (message.getMethod().equals("blacklist-hives-dimension")) {
+		//			int[] dims = message.getNBTValue().getIntArray("dimensions");
+		//			for (int dim : dims) {
+		//				HiveConfig.addBlacklistedDim(dim);
+		//			}
+		//			return true;
+		//		} else if (message.getMethod().equals("add-plantable-flower")) {
+		//			return addPlantableFlower(message);
+		//		} else if (message.getMethod().equals("add-acceptable-flower")) {
+		//			return addAcceptableFlower(message);
+		//		}
+		//TODO new imc
 		return false;
 	}
 
 	private boolean addPlantableFlower(InterModComms.IMCMessage message) {
 		try {
 			//TODO new imc
-//			CompoundNBT tagCompound = message.getNBTValue();
-//			BlockState flowerState = NBTUtil.readBlockState(tagCompound);
-//			double weight = tagCompound.getDouble("weight");
-//			List<String> flowerTypes = new ArrayList<>();
-//			for (String key : tagCompound.getKeySet()) {
-//				if (key.contains("flowertype")) {
-//					flowerTypes.add(tagCompound.getString("flowertype"));
-//				}
-//			}
-//			FlowerManager.flowerRegistry.registerPlantableFlower(flowerState, weight, flowerTypes.toArray(new String[0]));
+			//			CompoundNBT tagCompound = message.getNBTValue();
+			//			BlockState flowerState = NBTUtil.readBlockState(tagCompound);
+			//			double weight = tagCompound.getDouble("weight");
+			//			List<String> flowerTypes = new ArrayList<>();
+			//			for (String key : tagCompound.getKeySet()) {
+			//				if (key.contains("flowertype")) {
+			//					flowerTypes.add(tagCompound.getString("flowertype"));
+			//				}
+			//			}
+			//			FlowerManager.flowerRegistry.registerPlantableFlower(flowerState, weight, flowerTypes.toArray(new String[0]));
 			return true;
 		} catch (Exception e) {
 			IMCUtil.logInvalidIMCMessage(message);
@@ -853,15 +852,15 @@ public class ModuleApiculture extends BlankForestryModule {
 	private boolean addAcceptableFlower(InterModComms.IMCMessage message) {
 		try {
 			//TODO new imc
-//			CompoundNBT tagCompound = message.getNBTValue();
-//			BlockState flowerState = NBTUtil.readBlockState(tagCompound);
-//			List<String> flowerTypes = new ArrayList<>();
-//			for (String key : tagCompound.getKeySet()) {
-//				if (key.contains("flowertype")) {
-//					flowerTypes.add(tagCompound.getString("flowertype"));
-//				}
-//			}
-//			FlowerManager.flowerRegistry.registerAcceptableFlower(flowerState, flowerTypes.toArray(new String[0]));
+			//			CompoundNBT tagCompound = message.getNBTValue();
+			//			BlockState flowerState = NBTUtil.readBlockState(tagCompound);
+			//			List<String> flowerTypes = new ArrayList<>();
+			//			for (String key : tagCompound.getKeySet()) {
+			//				if (key.contains("flowertype")) {
+			//					flowerTypes.add(tagCompound.getString("flowertype"));
+			//				}
+			//			}
+			//			FlowerManager.flowerRegistry.registerAcceptableFlower(flowerState, flowerTypes.toArray(new String[0]));
 			return true;
 		} catch (Exception e) {
 			IMCUtil.logInvalidIMCMessage(message);
@@ -875,9 +874,9 @@ public class ModuleApiculture extends BlankForestryModule {
 	public void textureHook(TextureStitchEvent.Pre event) {
 		//TODO textures
 		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
-//			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
+			//			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
 		}
-//		beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
+		//		beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
 	}
 
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {
