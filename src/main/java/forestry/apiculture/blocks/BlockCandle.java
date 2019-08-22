@@ -306,10 +306,10 @@ public class BlockCandle extends TorchBlock implements IItemModelRegister, IColo
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void randomTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
 		if (tileCandle != null && tileCandle.isLit()) {
-			super.randomTick(stateIn, worldIn, pos, rand);
+			super.animateTick(stateIn, worldIn, pos, rand);
 		}
 	}
 

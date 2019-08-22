@@ -74,8 +74,7 @@ public class BlockStump extends TorchBlock implements IItemModelRegister {
 		return false;
 	}
 
-	//TODO - I think this is the right method
 	@Override
-	public void randomTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 	}
 }
