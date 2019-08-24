@@ -132,7 +132,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 
 	@Nullable
 	@Override
-	protected Slot getSlotAtPosition(int mouseX, int mouseY) {
+	protected Slot getSlotAtPosition(double mouseX, double mouseY) {
 		Slot slot = super.getSlotAtPosition(mouseX, mouseY);
 		if (slot instanceof SlotGeneticFilter && selection.getLogic() != null) {
 			return null;

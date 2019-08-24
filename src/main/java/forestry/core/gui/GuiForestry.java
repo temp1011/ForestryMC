@@ -222,7 +222,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	}
 
 	@Nullable
-	protected Slot getSlotAtPosition(int mouseX, int mouseY) {
+	protected Slot getSlotAtPosition(double mouseX, double mouseY) {
 		for (int k = 0; k < this.container.inventorySlots.size(); ++k) {
 			Slot slot = this.container.inventorySlots.get(k);
 
@@ -234,7 +234,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		return null;
 	}
 
-	private boolean isMouseOverSlot(Slot par1Slot, int mouseX, int mouseY) {
+	private boolean isMouseOverSlot(Slot par1Slot, double mouseX, double mouseY) {
 		return isPointInRegion(par1Slot.xPos, par1Slot.yPos, 16, 16, mouseX, mouseY);
 	}
 
