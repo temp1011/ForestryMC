@@ -58,15 +58,11 @@ public class ModuleSorting extends BlankForestryModule {
 	@Override
 	public void setupAPI() {
 		AlleleManager.filterRegistry = new FilterRegistry();
-
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
 	}
 
 	@Override
 	public void disabledSetupAPI() {
 		AlleleManager.filterRegistry = new DummyFilterRegistry();
-
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
 	}
 
 	@Override
@@ -91,6 +87,8 @@ public class ModuleSorting extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
+		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
+
 		DefaultFilterRuleType.init();
 	}
 

@@ -34,7 +34,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PushbackInputStream;
 import java.io.Reader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -101,38 +103,39 @@ public class Configuration {
 	/**
 	 * Create a configuration file for the file given in parameter with the provided config version number.
 	 */
-//	private void runConfiguration(File file, String configVersion) {
-//		this.file = file;
-//		this.definedConfigVersion = configVersion;
-//		String basePath = ((File) (FMLInjectionData.data()[6])).getAbsolutePath().replace(File.separatorChar, '/').replace("/.", "");
-//		String path = file.getAbsolutePath().replace(File.separatorChar, '/').replace("/./", "/").replace(basePath, "");
-//		if (PARENT != null) {
-//			PARENT.setChild(path, this);
-//			isChild = true;
-//		} else {
-//			fileName = path;
-//			try {
-//				load();
-//			} catch (Throwable e) {
-//				File fileBak = new File(file.getAbsolutePath() + "_" +
-//						new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".errored");
-//				LogManager.getLogger().fatal("An exception occurred while loading config file {}. This file will be renamed to {} " +
-//						"and a new config file will be generated.", file.getName(), fileBak.getName(), e);
-//
-//				file.renameTo(fileBak);
-//				load();
-//			}
-//		}
-//	}TODO
+	private void runConfiguration(File file, String configVersion) {
+		this.file = file;
+		this.definedConfigVersion = configVersion;
+		//TODO just don't crash here...
+		String basePath = (new File(".")).getAbsolutePath().replace(File.separatorChar, '/').replace("/.", "");
+		String path = file.getAbsolutePath().replace(File.separatorChar, '/').replace("/./", "/").replace(basePath, "");
+		if (PARENT != null) {
+			PARENT.setChild(path, this);
+			isChild = true;
+		} else {
+			fileName = path;
+			try {
+				load();
+			} catch (Throwable e) {
+				File fileBak = new File(file.getAbsolutePath() + "_" +
+						new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".errored");
+				LogManager.getLogger().fatal("An exception occurred while loading config file {}. This file will be renamed to {} " +
+						"and a new config file will be generated.", file.getName(), fileBak.getName(), e);
+
+				file.renameTo(fileBak);
+				load();
+			}
+		}
+	}//TODO
 
 	public Configuration(File file, String configVersion) {
-//		runConfiguration(file, configVersion);
+		runConfiguration(file, configVersion);
 		//TODO
 	}
 
 	public Configuration(File file, String configVersion, boolean caseSensitiveCustomCategories) {
 		this.caseSensitiveCustomCategories = caseSensitiveCustomCategories;
-//		runConfiguration(file, configVersion);
+		runConfiguration(file, configVersion);
 		//TODO
 	}
 

@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -28,7 +29,7 @@ import forestry.api.genetics.ISpeciesRoot;
  * <p>
  * After you've registered your backpack definition, create the item with
  * {@link #createBackpack(String, EnumBackpackType)}
- * or {@link #createNaturalistBackpack(String, ISpeciesRoot)}
+ * or {@link #createNaturalistBackpack(String, ISpeciesRoot, ItemGroup)}
  * and then register the returned item with {@link GameRegistry#register(IForgeRegistryEntry)} like any other item.
  */
 public interface IBackpackInterface {
@@ -68,9 +69,10 @@ public interface IBackpackInterface {
 	 *
 	 * @param backpackUid The unique ID of the backpack.
 	 * @param speciesRoot The species root.
+	 * @param tab
 	 * @return Created backpack item.
 	 */
-	Item createNaturalistBackpack(String backpackUid, ISpeciesRoot speciesRoot);
+	Item createNaturalistBackpack(String backpackUid, ISpeciesRoot speciesRoot, ItemGroup tab);
 
 	/**
 	 * Makes a new configurable backpack filter. Useful for implementing {@link IBackpackDefinition}.
@@ -83,7 +85,7 @@ public interface IBackpackInterface {
 	 *
 	 * @param speciesRootUid The species root's unique ID. See {@link ISpeciesRoot#getUID()}.
 	 * @return a new backpack filter for the specified species root
-	 * @see #createNaturalistBackpack(String, ISpeciesRoot)
+	 * @see #createNaturalistBackpack(String, ISpeciesRoot, ItemGroup)
 	 */
 	Predicate<ItemStack> createNaturalistBackpackFilter(String speciesRootUid);
 }

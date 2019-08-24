@@ -216,9 +216,6 @@ public class ModuleApiculture extends BlankForestryModule {
 		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hard);
 		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hardcore);
 		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.insane);
-
-		// Capabilities
-		CapabilityManager.INSTANCE.register(IArmorApiarist.class, new NullStorage<>(), () -> ArmorApiarist.INSTANCE);
 	}
 
 	@Override
@@ -256,6 +253,8 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
+		// Capabilities
+		CapabilityManager.INSTANCE.register(IArmorApiarist.class, new NullStorage<>(), () -> ArmorApiarist.INSTANCE);
 
 		BeeDefinition.preInit();
 

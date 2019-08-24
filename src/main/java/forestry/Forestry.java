@@ -42,6 +42,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
+import forestry.api.storage.BackpackManager;
+import forestry.api.storage.StorageManager;
 import forestry.core.EventHandlerCore;
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.climate.ClimateFactory;
@@ -63,6 +65,8 @@ import forestry.core.proxy.ProxyRenderClient;
 import forestry.core.recipes.DisableRecipe;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
+import forestry.storage.BackpackInterface;
+import forestry.storage.CrateRegistry;
 //import forestry.plugins.ForestryCompatPlugins;
 //import forestry.plugins.PluginBuildCraftFuels;
 //import forestry.plugins.PluginIC2;
@@ -118,19 +122,18 @@ public class Forestry {
 		ModuleManager.runSetup();
 		NetworkHandler networkHandler = new NetworkHandler();
 		//				DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
-		// Register the setup method for modloading
+
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-		// Register the enqueueIMC method for modloading
 		//		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-		// Register the processIMC method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMCMessages);
-		// Register the doClientStuff method for modloading
-				FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientStuff);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientStuff);
 		FMLJavaModLoadingContext.get().getModEventBus().register(TickHandlerCoreServer.class);    //TODO - correct?
 		MinecraftForge.EVENT_BUS.register(this);
 		//TODO - I think this is how it works
 		Proxies.render = DistExecutor.runForDist(() -> () -> new ProxyRenderClient(), () -> () -> new ProxyRender());
 		Proxies.common = DistExecutor.runForDist(() -> () -> new ProxyClient(), () -> () -> new ProxyCommon());
+
+		ModuleManager.getInternalHandler().runSetup();
 	}
 
 	public void clientStuff(FMLClientSetupEvent e) {
@@ -160,7 +163,6 @@ public class Forestry {
 		//TODO - config
 		Config.load(Dist.DEDICATED_SERVER);
 		CraftingHelper.register(new ResourceLocation(Constants.MOD_ID, "module"), new DisableRecipe());
-		ModuleManager.getInternalHandler().runSetup();
 
 		String gameMode = Config.gameMode;
 		Preconditions.checkNotNull(gameMode);

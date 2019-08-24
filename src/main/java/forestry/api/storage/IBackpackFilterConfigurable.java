@@ -22,7 +22,7 @@ public interface IBackpackFilterConfigurable extends Predicate<ItemStack> {
 	/**
 	 * Adds an item as invalid for this backpack, used to make exceptions to oreDictionary matches.
 	 *
-	 * @see #acceptOreDictName(String)
+	 * @see #acceptTagName(String)
 	 */
 	void rejectItem(ItemStack invalidItem);
 
@@ -32,7 +32,7 @@ public interface IBackpackFilterConfigurable extends Predicate<ItemStack> {
 	 *
 	 * @see OreDictionary
 	 */
-	void acceptOreDictName(String oreDictName);
+	void acceptTagName(String oreDictName);
 
 	/**
 	 * Removes an ore dictionary name as valid for this backpack.
