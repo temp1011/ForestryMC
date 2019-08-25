@@ -313,7 +313,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public IBeekeepingMode getBeekeepingMode(World world) {
+	public IBeekeepingMode getBeekeepingMode(ServerWorld world) {
 		if (activeBeekeepingMode != null) {
 			return activeBeekeepingMode;
 		}
@@ -336,7 +336,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public void setBeekeepingMode(World world, IBeekeepingMode mode) {
+	public void setBeekeepingMode(ServerWorld world, IBeekeepingMode mode) {
 		Preconditions.checkNotNull(world);
 		Preconditions.checkNotNull(mode);
 		activeBeekeepingMode = mode;
@@ -356,10 +356,10 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public IApiaristTracker getBreedingTracker(World world, @Nullable GameProfile player) {
+	public IApiaristTracker getBreedingTracker(ServerWorld world, @Nullable GameProfile player) {
 		String filename = "ApiaristTracker." + (player == null ? "common" : player.getId());
 		//TODO ServerWorld needed
-		DimensionSavedDataManager manager = ((ServerWorld) world).getSavedData();
+		DimensionSavedDataManager manager = world.getSavedData();
 		ApiaristTracker tracker = manager.getOrCreate(() -> new ApiaristTracker(filename), filename);
 
 

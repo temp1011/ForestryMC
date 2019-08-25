@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -49,7 +50,7 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	 * @return {@link IArboristTracker} associated with the passed world.
 	 */
 	@Override
-	IArboristTracker getBreedingTracker(World world, @Nullable GameProfile player);
+	IArboristTracker getBreedingTracker(ServerWorld world, @Nullable GameProfile player);
 
 	/* TREE SPECIFIC */
 
@@ -87,14 +88,14 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	/* GAME MODE */
 	List<ITreekeepingMode> getTreekeepingModes();
 
-	ITreekeepingMode getTreekeepingMode(World world);
+	ITreekeepingMode getTreekeepingMode(ServerWorld world);
 
 	@Nullable
 	ITreekeepingMode getTreekeepingMode(String name);
 
 	void registerTreekeepingMode(ITreekeepingMode mode);
 
-	void setTreekeepingMode(World world, ITreekeepingMode mode);
+	void setTreekeepingMode(ServerWorld world, ITreekeepingMode mode);
 
 	/* TEMPLATES */
 

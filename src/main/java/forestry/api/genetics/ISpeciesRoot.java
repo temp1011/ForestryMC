@@ -14,6 +14,7 @@ import java.util.Random;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -102,7 +103,7 @@ public interface ISpeciesRoot {
 	}
 
 	/* BREEDING TRACKER */
-	IBreedingTracker getBreedingTracker(World world, @Nullable GameProfile player);
+	IBreedingTracker getBreedingTracker(ServerWorld world, @Nullable GameProfile player);
 
 	/* GENOME MANIPULATION */
 	IIndividual templateAsIndividual(IAllele[] template);

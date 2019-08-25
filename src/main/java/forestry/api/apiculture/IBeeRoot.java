@@ -11,6 +11,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -54,7 +55,7 @@ public interface IBeeRoot extends ISpeciesRoot {
 	 * @return {@link IApiaristTracker} associated with the passed world.
 	 */
 	@Override
-	IApiaristTracker getBreedingTracker(World world, @Nullable GameProfile player);
+	IApiaristTracker getBreedingTracker(ServerWorld world, @Nullable GameProfile player);
 
 	/* BEE SPECIFIC */
 
@@ -104,14 +105,14 @@ public interface IBeeRoot extends ISpeciesRoot {
 
 	List<IBeekeepingMode> getBeekeepingModes();
 
-	IBeekeepingMode getBeekeepingMode(World world);
+	IBeekeepingMode getBeekeepingMode(ServerWorld world);
 
 	@Nullable
 	IBeekeepingMode getBeekeepingMode(String name);
 
 	void registerBeekeepingMode(IBeekeepingMode mode);
 
-	void setBeekeepingMode(World world, IBeekeepingMode mode);
+	void setBeekeepingMode(ServerWorld world, IBeekeepingMode mode);
 
 	/* MISC */
 
