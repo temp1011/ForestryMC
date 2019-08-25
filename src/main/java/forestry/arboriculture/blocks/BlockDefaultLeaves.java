@@ -1,14 +1,13 @@
 package forestry.arboriculture.blocks;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.BlockStateContainer;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -19,18 +18,14 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.client.model.ModelLoader;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.proxy.Proxies;
 
@@ -38,92 +33,24 @@ import forestry.core.proxy.Proxies;
  * Genetic leaves with no tile entity, used for worldgen trees.
  * Similar to decorative leaves, but these will drop saplings and can be used for pollination.
  */
-public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
-	private static final int VARIANTS_PER_BLOCK = 4;
+public class BlockDefaultLeaves extends BlockAbstractLeaves {
+	private final TreeDefinition definition;
 
-	public static List<BlockDefaultLeaves> create() {
-		List<BlockDefaultLeaves> blocks = new ArrayList<>();
-		final int blockCount = PropertyTreeType.getBlockCount(VARIANTS_PER_BLOCK);
-		for (int blockNumber = 0; blockNumber < blockCount; blockNumber++) {
-			final PropertyTreeType variant = PropertyTreeType.create("variant", blockNumber, VARIANTS_PER_BLOCK);
-			BlockDefaultLeaves block = new BlockDefaultLeaves(blockNumber) {
-				@Override
-				public PropertyTreeType getVariant() {
-					return variant;
-				}
-			};
-			blocks.add(block);
-		}
-		return blocks;
+	public BlockDefaultLeaves(TreeDefinition definition) {
+		super(Block.Properties.create(Material.LEAVES)
+				.hardnessAndResistance(0.2f)
+				.sound(SoundType.PLANT)
+				.tickRandomly());
+		this.definition = definition;
 	}
-
-	protected final int blockNumber;
-
-	public BlockDefaultLeaves(int blockNumber) {
-		this.blockNumber = blockNumber;
-		PropertyTreeType variant = getVariant();
-		setDefaultState(this.blockState.getBaseState()
-			.with(variant, variant.getFirstType())
-			.with(CHECK_DECAY, false)
-			.with(DECAYABLE, true));
-	}
-
-	public int getBlockNumber() {
-		return blockNumber;
-	}
-
-	protected abstract PropertyTreeType getVariant();
 
 	@Nullable
 	public TreeDefinition getTreeDefinition(BlockState blockState) {
 		if (blockState.getBlock() == this) {
-			return blockState.get(getVariant());
+			return this.definition;
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public int damageDropped(BlockState state) {
-		TreeDefinition treeDefinition = getTreeDefinition(state);
-		if (treeDefinition == null) {
-			return 0;
-		}
-		return treeDefinition.getMetadata() - blockNumber * VARIANTS_PER_BLOCK;
-	}
-
-	@Override
-	public BlockState getStateFromMeta(int meta) {
-		return this.getDefaultState()
-			.with(getVariant(), getTreeType(meta))
-			.with(DECAYABLE, (meta & DECAYABLE_FLAG) == 0)
-			.with(CHECK_DECAY, (meta & CHECK_DECAY_FLAG) > 0);
-	}
-
-	@Override
-	public int getMetaFromState(BlockState state) {
-		int i = damageDropped(state);
-
-		if (!state.getValue(DECAYABLE)) {
-			i |= DECAYABLE_FLAG;
-		}
-
-		if (state.getValue(CHECK_DECAY)) {
-			i |= CHECK_DECAY_FLAG;
-		}
-
-		return i;
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, getVariant(), CHECK_DECAY, DECAYABLE);
-	}
-
-	public TreeDefinition getTreeType(int meta) {
-		int variantCount = getVariant().getAllowedValues().size();
-		int variantMeta = (meta % variantCount) + blockNumber * VARIANTS_PER_BLOCK;
-		return TreeDefinition.byMetadata(variantMeta);
 	}
 
 	@Override
@@ -143,12 +70,6 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 	}
 
 	@Override
-	public BlockState getStateForPlacement(World world, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer, Hand hand) {
-		TreeDefinition type = getTreeType(meta);
-		return getDefaultState().with(getVariant(), type);
-	}
-
-	@Override
 	protected ITree getTree(IBlockReader world, BlockPos pos) {
 		BlockState blockState = world.getBlockState(pos);
 		TreeDefinition treeDefinition = getTreeDefinition(blockState);
@@ -163,19 +84,9 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 	@Override
 	public final boolean isOpaqueCube(BlockState state) {
 		if (!Proxies.render.fancyGraphicsEnabled()) {
-			TreeDefinition treeDefinition = state.getValue(getVariant());
-			return !TreeDefinition.Willow.equals(treeDefinition);
+			return !TreeDefinition.Willow.equals(definition);
 		}
 		return false;
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerModel(Item item, IModelManager manager) {
-		for (BlockState state : blockState.getValidStates()) {
-			int meta = getMetaFromState(state);
-			ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation("forestry:leaves.default." + blockNumber, "inventory"));
-		}
 	}
 
 	@Override

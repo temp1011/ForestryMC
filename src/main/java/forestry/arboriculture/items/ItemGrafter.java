@@ -14,34 +14,38 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
+
 import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemForestryTool;
-import forestry.core.utils.Translator;
 
 public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
+
+	//TODO could expose this in API, but others can just call same method to get same thing
+	public static ToolType GRAFTER = ToolType.get("grafter");
+
 	public ItemGrafter(int maxDamage) {
-		super(ItemStack.EMPTY);
-		setMaxDamage(maxDamage);
-		setMaxStackSize(1);
-		setCreativeTab(Tabs.tabArboriculture);
-		setHarvestLevel("grafter", 3);
+		super(ItemStack.EMPTY, (new Item.Properties())
+				.maxDamage(maxDamage)
+				.maxStackSize(1)
+				.group(ItemGroups.tabArboriculture)
+				.addToolType(GRAFTER, 3));
 		setEfficiencyOnProperMaterial(4.0f);
 	}
 
@@ -55,11 +59,11 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	}
 
 	@Override
-	public boolean canHarvestBlock(BlockState state, ItemStack stack) {
+	public boolean canHarvestBlock(BlockState state) {
 		Block block = state.getBlock();
 		return block instanceof LeavesBlock ||
-			state.getMaterial() == Material.LEAVES ||
-			super.canHarvestBlock(state, stack);
+				state.getMaterial() == Material.LEAVES ||
+				super.canHarvestBlock(state);
 	}
 
 	@Override

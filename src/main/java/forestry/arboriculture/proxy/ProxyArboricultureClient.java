@@ -38,6 +38,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
 import forestry.api.arboriculture.IWoodItemMeshDefinition;
 import forestry.api.arboriculture.IWoodStateMapper;
 import forestry.api.arboriculture.IWoodType;
@@ -127,7 +129,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 
 	@SubscribeEvent
 	public <T extends Block & IWoodTyped> void onModelBake(ModelBakeEvent event) {
-		Registry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
+		Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
 
 		for (WoodModelEntry<T> entry : woodModelEntrys) {
 			T woodTyped = entry.woodTyped;
@@ -169,7 +171,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 		}
 	}
 
-	private void retexturBlockModel(Registry<ModelResourceLocation, IBakedModel> registry,
+	private void retexturBlockModel(Map<ModelResourceLocation, IBakedModel> registry,
 		ImmutableMap<String, String> textures, IWoodType woodType, WoodBlockKind woodKind, BlockState blockState,
 		IWoodStateMapper woodMapper) {
 		ModelResourceLocation defaultModelResourceLocation = woodMapper.getDefaultModelResourceLocation(blockState);
@@ -181,7 +183,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 		}
 		ModelResourceLocation basicLocation = woodMapper.getModelLocation(blockState);
 		IModel retextureModel = woodKind.retextureModel(basicModel, woodType, textures);
-		registry.putObject(basicLocation, new SimpleRetexturedModel(retextureModel));
+		registry.put(basicLocation, new SimpleRetexturedModel(retextureModel));
 
 	}
 

@@ -7,6 +7,7 @@ import forestry.api.arboriculture.IWoodType;
 import forestry.arboriculture.WoodHelper;
 import forestry.arboriculture.blocks.BlockForestrySlab;
 
+//TODO vanilla just uses a standard blockitem.
 public class ItemBlockWoodSlab extends ItemSlab {
 	public ItemBlockWoodSlab(BlockForestrySlab block, BlockForestrySlab slab, BlockForestrySlab doubleSlab) {
 		super(block, slab, doubleSlab);
@@ -21,7 +22,7 @@ public class ItemBlockWoodSlab extends ItemSlab {
 	}
 
 	@Override
-	public int getItemBurnTime(ItemStack itemStack) {
+	public int getBurnTime(ItemStack itemStack) {
 		BlockForestrySlab forestrySlab = (BlockForestrySlab) this.block;
 		if (forestrySlab.isFireproof()) {
 			return 0;

@@ -50,6 +50,7 @@ import forestry.core.utils.BlockUtil;
 /**
  * Parent class for shared behavior between {@link BlockDefaultLeaves} and {@link BlockForestryLeaves}
  */
+//eg    public static final Block BIRCH_LEAVES = register("birch_leaves", new LeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)));
 public abstract class BlockAbstractLeaves extends LeavesBlock implements IColoredBlock {
 	public static final int FOLIAGE_COLOR_INDEX = 0;
 	public static final int FRUIT_COLOR_INDEX = 2;

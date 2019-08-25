@@ -15,28 +15,31 @@ import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
@@ -59,7 +62,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	private final EnumGermlingType type;
 
 	public ItemGermlingGE(EnumGermlingType type) {
-		super(Tabs.tabArboriculture);
+		super(ItemGroups.tabArboriculture);
 		this.type = type;
 	}
 
@@ -75,23 +78,23 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
+	public ITextComponent getDisplayName(ItemStack itemstack) {
 		if (itemstack.getTag() == null) {
-			return "Unknown";
+			return new StringTextComponent( "Unknown");
 		}
 		IAlleleSpecies species = getSpecies(itemstack);
 
 		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getUnlocalizedName().replace("trees.species.", "");
 		if (Translator.canTranslateToLocal(customTreeKey)) {
-			return Translator.translateToLocal(customTreeKey);
+			return new TranslationTextComponent(customTreeKey);
 		}
 		String typeString = Translator.translateToLocal("for.trees.grammar." + type.getName() + ".type");
 		return Translator.translateToLocal("for.trees.grammar." + type.getName()).replaceAll("%SPECIES", species.getAlleleName()).replaceAll("%TYPE", typeString);
 	}
 
 	@Override
-	public void getSubItems(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
 			addCreativeItems(subItems, true);
 		}
 	}
@@ -145,8 +148,8 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 
 		ItemStack itemStack = playerIn.getHeldItem(handIn);
 
-		if (raytraceresult != null && raytraceresult.typeOfHit == RayTraceResult.Type.BLOCK) {
-			BlockPos pos = raytraceresult.getBlockPos();
+		if (raytraceresult != null && raytraceresult.getType() == RayTraceResult.Type.BLOCK) {
+			BlockPos pos = ((BlockRayTraceResult) raytraceresult).getPos();
 
 			ITree tree = TreeManager.treeRoot.getMember(itemStack);
 			if (tree != null) {
@@ -161,13 +164,13 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 
-	private static ActionResult<ItemStack> onItemRightClickPollen(ItemStack itemStackIn, World worldIn, PlayerEntity playerIn, BlockPos pos, ITree tree) {
+	private static ActionResult<ItemStack> onItemRightClickPollen(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree) {
 		ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(worldIn, pos);
 		if (checkPollinatable == null || !checkPollinatable.canMateWith(tree)) {
 			return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
 		}
 
-		IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(playerIn.getGameProfile(), worldIn, pos, true);
+		IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(player.getGameProfile(), worldIn, pos, true);
 		if (pollinatable == null || !pollinatable.canMateWith(tree)) {
 			return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
 		}
@@ -181,7 +184,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 			NetworkUtil.sendNetworkPacket(packet, pos, worldIn);
 
-			if (!playerIn.capabilities.isCreativeMode) {
+			if (!player.isCreative()) {
 				itemStackIn.shrink(1);
 			}
 			return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
@@ -189,7 +192,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 
-	private static ActionResult<ItemStack> onItemRightClickSapling(ItemStack itemStackIn, World worldIn, PlayerEntity playerIn, BlockPos pos, ITree tree) {
+	private static ActionResult<ItemStack> onItemRightClickSapling(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree) {
 		// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
 		BlockState hitBlock = worldIn.getBlockState(pos);
 		if (!hitBlock.getBlock().isReplaceable(worldIn, pos)) {
@@ -200,8 +203,8 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		}
 
 		if (tree.canStay(worldIn, pos)) {
-			if (TreeManager.treeRoot.plantSapling(worldIn, tree, playerIn.getGameProfile(), pos)) {
-				if (!playerIn.capabilities.isCreativeMode) {
+			if (TreeManager.treeRoot.plantSapling(worldIn, tree, player.getGameProfile(), pos)) {
+				if (!player.isCreative()) {
 					itemStackIn.shrink(1);
 				}
 				return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
@@ -221,7 +224,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 	@Override
-	public int getItemBurnTime(ItemStack itemStack) {
+	public int getBurnTime(ItemStack itemStack) {
 		return 100;
 	}
 }
