@@ -6,12 +6,9 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.ModuleCore;
 import forestry.core.gui.slots.SlotLockable;
-import forestry.core.tiles.TileUtil;
 
 public class ContainerAnalyzerProvider<T extends TileEntity> extends ContainerTile<T> implements IContainerAnalyzerProvider {
 	private final ContainerAnalyzerProviderHelper providerHelper;

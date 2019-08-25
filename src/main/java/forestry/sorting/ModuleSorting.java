@@ -16,14 +16,12 @@ import forestry.api.modules.ForestryModule;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.tiles.TileUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.sorting.blocks.BlockRegistrySorting;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.SortingContainerTypes;
 import forestry.sorting.network.PacketRegistrySorting;
-import forestry.sorting.tiles.TileGeneticFilter;
 import forestry.sorting.tiles.TileRegistrySorting;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.SORTING, name = "Sorting", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.sorting.description")

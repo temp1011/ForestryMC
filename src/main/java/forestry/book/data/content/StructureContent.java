@@ -20,7 +20,6 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
 
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.IResource;
 
 import net.minecraftforge.api.distmarker.Dist;

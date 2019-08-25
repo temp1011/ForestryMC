@@ -11,7 +11,6 @@
 package forestry.mail;
 
 import javax.annotation.Nullable;
-import java.io.File;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;

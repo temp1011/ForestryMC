@@ -13,12 +13,10 @@ package forestry.mail.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
@@ -27,7 +25,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -40,16 +37,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import forestry.api.core.IModelManager;
 import forestry.api.mail.ILetter;
 import forestry.core.ItemGroupForestry;
 import forestry.core.items.ItemWithGui;
-import forestry.core.utils.Translator;
 import forestry.mail.Letter;
-import forestry.mail.LetterProperties;
-import forestry.mail.gui.ContainerCatalogue;
 import forestry.mail.gui.ContainerLetter;
-import forestry.mail.gui.GuiLetter;
 import forestry.mail.inventory.ItemInventoryLetter;
 
 public class ItemLetter extends ItemWithGui {

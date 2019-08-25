@@ -11,7 +11,6 @@
 package forestry.mail.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.network.PacketBuffer;
 
 import forestry.api.mail.IMailAddress;

@@ -5,7 +5,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.utils.Translator;
 import forestry.cultivation.blocks.BlockPlanter;
 
 public class ItemBlockPlanter extends ItemBlockForestry<BlockPlanter> {

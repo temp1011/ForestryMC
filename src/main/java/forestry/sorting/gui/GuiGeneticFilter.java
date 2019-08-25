@@ -1,9 +1,6 @@
 package forestry.sorting.gui;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
-
-import org.apache.logging.log4j.core.net.TcpSocketManager;
 
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import com.mojang.blaze3d.platform.GlStateManager;

@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.texture.ISprite;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.item.ItemStack;
@@ -23,7 +22,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
-import net.minecraftforge.common.model.IModelState;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,7 +30,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.config.Constants;
 import forestry.core.models.DefaultTextureGetter;
 import forestry.core.models.ModelManager;
-import forestry.core.models.baker.ModelBaker;
 import forestry.core.utils.ModelUtil;
 import forestry.storage.items.ItemCrated;
 

@@ -25,9 +25,6 @@ import net.minecraft.util.text.StringTextComponent;
 
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import forestry.apiculture.gui.ContainerHabitatLocator;
-import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
-import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.inventory.ItemInventorySolderingIron;

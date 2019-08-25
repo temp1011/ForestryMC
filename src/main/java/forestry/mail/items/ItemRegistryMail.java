@@ -20,7 +20,6 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.items.ItemRegistry;
-import forestry.core.utils.OreDictUtil;
 
 public class ItemRegistryMail extends ItemRegistry {
 	public final Map<EnumStampDefinition, ItemStamp> stamps = new EnumMap<>(EnumStampDefinition.class);

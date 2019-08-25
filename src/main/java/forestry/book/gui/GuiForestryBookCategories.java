@@ -14,7 +14,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IForesterBook;
-import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
 import forestry.book.gui.buttons.GuiButtonBookCategory;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;

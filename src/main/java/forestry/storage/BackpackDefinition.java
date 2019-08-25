@@ -22,7 +22,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
-import forestry.core.utils.Translator;
 
 public class BackpackDefinition implements IBackpackDefinition {
 	private final int primaryColor;

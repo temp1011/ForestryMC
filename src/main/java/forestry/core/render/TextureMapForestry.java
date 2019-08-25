@@ -9,14 +9,11 @@ import org.apache.commons.io.IOUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.PngSizeInfo;
 import net.minecraft.client.renderer.texture.Stitcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 //import net.minecraft.client.renderer.texture.TextureUtil;
 //import net.minecraft.client.resources.IResource;
 //import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.data.AnimationMetadataSection;
-import net.minecraft.client.resources.data.AnimationMetadataSectionSerializer;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.crash.ReportedException;
@@ -27,14 +24,9 @@ import net.minecraft.util.ResourceLocation;
 //import net.minecraftforge.fml.client.FMLClientHandler;
 //import net.minecraftforge.fml.common.ProgressManager;
 
-import com.mojang.blaze3d.platform.TextureUtil;
-
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.model.animation.AnimationStateMachine;
-
-import net.minecraftforge.fml.client.ClientHooks;
 
 import forestry.core.utils.Log;
 

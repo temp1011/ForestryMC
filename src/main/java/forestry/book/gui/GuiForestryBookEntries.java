@@ -19,8 +19,6 @@ import forestry.book.gui.buttons.GuiButtonBack;
 import forestry.book.gui.buttons.GuiButtonEntry;
 import forestry.book.gui.buttons.GuiButtonPage;
 
-import afu.org.checkerframework.checker.oigj.qual.O;
-
 @OnlyIn(Dist.CLIENT)
 public class GuiForestryBookEntries extends GuiForesterBook {
 	private final IBookCategory category;

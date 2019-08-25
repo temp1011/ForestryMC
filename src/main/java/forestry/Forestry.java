@@ -42,8 +42,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
-import forestry.api.storage.BackpackManager;
-import forestry.api.storage.StorageManager;
 import forestry.core.EventHandlerCore;
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.climate.ClimateFactory;
@@ -65,8 +63,6 @@ import forestry.core.proxy.ProxyRenderClient;
 import forestry.core.recipes.DisableRecipe;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
-import forestry.storage.BackpackInterface;
-import forestry.storage.CrateRegistry;
 //import forestry.plugins.ForestryCompatPlugins;
 //import forestry.plugins.PluginBuildCraftFuels;
 //import forestry.plugins.PluginIC2;

@@ -14,8 +14,6 @@ package forestry.book.data.structure;
 
 import com.google.gson.JsonObject;
 
-import java.util.Map;
-
 
 import net.minecraft.nbt.CompoundNBT;
 

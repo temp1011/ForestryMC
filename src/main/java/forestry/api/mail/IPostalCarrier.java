@@ -7,7 +7,6 @@ package forestry.api.mail;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 

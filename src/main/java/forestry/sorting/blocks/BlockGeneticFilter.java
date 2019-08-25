@@ -23,7 +23,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.blocks.BlockForestry;
-import forestry.core.network.Network;
 import forestry.core.tiles.TileUtil;
 import forestry.sorting.tiles.TileGeneticFilter;
 

@@ -3,7 +3,6 @@ package forestry.sorting.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.tiles.TileUtil;

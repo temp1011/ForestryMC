@@ -21,8 +21,6 @@ import forestry.cultivation.tiles.TileRegistryCultivation;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
-import afu.org.checkerframework.checker.oigj.qual.O;
-
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CULTIVATION, name = "Cultivation", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.cultivation.description")
 public class ModuleCultivation extends BlankForestryModule {
 	@Nullable

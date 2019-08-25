@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -19,9 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
 import forestry.core.inventory.IInventoryAdapter;
@@ -29,7 +25,6 @@ import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.mail.ModuleMail;
 import forestry.mail.gui.ContainerStampCollector;
-import forestry.mail.gui.GuiStampCollector;
 import forestry.mail.inventory.InventoryStampCollector;
 
 public class TileStampCollector extends TileBase implements IInventory {

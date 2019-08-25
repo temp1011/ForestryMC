@@ -17,7 +17,6 @@ import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFilteredInventory;
-import forestry.core.network.PacketBufferForestry;
 import forestry.storage.ModuleBackpacks;
 import forestry.storage.inventory.ItemInventoryBackpack;
 
