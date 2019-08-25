@@ -28,6 +28,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
@@ -70,7 +71,7 @@ public abstract class BlockUtil {
 		return null;
 	}
 
-	public static boolean isValidPodLocation(World world, BlockPos pos, Direction direction) {
+	public static boolean isValidPodLocation(IWorldReader world, BlockPos pos, Direction direction) {
 		pos = pos.offset(direction);
 		if (!world.isBlockLoaded(pos)) {
 			return false;

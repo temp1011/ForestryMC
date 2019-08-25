@@ -8,16 +8,16 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.commands;
+package forestry.arboriculture.commands;
 
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.PlayerEntity;
 
-public interface ICommandModeHelper {
-	String[] getModeNames();
+import forestry.core.commands.SpeciesNotFoundException;
+import forestry.core.commands.TemplateNotFoundException;
 
-	String getModeName(ServerWorld world);
+public interface ITreeSpawner {
 
-	boolean setMode(ServerWorld world, String modeName);
+	boolean spawn(ICommandSender sender, String treeName, PlayerEntity player) throws SpeciesNotFoundException;
 
-	Iterable<String> getDescription(String modeName);
 }

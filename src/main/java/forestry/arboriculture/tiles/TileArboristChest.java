@@ -8,16 +8,13 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.commands;
+package forestry.arboriculture.tiles;
 
-import net.minecraft.world.server.ServerWorld;
+import forestry.api.arboriculture.TreeManager;
+import forestry.core.tiles.TileNaturalistChest;
 
-public interface ICommandModeHelper {
-	String[] getModeNames();
-
-	String getModeName(ServerWorld world);
-
-	boolean setMode(ServerWorld world, String modeName);
-
-	Iterable<String> getDescription(String modeName);
+public class TileArboristChest extends TileNaturalistChest {
+	public TileArboristChest() {
+		super(TreeManager.treeRoot);
+	}
 }

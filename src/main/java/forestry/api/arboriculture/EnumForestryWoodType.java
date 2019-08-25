@@ -74,13 +74,6 @@ public enum EnumForestryWoodType implements IWoodType {
 		return toString();
 	}
 
-	public static EnumForestryWoodType byMetadata(int meta) {
-		if (meta < 0 || meta >= VALUES.length) {
-			meta = 0;
-		}
-		return VALUES[meta];
-	}
-
 	@Override
 	public String getPlankTexture() {
 		return "forestry:blocks/wood/planks." + getName();

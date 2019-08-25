@@ -8,16 +8,20 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.commands;
+package forestry.arboriculture.blocks;
 
-import net.minecraft.world.server.ServerWorld;
+import java.util.Collection;
 
-public interface ICommandModeHelper {
-	String[] getModeNames();
+import net.minecraft.state.EnumProperty;
 
-	String getModeName(ServerWorld world);
+import forestry.api.arboriculture.IWoodType;
 
-	boolean setMode(ServerWorld world, String modeName);
+public abstract class PropertyWoodType<T extends Enum<T> & IWoodType> extends EnumProperty<T> {
+	protected PropertyWoodType(String name, Class<T> valueClass, Collection<T> allowedValues) {
+		super(name, valueClass, allowedValues);
+	}
 
-	Iterable<String> getDescription(String modeName);
+	public T getFirstType() {
+		return getAllowedValues().iterator().next();
+	}
 }

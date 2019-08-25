@@ -8,16 +8,29 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.commands;
+package forestry.arboriculture.proxy;
 
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.block.Block;
 
-public interface ICommandModeHelper {
-	String[] getModeNames();
+import forestry.arboriculture.IWoodTyped;
 
-	String getModeName(ServerWorld world);
+public class ProxyArboriculture {
 
-	boolean setMode(ServerWorld world, String modeName);
+	public void initializeModels() {
+	}
 
-	Iterable<String> getDescription(String modeName);
+	public int getFoliageColorBasic() {
+		return 4764952;
+	}
+
+	public int getFoliageColorBirch() {
+		return 8431445;
+	}
+
+	public int getFoliageColorPine() {
+		return 6396257;
+	}
+
+	public <T extends Block & IWoodTyped> void registerWoodModel(T woodTyped, boolean withVariants) {
+	}
 }

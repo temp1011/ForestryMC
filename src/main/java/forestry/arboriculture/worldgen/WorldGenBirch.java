@@ -8,16 +8,14 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.commands;
+package forestry.arboriculture.worldgen;
 
-import net.minecraft.world.server.ServerWorld;
+import forestry.api.world.ITreeGenData;
 
-public interface ICommandModeHelper {
-	String[] getModeNames();
+public class WorldGenBirch extends WorldGenTreeVanilla {
 
-	String getModeName(ServerWorld world);
+	public WorldGenBirch(ITreeGenData tree) {
+		super(tree);
+	}
 
-	boolean setMode(ServerWorld world, String modeName);
-
-	Iterable<String> getDescription(String modeName);
 }

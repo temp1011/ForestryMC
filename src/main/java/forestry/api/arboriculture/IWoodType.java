@@ -23,4 +23,6 @@ public interface IWoodType extends IStringSerializable {
 	String getBarkTexture();
 
 	String getHeartTexture();
+
+	String toString();
 }

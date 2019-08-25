@@ -1,0 +1,10 @@
+@ParametersAreNonnullByDefault
+@FieldsAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+package forestry.arboriculture.genetics;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import mcp.MethodsReturnNonnullByDefault;
+
+import forestry.core.utils.FieldsAreNonnullByDefault;

@@ -8,16 +8,15 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.commands;
+package forestry.arboriculture.genetics.alleles;
 
-import net.minecraft.world.server.ServerWorld;
+public class AlleleLeafEffectNone extends AlleleLeafEffect {
+	public AlleleLeafEffectNone() {
+		super("none", true);
+	}
 
-public interface ICommandModeHelper {
-	String[] getModeNames();
-
-	String getModeName(ServerWorld world);
-
-	boolean setMode(ServerWorld world, String modeName);
-
-	Iterable<String> getDescription(String modeName);
+	@Override
+	public String getUnlocalizedName() {
+		return "for.arboriculture.effect.none";
+	}
 }

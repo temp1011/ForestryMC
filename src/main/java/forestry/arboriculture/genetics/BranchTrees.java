@@ -8,16 +8,14 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.commands;
+package forestry.arboriculture.genetics;
 
-import net.minecraft.world.server.ServerWorld;
+import forestry.core.genetics.Branch;
 
-public interface ICommandModeHelper {
-	String[] getModeNames();
+public class BranchTrees extends Branch {
 
-	String getModeName(ServerWorld world);
+	public BranchTrees(String uid, String scientific) {
+		super("trees." + uid, scientific);
+	}
 
-	boolean setMode(ServerWorld world, String modeName);
-
-	Iterable<String> getDescription(String modeName);
 }

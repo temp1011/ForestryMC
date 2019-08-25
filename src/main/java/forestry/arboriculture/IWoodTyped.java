@@ -8,16 +8,15 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.commands;
+package forestry.arboriculture;
 
-import net.minecraft.world.server.ServerWorld;
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.WoodBlockKind;
 
-public interface ICommandModeHelper {
-	String[] getModeNames();
+public interface IWoodTyped {
+	WoodBlockKind getBlockKind();
 
-	String getModeName(ServerWorld world);
+	boolean isFireproof();
 
-	boolean setMode(ServerWorld world, String modeName);
-
-	Iterable<String> getDescription(String modeName);
+	IWoodType getWoodType();
 }

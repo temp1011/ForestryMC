@@ -1,0 +1,10 @@
+@ParametersAreNonnullByDefault
+@FieldsAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+package forestry.arboriculture.models;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import mcp.MethodsReturnNonnullByDefault;
+
+import forestry.core.utils.FieldsAreNonnullByDefault;
