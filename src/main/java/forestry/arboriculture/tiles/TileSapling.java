@@ -17,6 +17,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreekeepingMode;
@@ -30,15 +31,15 @@ public class TileSapling extends TileTreeContainer {
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(CompoundNBT compoundNBT) {
-		super.readFromNBT(compoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
 		timesTicked = compoundNBT.getInt("TT");
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compoundNBT) {
-		compoundNBT = super.writeToNBT(compoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
 		compoundNBT.putInt("TT", timesTicked);
 		return compoundNBT;
@@ -50,7 +51,7 @@ public class TileSapling extends TileTreeContainer {
 		tryGrow(rand, false);
 	}
 
-	private static int getRequiredMaturity(World world, ITree tree) {
+	private static int getRequiredMaturity(ServerWorld world, ITree tree) {
 		ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
 		float maturationModifier = treekeepingMode.getMaturationModifier(tree.getGenome(), 1f);
 		return Math.round(tree.getRequiredMaturity() * maturationModifier);
@@ -63,7 +64,13 @@ public class TileSapling extends TileTreeContainer {
 			return false;
 		}
 
-		int maturity = getRequiredMaturity(world, tree);
+		if(world.isRemote) {
+			return false;
+		}
+
+		ServerWorld sWorld = (ServerWorld) world;
+
+		int maturity = getRequiredMaturity(sWorld, tree);
 		if (timesTicked < maturity) {
 			return true;
 		}
@@ -85,7 +92,12 @@ public class TileSapling extends TileTreeContainer {
 			return;
 		}
 
-		int maturity = getRequiredMaturity(world, tree);
+		if(world.isRemote) {
+			return;
+		}
+
+
+		int maturity = getRequiredMaturity((ServerWorld) world, tree);
 		if (timesTicked < maturity) {
 			if (bonemealed) {
 				timesTicked = maturity;

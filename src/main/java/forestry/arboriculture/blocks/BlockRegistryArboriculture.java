@@ -70,10 +70,9 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public final Map<EnumForestryWoodType, BlockForestryDoor> doors = new EnumMap<>(EnumForestryWoodType.class);
 
 	public final BlockSapling saplingGE;
-	public final BlockForestryLeaves leaves;
+	public final Map<TreeDefinition, BlockForestryLeaves> leaves = new EnumMap<>(TreeDefinition.class);
 	public final Map<TreeDefinition, BlockDefaultLeaves> leavesDefault = new EnumMap<>(TreeDefinition.class);
-	public final List<BlockDefaultLeavesFruit> leavesDefaultFruit;
-	public final Map<String, BlockState> speciesToLeavesDefaultFruit;
+	public final Map<TreeDefinition, BlockDefaultLeavesFruit> leavesDefaultFruit = new EnumMap<>(TreeDefinition.class);
 	public final Map<TreeDefinition, BlockDecorativeLeaves> leavesDecorative = new EnumMap<>(TreeDefinition.class);
 	public final Map<String, BlockFruitPod> podsMap;
 
@@ -210,27 +209,12 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		registerBlock(saplingGE, new ItemBlockForestry<>(saplingGE), "sapling_ge");
 		registerOreDictWildcard(OreDictUtil.TREE_SAPLING, saplingGE);
 
-		// Leaves
-		leaves = new BlockForestryLeaves();
-		registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves");
-		registerOreDictWildcard(OreDictUtil.TREE_LEAVES, leaves);
-
-		leavesDefaultFruit = BlockDefaultLeavesFruit.create();
-		speciesToLeavesDefaultFruit = new HashMap<>();
-		for (BlockDefaultLeavesFruit leaves : leavesDefaultFruit) {
-			registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves.default.fruit." + leaves.getBlockNumber());
-			registerOreDictWildcard(OreDictUtil.TREE_LEAVES, leaves);
-
-			PropertyTreeTypeFruit treeType = leaves.getVariant();
-			for (PropertyTreeTypeFruit.LeafVariant variant : treeType.getAllowedValues()) {
-				Preconditions.checkNotNull(variant);
-				String speciesUid = variant.definition.getUID();
-				BlockState blockState = leaves.getDefaultState().with(treeType, variant);
-				speciesToLeavesDefaultFruit.put(speciesUid, blockState);
-			}
-		}
-
 		for(TreeDefinition definition : TreeDefinition.VALUES) {
+			//leaves
+			BlockForestryLeaves forestryLeaves = new BlockForestryLeaves(definition);
+			registerBlock(forestryLeaves, new ItemBlockLeaves(forestryLeaves), definition.getName() + "_leaves");
+			leaves.put(definition, forestryLeaves);
+
 			//decorative
 			BlockDecorativeLeaves decorativeLeaves = new BlockDecorativeLeaves(definition);
 			//TODO block name might be a bit rubbish
@@ -239,8 +223,13 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 			//default
 			BlockDefaultLeaves defaultLeaves = new BlockDefaultLeaves(definition);
-			registerBlock(defaultLeaves, new ItemBlockLeaves(leaves), definition.getName() + "_default_leaves");
+			registerBlock(defaultLeaves, new ItemBlockLeaves(defaultLeaves), definition.getName() + "_default_leaves");
 			leavesDefault.put(definition, defaultLeaves);
+
+			//default fruit leaves
+			BlockDefaultLeavesFruit defaultLeavesFruit = new BlockDefaultLeavesFruit(definition);
+			registerBlock(defaultLeavesFruit, new ItemBlockLeaves(defaultLeavesFruit), definition.getName() + "_default_leaves_fruit");
+			leavesDefaultFruit.put(definition, defaultLeavesFruit);
 		}
 
 		// Pods
@@ -263,23 +252,30 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		Optional<BlockDecorativeLeaves> block = leavesDecorative.entrySet().stream()
 				.filter(e -> e.getKey().getUID().equals(speciesUid))
 				.findFirst()
-				.flatMap(e -> Optional.of(e.getValue()));
+				.map(Map.Entry::getValue);
 
 		return block.map(ItemStack::new).orElse(ItemStack.EMPTY);
 	}
 
+	//TODO probably slow etc
 	@Nullable
 	public BlockState getDefaultLeaves(String speciesUid) {
 		Optional<BlockDefaultLeaves> block = leavesDefault.entrySet().stream()
 				.filter(e -> e.getKey().getUID().equals(speciesUid))
 				.findFirst()
-				.flatMap(e -> Optional.of(e.getValue()));
+				.map(Map.Entry::getValue);
 
 		return block.map(Block::getDefaultState).orElse(null);
 	}
 
+	@Nullable
 	public BlockState getDefaultLeavesFruit(String speciesUid) {
-		return speciesToLeavesDefaultFruit.get(speciesUid);
+		Optional<BlockDefaultLeavesFruit> block = leavesDefaultFruit.entrySet().stream()
+				.filter(e -> e.getKey().getUID().equals(speciesUid))
+				.findFirst()
+				.map(Map.Entry::getValue);
+
+		return block.map(Block::getDefaultState).orElse(null);
 	}
 
 	@Nullable

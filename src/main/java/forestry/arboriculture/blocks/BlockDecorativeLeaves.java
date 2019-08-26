@@ -15,6 +15,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -56,29 +57,31 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 	}
 
 	@Override
-	public void onEntityCollision(World worldIn, BlockPos pos, BlockState state, Entity entityIn) {
-		entityIn.motionX *= 0.4D;
-		entityIn.motionZ *= 0.4D;
+	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+		super.onEntityCollision(state, worldIn, pos, entityIn);
+		Vec3d motion = entityIn.getMotion();
+		entityIn.setMotion(motion.getX()*0.4D, motion.getY(), motion.getZ()*0.4D);
 	}
 
-	@Override
-	public boolean isOpaqueCube(BlockState state) {
-		if (!Proxies.render.fancyGraphicsEnabled()) {
-			return !TreeDefinition.Willow.equals(definition);
-		}
-		return false;
-	}
+	//TODO hitbox/rendering
+	//	@Override
+	//	public final boolean isOpaqueCube(BlockState state) {
+	//		if (!Proxies.render.fancyGraphicsEnabled()) {
+	//			return !TreeDefinition.Willow.equals(definition);
+	//		}
+	//		return false;
+	//	}
 
-	@Override
-	public boolean causesSuffocation(BlockState state) {
-		return false;
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public boolean shouldSideBeRendered(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return (Proxies.render.fancyGraphicsEnabled() || blockAccess.getBlockState(pos.offset(side)).getBlock() != this) && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
-	}
+//	@Override
+//	public boolean causesSuffocation(BlockState state) {
+//		return false;
+//	}
+//
+//	@Override
+//	@OnlyIn(Dist.CLIENT)
+//	public boolean shouldSideBeRendered(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+//		return (Proxies.render.fancyGraphicsEnabled() || blockAccess.getBlockState(pos.offset(side)).getBlock() != this) && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+//	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
@@ -86,10 +89,11 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 		return BlockRenderLayer.CUTOUT_MIPPED; // fruit overlays require CUTOUT_MIPPED, even in Fast graphics
 	}
 
-	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
-
-	}
+	//TODO loot tables? or just override here to empty?
+//	@Override
+//	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
+//
+//	}
 
 	/* PROPERTIES */
 	@Override

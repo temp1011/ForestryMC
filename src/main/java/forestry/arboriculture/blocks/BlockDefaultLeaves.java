@@ -15,6 +15,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -60,8 +61,12 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 			return;
 		}
 
+		if(world.isRemote) {
+			return;
+		}
+
 		// Add saplings
-		List<ITree> saplings = tree.getSaplings(world, playerProfile, pos, saplingModifier);
+		List<ITree> saplings = tree.getSaplings((ServerWorld) world, playerProfile, pos, saplingModifier);
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
 				drops.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING));
@@ -81,13 +86,14 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 	}
 
 	/* RENDERING */
-	@Override
-	public final boolean isOpaqueCube(BlockState state) {
-		if (!Proxies.render.fancyGraphicsEnabled()) {
-			return !TreeDefinition.Willow.equals(definition);
-		}
-		return false;
-	}
+	//TODO hitbox/rendering
+//	@Override
+//	public final boolean isOpaqueCube(BlockState state) {
+//		if (!Proxies.render.fancyGraphicsEnabled()) {
+//			return !TreeDefinition.Willow.equals(definition);
+//		}
+//		return false;
+//	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)

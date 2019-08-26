@@ -22,6 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.util.Constants;
@@ -96,8 +97,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(CompoundNBT compoundNBT) {
-		super.readFromNBT(compoundNBT);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
 		ripeningTime = compoundNBT.getShort("RT");
 		damage = compoundNBT.getInt("ENC");
@@ -117,8 +118,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compoundNBT) {
-		compoundNBT = super.writeToNBT(compoundNBT);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
 		compoundNBT.putInt("RT", getRipeningTime());
 		compoundNBT.putInt("ENC", damage);
@@ -174,8 +175,12 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			damage--;
 		}
 
+		if(world.isRemote) {
+			return;	//TODO maybe this doesn't work or needs to be moved etc
+		}
+
 		if (hasFruit() && getRipeningTime() < ripeningPeriod) {
-			ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
+			ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode((ServerWorld) world);
 			float sappinessModifier = treekeepingMode.getSappinessModifier(genome, 1f);
 			float sappiness = genome.getSappiness() * sappinessModifier;
 

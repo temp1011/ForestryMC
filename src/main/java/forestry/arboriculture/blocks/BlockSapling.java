@@ -71,7 +71,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	@Override
-	public TileEntity createTileEntity(World var1, int meta) {
+	public TileEntity createTileEntity(BlockState state, World var1) {
 		return new TileSapling();
 	}
 

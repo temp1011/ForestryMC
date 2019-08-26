@@ -14,17 +14,15 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockStateContainer;
 import net.minecraft.block.IGrowable;
-import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -37,24 +35,18 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
 import forestry.api.core.IToolScoop;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.blocks.properties.UnlistedBlockAccess;
-import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -62,18 +54,15 @@ import forestry.core.utils.NetworkUtil;
 
 public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowable {
 
-	public BlockForestryLeaves() {
-		setDefaultState(this.blockState.getBaseState()
-				.with(CHECK_DECAY, false)
-				.with(DECAYABLE, true));
-	}
+	//TODO this should be used. Maybe for tile?
+	private TreeDefinition definition;
 
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new ExtendedBlockState(this,
-				new IProperty[]{DECAYABLE, CHECK_DECAY},
-				new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS}
-		);
+	public BlockForestryLeaves(TreeDefinition definition) {
+		super(Block.Properties.create(Material.LEAVES)
+				.hardnessAndResistance(0.2F)
+				.tickRandomly()
+				.sound(SoundType.PLANT));    //TODO sort out constructor block properties hierarchy
+		this.definition = definition;
 	}
 
 	@Override
@@ -102,11 +91,11 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	//TODO extended state
-//	@Override
-//	public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
-//		return super.getExtendedState(state, world, pos).with(UnlistedBlockPos.POS, pos)
-//				.with(UnlistedBlockAccess.BLOCKACCESS, world);
-//	}
+	//	@Override
+	//	public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
+	//		return super.getExtendedState(state, world, pos).with(UnlistedBlockPos.POS, pos)
+	//				.with(UnlistedBlockAccess.BLOCKACCESS, world);
+	//	}
 
 	/* TILE ENTITY */
 	@Override
@@ -147,11 +136,11 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	/* MODELS */
-//	@Override
-//	@OnlyIn(Dist.CLIENT)
-//	public void registerModel(Item item, IModelManager manager) {
-//		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:leaves", "inventory"));
-//	}
+	//	@Override
+	//	@OnlyIn(Dist.CLIENT)
+	//	public void registerModel(Item item, IModelManager manager) {
+	//		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:leaves", "inventory"));
+	//	}
 
 	@Override
 	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
