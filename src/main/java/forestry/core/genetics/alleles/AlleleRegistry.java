@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,13 +26,11 @@ import genetics.api.GeneticsAPI;
 import genetics.api.classification.IClassification;
 import genetics.api.classification.IClassification.EnumClassLevel;
 import genetics.api.classification.IClassificationRegistry;
-import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 
 import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IAlleleHandler;
 import forestry.api.genetics.IAlleleRegistry;
-import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.ModuleCore;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
@@ -47,60 +44,6 @@ public class AlleleRegistry implements IAlleleRegistry {
 	 * Internal Set of all alleleHandlers, which trigger when an allele or branch is registered
 	 */
 	private final Set<IAlleleHandler> alleleHandlers = new HashSet<>();
-
-	@Override
-	public Map<String, IForestrySpeciesRoot> getSpeciesRoot() {
-		return Collections.unmodifiableMap(rootMap);
-	}
-
-	@Override
-	@Nullable
-	public IForestrySpeciesRoot getSpeciesRoot(String uid) {
-		return rootMap.get(uid);
-	}
-
-	@Override
-	@Nullable
-	public IForestrySpeciesRoot getSpeciesRoot(ItemStack stack) {
-		if (stack.isEmpty()) {
-			return null;
-		}
-
-		for (IForestrySpeciesRoot root : rootMap.values()) {
-			if (root.isMember(stack)) {
-				return root;
-			}
-		}
-		return null;
-	}
-
-	@Override
-	@Nullable
-	public IForestrySpeciesRoot getSpeciesRoot(Class<? extends IIndividual> individualClass) {
-		for (IForestrySpeciesRoot root : rootMap.values()) {
-			if (root.getMemberClass().isAssignableFrom(individualClass)) {
-				return root;
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public IForestrySpeciesRoot getSpeciesRoot(IIndividual individual) {
-		return individual.getGenome().getSpeciesRoot();
-	}
-
-	/* INDIVIDUALS */
-	@Override
-	@Nullable
-	public IIndividual getIndividual(ItemStack stack) {
-		IForestrySpeciesRoot root = getSpeciesRoot(stack);
-		if (root == null) {
-			return null;
-		}
-
-		return root.create(stack);
-	}
 
 	public void initialize() {
 

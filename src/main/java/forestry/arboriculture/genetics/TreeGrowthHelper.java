@@ -9,14 +9,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
+import genetics.api.individual.IGenome;
+
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.tiles.TileUtil;
 
 public class TreeGrowthHelper {
 	@Nullable
-	public static BlockPos canGrow(World world, ITreeGenome genome, BlockPos pos, int expectedGirth, int expectedHeight) {
+	public static BlockPos canGrow(World world, IGenome genome, BlockPos pos, int expectedGirth, int expectedHeight) {
 		BlockPos growthPos = hasSufficientSaplingsAroundSapling(genome, world, pos, expectedGirth);
 		if (growthPos == null) {
 			return null;
@@ -55,7 +56,7 @@ public class TreeGrowthHelper {
 	 * Uses a knownSaplings cache to avoid checking the same saplings multiple times.
 	 */
 	@Nullable
-	private static BlockPos hasSufficientSaplingsAroundSapling(ITreeGenome genome, World world, BlockPos saplingPos, int expectedGirth) {
+	private static BlockPos hasSufficientSaplingsAroundSapling(IGenome genome, World world, BlockPos saplingPos, int expectedGirth) {
 		final int checkSize = (expectedGirth * 2) - 1;
 		final int offset = expectedGirth - 1;
 		final Map<BlockPos, Boolean> knownSaplings = new HashMap<>(checkSize * checkSize);
@@ -72,7 +73,7 @@ public class TreeGrowthHelper {
 		return null;
 	}
 
-	private static boolean checkForSaplings(ITreeGenome genome, World world, BlockPos startPos, int girth, Map<BlockPos, Boolean> knownSaplings) {
+	private static boolean checkForSaplings(IGenome genome, World world, BlockPos startPos, int girth, Map<BlockPos, Boolean> knownSaplings) {
 		for (int x = 0; x < girth; x++) {
 			for (int z = 0; z < girth; z++) {
 				BlockPos checkPos = startPos.add(x, 0, z);
@@ -85,7 +86,7 @@ public class TreeGrowthHelper {
 		return true;
 	}
 
-	private static boolean isSapling(ITreeGenome genome, World world, BlockPos pos) {
+	private static boolean isSapling(IGenome genome, World world, BlockPos pos) {
 		if (!world.isBlockLoaded(pos)) {
 			return false;
 		}
@@ -100,6 +101,6 @@ public class TreeGrowthHelper {
 		}
 
 		ITree tree = sapling.getTree();
-		return tree != null && tree.getGenome().getPrimary().getUID().equals(genome.getPrimary().getUID());
+		return tree != null && tree.getGenome().getPrimary().getRegistryName().equals(genome.getPrimary().getRegistryName());
 	}
 }

@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Stack;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +30,7 @@ import net.minecraft.util.text.StringTextComponent;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
+import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.alleles.IAlleleValue;
@@ -37,6 +39,9 @@ import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.IRootDefinition;
+import genetics.api.root.components.ComponentKeys;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IBeeRoot;
@@ -148,11 +153,11 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		}
 
 		ItemStack stackInSlot = itemInventory.getStackInSlot(specimenSlot);
-		IForestrySpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(stackInSlot);
-		if (speciesRoot == null) {
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stackInSlot, IForestrySpeciesRoot.class);
+		if (definition.isRootPresent()) {
 			return;
 		}
-
+		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
 		switch (specimenSlot) {
 			case ItemInventoryAlyzer.SLOT_ANALYZE_1: {
 				speciesRoot.getAlyzerPlugin().drawAnalyticsPage1(this, stackInSlot);
@@ -167,13 +172,11 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 				break;
 			}
 			case ItemInventoryAlyzer.SLOT_ANALYZE_4: {
-				IIndividual individual = speciesRoot.create(stackInSlot);
-				drawAnalyticsPageMutations(individual);
+				speciesRoot.create(stackInSlot).ifPresent(this::drawAnalyticsPageMutations);
 				break;
 			}
 			case ItemInventoryAlyzer.SLOT_ANALYZE_5: {
-				IIndividual individual = speciesRoot.create(stackInSlot);
-				drawAnalyticsPageClassification(individual);
+				speciesRoot.create(stackInSlot).ifPresent(this::drawAnalyticsPageClassification);
 				break;
 			}
 			default:
@@ -189,13 +192,14 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 				continue;
 			}
 
-			IForestrySpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(stackInSlot);
-			if (speciesRoot == null) {
+			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stackInSlot);
+			if (!definition.isRootPresent()) {
 				continue;
 			}
+			IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
 
-			IIndividual individual = speciesRoot.create(stackInSlot);
-			if (!individual.isAnalyzed()) {
+			Optional<IIndividual> optionalIndividual = speciesRoot.create(stackInSlot);
+			if (optionalIndividual.filter(individual -> !individual.isAnalyzed()).isPresent()) {
 				continue;
 			}
 
@@ -299,8 +303,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		textLayout.endPage();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void drawAnalyticsPageMutations(IIndividual individual) {
-
 		textLayout.startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 		textLayout.drawLine(Translator.translateToLocal("for.gui.beealyzer.mutations") + ":", COLUMN_0);
 		textLayout.newLine();
@@ -308,7 +312,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		RenderHelper.enableGUIStandardItemLighting();
 
 		IGenome genome = individual.getGenome();
-		IForestrySpeciesRoot speciesRoot = genome.getRoot();
+		IForestrySpeciesRoot<IIndividual> speciesRoot = (IForestrySpeciesRoot) individual.getRoot();
 		IAlleleSpecies species = genome.getPrimary();
 
 		int columnWidth = 50;
@@ -317,7 +321,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		PlayerEntity player = Minecraft.getInstance().player;
 		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
 
-		for (IMutation mutation : speciesRoot.getCombinations(species)) {
+		IMutationContainer<IMutation> container = speciesRoot.getComponent(ComponentKeys.MUTATIONS).get();
+		for (IMutation mutation : container.getCombinations(species)) {
 			if (breedingTracker.isDiscovered(mutation)) {
 				drawMutationInfo(mutation, species, COLUMN_0 + x, breedingTracker);
 			} else {
@@ -340,16 +345,15 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	}
 
 	public void drawMutationInfo(IMutation combination, IAllele species, int x, IBreedingTracker breedingTracker) {
+		Map<String, ItemStack> iconStacks = ((IForestrySpeciesRoot) combination.getRoot()).getAlyzerPlugin().getIconStacks();
 
-		Map<String, ItemStack> iconStacks = combination.getRoot().getAlyzerPlugin().getIconStacks();
-
-		ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getUID());
+		ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getRegistryName().toString());
 		widgetManager.add(new ItemStackWidget(widgetManager, x, textLayout.getLineY(), partnerBee));
 
 		drawProbabilityArrow(combination, guiLeft + x + 18, guiTop + textLayout.getLineY() + 4, breedingTracker);
 
 		IAllele result = combination.getTemplate()[BeeChromosomes.SPECIES.ordinal()];
-		ItemStack resultBee = iconStacks.get(result.getUID());
+		ItemStack resultBee = iconStacks.get(result.getRegistryName().toString());
 		widgetManager.add(new ItemStackWidget(widgetManager, x + 33, textLayout.getLineY(), resultBee));
 	}
 
@@ -495,9 +499,9 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	public List<String> getHints() {
 		ItemStack specimen = itemInventory.getSpecimen();
 		if (!specimen.isEmpty()) {
-			IForestrySpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(specimen);
-			if (speciesRoot != null) {
-				IAlyzerPlugin alyzerPlugin = speciesRoot.getAlyzerPlugin();
+			IRootDefinition<IForestrySpeciesRoot> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(specimen);
+			if (definition.isRootPresent()) {
+				IAlyzerPlugin alyzerPlugin = definition.get().getAlyzerPlugin();
 				return alyzerPlugin.getHints();
 			}
 		}

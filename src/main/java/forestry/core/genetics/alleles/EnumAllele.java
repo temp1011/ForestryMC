@@ -4,6 +4,8 @@ import java.util.Locale;
 
 import net.minecraft.util.math.Vec3i;
 
+import genetics.api.alleles.IAlleleData;
+
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.flowers.FlowerProvider;
@@ -133,7 +135,7 @@ public class EnumAllele {
 		}
 	}
 
-	public enum Height implements IAlleleValue<Float> {
+	public enum Height implements IAlleleData<Float> {
 		SMALLEST(0.25f),
 		SMALLER(0.5f),
 		SMALL(0.75f),
@@ -163,6 +165,16 @@ public class EnumAllele {
 		@Override
 		public boolean isDominant() {
 			return dominant;
+		}
+
+		@Override
+		public String getCategory() {
+			return "height";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase();
 		}
 	}
 

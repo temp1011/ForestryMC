@@ -16,10 +16,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
 
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeGenome;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.commands.SpeciesNotFoundException;

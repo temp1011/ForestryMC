@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.core.items.ItemRegistry;
 
 public class ItemRegistryArboriculture extends ItemRegistry {

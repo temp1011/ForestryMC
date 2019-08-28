@@ -20,12 +20,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.apiculture.IApiaristTracker;
-import forestry.api.arboriculture.EnumTreeChromosome;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestryMutation;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IMutation;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.buttons.GuiBetterButton;
@@ -75,7 +75,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 			textLayout.startPage();
 
 			displaySpeciesInformation(true, individual.getGenome().getPrimary(), iconStacks.get(individual.getIdent()), 10);
-			if (!individual.isPureBred(EnumTreeChromosome.SPECIES)) {
+			if (!individual.isPureBred(TreeChromosomes.SPECIES)) {
 				displaySpeciesInformation(individual.isAnalyzed(), individual.getGenome().getSecondary(), iconStacks.get(individual.getGenome().getSecondary().getUID()), 10);
 			}
 
@@ -164,7 +164,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 		int columnWidth = 16;
 		int column = 10;
 
-		for (IForestryMutation combination : speciesRoot.getCombinations(species)) {
+		for (IMutation combination : speciesRoot.getCombinations(species)) {
 			if (combination.isSecret()) {
 				continue;
 			}
@@ -186,7 +186,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 		textLayout.newLine();
 	}
 
-	private void drawMutationIcon(IForestryMutation combination, IAlleleForestrySpecies species, int x) {
+	private void drawMutationIcon(IMutation combination, IAlleleForestrySpecies species, int x) {
 		GuiUtil.drawItemStack(this, iconStacks.get(combination.getPartner(species).getUID()), guiLeft + x, guiTop + textLayout.getLineY());
 
 		int line = 48;
@@ -217,7 +217,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 
 	}
 
-	private void drawUnknownIcon(IForestryMutation mutation, int x) {
+	private void drawUnknownIcon(IMutation mutation, int x) {
 
 		float chance = mutation.getBaseChance();
 

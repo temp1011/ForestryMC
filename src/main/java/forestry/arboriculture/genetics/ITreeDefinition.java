@@ -12,9 +12,9 @@ package forestry.arboriculture.genetics;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeGenome;
 import forestry.core.genetics.IGeneticDefinition;
 
 public interface ITreeDefinition extends IGeneticDefinition {

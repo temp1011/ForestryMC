@@ -37,11 +37,11 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.fml.DistExecutor;
 
 import forestry.Forestry;
-import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;

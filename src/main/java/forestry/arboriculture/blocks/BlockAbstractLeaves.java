@@ -30,7 +30,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.LeafDecayHelper;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.blocks.IColoredBlock;

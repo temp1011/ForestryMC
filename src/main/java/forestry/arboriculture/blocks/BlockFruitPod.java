@@ -30,7 +30,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.core.tiles.TileUtil;

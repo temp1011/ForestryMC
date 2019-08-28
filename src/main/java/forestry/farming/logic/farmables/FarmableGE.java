@@ -18,9 +18,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.farming.logic.crops.CropDestroy;

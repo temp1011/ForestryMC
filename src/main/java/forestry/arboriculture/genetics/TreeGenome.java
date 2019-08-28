@@ -17,13 +17,13 @@ import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.IAlleleLeafEffect;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.arboriculture.genetics.IAlleleLeafEffect;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITreeGenome;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleFloat;
@@ -54,63 +54,63 @@ public class TreeGenome extends Genome implements ITreeGenome {
 			return (IAlleleTreeSpecies) species;
 		}
 
-		return (IAlleleTreeSpecies) getActiveAllele(itemStack, EnumTreeChromosome.SPECIES, TreeManager.treeRoot);
+		return (IAlleleTreeSpecies) getActiveAllele(itemStack, TreeChromosomes.SPECIES, TreeManager.treeRoot);
 	}
 
 	@Override
 	public IAlleleTreeSpecies getPrimary() {
-		return (IAlleleTreeSpecies) getActiveAllele(EnumTreeChromosome.SPECIES);
+		return (IAlleleTreeSpecies) getActiveAllele(TreeChromosomes.SPECIES);
 	}
 
 	@Override
 	public IAlleleTreeSpecies getSecondary() {
-		return (IAlleleTreeSpecies) getInactiveAllele(EnumTreeChromosome.SPECIES);
+		return (IAlleleTreeSpecies) getInactiveAllele(TreeChromosomes.SPECIES);
 	}
 
 
 	@Override
 	public IFruitProvider getFruitProvider() {
-		return ((IAlleleFruit) getActiveAllele(EnumTreeChromosome.FRUITS)).getProvider();
+		return ((IAlleleFruit) getActiveAllele(TreeChromosomes.FRUITS)).getProvider();
 	}
 
 	@Override
 	public float getHeight() {
-		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.HEIGHT)).getValue();
+		return ((IAlleleFloat) getActiveAllele(TreeChromosomes.HEIGHT)).getValue();
 	}
 
 	@Override
 	public float getFertility() {
-		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.FERTILITY)).getValue();
+		return ((IAlleleFloat) getActiveAllele(TreeChromosomes.FERTILITY)).getValue();
 	}
 
 	@Override
 	public float getYield() {
-		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.YIELD)).getValue();
+		return ((IAlleleFloat) getActiveAllele(TreeChromosomes.YIELD)).getValue();
 	}
 
 	@Override
 	public float getSappiness() {
-		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.SAPPINESS)).getValue();
+		return ((IAlleleFloat) getActiveAllele(TreeChromosomes.SAPPINESS)).getValue();
 	}
 
 	@Override
 	public int getMaturationTime() {
-		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.MATURATION)).getValue();
+		return ((IAlleleInteger) getActiveAllele(TreeChromosomes.MATURATION)).getValue();
 	}
 
 	@Override
 	public int getGirth() {
-		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.GIRTH)).getValue();
+		return ((IAlleleInteger) getActiveAllele(TreeChromosomes.GIRTH)).getValue();
 	}
 
 	@Override
 	public boolean getFireproof() {
-		return ((IAlleleBoolean) getActiveAllele(EnumTreeChromosome.FIREPROOF)).getValue();
+		return ((IAlleleBoolean) getActiveAllele(TreeChromosomes.FIREPROOF)).getValue();
 	}
 
 	@Override
 	public IAlleleLeafEffect getEffect() {
-		return (IAlleleLeafEffect) getActiveAllele(EnumTreeChromosome.EFFECT);
+		return (IAlleleLeafEffect) getActiveAllele(TreeChromosomes.EFFECT);
 	}
 
 	@Override

@@ -24,27 +24,27 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.PlantType;
 
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.IAlleleTreeSpeciesBuilder;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenerator;
-import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpeciesBuilder;
+import forestry.api.arboriculture.genetics.ITreeRoot;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.IModelManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.ClimateGrowthProvider;
 import forestry.arboriculture.genetics.LeafProvider;
-import forestry.core.genetics.alleles.AlleleSpecies;
+import forestry.core.genetics.alleles.AlleleForestrySpecies;
 
-public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesBuilder, IAlleleTreeSpecies {
+public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleTreeSpeciesBuilder, IAlleleTreeSpecies {
 	private final ITreeGenerator generator;
 	private final IGermlingModelProvider germlingModelProvider;
 	private final ILeafSpriteProvider leafSpriteProvider;
@@ -81,7 +81,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
 	@Override
 	public IAlleleTreeSpecies build() {
-		AlleleManager.alleleRegistry.registerAllele(this, EnumTreeChromosome.SPECIES);
+		AlleleManager.alleleRegistry.registerAllele(this, TreeChromosomes.SPECIES);
 		leafProvider.init(this);
 		return this;
 	}

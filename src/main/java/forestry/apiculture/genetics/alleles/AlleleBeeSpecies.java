@@ -24,6 +24,10 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.classification.IClassification;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModelProvider;
@@ -33,19 +37,16 @@ import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IAlleleBeeSpeciesBuilder;
-import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.core.IModelManager;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IClassification;
-import forestry.api.genetics.IIndividual;
 import forestry.apiculture.genetics.DefaultBeeModelProvider;
 import forestry.apiculture.genetics.DefaultBeeSpriteColourProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
-import forestry.core.genetics.alleles.AlleleSpecies;
+import forestry.core.genetics.alleles.AlleleForestrySpecies;
 import forestry.core.utils.ItemStackUtil;
 
-public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies, IAlleleBeeSpeciesBuilder {
+public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBeeSpecies, IAlleleBeeSpeciesBuilder {
 	private final Map<ItemStack, Float> productChances = new HashMap<>();
 	private final Map<ItemStack, Float> specialtyChances = new HashMap<>();
 
@@ -175,7 +176,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
-	public boolean isJubilant(IBeeGenome genome, IBeeHousing housing) {
+	public boolean isJubilant(IGenome genome, IBeeHousing housing) {
 		return jubilanceProvider.isJubilant(this, genome, housing);
 	}
 

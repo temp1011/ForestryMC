@@ -28,9 +28,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.arboriculture.genetics.ITreeGenome;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IFruitBearer;

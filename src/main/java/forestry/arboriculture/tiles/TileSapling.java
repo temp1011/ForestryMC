@@ -18,9 +18,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
 
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.arboriculture.worldgen.WorldGenArboriculture;
 import forestry.core.worldgen.WorldGenBase;

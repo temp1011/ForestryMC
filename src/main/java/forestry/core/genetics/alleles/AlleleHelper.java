@@ -11,24 +11,22 @@
 package forestry.core.genetics.alleles;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.util.math.Vec3i;
+import genetics.api.IGeneticApiInstance;
+import genetics.api.alleles.IAlleleHelper;
+import genetics.api.alleles.IAlleleRegistry;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
-import forestry.api.arboriculture.EnumTreeChromosome;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleInteger;
-import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosomeType;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.apiculture.flowers.FlowerProvider;
 import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
@@ -50,7 +48,7 @@ public class AlleleHelper implements IAlleleHelper {
 		return instance;
 	}
 
-	private void init() {
+	private void init(IAlleleRegistry registry, IGeneticApiInstance apiInstance) {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			createAlleles(EnumAllele.Fertility.class, BeeChromosomes.FERTILITY);
 			createAlleles(EnumAllele.Flowering.class, BeeChromosomes.FLOWERING);
@@ -60,44 +58,44 @@ public class AlleleHelper implements IAlleleHelper {
 		if (ModuleHelper.anyEnabled(ForestryModuleUids.APICULTURE, ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			createAlleles(EnumAllele.Speed.class,
 				BeeChromosomes.SPEED,
-				EnumButterflyChromosome.SPEED
+				ButterflyChromosomes.SPEED
 			);
 			createAlleles(EnumAllele.Lifespan.class,
 				BeeChromosomes.LIFESPAN,
-				EnumButterflyChromosome.LIFESPAN
+				ButterflyChromosomes.LIFESPAN
 			);
 			createAlleles(EnumAllele.Tolerance.class,
 				BeeChromosomes.TEMPERATURE_TOLERANCE,
 				BeeChromosomes.HUMIDITY_TOLERANCE,
-				EnumButterflyChromosome.TEMPERATURE_TOLERANCE,
-				EnumButterflyChromosome.HUMIDITY_TOLERANCE
+				ButterflyChromosomes.TEMPERATURE_TOLERANCE,
+				ButterflyChromosomes.HUMIDITY_TOLERANCE
 			);
 			createAlleles(EnumAllele.Flowers.class,
 				BeeChromosomes.FLOWER_PROVIDER,
-				EnumButterflyChromosome.FLOWER_PROVIDER
+				ButterflyChromosomes.FLOWER_PROVIDER
 			);
 		}
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			createAlleles(EnumAllele.Height.class, EnumTreeChromosome.HEIGHT);
-			createAlleles(EnumAllele.Saplings.class, EnumTreeChromosome.FERTILITY);
-			createAlleles(EnumAllele.Yield.class, EnumTreeChromosome.YIELD);
-			createAlleles(EnumAllele.Fireproof.class, EnumTreeChromosome.FIREPROOF);
-			createAlleles(EnumAllele.Maturation.class, EnumTreeChromosome.MATURATION);
-			createAlleles(EnumAllele.Sappiness.class, EnumTreeChromosome.SAPPINESS);
+			registry.registerAlleles(EnumAllele.Height.values(), TreeChromosomes.HEIGHT);
+			createAlleles(EnumAllele.Saplings.class, TreeChromosomes.FERTILITY);
+			createAlleles(EnumAllele.Yield.class, TreeChromosomes.YIELD);
+			createAlleles(EnumAllele.Fireproof.class, TreeChromosomes.FIREPROOF);
+			createAlleles(EnumAllele.Maturation.class, TreeChromosomes.MATURATION);
+			createAlleles(EnumAllele.Sappiness.class, TreeChromosomes.SAPPINESS);
 		}
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-			createAlleles(EnumAllele.Size.class, EnumButterflyChromosome.SIZE);
+			createAlleles(EnumAllele.Size.class, ButterflyChromosomes.SIZE);
 		}
 
 		Map<Integer, IAlleleInteger> integers = new HashMap<>();
 		for (int i = 1; i <= 10; i++) {
 			IAlleleInteger alleleInteger = new AlleleInteger(modId, "i", i + "d", i, true);
 			AlleleManager.alleleRegistry.registerAllele(alleleInteger,
-				EnumTreeChromosome.GIRTH,
-				EnumButterflyChromosome.METABOLISM,
-				EnumButterflyChromosome.FERTILITY
+				TreeChromosomes.GIRTH,
+				ButterflyChromosomes.METABOLISM,
+				ButterflyChromosomes.FERTILITY
 			);
 			integers.put(i, alleleInteger);
 		}
@@ -111,65 +109,12 @@ public class AlleleHelper implements IAlleleHelper {
 				BeeChromosomes.NEVER_SLEEPS,
 				BeeChromosomes.TOLERATES_RAIN,
 				BeeChromosomes.CAVE_DWELLING,
-				EnumButterflyChromosome.NOCTURNAL,
-				EnumButterflyChromosome.TOLERANT_FLYER,
-				EnumButterflyChromosome.FIRE_RESIST
+				ButterflyChromosomes.NOCTURNAL,
+				ButterflyChromosomes.TOLERANT_FLYER,
+				ButterflyChromosomes.FIRE_RESIST
 			);
 		}
 		alleleMaps.put(Boolean.class, booleans);
-	}
-
-	private IAllele get(Object value) {
-		Class<?> valueClass = value.getClass();
-		Map<?, ? extends IAllele> map = alleleMaps.get(valueClass);
-		if (map == null) {
-			throw new IllegalArgumentException("There is no IAllele type for: " + valueClass + ' ' + value);
-		}
-		IAllele allele = map.get(value);
-		if (allele == null) {
-			throw new IllegalArgumentException("There is no IAllele for: " + valueClass + ' ' + value);
-		}
-
-		return allele;
-	}
-
-	@Override
-	public <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, IAllele allele) {
-		if (!chromosomeType.getAlleleClass().isInstance(allele)) {
-			throw new IllegalArgumentException("Allele is the wrong type. Expected: " + chromosomeType + " Got: " + allele);
-		}
-
-		Collection<IChromosomeType> validTypes = AlleleManager.alleleRegistry.getChromosomeTypes(allele);
-		if (validTypes.size() > 0 && !validTypes.contains(chromosomeType)) {
-			throw new IllegalArgumentException("Allele can't applied to this Chromosome type. Expected: " + validTypes + " Got: " + chromosomeType);
-		}
-
-		alleles[chromosomeType.ordinal()] = allele;
-	}
-
-	@Override
-	public <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, IAlleleValue value) {
-		set(alleles, chromosomeType, get(value));
-	}
-
-	@Override
-	public <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, boolean value) {
-		set(alleles, chromosomeType, get(value));
-	}
-
-	@Override
-	public <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, int value) {
-		set(alleles, chromosomeType, get(value));
-	}
-
-	private <K extends Enum<K> & IAlleleValue<V>, V> void createAlleles(Class<K> enumClass, IChromosomeType... types) {
-		String category = enumClass.getSimpleName().toLowerCase(Locale.ENGLISH);
-		EnumMap<K, IAllele> map = new EnumMap<>(enumClass);
-		for (K enumValue : enumClass.getEnumConstants()) {
-			IAllele allele = createAllele(category, enumValue, types);
-			map.put(enumValue, allele);
-		}
-		alleleMaps.put(enumClass, map);
 	}
 
 	private static <K extends IAlleleValue<V>, V> IAllele createAllele(String category, K enumValue, IChromosomeType... types) {
@@ -178,20 +123,7 @@ public class AlleleHelper implements IAlleleHelper {
 		String name = enumValue.toString().toLowerCase(Locale.ENGLISH);
 
 		Class<?> valueClass = value.getClass();
-		if (Float.class.isAssignableFrom(valueClass)) {
-			return AlleleManager.alleleFactory.createFloat(modId, category, name, (Float) value, isDominant, types);
-		} else if (Integer.class.isAssignableFrom(valueClass)) {
-			return AlleleManager.alleleFactory.createInteger(modId, category, name, (Integer) value, isDominant, types);
-		} else if (Vec3i.class.isAssignableFrom(valueClass)) {
-			Vec3i area = (Vec3i) value;
-			return AlleleManager.alleleFactory.createArea(modId, category, name, area, isDominant, types);
-		} else if (Boolean.class.isAssignableFrom(valueClass)) {
-			return AlleleManager.alleleFactory.createBoolean(modId, category, (Boolean) value, isDominant, types);
-		} else if (EnumTolerance.class.isAssignableFrom(valueClass)) {
-			IAlleleTolerance alleleTolerance = new AlleleTolerance(modId, category, name, (EnumTolerance) value, isDominant);
-			AlleleManager.alleleRegistry.registerAllele(alleleTolerance, types);
-			return alleleTolerance;
-		} else if (FlowerProvider.class.isAssignableFrom(valueClass)) {
+		if (FlowerProvider.class.isAssignableFrom(valueClass)) {
 			return AlleleManager.alleleFactory.createFlowers(modId, category, name, (FlowerProvider) value, isDominant, types);
 		}
 		throw new RuntimeException("could not create allele for category: " + category + " and value " + valueClass);

@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.core.config.Constants;
 import forestry.core.render.ForestryStateMapper;

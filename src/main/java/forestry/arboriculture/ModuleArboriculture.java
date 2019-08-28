@@ -28,6 +28,7 @@ import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -44,26 +45,26 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.EnumForestryWoodType;
-import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
-import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
@@ -481,10 +482,13 @@ public class ModuleArboriculture extends BlankForestryModule {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
+		if (event.getMap() != Minecraft.getInstance().getTextureMap()) {
+			return;
+		}
 		TextureLeaves.registerAllSprites();
 		WoodTextureManager.parseFile();
 		for (IAlleleFruit alleleFruit : AlleleFruits.getFruitAlleles()) {
-			alleleFruit.getProvider().registerSprites();
+			alleleFruit.getProvider().registerSprites(event);
 		}
 		List<ResourceLocation> textures = new ArrayList<>();
 		for (IWoodType type : TreeManager.woodAccess.getRegisteredWoodTypes()) {

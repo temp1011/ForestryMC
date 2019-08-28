@@ -31,12 +31,12 @@ import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IGrowthProvider;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeGenome;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.TreeConfig;
@@ -120,7 +120,7 @@ public class TreeDecorator {
 		if (!SPECIES.isEmpty()) {
 			return SPECIES;
 		}
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles(EnumTreeChromosome.SPECIES)) {
+		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles(TreeChromosomes.SPECIES)) {
 			if (allele instanceof IAlleleTreeSpecies) {
 				IAlleleTreeSpecies alleleTreeSpecies = (IAlleleTreeSpecies) allele;
 				if (alleleTreeSpecies.getRarity() > 0) {

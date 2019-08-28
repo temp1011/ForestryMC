@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.genetics.IBee;
-import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.genetics.IIndividual;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IDatabaseElement;

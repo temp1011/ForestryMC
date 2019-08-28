@@ -14,7 +14,7 @@
 //import net.minecraft.village.MerchantRecipeList;
 //
 //import forestry.api.arboriculture.EnumForestryWoodType;
-//import forestry.api.arboriculture.EnumGermlingType;
+//import forestry.api.arboriculture.genetics.EnumGermlingType;
 //import forestry.api.arboriculture.TreeManager;
 //import forestry.api.arboriculture.WoodBlockKind;
 //import forestry.api.genetics.AlleleManager;

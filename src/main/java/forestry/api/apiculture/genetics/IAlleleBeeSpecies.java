@@ -15,7 +15,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.individual.IGenome;
-import genetics.api.root.IIndividualRoot;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.IModelManager;
@@ -27,7 +26,7 @@ public interface IAlleleBeeSpecies extends IAlleleForestrySpecies {
 	 * @return the IBeeRoot
 	 */
 	@Override
-	IIndividualRoot<IBee> getRoot();
+	IBeeRoot getRoot();
 
 	/**
 	 * @return true if this species is only active at night.

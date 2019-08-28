@@ -17,7 +17,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.blocks.properties.PropertyAllele;

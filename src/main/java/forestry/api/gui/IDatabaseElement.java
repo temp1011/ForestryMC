@@ -4,13 +4,14 @@ import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+
 import forestry.api.genetics.DatabaseMode;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IChromosomeType;
-import forestry.api.genetics.IForestryMutation;
-import forestry.api.genetics.IGenome;
-import forestry.api.genetics.IIndividual;
 import forestry.api.gui.style.ITextStyle;
 
 //TODO textcomponents?
@@ -40,9 +41,9 @@ public interface IDatabaseElement extends IElementLayout {
 
 	void addToleranceLine(IChromosomeType chromosome);
 
-	void addMutation(int x, int y, int width, int height, IForestryMutation mutation, IAllele species, IBreedingTracker breedingTracker);
+	void addMutation(int x, int y, int width, int height, IMutation mutation, IAllele species, IBreedingTracker breedingTracker);
 
-	void addMutationResultant(int x, int y, int width, int height, IForestryMutation mutation, IBreedingTracker breedingTracker);
+	void addMutationResultant(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker);
 
 	//void addRow(String firstText, String secondText, String thirdText, ITextStyle firstStyle, ITextStyle secondStyle, ITextStyle thirdStyle);
 

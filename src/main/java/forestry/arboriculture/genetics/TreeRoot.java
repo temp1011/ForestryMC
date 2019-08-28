@@ -41,28 +41,28 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.ITreeMutation;
-import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeGenome;
+import forestry.api.arboriculture.genetics.ITreeMutation;
+import forestry.api.arboriculture.genetics.ITreeRoot;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IDatabasePlugin;
-import forestry.api.genetics.IForestryMutation;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.ISpeciesType;
 import forestry.arboriculture.ModuleArboriculture;
@@ -393,7 +393,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public void registerMutation(IForestryMutation mutation) {
+	public void registerMutation(IMutation mutation) {
 		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID())) {
 			return;
 		}
@@ -422,12 +422,12 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public IChromosomeType[] getKaryotype() {
-		return EnumTreeChromosome.values();
+		return TreeChromosomes.values();
 	}
 
 	@Override
 	public IChromosomeType getSpeciesChromosomeType() {
-		return EnumTreeChromosome.SPECIES;
+		return TreeChromosomes.SPECIES;
 	}
 
 	@Override
@@ -463,7 +463,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	public Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily) {
 		if (providersForFamilies.isEmpty()) {
 			@SuppressWarnings("unchecked")
-			Collection<IAlleleFruit> fruitAlleles = (Collection<IAlleleFruit>) (Object) AlleleManager.alleleRegistry.getRegisteredAlleles(EnumTreeChromosome.FRUITS);
+			Collection<IAlleleFruit> fruitAlleles = (Collection<IAlleleFruit>) (Object) AlleleManager.alleleRegistry.getRegisteredAlleles(TreeChromosomes.FRUITS);
 			for (IAlleleFruit alleleFruit : fruitAlleles) {
 				IFruitProvider fruitProvider = alleleFruit.getProvider();
 				Collection<IFruitProvider> fruitProviders = providersForFamilies.computeIfAbsent(fruitProvider.getFamily(), k -> new ArrayList<>());

@@ -13,12 +13,12 @@ package forestry.arboriculture.genetics;
 import java.awt.Color;
 
 import forestry.api.arboriculture.EnumLeafType;
-import forestry.api.arboriculture.IAlleleTreeSpeciesBuilder;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.ITreeFactory;
 import forestry.api.arboriculture.ITreeGenerator;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpeciesBuilder;
+import forestry.api.arboriculture.genetics.ITreeFactory;
 import forestry.api.genetics.IClassification;
 import forestry.arboriculture.genetics.alleles.AlleleTreeSpecies;
 import forestry.arboriculture.models.SpriteProviderLeaves;

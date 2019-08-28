@@ -36,8 +36,10 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleRegistry;
+import genetics.api.GeneticsAPI;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.ApiaristAI;
@@ -82,9 +84,16 @@ public class EventHandlerCore {
 	}
 
 	private static void syncBreedingTrackers(PlayerEntity player) {
-		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
-		Collection<IForestrySpeciesRoot> speciesRoots = alleleRegistry.getSpeciesRoot().values();
-		for (IForestrySpeciesRoot speciesRoot : speciesRoots) {
+		Collection<IRootDefinition> speciesRoots = GeneticsAPI.apiInstance.getRoots().values();
+		for (IRootDefinition definition : speciesRoots) {
+			if (!definition.isRootPresent()) {
+				continue;
+			}
+			IIndividualRoot root = definition.get();
+			if (!(root instanceof IForestrySpeciesRoot)) {
+				continue;
+			}
+			IForestrySpeciesRoot speciesRoot = (IForestrySpeciesRoot) root;
 			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
 			breedingTracker.synchToPlayer(player);
 		}

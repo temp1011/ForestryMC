@@ -9,8 +9,8 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.FruitProviderNone;
@@ -77,7 +77,7 @@ public class AlleleFruits {
 
 	public static void registerAlleles() {
 		for (IAlleleFruit fruitAllele : fruitAlleles) {
-			AlleleManager.alleleRegistry.registerAllele(fruitAllele, EnumTreeChromosome.FRUITS);
+			AlleleManager.alleleRegistry.registerAllele(fruitAllele, TreeChromosomes.FRUITS);
 		}
 	}
 
@@ -88,7 +88,7 @@ public class AlleleFruits {
 	public static List<IAlleleFruit> getFruitAllelesWithModels() {
 		if (fruitAllelesWithModels == null) {
 			fruitAllelesWithModels = new ArrayList<>();
-			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles(EnumTreeChromosome.FRUITS)) {
+			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles(TreeChromosomes.FRUITS)) {
 				if (allele instanceof IAlleleFruit) {
 					IAlleleFruit alleleFruit = (IAlleleFruit) allele;
 					if (alleleFruit.getModelName() != null) {

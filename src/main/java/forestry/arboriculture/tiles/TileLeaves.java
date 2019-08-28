@@ -28,17 +28,19 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.util.Constants;
 
+import genetics.api.individual.IIndividual;
+
 import forestry.api.arboriculture.EnumFruitFamily;
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeGenome;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
@@ -46,12 +48,11 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.api.lepidopterology.genetics.IButterflyGenome;
 import forestry.apiculture.ModuleApiculture;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -332,7 +333,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 				return;
 			}
 
-			tree.mate((ITree) individual);
+			tree.mate(individual.getGenome());
 			if (!world.isRemote) {
 				sendNetworkUpdate();
 			}
@@ -389,7 +390,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		data.writeByte(leafState);
 
 		if (hasFruit) {
-			String fruitAlleleUID = getTree().getGenome().getActiveAllele(EnumTreeChromosome.FRUITS).getUID();
+			String fruitAlleleUID = getTree().getGenome().getActiveAllele(TreeChromosomes.FRUITS).getUID();
 			int colourFruits = getFruitColour();
 
 			data.writeString(fruitAlleleUID);
@@ -417,13 +418,13 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			if (fruitAlleleUID != null) {
 				IAllele fruitAllele = AlleleManager.alleleRegistry.getAllele(fruitAlleleUID);
 				if (fruitAllele instanceof IAlleleFruit) {
-					treeTemplate[EnumTreeChromosome.FRUITS.ordinal()] = fruitAllele;
+					treeTemplate[TreeChromosomes.FRUITS.ordinal()] = fruitAllele;
 				}
 			}
 
 			ITree tree = TreeManager.treeRoot.templateAsIndividual(treeTemplate);
 			if (isPollinatedState) {
-				tree.mate(tree);
+				tree.mate(tree.getGenome());
 			}
 
 			setTree(tree);

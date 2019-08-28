@@ -27,8 +27,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.genetics.Tree;
 import forestry.core.network.IStreamable;

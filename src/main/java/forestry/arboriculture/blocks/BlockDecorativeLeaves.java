@@ -29,7 +29,7 @@ import net.minecraftforge.common.IShearable;
 
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.genetics.ITreeGenome;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.proxy.Proxies;
@@ -77,7 +77,7 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public boolean shouldSideBeRendered(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return (Proxies.render.fancyGraphicsEnabled() || blockAccess.getBlockState(pos.offset(side)).getBlock() != this) && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+		return (Proxies.render.fancyGraphicsEnabled() || blockAccess.getBlockState(pos.offset(side)).getBlock() != this) && Block.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 
 	@Override

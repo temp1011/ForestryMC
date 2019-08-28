@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreekeepingMode;
+import forestry.api.arboriculture.genetics.ITreeGenome;
 
 public class TreekeepingMode implements ITreekeepingMode {
 

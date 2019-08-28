@@ -38,13 +38,13 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.core.IToolScoop;
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.blocks.properties.UnlistedBlockAccess;

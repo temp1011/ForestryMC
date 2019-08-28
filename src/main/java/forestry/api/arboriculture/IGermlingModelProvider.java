@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.core.IModelManager;
 
 /**

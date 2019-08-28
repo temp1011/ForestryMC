@@ -19,8 +19,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+
 import forestry.api.core.ForestryEvent;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.genetics.BreedingTracker;
@@ -55,9 +58,10 @@ public class PacketGenomeTrackerSync extends ForestryPacket implements IForestry
 			if (nbt != null) {
 				String type = nbt.getString(BreedingTracker.TYPE_KEY);
 
-				IForestrySpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
-				if (root != null) {
-					IBreedingTracker tracker = root.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
+				IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(type);
+
+				if (definition.isRootPresent()) {
+					IBreedingTracker tracker = definition.get().getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
 					tracker.decodeFromNBT(nbt);
 					MinecraftForge.EVENT_BUS.post(new ForestryEvent.SyncedBreedingTracker(tracker, player));
 				}

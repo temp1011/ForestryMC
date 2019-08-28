@@ -27,7 +27,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
-import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.genetics.AlleleRegisterEvent;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;

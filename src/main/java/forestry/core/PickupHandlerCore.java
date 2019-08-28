@@ -10,14 +10,18 @@
  ******************************************************************************/
 package forestry.core;
 
+import java.util.Optional;
+
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.genetics.AlleleManager;
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.IIndividual;
 
 public class PickupHandlerCore implements IPickupHandler {
 
@@ -28,10 +32,12 @@ public class PickupHandlerCore implements IPickupHandler {
 			return false;
 		}
 
-		IForestrySpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(itemstack);
-		if (root != null) {
-			IIndividual individual = root.create(itemstack);
-			if (individual != null) {
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemstack, IForestrySpeciesRoot.class);
+		if (definition.isRootPresent()) {
+			IForestrySpeciesRoot<IIndividual> root = definition.get();
+			Optional<IIndividual> optionalIndividual = root.create(itemstack);
+			if (optionalIndividual.isPresent()) {
+				IIndividual individual = optionalIndividual.get();
 				IBreedingTracker tracker = root.getBreedingTracker(entityitem.world, PlayerEntity.getGameProfile());
 				tracker.registerPickup(individual);
 			}

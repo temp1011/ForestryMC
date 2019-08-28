@@ -39,16 +39,16 @@ import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKeys;
 
 import forestry.api.arboriculture.ArboricultureCapabilities;
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.ISpeciesRootPollinatable;
-import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.genetics.ItemGE;
 import forestry.core.tiles.TileUtil;
 
@@ -191,10 +191,10 @@ public class GeneticsUtil {
 	}
 
 	public static ItemStack convertToGeneticEquivalent(ItemStack foreign) {
-		if (AlleleManager.alleleRegistry.getSpeciesRoot(foreign) == null) {
+		if (!GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(foreign).isRootPresent()) {
 			Optional<IIndividual> optionalIndividual = getGeneticEquivalent(foreign);
 			if (optionalIndividual.isPresent()) {
-				ItemStack equivalent = TreeManager.treeRoot.getTypes().createStack(optionalIndividual.get(), EnumGermlingType.SAPLING);
+				ItemStack equivalent = TreeManager.treeRoot.getTypes().createStack((ITree) optionalIndividual.get(), EnumGermlingType.SAPLING);
 				equivalent.setCount(foreign.getCount());
 				return equivalent;
 			}

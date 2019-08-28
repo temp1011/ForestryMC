@@ -1,6 +1,7 @@
 package forestry.core.gui;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -8,9 +9,10 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
+import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
 
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.ModuleCore;
@@ -82,40 +84,44 @@ public class ContainerAnalyzerProviderHelper {
 			specimen = convertedSpecimen;
 		}
 
-		IForestrySpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(specimen);
-
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(specimen);
 		// No individual, abort
-		if (speciesRoot == null) {
+		if (!definition.isRootPresent()) {
 			return;
 		}
+		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
 
-		IIndividual individual = speciesRoot.create(specimen);
+		Optional<IIndividual> optionalIndividual = speciesRoot.create(specimen);
+
 
 		// Analyze if necessary
-		if (individual != null && !individual.isAnalyzed()) {
-			final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
-			ItemStack energyStack = ItemStack.EMPTY;//alyzerInventory.getStackInSlot(InventoryDatabaseAnalyzer.SLOT_ENERGY);
-			if (requiresEnergy && !ItemInventoryAlyzer.isAlyzingFuel(energyStack)) {
-				return;
-			}
-
-			if (individual.analyze()) {
-				IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
-				breedingTracker.registerSpecies(individual.getGenome().getPrimary());
-				breedingTracker.registerSpecies(individual.getGenome().getSecondary());
-
-				CompoundNBT CompoundNBT = new CompoundNBT();
-				individual.write(CompoundNBT);
-				specimen = specimen.copy();
-				specimen.setTag(CompoundNBT);
-
-				if (requiresEnergy) {
-					// Decrease energy
-					//TODO energy
-//					alyzerInventory.decrStackSize(InventoryDatabaseAnalyzer.SLOT_ENERGY, 1);
+		if (optionalIndividual.isPresent()) {
+			IIndividual individual = optionalIndividual.get();
+			if (!individual.isAnalyzed()) {
+				final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
+				ItemStack energyStack = ItemStack.EMPTY;//alyzerInventory.getStackInSlot(InventoryDatabaseAnalyzer.SLOT_ENERGY);
+				if (requiresEnergy && !ItemInventoryAlyzer.isAlyzingFuel(energyStack)) {
+					return;
 				}
+
+				if (individual.analyze()) {
+					IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
+					breedingTracker.registerSpecies(individual.getGenome().getPrimary());
+					breedingTracker.registerSpecies(individual.getGenome().getSecondary());
+
+					CompoundNBT CompoundNBT = new CompoundNBT();
+					individual.write(CompoundNBT);
+					specimen = specimen.copy();
+					specimen.setTag(CompoundNBT);
+
+					if (requiresEnergy) {
+						// Decrease energy
+						//TODO energy
+						//					alyzerInventory.decrStackSize(InventoryDatabaseAnalyzer.SLOT_ENERGY, 1);
+					}
+				}
+				specimenSlot.putStack(specimen);
 			}
-			specimenSlot.putStack(specimen);
 		}
 		return;
 	}

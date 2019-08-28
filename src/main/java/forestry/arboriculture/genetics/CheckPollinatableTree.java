@@ -12,7 +12,7 @@ package forestry.arboriculture.genetics;
 
 import net.minecraftforge.common.PlantType;
 
-import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.ModuleApiculture;

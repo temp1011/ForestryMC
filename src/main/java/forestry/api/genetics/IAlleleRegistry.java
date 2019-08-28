@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
@@ -15,7 +14,6 @@ import com.mojang.authlib.GameProfile;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.classification.IClassification;
-import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 
 /**
@@ -24,9 +22,6 @@ import genetics.api.mutation.IMutation;
  * @author SirSengir
  */
 public interface IAlleleRegistry {
-
-	@Nullable
-	<I extends IIndividual> IForestrySpeciesRoot<I> getSpeciesRoot(ItemStack stack);
 
 	/* FRUIT FAMILIES */
 

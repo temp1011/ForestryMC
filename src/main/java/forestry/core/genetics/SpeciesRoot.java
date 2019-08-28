@@ -30,10 +30,10 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
-import forestry.api.genetics.IForestryMutation;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IIndividualTranslator;
+import forestry.api.genetics.IMutation;
 
 public abstract class SpeciesRoot implements IForestrySpeciesRoot {
 	/* TRANSLATORS */
@@ -129,9 +129,9 @@ public abstract class SpeciesRoot implements IForestrySpeciesRoot {
 
 	/* MUTATIONS */
 	@Override
-	public List<IForestryMutation> getCombinations(IAllele other) {
-		List<IForestryMutation> combinations = new ArrayList<>();
-		for (IForestryMutation mutation : getMutations(false)) {
+	public List<IMutation> getCombinations(IAllele other) {
+		List<IMutation> combinations = new ArrayList<>();
+		for (IMutation mutation : getMutations(false)) {
 			if (mutation.isPartner(other)) {
 				combinations.add(mutation);
 			}
@@ -141,10 +141,10 @@ public abstract class SpeciesRoot implements IForestrySpeciesRoot {
 	}
 
 	@Override
-	public List<? extends IForestryMutation> getResultantMutations(IAllele other) {
-		List<IForestryMutation> mutations = new ArrayList<>();
+	public List<? extends IMutation> getResultantMutations(IAllele other) {
+		List<IMutation> mutations = new ArrayList<>();
 		int speciesIndex = getSpeciesChromosomeType().ordinal();
-		for (IForestryMutation mutation : getMutations(false)) {
+		for (IMutation mutation : getMutations(false)) {
 			IAllele[] template = mutation.getTemplate();
 			if (template == null || template.length <= speciesIndex) {
 				continue;
@@ -159,11 +159,11 @@ public abstract class SpeciesRoot implements IForestrySpeciesRoot {
 	}
 
 	@Override
-	public List<IForestryMutation> getCombinations(IAlleleForestrySpecies parentSpecies0, IAlleleForestrySpecies parentSpecies1, boolean shuffle) {
-		List<IForestryMutation> combinations = new ArrayList<>();
+	public List<IMutation> getCombinations(IAlleleForestrySpecies parentSpecies0, IAlleleForestrySpecies parentSpecies1, boolean shuffle) {
+		List<IMutation> combinations = new ArrayList<>();
 
 		String parentSpecies1UID = parentSpecies1.getUID();
-		for (IForestryMutation mutation : getMutations(shuffle)) {
+		for (IMutation mutation : getMutations(shuffle)) {
 			if (mutation.isPartner(parentSpecies0)) {
 				IAllele partner = mutation.getPartner(parentSpecies0);
 				if (partner.getUID().equals(parentSpecies1UID)) {
@@ -176,9 +176,9 @@ public abstract class SpeciesRoot implements IForestrySpeciesRoot {
 	}
 
 	@Override
-	public Collection<? extends IForestryMutation> getPaths(IAllele result, IChromosomeType chromosomeType) {
-		ArrayList<IForestryMutation> paths = new ArrayList<>();
-		for (IForestryMutation mutation : getMutations(false)) {
+	public Collection<? extends IMutation> getPaths(IAllele result, IChromosomeType chromosomeType) {
+		ArrayList<IMutation> paths = new ArrayList<>();
+		for (IMutation mutation : getMutations(false)) {
 			if (mutation.getTemplate()[chromosomeType.ordinal()] == result) {
 				paths.add(mutation);
 			}

@@ -16,10 +16,10 @@ import net.minecraft.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.core.IModelManager;
 
 public class ModelProviderGermlingVanilla implements IGermlingModelProvider {

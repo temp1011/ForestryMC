@@ -17,8 +17,8 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleForestrySpecies;

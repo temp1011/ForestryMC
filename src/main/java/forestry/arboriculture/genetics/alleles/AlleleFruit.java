@@ -12,8 +12,8 @@ package forestry.arboriculture.genetics.alleles;
 
 import javax.annotation.Nullable;
 
-import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
 

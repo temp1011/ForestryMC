@@ -26,12 +26,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.arboriculture.EnumFruitFamily;
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlyzerPlugin;
@@ -89,31 +89,31 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 				String customPrimaryTreeKey = "trees.custom.treealyzer." + type.getName() + "." + tree.getGenome().getPrimary().getUnlocalizedName().replace("trees.species.", "");
 				String customSecondaryTreeKey = "trees.custom.treealyzer." + type.getName() + "." + tree.getGenome().getSecondary().getUnlocalizedName().replace("trees.species.", "");
 
-				guiAlyzer.drawSpeciesRow(Translator.translateToLocal("for.gui.species"), tree, EnumTreeChromosome.SPECIES, GuiAlyzer.checkCustomName(customPrimaryTreeKey), GuiAlyzer.checkCustomName(customSecondaryTreeKey));
+				guiAlyzer.drawSpeciesRow(Translator.translateToLocal("for.gui.species"), tree, TreeChromosomes.SPECIES, GuiAlyzer.checkCustomName(customPrimaryTreeKey), GuiAlyzer.checkCustomName(customSecondaryTreeKey));
 				textLayout.newLine();
 			}
 
-			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.saplings"), tree, EnumTreeChromosome.FERTILITY);
+			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.saplings"), tree, TreeChromosomes.FERTILITY);
 			textLayout.newLineCompressed();
-			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.maturity"), tree, EnumTreeChromosome.MATURATION);
+			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.maturity"), tree, TreeChromosomes.MATURATION);
 			textLayout.newLineCompressed();
-			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.height"), tree, EnumTreeChromosome.HEIGHT);
+			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.height"), tree, TreeChromosomes.HEIGHT);
 			textLayout.newLineCompressed();
 
-			IAlleleInteger activeGirth = (IAlleleInteger) tree.getGenome().getActiveAllele(EnumTreeChromosome.GIRTH);
-			IAlleleInteger inactiveGirth = (IAlleleInteger) tree.getGenome().getInactiveAllele(EnumTreeChromosome.GIRTH);
+			IAlleleInteger activeGirth = (IAlleleInteger) tree.getGenome().getActiveAllele(TreeChromosomes.GIRTH);
+			IAlleleInteger inactiveGirth = (IAlleleInteger) tree.getGenome().getInactiveAllele(TreeChromosomes.GIRTH);
 			textLayout.drawLine(Translator.translateToLocal("for.gui.girth"), GuiAlyzer.COLUMN_0);
-			guiAlyzer.drawLine(String.format("%sx%s", activeGirth.getValue(), activeGirth.getValue()), GuiAlyzer.COLUMN_1, tree, EnumTreeChromosome.GIRTH, false);
-			guiAlyzer.drawLine(String.format("%sx%s", inactiveGirth.getValue(), inactiveGirth.getValue()), GuiAlyzer.COLUMN_2, tree, EnumTreeChromosome.GIRTH, true);
+			guiAlyzer.drawLine(String.format("%sx%s", activeGirth.getValue(), activeGirth.getValue()), GuiAlyzer.COLUMN_1, tree, TreeChromosomes.GIRTH, false);
+			guiAlyzer.drawLine(String.format("%sx%s", inactiveGirth.getValue(), inactiveGirth.getValue()), GuiAlyzer.COLUMN_2, tree, TreeChromosomes.GIRTH, true);
 
 			textLayout.newLineCompressed();
 
-			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.yield"), tree, EnumTreeChromosome.YIELD);
+			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.yield"), tree, TreeChromosomes.YIELD);
 			textLayout.newLineCompressed();
-			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.sappiness"), tree, EnumTreeChromosome.SAPPINESS);
+			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.sappiness"), tree, TreeChromosomes.SAPPINESS);
 			textLayout.newLineCompressed();
 
-			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.effect"), tree, EnumTreeChromosome.EFFECT);
+			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.effect"), tree, TreeChromosomes.EFFECT);
 
 			textLayout.endPage();
 		}
@@ -146,9 +146,9 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			String no = Translator.translateToLocal("for.no");
 
 			String fireproofActive = StringUtil.readableBoolean(tree.getGenome().getFireproof(), yes, no);
-			String fireproofInactive = StringUtil.readableBoolean(((AlleleBoolean) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FIREPROOF)).getValue(), yes, no);
+			String fireproofInactive = StringUtil.readableBoolean(((AlleleBoolean) tree.getGenome().getInactiveAllele(TreeChromosomes.FIREPROOF)).getValue(), yes, no);
 
-			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.fireproof"), fireproofActive, fireproofInactive, tree, EnumTreeChromosome.FIREPROOF);
+			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.fireproof"), fireproofActive, fireproofInactive, tree, TreeChromosomes.FIREPROOF);
 
 			textLayout.newLine();
 
@@ -182,19 +182,19 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.newLine();
 
-			int fruitDominance0 = guiAlyzer.getColorCoding(tree.getGenome().getActiveAllele(EnumTreeChromosome.FRUITS).isDominant());
-			int fruitDominance1 = guiAlyzer.getColorCoding(tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS).isDominant());
+			int fruitDominance0 = guiAlyzer.getColorCoding(tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).isDominant());
+			int fruitDominance1 = guiAlyzer.getColorCoding(tree.getGenome().getInactiveAllele(TreeChromosomes.FRUITS).isDominant());
 
 			textLayout.drawLine(Translator.translateToLocal("for.gui.fruits"), GuiAlyzer.COLUMN_0);
 			String strike = "";
-			IAllele fruit0 = tree.getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
+			IAllele fruit0 = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS);
 			if (!tree.canBearFruit() && fruit0 != AlleleFruits.fruitNone) {
 				strike = TextFormatting.STRIKETHROUGH.toString();
 			}
 			textLayout.drawLine(strike + tree.getGenome().getFruitProvider().getDescription(), GuiAlyzer.COLUMN_1, fruitDominance0);
 
 			strike = "";
-			IAlleleFruit fruit1 = (IAlleleFruit) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS);
+			IAlleleFruit fruit1 = tree.getGenome().getInactiveAllele(TreeChromosomes.FRUITS);
 			if (!tree.getGenome().getSecondary().getSuitableFruit().contains(fruit1.getProvider().getFamily()) && fruit1 != AlleleFruits.fruitNone) {
 				strike = TextFormatting.STRIKETHROUGH.toString();
 			}
@@ -204,7 +204,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.drawLine(Translator.translateToLocal("for.gui.family"), GuiAlyzer.COLUMN_0);
 			IFruitFamily primary = tree.getGenome().getFruitProvider().getFamily();
-			IFruitFamily secondary = ((IAlleleFruit) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS)).getProvider().getFamily();
+			IFruitFamily secondary = tree.getGenome().getInactiveAllele(TreeChromosomes.FRUITS).getProvider().getFamily();
 
 			if (primary != null && !primary.getUID().equals(EnumFruitFamily.NONE.getUID())) {
 				textLayout.drawLine(primary.getName(), GuiAlyzer.COLUMN_1, fruitDominance0);

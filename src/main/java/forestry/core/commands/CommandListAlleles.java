@@ -9,12 +9,12 @@
 //import net.minecraft.server.MinecraftServer;
 //
 //import forestry.api.apiculture.genetics.EnumBeeChromosome;
-//import forestry.api.arboriculture.EnumTreeChromosome;
+//import forestry.api.arboriculture.genetics.EnumTreeChromosome;
 //import forestry.api.genetics.AlleleManager;
 //import forestry.api.genetics.IChromosomeType;
 //import forestry.api.genetics.IGenome;
 //import forestry.api.genetics.IIndividual;
-//import forestry.api.lepidopterology.EnumButterflyChromosome;
+//import forestry.api.lepidopterology.genetics.EnumButterflyChromosome;
 //import forestry.apiculture.genetics.BeeGenome;
 //import forestry.arboriculture.genetics.TreeGenome;
 //import forestry.lepidopterology.genetics.ButterflyGenome;

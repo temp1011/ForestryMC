@@ -19,7 +19,7 @@ import genetics.api.individual.IIndividual;
  * @since 5.12.16
  */
 //TODO: Move to a component ?
-public interface ISpeciesRootPollinatable extends IForestrySpeciesRoot {
+public interface ISpeciesRootPollinatable<I extends IIndividual> extends IForestrySpeciesRoot<I> {
 
 	ICheckPollinatable createPollinatable(IIndividual individual);
 

@@ -7,15 +7,24 @@ package forestry.api.arboriculture;
 
 import javax.annotation.Nullable;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.root.IRootDefinition;
+
+import forestry.api.arboriculture.genetics.ITreeFactory;
+import forestry.api.arboriculture.genetics.ITreeMutationFactory;
+import forestry.api.arboriculture.genetics.ITreeRoot;
+
 public class TreeManager {
+
+	public static final IRootDefinition<ITreeRoot> treeRootDefinition = GeneticsAPI.apiInstance.getRoot("rootTrees");
 
 	/**
 	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees")
 	 *
 	 * @implNote Only null if the "arboriculture" module is not enabled.
 	 */
-	@Nullable
-	public static ITreeRoot treeRoot;
+	//TODO: Move most calls to definition (more save)
+	public static ITreeRoot treeRoot = treeRootDefinition.get();
 
 	/**
 	 * Convenient access to wood items.

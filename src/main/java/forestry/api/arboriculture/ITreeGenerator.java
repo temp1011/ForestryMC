@@ -15,6 +15,8 @@ import net.minecraft.world.gen.feature.Feature;
 
 import com.mojang.authlib.GameProfile;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.world.ITreeGenData;
 
 /**
@@ -23,7 +25,7 @@ import forestry.api.world.ITreeGenData;
 public interface ITreeGenerator {
 	Feature getWorldGenerator(ITreeGenData tree);
 
-	boolean setLogBlock(ITreeGenome genome, World world, BlockPos pos, Direction facing);
+	boolean setLogBlock(IGenome genome, World world, BlockPos pos, Direction facing);
 
-	boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos, Random rand);
+	boolean setLeaves(IGenome genome, World world, @Nullable GameProfile owner, BlockPos pos, Random rand);
 }

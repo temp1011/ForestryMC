@@ -7,8 +7,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import forestry.api.arboriculture.IGrowthProvider;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeGenome;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;

@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.arboriculture.ITreeGenome;
+import genetics.api.individual.IGenome;
 
 public interface ITreeGenData {
 
@@ -37,5 +37,5 @@ public interface ITreeGenData {
 
 	boolean trySpawnFruitBlock(World world, Random rand, BlockPos pos);
 
-	ITreeGenome getGenome();
+	IGenome getGenome();
 }

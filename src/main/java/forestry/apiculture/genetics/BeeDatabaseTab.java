@@ -19,7 +19,7 @@ import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IDatabaseElement;
 import forestry.api.gui.style.ITextStyle;
 import forestry.api.gui.style.TextStyleBuilder;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.render.ColourProperties;
@@ -87,7 +87,7 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 				diurnal = !bee.getGenome().getPrimary().isNocturnal() ? yes : no;
 			}
 		} else {
-			if (((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumButterflyChromosome.NOCTURNAL)).getValue()) {
+			if (((AlleleBoolean) bee.getGenome().getInactiveAllele(ButterflyChromosomes.NOCTURNAL)).getValue()) {
 				nocturnal = diurnal = yes;
 			} else {
 				nocturnal = bee.getGenome().getSecondary().isNocturnal() ? yes : no;

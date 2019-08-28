@@ -12,8 +12,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.config.LocalizedConfiguration;
@@ -64,7 +64,7 @@ public class TreeConfig {
 		config.setCategoryComment(CONFIG_CATEGORY_TREE, CONFIG_COMMENT);
 		config.setCategoryComment(CONFIG_CATEGORY_TREE + ".global", "All options defined in the global category are used for all trees.");
 		GLOBAL.parseConfig(config);
-		for (IAllele treeAllele : AlleleManager.alleleRegistry.getRegisteredAlleles(EnumTreeChromosome.SPECIES)) {
+		for (IAllele treeAllele : AlleleManager.alleleRegistry.getRegisteredAlleles(TreeChromosomes.SPECIES)) {
 			if (!(treeAllele instanceof IAlleleTreeSpecies)) {
 				continue;
 			}

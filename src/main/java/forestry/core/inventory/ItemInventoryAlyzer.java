@@ -19,11 +19,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
+import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.ModuleApiculture;
@@ -74,10 +75,11 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		}
 
 		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
-		IForestrySpeciesRoot<IIndividual> speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
-		if (speciesRoot == null) {
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
+		if (!definition.isRootPresent()) {
 			return false;
 		}
+		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
 
 		if (slotIndex == SLOT_SPECIMEN) {
 			return true;
@@ -106,12 +108,12 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 			specimen = convertedSpecimen;
 		}
 
-		IForestrySpeciesRoot<IIndividual> speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(specimen);
-
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(specimen);
 		// No individual, abort
-		if (speciesRoot == null) {
+		if (!definition.isRootPresent()) {
 			return;
 		}
+		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
 
 		Optional<IIndividual> optionalIndividual = speciesRoot.create(specimen);
 
@@ -155,8 +157,8 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		if (!hasSpecimen()) {
 			errorStates.add(EnumErrorCode.NO_SPECIMEN);
 		} else {
-			IForestrySpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(getSpecimen());
-			if (speciesRoot != null && !isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
+			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(getSpecimen());
+			if (definition.isRootPresent() && !isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
 				errorStates.add(EnumErrorCode.NO_HONEY);
 			}
 		}

@@ -13,12 +13,12 @@ package forestry.arboriculture.genetics;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.ITreeMutation;
-import forestry.api.arboriculture.ITreeMutationBuilder;
-import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITreeGenome;
+import forestry.api.arboriculture.genetics.ITreeMutation;
+import forestry.api.arboriculture.genetics.ITreeMutationBuilder;
+import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.climate.ClimateManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.genetics.mutations.Mutation;
