@@ -47,9 +47,4 @@ public abstract class BlockRegistry {
 		registerBlock(block, null, name);
 	}
 
-	protected static void registerOreDictWildcard(String oreDictName, Block block) {
-//		OreDictionary.registerOre(oreDictName, new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
-		//TODO oredict, tags
-	}
-
 }

@@ -20,13 +20,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.server.ServerWorld;
 
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
+
 import forestry.api.apiculture.IApiaristTracker;
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.buttons.GuiBetterButton;
@@ -37,7 +40,7 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 
 public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInventory> {
-	private final ISpeciesRoot speciesRoot;
+	private final IForestrySpeciesRoot<IIndividual> speciesRoot;
 	private final IBreedingTracker breedingTracker;
 	private final HashMap<String, ItemStack> iconStacks = new HashMap<>();
 	private final int pageCurrent, pageMax;
@@ -54,7 +57,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 		ySize = 202;
 
 		for (IIndividual individual : speciesRoot.getIndividualTemplates()) {
-			iconStacks.put(individual.getIdent(), speciesRoot.getMemberStack(individual, speciesRoot.getIconType()));
+			iconStacks.put(individual.getIdentifier(), speciesRoot.getTypes().createStack(individual, speciesRoot.getIconType()));
 		}
 
 		//TODO world cast
@@ -76,9 +79,9 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 			RenderHelper.enableGUIStandardItemLighting();
 			textLayout.startPage();
 
-			displaySpeciesInformation(true, individual.getGenome().getPrimary(), iconStacks.get(individual.getIdent()), 10);
-			if (!individual.isPureBred(EnumTreeChromosome.SPECIES)) {
-				displaySpeciesInformation(individual.isAnalyzed(), individual.getGenome().getSecondary(), iconStacks.get(individual.getGenome().getSecondary().getUID()), 10);
+			displaySpeciesInformation(true, individual.getGenome().getPrimary(), iconStacks.get(individual.getIdentifier()), 10);
+			if (!individual.isPureBred(TreeChromosomes.SPECIES)) {
+				displaySpeciesInformation(individual.isAnalyzed(), individual.getGenome().getSecondary(), iconStacks.get(individual.getGenome().getSecondary().getRegistryName().toString()), 10);
 			}
 
 			textLayout.endPage();
@@ -124,7 +127,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 			return null;
 		}
 
-		return speciesRoot.getMember(slot.getStack());
+		return speciesRoot.getTypes().createIndividual(slot.getStack()).orElse(null);
 	}
 
 	private void displayBreedingStatistics(int x) {
@@ -157,7 +160,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 			return;
 		}
 
-		textLayout.drawLine(species.getAlleleName(), x);
+		textLayout.drawLine(species.getDisplayName().getFormattedText(), x);
 		GuiUtil.drawItemStack(this, iconStack, guiLeft + x + 69, guiTop + textLayout.getLineY() - 2);
 
 		textLayout.newLine();
@@ -166,7 +169,8 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 		int columnWidth = 16;
 		int column = 10;
 
-		for (IMutation combination : speciesRoot.getCombinations(species)) {
+		IMutationContainer<IIndividual, ? extends IMutation> container = speciesRoot.getComponent(ComponentKeys.MUTATIONS);
+		for (IMutation combination : container.getCombinations(species)) {
 			if (combination.isSecret()) {
 				continue;
 			}
@@ -189,7 +193,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 	}
 
 	private void drawMutationIcon(IMutation combination, IAlleleSpecies species, int x) {
-		GuiUtil.drawItemStack(this, iconStacks.get(combination.getPartner(species).getUID()), guiLeft + x, guiTop + textLayout.getLineY());
+		GuiUtil.drawItemStack(this, iconStacks.get(combination.getPartner(species).getRegistryName().toString()), guiLeft + x, guiTop + textLayout.getLineY());
 
 		int line = 48;
 		int column;

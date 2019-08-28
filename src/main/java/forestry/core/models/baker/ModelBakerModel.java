@@ -32,14 +32,11 @@ import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
-
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ModelBakerModel implements IBakedModel {
 
@@ -65,7 +62,7 @@ public class ModelBakerModel implements IBakedModel {
 		modelsPost = new ArrayList<>();
 		faceQuads = new EnumMap<>(Direction.class);
 		generalQuads = new ArrayList<>();
-		particleSprite = Minecraft.getInstance().getTextureMap().missingImage;	//TODO AT
+		particleSprite = Minecraft.getInstance().getTextureMap().missingImage;
 		isGui3d = true;
 		isAmbientOcclusion = false;
 		setModelState(modelState);

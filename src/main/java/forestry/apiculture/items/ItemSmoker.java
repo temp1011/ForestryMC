@@ -23,7 +23,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.apiculture.ApicultureCapabilities;
-import forestry.api.apiculture.IHiveTile;
+import forestry.api.apiculture.hives.IHiveTile;
 import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemForestry;
 import forestry.core.render.ParticleRender;

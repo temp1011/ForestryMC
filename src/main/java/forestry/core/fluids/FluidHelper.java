@@ -29,7 +29,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import forestry.core.utils.ItemStackUtil;
 
-//TODO there's probably some code that can be cleaned up in here.
+//TODO: Fix isFillable's
 public final class FluidHelper {
 
 	private FluidHelper() {
@@ -43,18 +43,22 @@ public final class FluidHelper {
 		}
 	}
 
-	public static boolean canAcceptFluid(World world, BlockPos pos, Direction facing, FluidStack fluid) {
+	public static boolean canAcceptFluid(World world, BlockPos pos, Direction facing, FluidStack fluid, boolean checkSpace) {
 		LazyOptional<IFluidHandler> capability = FluidUtil.getFluidHandler(world, pos, facing);
-		if (capability.isPresent()) {
-			IFluidHandler handler = capability.orElse(null);
-
-			for (int i = 0; i < handler.getTanks(); i++) {
-				if (handler.isFluidValid(i, fluid)) {
+		return capability.filter((handler) -> {
+			for (int tank = 0; tank < handler.getTanks(); tank++) {
+				int amountFilled = handler.fill(fluid, IFluidHandler.FluidAction.SIMULATE);
+				if (amountFilled > 0 && (!checkSpace || amountFilled >= fluid.getAmount())) {
 					return true;
 				}
 			}
-		}
-		return false;
+			return false;
+		})
+			.isPresent();
+	}
+
+	public static boolean canAcceptFluid(World world, BlockPos pos, Direction facing, FluidStack fluid) {
+		return canAcceptFluid(world, pos, facing, fluid, false);
 	}
 
 	public enum FillStatus {
@@ -95,7 +99,7 @@ public final class FluidHelper {
 		}
 
 		FluidStack canDrain = fluidHandler.drain(new FluidStack(fluidToFill, containerCapacity), IFluidHandler.FluidAction.SIMULATE);
-		if (canDrain.isEmpty() || canDrain.getAmount() == 0) {
+		if (canDrain.isEmpty()) {
 			return FillStatus.NO_FLUID;
 		}
 
@@ -173,6 +177,8 @@ public final class FluidHelper {
 		}
 		ItemStack outputStack = inv.getStackInSlot(outputSlot);
 
+		//Only needed so we can test if the container can be filled
+		FluidStack content = FluidUtil.getFluidContained(input).orElse(FluidStack.EMPTY);
 		FluidActionResult drainedResultSimulated = FluidUtil.tryEmptyContainer(input, fluidHandler, FluidAttributes.BUCKET_VOLUME, null, false);
 		if (!drainedResultSimulated.isSuccess()) {
 			return FillStatus.INVALID_INPUT;
@@ -190,7 +196,7 @@ public final class FluidHelper {
 						if (!outputStack.isEmpty()) {
 							newStack.grow(outputStack.getCount());
 						}
-						if (!isFillableContainer(newStack) || isFillableContainerAndEmpty(newStack)) {
+						if (!isFillableContainer(newStack, content) || isFillableContainerAndEmpty(newStack, content)) {
 							inv.setInventorySlotContents(outputSlot, newStack);
 							inv.decrStackSize(inputSlot, 1);
 						}
@@ -209,48 +215,22 @@ public final class FluidHelper {
 		return FillStatus.NO_SPACE;
 	}
 
-	public static boolean isFillableContainer(ItemStack container) {
+	public static boolean isFillableContainer(ItemStack container, FluidStack content) {
 		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
 		if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
 
-		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
-
-		//TODO not sure how to do this well any more, only thing I can think of is iterating the fluid registry...
-		//perhaps investigate call sites of this method to see if they can be simplified.
-		//		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
-		//		for (IFluidTankProperties properties : tankProperties) {
-		//			if (properties.canFill()) {
-		//				return true;
-		//			}
-		//		}
-
-		return false;
+		return fluidHandlerCap.filter(handler -> handler.fill(new FluidStack(content, 1), IFluidHandler.FluidAction.SIMULATE) > 0).isPresent();
 	}
 
-	public static boolean isFillableContainerAndEmpty(ItemStack container) {
+	public static boolean isFillableContainerAndEmpty(ItemStack container, FluidStack content) {
 		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
 		if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
 
-		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
-
-		//TODO again, need to check against a specific fluid stack here really.
-		//		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
-		//		for (IFluidTankProperties properties : tankProperties) {
-		//			if (properties.canFill() && properties.getCapacity() > 0) {
-		//				FluidStack contents = properties.getContents();
-		//				if (contents == null) {
-		//					return true;
-		//				} else if (contents.getAmount() > 0) {
-		//					return false;
-		//				}
-		//			}
-		//		}
-
-		return false;
+		return fluidHandlerCap.filter(handler -> handler.fill(new FluidStack(content, 1), IFluidHandler.FluidAction.SIMULATE) > 0 && handler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE).isEmpty()).isPresent();
 	}
 
 	public static ItemStack getEmptyContainer(ItemStack container) {
@@ -261,85 +241,98 @@ public final class FluidHelper {
 			return ItemStack.EMPTY;
 		}
 
-		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
-
-		if (!fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE).isEmpty()) {
-			return empty;
-		}
-		return ItemStack.EMPTY;
+		return fluidHandlerCap.filter(fluidHandler -> fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE) != null).isPresent() ? empty : ItemStack.EMPTY;
 	}
 
 	public static boolean isFillableContainerWithRoom(ItemStack container) {
 		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
-		if (!fluidHandlerCap.isPresent()) {
+		return fluidHandlerCap.isPresent();
+		/*if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
 
 		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
-		for (int i = 0; i < fluidHandler.getTanks(); i++) {
-			FluidStack stack = fluidHandler.getFluidInTank(i).copy();
-			stack.setAmount(Integer.MAX_VALUE);
-			int filled = fluidHandler.fill(stack, IFluidHandler.FluidAction.SIMULATE);
-			if (filled > 0) {
-				return true;
+		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
+		for (IFluidTankProperties properties : tankProperties) {
+			if (properties.canFill() && properties.getCapacity() > 0) {
+				FluidStack contents = properties.getContents();
+				if (contents == null) {
+					return true;
+				} else if (contents.amount < properties.getCapacity()) {
+					return true;
+				}
 			}
 		}
-		return false;
+
+		return false;*/
 	}
 
 	public static boolean isFillableEmptyContainer(ItemStack empty) {
 		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(empty);
-		if (!fluidHandlerCap.isPresent()) {
+		return fluidHandlerCap.isPresent();
+		/*if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
 
 		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
-		//TODO need a fluidstack to check if can accept the fluid here really.
-		//		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
-		//		for (IFluidTankProperties properties : tankProperties) {
-		//			if (!properties.canFill()) {
-		//				return false;
-		//			}
-		//
-		//			FluidStack contents = properties.getContents();
-		//			if (contents != null && contents.getAmount() > 0) {
-		//				return false;
-		//			}
-		//		}
+		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
+		for (IFluidTankProperties properties : tankProperties) {
+			if (!properties.canFill()) {
+				return false;
+			}
 
-		return true;
+			FluidStack contents = properties.getContents();
+			if (contents != null && contents.amount > 0) {
+				return false;
+			}
+		}
+
+		return true;*/
 	}
 
 	public static boolean isDrainableFilledContainer(ItemStack container) {
 		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
-		if (!fluidHandlerCap.isPresent()) {
+		return fluidHandlerCap.isPresent();
+		/*if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
 
 		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
-		for (int i = 0; i < fluidHandler.getTanks(); i++) {
-			if (fluidHandler.getFluidInTank(i).getAmount() < fluidHandler.getTankCapacity(i)) {
-				return false;    //not full
+		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
+		for (IFluidTankProperties properties : tankProperties) {
+			if (!properties.canDrain()) {
+				return false;
+			}
+
+			FluidStack contents = properties.getContents();
+			if (contents == null || contents.amount < properties.getCapacity()) {
+				return false;
 			}
 		}
 
-		FluidStack drained = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-		return !drained.isEmpty();
+		return true;*/
 	}
 
 	public static boolean isDrainableContainer(ItemStack container) {
 		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
-		if (!fluidHandlerCap.isPresent()) {
+		return fluidHandlerCap.isPresent();
+		/*if (!fluidHandlerCap.isPresent()) {
 			return false;
 		}
 
 		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
-		FluidStack drained = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-		return !drained.isEmpty();
+		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
+		for (IFluidTankProperties properties : tankProperties) {
+			if (properties.canDrain()) {
+				return true;
+			}
+		}
+
+		return false;*/
 	}
 
 	public static boolean isEmpty(ItemStack container) {
@@ -348,15 +341,14 @@ public final class FluidHelper {
 			return false;
 		}
 
-		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
-
-		for (int i = 0; i < fluidHandler.getTanks(); i++) {
-			if (!fluidHandler.getFluidInTank(i).isEmpty()) {
-				return false;
+		return fluidHandlerCap.filter(fluidHandler -> {
+			for (int i = 0; i < fluidHandler.getTanks(); i++) {
+				if (!fluidHandler.getFluidInTank(i).isEmpty()) {
+					return false;
+				}
 			}
-		}
-
-		return true;
+			return true;
+		}).isPresent();
 	}
 
 }

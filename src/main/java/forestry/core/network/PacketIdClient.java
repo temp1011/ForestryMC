@@ -13,10 +13,9 @@ package forestry.core.network;
 
 import javax.annotation.Nullable;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.network.packets.PacketHandlerDummyClient;
 
 /**

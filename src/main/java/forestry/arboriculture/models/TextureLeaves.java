@@ -14,14 +14,12 @@ import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
+
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.core.config.Constants;
 
@@ -39,9 +37,9 @@ public class TextureLeaves {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static void registerAllSprites() {
+	public static void registerAllSprites(TextureStitchEvent.Pre event) {
 		for (TextureLeaves leafTexture : leafTextures.values()) {
-			leafTexture.registerSprites();
+			leafTexture.registerSprites(event);
 		}
 	}
 
@@ -52,20 +50,18 @@ public class TextureLeaves {
 
 	private TextureLeaves(EnumLeafType enumLeafType) {
 		String ident = enumLeafType.toString().toLowerCase(Locale.ENGLISH);
-		this.plain = new ResourceLocation(Constants.MOD_ID, "blocks/leaves/" + ident + ".plain");
-		this.fancy = new ResourceLocation(Constants.MOD_ID, "blocks/leaves/" + ident + ".fancy");
-		this.pollinatedPlain = new ResourceLocation(Constants.MOD_ID, "blocks/leaves/" + ident + ".changed.plain");
-		this.pollinatedFancy = new ResourceLocation(Constants.MOD_ID, "blocks/leaves/" + ident + ".changed");
+		this.plain = new ResourceLocation(Constants.MOD_ID, "block/leaves/" + ident + ".plain");
+		this.fancy = new ResourceLocation(Constants.MOD_ID, "block/leaves/" + ident + ".fancy");
+		this.pollinatedPlain = new ResourceLocation(Constants.MOD_ID, "block/leaves/" + ident + ".changed.plain");
+		this.pollinatedFancy = new ResourceLocation(Constants.MOD_ID, "block/leaves/" + ident + ".changed");
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	private void registerSprites() {
-		AtlasTexture textureMapBlocks = Minecraft.getInstance().getTextureMap();
-		//TODO textures
-//		textureMapBlocks.registerSprite(plain);
-//		textureMapBlocks.registerSprite(fancy);
-//		textureMapBlocks.registerSprite(pollinatedPlain);
-//		textureMapBlocks.registerSprite(pollinatedFancy);
+	private void registerSprites(TextureStitchEvent.Pre event) {
+		event.addSprite(plain);
+		event.addSprite(fancy);
+		event.addSprite(pollinatedPlain);
+		event.addSprite(pollinatedFancy);
 	}
 
 	public ResourceLocation getSprite(boolean pollinated, boolean fancy) {

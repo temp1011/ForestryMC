@@ -23,11 +23,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-//import net.minecraftforge.oredict.OreDictionary;
-//import net.minecraftforge.oredict.ShapedOreRecipe;
-
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.utils.ItemStackUtil;
+
+//import net.minecraftforge.oredict.OreDictionary;
+//import net.minecraftforge.oredict.ShapedOreRecipe;
 
 //TODO - with recipes now matching on tags is this class really needed any more?
 public class ShapedRecipeCustom extends ShapedRecipe implements IDescriptiveRecipe {

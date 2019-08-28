@@ -15,7 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -25,10 +25,11 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.render.ForestryResource;
+import forestry.core.render.IForestryRenderer;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 
-public class RenderEngine extends TileEntityRenderer<TileEngine> {
+public class RenderEngine implements IForestryRenderer<TileEngine> {
 	private final RendererModel boiler;
 	private final RendererModel trunk;
 	private final RendererModel piston;
@@ -87,21 +88,20 @@ public class RenderEngine extends TileEntityRenderer<TileEngine> {
 				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_medium.png"),
 				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_low.png"),};
 	}
-	
+
 	@Override
-	public void render(TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
-		if (engine != null) {
-			World worldObj = engine.getWorldObj();
-			if (worldObj.isBlockLoaded(engine.getPos())) {
-				BlockState blockState = worldObj.getBlockState(engine.getPos());
-				if (blockState.getBlock() instanceof BlockBase) {
-					Direction facing = blockState.get(BlockBase.FACING);
-					render(engine.getTemperatureState(), engine.progress, facing, x, y, z);
-					return;
-				}
-			}
+	public void renderTile(TileEngine tile, double x, double y, double z, float partialTicks, int destroyStage) {
+		World worldObj = tile.getWorldObj();
+		BlockState blockState = worldObj.getBlockState(tile.getPos());
+		if (blockState.getBlock() instanceof BlockBase) {
+			Direction facing = blockState.get(BlockBase.FACING);
+			render(tile.getTemperatureState(), tile.progress, facing, x, y, z);
 		}
-		render(TemperatureState.COOL, 0.25F, Direction.UP, x, y, z);
+	}
+
+	@Override
+	public void renderItem(ItemStack stack) {
+		render(TemperatureState.COOL, 0.25F, Direction.UP, 0, 0, 0);
 	}
 
 	private void render(TemperatureState state, float progress, Direction orientation, double x, double y, double z) {

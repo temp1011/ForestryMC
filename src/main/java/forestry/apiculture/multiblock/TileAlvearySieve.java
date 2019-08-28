@@ -15,13 +15,14 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
 
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeListener;
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlvearySieve;
@@ -72,9 +73,13 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 				return false;
 			}
 
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(pollen);
+			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(pollen);
+			if (!definition.isRootPresent()) {
+				return false;
+			}
+			IForestrySpeciesRoot<IIndividual> root = definition.get();
 
-			ItemStack pollenStack = speciesRoot.getMemberStack(pollen, EnumGermlingType.POLLEN);
+			ItemStack pollenStack = root.getTypes().createStack(pollen, EnumGermlingType.POLLEN);
 			if (!pollenStack.isEmpty()) {
 				inventory.storePollenStack(pollenStack);
 				return true;

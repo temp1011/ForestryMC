@@ -1,6 +1,7 @@
 package forestry.modules;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -75,14 +76,18 @@ public class ForestryPluginUtil {
 			}
 		}
 
-
+		Set<String> loadedClasses = new HashSet<>();//TODO: Remove
 		List<T> instances = new ArrayList<>();
 		for (String className : pluginClassNames) {
+			if (loadedClasses.contains(className)) {
+				continue;
+			}
 			try {
 				Class<?> asmClass = Class.forName(className);
 				Class<? extends T> asmInstanceClass = asmClass.asSubclass(instanceClass);
 				T instance = asmInstanceClass.newInstance();
 				instances.add(instance);
+				loadedClasses.add(className);
 			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
 				Log.error("Failed to load: {}", className, e);
 			}

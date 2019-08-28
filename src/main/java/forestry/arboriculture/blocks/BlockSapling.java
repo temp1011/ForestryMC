@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.IFluidState;
@@ -25,51 +26,47 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.ModelLoader;
 
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.render.SaplingStateMapper;
 import forestry.arboriculture.tiles.TileSapling;
+import forestry.core.models.IStateMapperRegister;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
-//TODO flatten?
-//eg    public static final Block OAK_SAPLING = register("oak_sapling", new SaplingBlock(new OakTree(), Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.PLANT)));
-public class BlockSapling extends BlockTreeContainer implements IGrowable {
-	protected static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
+public class BlockSapling extends BlockTreeContainer implements IGrowable, IStateMapperRegister, IItemModelRegister {
+	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	/* PROPERTYS */
 	public static final PropertyTree TREE = new PropertyTree("tree");
 
 	public BlockSapling() {
-		super(Material.PLANTS);
+		super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.0F).sound(SoundType.PLANT));
 	}
 
-	//TODO voxelshape
-	//	@Override
-	//	public AxisAlignedBB getBoundingBox(BlockState state, IBlockReader source, BlockPos pos) {
-	//		return SAPLING_AABB;
-	//	}
-	/* COLLISION BOX */
-
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return VoxelShapes.empty();
+	public VoxelShape getShape(BlockState blockState, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
+		return SHAPE;
+	}
+
+	@Nullable
+	@Override
+	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+		return new TileSapling();
 	}
 
 	/* RENDERING */
@@ -84,35 +81,46 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	/* STATES */
-//	@Override
-//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
-//		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
-//		if (sapling != null && sapling.getTree() != null) {
-//			state = state.with(TREE, sapling.getTree().getGenome().getPrimary());
-//		} else {
-//			state = state.with(TREE, TreeDefinition.Oak.getGenome().getPrimary());
-//		}
-//		return state;
-//	}
+	//	@Override
+	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
+	//		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
+	//		if (sapling != null && sapling.getTree() != null) {
+	//			state = state.with(TREE, sapling.getTree().getGenome().getPrimary());
+	//		} else {
+	//			state = state.with(TREE, TreeDefinition.Oak.getGenome().getPrimary());
+	//		}
+	//		return state;
+	//	}
+
+	@Override
+	public BlockState getStateAtViewpoint(BlockState state, IBlockReader world, BlockPos pos, Vec3d viewpoint) {
+		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
+		if (sapling != null && sapling.getTree() != null) {
+			state = state.with(TREE, sapling.getTree().getGenome().getPrimary(IAlleleTreeSpecies.class));
+		} else {
+			state = state.with(TREE, TreeDefinition.Oak.getGenome().getPrimary(IAlleleTreeSpecies.class));
+		}
+		return state;
+	}
 
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(TREE);
 	}
 
-//	@Override
-//	@OnlyIn(Dist.CLIENT)
-//	public void registerStateMapper() {
-//		ModelLoader.setCustomStateMapper(this, new SaplingStateMapper());
-//	}
-//
-//	/* MODELS */
-//	@OnlyIn(Dist.CLIENT)
-//	@Override
-//	public void registerModel(Item item, IModelManager manager) {
-//		//To delete the error message
-//		manager.registerItemModel(item, 0, "germlings/sapling.tree_larch");
-//	}
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void registerStateMapper() {
+		//	ModelLoader.setCustomStateMapper(this, new SaplingStateMapper());
+	}
+
+	/* MODELS */
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		//To delete the error message
+		manager.registerItemModel(item, 0, "germlings/sapling.tree_larch");
+	}
 
 	/* PLANTING */
 	public static boolean canBlockStay(IBlockReader world, BlockPos pos) {
@@ -135,14 +143,13 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	/* REMOVING */
-	//TODO loot table
-//	@Override
-//	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
-//		ItemStack drop = getDrop(world, pos);
-//		if (!drop.isEmpty()) {
-//			drops.add(drop);
-//		}
-//	}
+	//	@Override
+	//	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
+	//		ItemStack drop = getDrop(world, pos);
+	//		if (!drop.isEmpty()) {
+	//			drops.add(drop);
+	//		}
+	//	}
 
 	@Override
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
@@ -150,7 +157,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		if (sapling == null || sapling.getTree() == null) {
 			return ItemStack.EMPTY;
 		}
-		return TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING);
+		return TreeManager.treeRoot.getTypes().createStack(sapling.getTree(), EnumGermlingType.SAPLING);
 	}
 
 	@Override
@@ -179,7 +186,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		if (sapling != null) {
 			ITree tree = sapling.getTree();
 			if (tree != null) {
-				return TreeManager.treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING);
+				return TreeManager.treeRoot.getTypes().createStack(tree, EnumGermlingType.SAPLING);
 			}
 		}
 		return ItemStack.EMPTY;
@@ -206,11 +213,5 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		if (saplingTile != null) {
 			saplingTile.tryGrow(rand, true);
 		}
-	}
-
-	@Nullable
-	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
-		return new TileSapling();
 	}
 }

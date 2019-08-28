@@ -6,12 +6,11 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.arboriculture.EnumGermlingType;
+
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFilterData;
 import forestry.api.genetics.IFilterRule;

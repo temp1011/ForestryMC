@@ -24,13 +24,10 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
-
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.core.gui.tooltips.ToolTip;
@@ -44,6 +41,7 @@ public class FilteredTank extends StandardTank {
 
 	public FilteredTank(int capacity) {
 		super(capacity);
+		setValidator(this::fluidMatchesFilter);
 	}
 
 	public FilteredTank(int capacity, boolean canFill, boolean canDrain) {
@@ -59,13 +57,11 @@ public class FilteredTank extends StandardTank {
 		for (Fluid fluid : filters) {
 			this.filters.add(fluid.getRegistryName());
 		}
-		setValidator(this::fluidMatchesFilter);
 		return this;
 	}
 
 	private boolean fluidMatchesFilter(FluidStack resource) {
-		return !resource.isEmpty() && resource.getFluid() != null &&
-			filters.contains(resource.getFluid().getRegistryName());
+		return resource.getFluid() != null && filters.contains(resource.getFluid().getRegistryName());
 	}
 
 	@Override
@@ -81,12 +77,13 @@ public class FilteredTank extends StandardTank {
 		if (Screen.hasShiftDown() || filters.size() < 5) {
 			for (ResourceLocation filterName : filters) {
 				Fluid fluidFilter = ForgeRegistries.FLUIDS.getValue(filterName);
-				Rarity rarity = fluidFilter.getAttributes().getRarity();
+				FluidAttributes attributes = fluidFilter.getAttributes();
+				Rarity rarity = attributes.getRarity();
 				if (rarity == null) {
 					rarity = Rarity.COMMON;
 				}
-				FluidStack filterFluidStack = new FluidStack(fluidFilter, FluidAttributes.BUCKET_VOLUME);
-				toolTip.add(new TranslationTextComponent(fluidFilter.getAttributes().getTranslationKey(filterFluidStack)), rarity.color);
+				FluidStack filterFluidStack = new FluidStack(fluidFilter, 0);
+				toolTip.add(filterFluidStack.getDisplayName(), rarity.color);
 			}
 		} else {
 			//TODO can this be simplified

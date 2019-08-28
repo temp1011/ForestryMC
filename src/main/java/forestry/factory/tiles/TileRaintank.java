@@ -16,29 +16,25 @@ import java.io.IOException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraft.fluid.Fluid;
-
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IErrorLogic;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -73,7 +69,8 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		super(ModuleFactory.getTiles().rainTank);
 		setInternalInventory(new InventoryRaintank(this));
 
-		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(Fluids.WATER);
+		//TODO fluids
+		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(/*FluidRegistry.WATER*/);
 
 		tankManager = new TankManager(this, resourceTank);
 
@@ -122,7 +119,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 			errorLogic.setCondition(!world.isRainingAt(posAbove), EnumErrorCode.NOT_RAINING);
 
 			if (!errorLogic.hasErrors()) {
-				resourceTank.fill(WATER_PER_UPDATE, IFluidHandler.FluidAction.EXECUTE);
+				resourceTank.fillInternal(WATER_PER_UPDATE, IFluidHandler.FluidAction.EXECUTE);
 			}
 
 			containerFiller.updateServerSide();

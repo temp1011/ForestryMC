@@ -12,6 +12,8 @@ package forestry.core.items;
 
 import net.minecraft.item.Item;
 
+import forestry.core.ItemGroupForestry;
+
 public class ItemCraftingMaterial extends ItemForestry {
 
 	private EnumCraftingMaterial type;
@@ -19,7 +21,8 @@ public class ItemCraftingMaterial extends ItemForestry {
 	public ItemCraftingMaterial(EnumCraftingMaterial type) {
 		super((new Item.Properties())
 		.maxDamage(0)
-		.setNoRepair());
+			.setNoRepair()
+			.group(ItemGroupForestry.tabForestry));
 		this.type = type;
 	}
 

@@ -9,9 +9,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * A entry in the {@link IForesterBook}.

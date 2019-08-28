@@ -13,7 +13,7 @@ package forestry.arboriculture.worldgen;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 
 public class TreeBlockType implements ITreeBlockType {
 
@@ -29,8 +29,8 @@ public class TreeBlockType implements ITreeBlockType {
 	}
 
 	@Override
-	public boolean setBlock(World world, BlockPos pos) {
-		return world.setBlockState(pos, blockState);
+	public boolean setBlock(IWorld world, BlockPos pos) {
+		return world.setBlockState(pos, blockState, 18);
 	}
 
 	public BlockState getBlockState() {

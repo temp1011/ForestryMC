@@ -10,23 +10,26 @@
  ******************************************************************************/
 package forestry.climatology.gui.elements;
 
+import java.util.Optional;
+
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.gui.events.GuiEvent;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Constants;
@@ -42,11 +45,12 @@ public class SpeciesSelectionElement extends GuiElement {
 			if (itemstack.isEmpty()) {
 				return;
 			}
-			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(itemstack);
-			if (individual == null) {
+			Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(itemstack);
+			if (!optional.isPresent()) {
 				return;
 			}
-			IAlleleSpecies primary = individual.getGenome().getPrimary();
+			IIndividual individual = optional.get();
+			IAlleleForestrySpecies primary = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
 			EnumTemperature temperature = primary.getTemperature();
 			EnumHumidity humidity = primary.getHumidity();
 			float temp;

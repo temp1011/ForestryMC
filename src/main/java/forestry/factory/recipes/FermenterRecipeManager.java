@@ -16,10 +16,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
-
-import net.minecraft.fluid.Fluid;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;

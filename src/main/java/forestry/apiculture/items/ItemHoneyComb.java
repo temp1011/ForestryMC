@@ -18,7 +18,6 @@ import java.util.Random;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-
 import forestry.api.core.ItemGroups;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
@@ -32,7 +31,6 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 		.maxDamage(0)
 		.group(ItemGroups.tabApiculture)
 		.setNoRepair());
-//		setHasSubtypes(true); TODO - flatten?
 
 		this.type = type;
 	}
@@ -60,7 +58,7 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
+	public int getColorFromItemStack(ItemStack itemstack, int tintIndex) {
 		EnumHoneyComb honeyComb = this.type;
 		if (tintIndex == 1) {
 			return honeyComb.primaryColor;

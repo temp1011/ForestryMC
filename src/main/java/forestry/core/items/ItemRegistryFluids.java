@@ -13,10 +13,10 @@ package forestry.core.items;
 import java.util.EnumMap;
 import java.util.Map;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;

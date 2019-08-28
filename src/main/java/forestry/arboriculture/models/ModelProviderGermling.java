@@ -10,57 +10,42 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.arboriculture.EnumGermlingType;
+
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.core.IModelManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.core.config.Constants;
 import forestry.core.utils.StringUtil;
 
 public class ModelProviderGermling implements IGermlingModelProvider {
 
-	private final String name;
 	private final ILeafSpriteProvider leafSpriteProvider;
 	@OnlyIn(Dist.CLIENT)
-	private ModelResourceLocation germlingModel;
+	private ResourceLocation itemModel;
 	@OnlyIn(Dist.CLIENT)
-	private ModelResourceLocation pollenModel;
+	private ResourceLocation blockModel;
 
 	public ModelProviderGermling(String uid, ILeafSpriteProvider leafSpriteProvider) {
-		String modelName = uid.substring("forestry.".length());
-		this.name = StringUtil.camelCaseToUnderscores(modelName);
+		String name = StringUtil.camelCaseToUnderscores(uid);
 		this.leafSpriteProvider = leafSpriteProvider;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
-		if (type == EnumGermlingType.SAPLING) {
-			germlingModel = manager.getModelLocation("germlings/sapling." + name);
-//			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:germlings/sapling." + name));
-		} else if (type == EnumGermlingType.POLLEN) {
-			pollenModel = manager.getModelLocation("pollen");
-//			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:pollen"));
-		}
-		//TODO models
+		itemModel = new ResourceLocation(Constants.MOD_ID + ":germlings/sapling." + name);
+		blockModel = new ResourceLocation(Constants.MOD_ID + ":block/germlings/sapling." + name);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public ModelResourceLocation getModel(EnumGermlingType type) {
-		if (type == EnumGermlingType.POLLEN) {
-			return pollenModel;
-		} else {
-			return germlingModel;
-		}
+	public ResourceLocation getItemModel() {
+		return itemModel;
+	}
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public ResourceLocation getBlockModel() {
+		return blockModel;
 	}
 
 	@Override

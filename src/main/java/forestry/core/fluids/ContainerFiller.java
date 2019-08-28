@@ -2,10 +2,10 @@ package forestry.core.fluids;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
@@ -43,7 +43,7 @@ public class ContainerFiller {
 
 		if (usedInput != null) {
 			FluidStack tankContents = fluidTank.getFluid();
-			if (tankContents != null && tankContents.getAmount() > 0) {
+			if (!tankContents.isEmpty() && tankContents.getAmount() > 0) {
 				if (fillingProgress == 0) {
 					Fluid tankFluid = tankContents.getFluid();
 					FluidHelper.FillStatus canFill = FluidHelper.fillContainers(fluidTank, inventory, inputSlot, outputSlot, tankFluid, false);

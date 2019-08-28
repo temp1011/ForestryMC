@@ -13,9 +13,9 @@ package forestry.mail.inventory;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
 
 import forestry.api.mail.IStamps;

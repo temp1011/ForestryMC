@@ -21,10 +21,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
+
 import forestry.api.core.EnumTemperature;
 import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.blocks.BlockBase;
@@ -34,9 +34,7 @@ import forestry.core.tiles.TileUtil;
 
 public class BlockHabitatFormer extends BlockBase<BlockTypeClimatology> implements IColoredBlock {
 	public BlockHabitatFormer() {
-		super(BlockTypeClimatology.HABITAT_FORMER, Block.Properties.create(Material.IRON).hardnessAndResistance(1.0f));
-
-		//TODO harvest level setHarvestLevel("pickaxe", 0);
+		super(BlockTypeClimatology.HABITAT_FORMER, Block.Properties.create(Material.IRON).hardnessAndResistance(1.0f).harvestTool(ToolType.AXE).harvestLevel(0));
 	}
 
 	@OnlyIn(Dist.CLIENT)

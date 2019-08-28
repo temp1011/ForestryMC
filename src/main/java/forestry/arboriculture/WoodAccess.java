@@ -23,8 +23,11 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodAccess;
@@ -38,7 +41,6 @@ import forestry.arboriculture.blocks.BlockForestryPlank;
 import forestry.arboriculture.blocks.BlockForestrySlab;
 import forestry.arboriculture.blocks.BlockForestryStairs;
 
-//TODO - Perhaps a nicer way to manage this would be to have a tag for this purpose.
 public class WoodAccess implements IWoodAccess {
 	@Nullable
 	private static WoodAccess INSTANCE;
@@ -50,7 +52,6 @@ public class WoodAccess implements IWoodAccess {
 		return INSTANCE;
 	}
 
-	//TODO table?
 	private final Map<WoodBlockKind, WoodMap> woodMaps = new EnumMap<>(WoodBlockKind.class);
 	private final List<IWoodType> registeredWoodTypes = new ArrayList<>();
 
@@ -61,15 +62,13 @@ public class WoodAccess implements IWoodAccess {
 		registerVanilla();
 	}
 
-	//TODO implement getWoodBlockKind on superclass of all wood blocks to simplify this
 	public void registerLogs(Collection<? extends BlockForestryLog> blocks) {
 		for (BlockForestryLog block : blocks) {
-			//noinspection unchecked
 			registerWithoutVariants(block, WoodBlockKind.LOG);
 		}
 	}
 
-	public void registerPlanks(Collection<? extends BlockForestryPlank> blocks) {
+	public <V extends Enum<V> & IWoodType> void registerPlanks(Collection<? extends BlockForestryPlank> blocks) {
 		for (BlockForestryPlank block : blocks) {
 			//noinspection unchecked
 			registerWithoutVariants(block, WoodBlockKind.PLANKS);
@@ -109,21 +108,6 @@ public class WoodAccess implements IWoodAccess {
 	}
 
 	private void registerVanilla() {
-		//TODO can this be done with tags?
-		register(EnumVanillaWoodType.OAK, WoodBlockKind.SLAB, false, Blocks.OAK_SLAB.getDefaultState(), new ItemStack(Blocks.OAK_SLAB));
-		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.SLAB, false, Blocks.SPRUCE_SLAB.getDefaultState(), new ItemStack(Blocks.SPRUCE_SLAB));
-		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.SLAB, false, Blocks.BIRCH_SLAB.getDefaultState(), new ItemStack(Blocks.BIRCH_SLAB));
-		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.SLAB, false, Blocks.JUNGLE_SLAB.getDefaultState(), new ItemStack(Blocks.JUNGLE_SLAB));
-		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.SLAB, false, Blocks.ACACIA_SLAB.getDefaultState(), new ItemStack(Blocks.ACACIA_SLAB));
-		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.SLAB, false, Blocks.DARK_OAK_SLAB.getDefaultState(), new ItemStack(Blocks.DARK_OAK_SLAB));
-
-		register(EnumVanillaWoodType.OAK, WoodBlockKind.PLANKS, false, Blocks.OAK_PLANKS.getDefaultState(), new ItemStack(Blocks.OAK_PLANKS));
-		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.PLANKS, false, Blocks.SPRUCE_PLANKS.getDefaultState(), new ItemStack(Blocks.SPRUCE_PLANKS));
-		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.PLANKS, false, Blocks.BIRCH_PLANKS.getDefaultState(), new ItemStack(Blocks.BIRCH_PLANKS));
-		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.PLANKS, false, Blocks.JUNGLE_PLANKS.getDefaultState(), new ItemStack(Blocks.JUNGLE_PLANKS));
-		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.PLANKS, false, Blocks.ACACIA_PLANKS.getDefaultState(), new ItemStack(Blocks.ACACIA_PLANKS));
-		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.PLANKS, false, Blocks.DARK_OAK_PLANKS.getDefaultState(), new ItemStack(Blocks.DARK_OAK_PLANKS));
-
 		register(EnumVanillaWoodType.OAK, WoodBlockKind.LOG, false, Blocks.OAK_LOG.getDefaultState(), new ItemStack(Blocks.OAK_LOG));
 		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.LOG, false, Blocks.SPRUCE_LOG.getDefaultState(), new ItemStack(Blocks.SPRUCE_LOG));
 		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.LOG, false, Blocks.BIRCH_LOG.getDefaultState(), new ItemStack(Blocks.BIRCH_LOG));
@@ -131,6 +115,27 @@ public class WoodAccess implements IWoodAccess {
 		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.LOG, false, Blocks.ACACIA_LOG.getDefaultState(), new ItemStack(Blocks.ACACIA_LOG));
 		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.LOG, false, Blocks.DARK_OAK_LOG.getDefaultState(), new ItemStack(Blocks.DARK_OAK_LOG));
 
+		register(EnumVanillaWoodType.OAK, WoodBlockKind.PLANKS, false, Blocks.OAK_PLANKS.getDefaultState(), new ItemStack(Blocks.OAK_PLANKS));
+		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.PLANKS, false, Blocks.SPRUCE_PLANKS.getDefaultState(), new ItemStack(Blocks.SPRUCE_PLANKS));
+		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.PLANKS, false, Blocks.BIRCH_PLANKS.getDefaultState(), new ItemStack(Blocks.BIRCH_PLANKS));
+		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.PLANKS, false, Blocks.JUNGLE_PLANKS.getDefaultState(), new ItemStack(Blocks.JUNGLE_PLANKS));
+		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.PLANKS, false, Blocks.ACACIA_PLANKS.getDefaultState(), new ItemStack(Blocks.ACACIA_PLANKS));
+		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.PLANKS, false, Blocks.DARK_OAK_PLANKS.getDefaultState(), new ItemStack(Blocks.DARK_OAK_PLANKS));
+		
+		register(EnumVanillaWoodType.OAK, WoodBlockKind.SLAB, false, Blocks.OAK_SLAB.getDefaultState(), new ItemStack(Blocks.OAK_SLAB));
+		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.SLAB, false, Blocks.SPRUCE_SLAB.getDefaultState(), new ItemStack(Blocks.SPRUCE_SLAB));
+		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.SLAB, false, Blocks.BIRCH_SLAB.getDefaultState(), new ItemStack(Blocks.BIRCH_SLAB));
+		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.SLAB, false, Blocks.JUNGLE_SLAB.getDefaultState(), new ItemStack(Blocks.JUNGLE_SLAB));
+		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.SLAB, false, Blocks.ACACIA_SLAB.getDefaultState(), new ItemStack(Blocks.ACACIA_SLAB));
+		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.SLAB, false, Blocks.DARK_OAK_SLAB.getDefaultState(), new ItemStack(Blocks.DARK_OAK_SLAB));
+
+		register(EnumVanillaWoodType.OAK, WoodBlockKind.LOG, false, Blocks.OAK_LOG.getDefaultState(), new ItemStack(Blocks.OAK_LOG));
+		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.LOG, false, Blocks.SPRUCE_LOG.getDefaultState(), new ItemStack(Blocks.SPRUCE_LOG));
+		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.LOG, false, Blocks.BIRCH_LOG.getDefaultState(), new ItemStack(Blocks.BIRCH_LOG));
+		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.LOG, false, Blocks.JUNGLE_LOG.getDefaultState(), new ItemStack(Blocks.JUNGLE_LOG));
+		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.LOG, false, Blocks.ACACIA_LOG.getDefaultState(), new ItemStack(Blocks.ACACIA_LOG));
+		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.LOG, false, Blocks.DARK_OAK_LOG.getDefaultState(), new ItemStack(Blocks.DARK_OAK_LOG));
+		
 		register(EnumVanillaWoodType.OAK, WoodBlockKind.FENCE, false, Blocks.OAK_FENCE.getDefaultState(), new ItemStack(Blocks.OAK_FENCE));
 		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.FENCE, false, Blocks.SPRUCE_FENCE.getDefaultState(), new ItemStack(Blocks.SPRUCE_FENCE));
 		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.FENCE, false, Blocks.BIRCH_FENCE.getDefaultState(), new ItemStack(Blocks.BIRCH_FENCE));
@@ -160,6 +165,20 @@ public class WoodAccess implements IWoodAccess {
 		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.DOOR, false, Blocks.DARK_OAK_DOOR.getDefaultState(), new ItemStack(Items.DARK_OAK_DOOR));
 	}
 
+	//	private <T extends Block & IWoodTyped, V extends Enum<V> & IWoodType> void registerWithVariants(T woodTyped, WoodBlockKind woodBlockKind, PropertyWoodType<V> property) {
+	//		boolean fireproof = woodTyped.isFireproof();
+	//
+	//		for (V value : property.getAllowedValues()) {
+	//			BlockState blockState = woodTyped.getDefaultState().with(property, value);
+	//			IWoodType woodType = woodTyped.getWoodType();
+	//			ItemStack itemStack = new ItemStack(woodTyped, 1, meta);
+	//			if (!(woodType instanceof EnumVanillaWoodType)) {
+	//				ModuleArboriculture.proxy.registerWoodModel(woodTyped, true);
+	//			}
+	//			register(woodType, woodBlockKind, fireproof, blockState, itemStack);
+	//		}
+	//	}
+
 	/**
 	 * Register wood blocks that have no variant property
 	 */
@@ -170,6 +189,11 @@ public class WoodAccess implements IWoodAccess {
 		ItemStack itemStack = new ItemStack(woodTyped);
 		if (!(woodType instanceof EnumVanillaWoodType)) {
 			ModuleArboriculture.proxy.registerWoodModel(woodTyped, false);
+		}
+		if (itemStack.isEmpty()) {
+			Block block = ForgeRegistries.BLOCKS.getValue(woodTyped.getBlock().getRegistryName());
+			Item item = woodTyped.asItem();
+			new ItemStack(woodTyped);
 		}
 		register(woodType, woodBlockKind, fireproof, blockState, itemStack);
 	}

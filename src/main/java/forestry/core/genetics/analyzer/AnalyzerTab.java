@@ -5,8 +5,9 @@ import java.util.Locale;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
+import genetics.api.individual.IIndividual;
+
 import forestry.api.genetics.IDatabaseTab;
-import forestry.api.genetics.IIndividual;
 import forestry.api.gui.IDatabaseElement;
 import forestry.core.ModuleCore;
 

@@ -22,7 +22,6 @@ public class ItemWaxCast extends ItemForestry implements ICraftingPlan {
 	public ItemWaxCast() {
 		super((new Item.Properties())
 		.group(ItemGroups.tabApiculture)
-		.maxStackSize(1)
 		.maxDamage(16)
 		.setNoRepair());
 	}

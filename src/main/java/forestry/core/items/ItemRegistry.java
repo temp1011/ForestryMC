@@ -15,12 +15,12 @@ import java.util.Locale;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-//import net.minecraftforge.oredict.OreDictionary;
-
 import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
+
+//import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class ItemRegistry {
 	protected static <T extends Item> T registerItem(T item, String name) {

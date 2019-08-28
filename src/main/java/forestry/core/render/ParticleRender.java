@@ -16,13 +16,14 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.apiculture.IBeeGenome;
+
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IHiveTile;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.hives.IHiveTile;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.apiculture.entities.ParticleBeeExplore;
@@ -30,12 +31,13 @@ import forestry.apiculture.entities.ParticleBeeRoundTrip;
 import forestry.apiculture.entities.ParticleBeeTargetEntity;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.core.config.Config;
-//import forestry.core.entities.ParticleClimate;
-//import forestry.core.entities.ParticleHoneydust;
 import forestry.core.entities.ParticleIgnition;
 import forestry.core.entities.ParticleSmoke;
 import forestry.core.entities.ParticleSnow;
 import forestry.core.utils.VectUtil;
+
+//import forestry.core.entities.ParticleClimate;
+//import forestry.core.entities.ParticleHoneydust;
 
 @OnlyIn(Dist.CLIENT)
 public class ParticleRender {
@@ -56,7 +58,7 @@ public class ParticleRender {
 		}
 	}
 
-	public static void addBeeHiveFX(IBeeHousing housing, IBeeGenome genome, List<BlockPos> flowerPositions) {
+	public static void addBeeHiveFX(IBeeHousing housing, IGenome genome, List<BlockPos> flowerPositions) {
 		World world = housing.getWorldObj();
 		if (!shouldSpawnParticle(world)) {
 			return;
@@ -75,7 +77,7 @@ public class ParticleRender {
 			return;
 		}
 
-		int color = genome.getPrimary().getSpriteColour(0);
+		int color = genome.getPrimary(IAlleleBeeSpecies.class).getSpriteColour(0);
 
 		int randomInt = world.rand.nextInt(100);
 
@@ -236,11 +238,11 @@ public class ParticleRender {
 		int j = rand.nextInt(2) * 2 - 1;
 		int k = rand.nextInt(2) * 2 - 1;
 		double xPos = (double) pos.getX() + 0.5D + 0.25D * (double) j;
-		double yPos = (double) ((float) pos.getY() + rand.nextFloat());
+		double yPos = (float) pos.getY() + rand.nextFloat();
 		double zPos = (double) pos.getZ() + 0.5D + 0.25D * (double) k;
-		double xSpeed = (double) (rand.nextFloat() * (float) j);
+		double xSpeed = rand.nextFloat() * (float) j;
 		double ySpeed = ((double) rand.nextFloat() - 0.5D) * 0.125D;
-		double zSpeed = (double) (rand.nextFloat() * (float) k);
+		double zSpeed = rand.nextFloat() * (float) k;
 		ParticleManager effectRenderer = Minecraft.getInstance().particles;
 		//TODO particle data
 		Particle particle = effectRenderer.addParticle(RedstoneParticleData.REDSTONE_DUST, xPos, yPos, zPos, xSpeed, ySpeed, zSpeed);

@@ -17,7 +17,6 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.util.InputMappings;
@@ -26,6 +25,8 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -329,6 +330,16 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	@Override
 	public Minecraft getMC() {
 		return minecraft;
+	}
+
+	//TODO - not needed but I think this is fillGradient(...)
+//	@Override
+//	public void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6) {
+//		super.drawGradientRect(par1, par2, par3, par4, par5, par6);
+//	}
+
+	public int getBlitOffset() {
+		return blitOffset;
 	}
 
 	public List<Rectangle> getExtraGuiAreas() {

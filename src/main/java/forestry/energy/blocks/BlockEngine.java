@@ -10,20 +10,24 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.EnumMap;
-import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+
+import net.minecraftforge.common.ToolType;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.tiles.TileEngine;
@@ -32,32 +36,25 @@ import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 
 public class BlockEngine extends BlockBase<BlockTypeEngine> {
-	private static final EnumMap<Direction, List<AxisAlignedBB>> boundingBoxesForDirections = new EnumMap<>(Direction.class);
+	private static final EnumMap<Direction, VoxelShape> SHAPE_FOR_DIRECTIONS = new EnumMap<>(Direction.class);
 
 	static {
-		boundingBoxesForDirections.put(Direction.DOWN, ImmutableList.of(
-			new AxisAlignedBB(0.0, 0.5, 0.0, 1.0, 1.0, 1.0), new AxisAlignedBB(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
-		));
-		boundingBoxesForDirections.put(Direction.UP, ImmutableList.of(
-			new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0), new AxisAlignedBB(0.25, 0.5, 0.25, 0.75, 1.0, 0.75)
-		));
-		boundingBoxesForDirections.put(Direction.NORTH, ImmutableList.of(
-			new AxisAlignedBB(0.0, 0.0, 0.5, 1.0, 1.0, 1.0), new AxisAlignedBB(0.25, 0.25, 0.0, 0.75, 0.75, 0.5)
-		));
-		boundingBoxesForDirections.put(Direction.SOUTH, ImmutableList.of(
-			new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 1.0, 0.5), new AxisAlignedBB(0.25, 0.25, 0.5, 0.75, 0.75, 1.0)
-		));
-		boundingBoxesForDirections.put(Direction.WEST, ImmutableList.of(
-			new AxisAlignedBB(0.5, 0.0, 0.0, 1.0, 1.0, 1.0), new AxisAlignedBB(0.0, 0.25, 0.25, 0.5, 0.75, 0.75)
-		));
-		boundingBoxesForDirections.put(Direction.EAST, ImmutableList.of(
-			new AxisAlignedBB(0.0, 0.0, 0.0, 0.5, 1.0, 1.0), new AxisAlignedBB(0.5, 0.25, 0.25, 1.0, 0.75, 0.75)
-		));
+		SHAPE_FOR_DIRECTIONS.put(Direction.EAST, VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 6, 16, 16), Block.makeCuboidShape(6, 2, 2, 10, 14, 14), Block.makeCuboidShape(10, 4, 4, 16, 12, 12)));
+		SHAPE_FOR_DIRECTIONS.put(Direction.WEST, VoxelShapes.or(Block.makeCuboidShape(0, 4, 4, 6, 12, 12), Block.makeCuboidShape(6, 2, 2, 10, 14, 14), Block.makeCuboidShape(10, 0, 0, 16, 16, 16)));
+		SHAPE_FOR_DIRECTIONS.put(Direction.SOUTH, VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 16, 6), Block.makeCuboidShape(2, 2, 6, 14, 14, 10), Block.makeCuboidShape(4, 4, 10, 12, 12, 16)));
+		SHAPE_FOR_DIRECTIONS.put(Direction.NORTH, VoxelShapes.or(Block.makeCuboidShape(4, 4, 0, 12, 12, 6), Block.makeCuboidShape(2, 2, 6, 14, 14, 10), Block.makeCuboidShape(0, 0, 10, 16, 16, 16)));
+		SHAPE_FOR_DIRECTIONS.put(Direction.UP, VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 6, 16), Block.makeCuboidShape(2, 6, 2, 14, 10, 14), Block.makeCuboidShape(4, 10, 4, 12, 16, 12)));
+		SHAPE_FOR_DIRECTIONS.put(Direction.DOWN, VoxelShapes.or(Block.makeCuboidShape(0, 10, 0, 16, 16, 16), Block.makeCuboidShape(2, 6, 2, 14, 10, 14), Block.makeCuboidShape(4, 0, 4, 12, 6, 12)));
 	}
 
 	public BlockEngine(BlockTypeEngine blockType) {
-		super(blockType);
-//		setHarvestLevel("pickaxe", 0);	//TODO setToolType in item?
+		super(blockType, Properties.create(Material.IRON).harvestTool(ToolType.PICKAXE).harvestLevel(0));
+	}
+
+	@Override
+	public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+		Direction orientation = state.get(FACING);
+		return SHAPE_FOR_DIRECTIONS.get(orientation);
 	}
 
 	//TODO raytracing

@@ -8,12 +8,11 @@ import java.util.Map.Entry;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.state.IProperty;
-//import net.minecraft.client.renderer.block.statemap.IStateMapper;
-
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+//import net.minecraft.client.renderer.block.statemap.IStateMapper;
 //TODO - flatten to avoid statemapper?
 @OnlyIn(Dist.CLIENT)
 public abstract class ForestryStateMapper {//implements IStateMapper {

@@ -9,6 +9,8 @@ import net.minecraft.block.BlockState;
 
 import net.minecraftforge.common.BiomeDictionary;
 
+import genetics.api.mutation.IMutation;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 

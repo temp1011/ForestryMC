@@ -12,8 +12,8 @@ package forestry.database.network;
 
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdServer;
 import forestry.database.network.packets.PacketExtractItem;

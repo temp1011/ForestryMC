@@ -5,9 +5,10 @@ import java.util.List;
 
 import net.minecraft.potion.Effects;
 
-import forestry.api.apiculture.EnumBeeChromosome;
-import forestry.api.apiculture.IAlleleBeeEffect;
-import forestry.api.genetics.AlleleManager;
+import genetics.api.alleles.IAlleleRegistry;
+
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IAlleleBeeEffect;
 
 public class AlleleEffects {
 	public static final IAlleleBeeEffect effectNone;
@@ -44,7 +45,7 @@ public class AlleleEffects {
 			effectCreeper = new AlleleEffectCreeper(),
 			effectIgnition = new AlleleEffectIgnition(),
 			effectExploration = new AlleleEffectExploration(),
-			effectFestiveEaster = new AlleleEffectNone("festiveEaster", true),
+			effectFestiveEaster = new AlleleEffectNone("festive_easter", true),
 			effectSnowing = new AlleleEffectSnowing(),
 			effectDrunkard = new AlleleEffectPotion("drunkard", false, Effects.NAUSEA, 100),
 			effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList()),
@@ -55,9 +56,9 @@ public class AlleleEffects {
 		);
 	}
 
-	public static void registerAlleles() {
+	public static void registerAlleles(IAlleleRegistry registry) {
 		for (IAlleleBeeEffect beeEffect : beeEffects) {
-			AlleleManager.alleleRegistry.registerAllele(beeEffect, EnumBeeChromosome.EFFECT);
+			registry.registerAllele(beeEffect, BeeChromosomes.EFFECT);
 		}
 	}
 }

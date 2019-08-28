@@ -10,13 +10,10 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.config.Constants;
-import forestry.core.fluids.StandardTank;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.TankElement;
@@ -46,11 +43,7 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 
 	@Override
 	protected void onIndexUpdate(int index, ICarpenterRecipe recipe) {
-		selectedElement.add(new TankElement(91, 1, null, () -> {
-			IFluidTank t = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY, true, true);
-			t.fill(recipe.getFluidResource(), IFluidHandler.FluidAction.EXECUTE);
-			return t;
-		}, CARPENTER_TANK_OVERLAY));
+		selectedElement.add(new TankElement(91, 1, null, recipe.getFluidResource(), Constants.PROCESSOR_TANK_CAPACITY, CARPENTER_TANK_OVERLAY));
 		IDescriptiveRecipe gridRecipe = recipe.getCraftingGridRecipe();
 		NonNullList<NonNullList<ItemStack>> ingredients = gridRecipe.getRawIngredients();
 		for (int x = 0; x < 3; x++) {

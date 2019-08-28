@@ -17,11 +17,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.core.blocks.properties.PropertyAllele;
-import forestry.core.config.Constants;
 
 public class PropertyTree extends PropertyAllele<IAlleleTreeSpecies> {
 	private static final Map<String, IAlleleTreeSpecies> namesMap = new HashMap<>();
@@ -38,7 +39,7 @@ public class PropertyTree extends PropertyAllele<IAlleleTreeSpecies> {
 	@Override
 	public List<IAlleleTreeSpecies> getAllowedValues() {
 		List<IAlleleTreeSpecies> trees = new ArrayList<>();
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES)) {
 			if (allele instanceof IAlleleTreeSpecies) {
 				trees.add((IAlleleTreeSpecies) allele);
 			}
@@ -48,7 +49,7 @@ public class PropertyTree extends PropertyAllele<IAlleleTreeSpecies> {
 
 	@Override
 	public String getName(IAlleleTreeSpecies value) {
-		return value.getUID().replace(Constants.MOD_ID + ".tree", "").toLowerCase(Locale.ENGLISH);
+		return value.getRegistryName().getPath().replace("tree_", "").toLowerCase(Locale.ENGLISH);
 	}
 
 	@Override

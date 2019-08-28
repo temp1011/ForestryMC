@@ -10,15 +10,20 @@
 // ******************************************************************************/
 //package forestry.arboriculture.commands;
 //
+//import net.minecraft.command.CommandSource;
+//
+//import com.mojang.brigadier.CommandDispatcher;
+//import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+//
 //import forestry.core.commands.CommandMode;
 //import forestry.core.commands.CommandSaveStats;
 //import forestry.core.commands.ICommandModeHelper;
 //import forestry.core.commands.IStatsSaveHelper;
 //import forestry.core.commands.SubCommand;
 //
-//public class CommandTree extends SubCommand {
-////TODO commands
-//	public CommandTree() {
+//public class CommandTree {
+//
+//	public CommandTree(CommandDispatcher<CommandSource> dispatcher) {
 //		super("tree");
 //
 //		IStatsSaveHelper saveHelper = new TreeStatsSaveHelper();
@@ -28,6 +33,10 @@
 //		addChildCommand(new CommandTreeSpawn("spawnForest", new ForestSpawner()));
 //		addChildCommand(new CommandMode(modeHelper));
 //		addChildCommand(new CommandSaveStats(saveHelper, modeHelper));
+//		dispatcher.register(
+//			LiteralArgumentBuilder.literal("tree")
+//			.then()
+//		);
 //	}
 //
 //}

@@ -14,15 +14,12 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-//import net.minecraft.block.properties.IProperty;
-//import net.minecraft.block.properties.EnumProperty;
-//import net.minecraft.block.BlockStateContainer;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.EnumProperty;
@@ -35,19 +32,21 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-//import net.minecraftforge.common.property.ExtendedBlockState;
-//import net.minecraftforge.common.property.IExtendedBlockState;
-//import net.minecraftforge.common.property.IUnlistedProperty;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.core.IModelManager;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.tiles.TileUtil;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.tiles.TileFarm;
+
+//import net.minecraft.block.properties.IProperty;
+//import net.minecraft.block.properties.EnumProperty;
+//import net.minecraft.block.BlockStateContainer;
+//import net.minecraftforge.common.property.ExtendedBlockState;
+//import net.minecraftforge.common.property.IExtendedBlockState;
+//import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class BlockFarm extends BlockStructure {
 

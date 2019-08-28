@@ -13,7 +13,6 @@ package forestry.core.utils.datastructures;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-
 import forestry.core.utils.ItemStackUtil;
 
 public class ItemStackMap<T> extends StackMap<ItemStack, T> {

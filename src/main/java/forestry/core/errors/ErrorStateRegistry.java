@@ -18,10 +18,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.core.IErrorStateRegistry;
@@ -47,7 +47,7 @@ public class ErrorStateRegistry implements IErrorStateRegistry {
 
 	@Override
 	public void addAlias(IErrorState state, String name) {
-		if (!states.values().contains(state)) {
+		if (!states.containsValue(state)) {
 			throw new RuntimeException("Forestry Error State did not exist while trying to register alias.");
 		}
 
@@ -87,9 +87,9 @@ public class ErrorStateRegistry implements IErrorStateRegistry {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static void initSprites() {
+	public static void initSprites(TextureStitchEvent.Pre event) {
 		for (IErrorState code : states.values()) {
-			code.registerSprite();
+			code.registerSprite(event);
 		}
 	}
 }

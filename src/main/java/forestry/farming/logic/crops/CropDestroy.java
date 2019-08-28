@@ -19,8 +19,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.event.ForgeEventFactory;
 
@@ -56,7 +56,7 @@ public class CropDestroy extends Crop {
 	@Override
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		List<ItemStack> harvested = block.getDrops(blockState,(ServerWorld) world, pos, world.getTileEntity(pos));    //TODO - method safety
+		List<ItemStack> harvested = Block.getDrops(blockState, (ServerWorld) world, pos, world.getTileEntity(pos));    //TODO - method safety
 		NonNullList<ItemStack> nnHarvested = NonNullList.from(ItemStack.EMPTY, harvested.toArray(new ItemStack[0]));	//TODO very messy
 		float chance = ForgeEventFactory.fireBlockHarvesting(nnHarvested, world, pos, blockState, 0, 1.0F, false, null);
 

@@ -9,10 +9,11 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.world.server.ServerWorld;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.alleles.IAllele;
+
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 

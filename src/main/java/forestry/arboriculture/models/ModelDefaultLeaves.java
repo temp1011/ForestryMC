@@ -23,13 +23,14 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
+import net.minecraftforge.client.model.data.IModelData;
+
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -75,11 +76,11 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 		Block block = Block.getBlockFromItem(stack.getItem());
 		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "ItemStack must be for default leaves.");
 		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
-		return new Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());
+		return new Key(bBlock.getTreeDefinition(), Proxies.render.fancyGraphicsEnabled());
 	}
 
 	@Override
-	protected ModelDefaultLeaves.Key getWorldKey(BlockState state) {
+	protected ModelDefaultLeaves.Key getWorldKey(BlockState state, IModelData extraData) {
 		Block block = state.getBlock();
 		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "state must be for default leaves.");
 		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
@@ -89,12 +90,12 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 	}
 
 	@Override
-	protected void bakeBlock(BlockDefaultLeaves block, Key key, ModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockDefaultLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
 		TreeDefinition treeDefinition = key.definition;
 		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 
-		ITreeGenome genome = treeDefinition.getGenome();
-		IAlleleTreeSpecies species = genome.getPrimary();
+		IGenome genome = treeDefinition.getGenome();
+		IAlleleTreeSpecies species = genome.getPrimary(IAlleleTreeSpecies.class);
 		ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
 
 		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);
@@ -107,11 +108,12 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 		baker.setParticleSprite(leafSprite);
 	}
 
+
 	@Override
-	protected IBakedModel bakeModel(BlockState state, Key key, BlockDefaultLeaves block) {
+	protected IBakedModel bakeModel(BlockState state, Key key, BlockDefaultLeaves block, IModelData extraData) {
 		ModelBaker baker = new ModelBaker();
 
-		bakeBlock(block, key, baker, false);
+		bakeBlock(block, extraData, key, baker, false);
 
 		blockModel = baker.bakeModel(false);
 		onCreateModel(blockModel);

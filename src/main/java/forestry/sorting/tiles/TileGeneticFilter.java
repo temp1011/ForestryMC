@@ -23,13 +23,15 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import forestry.api.genetics.AlleleManager;
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IRootDefinition;
+
 import forestry.api.genetics.GeneticCapabilities;
 import forestry.api.genetics.IFilterData;
 import forestry.api.genetics.IFilterLogic;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.genetics.ISpeciesType;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
@@ -140,14 +142,15 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	}
 
 	public Collection<Direction> getValidDirections(ItemStack itemStack, Direction from) {
-		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
 		IIndividual individual = null;
-		ISpeciesType type = null;
-		if (root != null) {
-			individual = root.getMember(itemStack);
-			type = root.getType(itemStack);
+		IOrganismType type = null;
+		if (definition.isRootPresent()) {
+			IForestrySpeciesRoot<IIndividual> root = definition.get();
+			individual = root.create(itemStack).orElse(null);
+			type = root.getTypes().getType(itemStack).orElse(null);
 		}
-		IFilterData filterData = new FilterData(root, individual, type);
+		IFilterData filterData = new FilterData(definition, individual, type);
 		List<Direction> validFacings = new LinkedList<>();
 		for (Direction facing : Direction.VALUES) {
 			if (facing == from) {

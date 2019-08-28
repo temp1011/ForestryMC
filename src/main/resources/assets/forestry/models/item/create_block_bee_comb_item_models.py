@@ -4,7 +4,7 @@
 
 combs = ["honey", "cocoa", "simmering", "stringy", "frozen", "dripping", "silky","parched", "mysterious", "irradiated", "powdery", "reddened", "darkened", "omega", "wheaten", "mossy", "mellow"]
 for c in combs:
-    with open("block_bee_combs_" + c + ".json", "w") as f:
+    with open("block_bee_comb_" + c + ".json", "w") as f:
         f.write("""{
     "parent": "forestry:block/block_bee_combs",
     "display": {

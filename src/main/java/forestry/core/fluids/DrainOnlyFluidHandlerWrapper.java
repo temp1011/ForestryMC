@@ -30,21 +30,23 @@ public class DrainOnlyFluidHandlerWrapper implements IFluidHandler {
 
 	@Override
 	public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
-		return false;
+		return internalFluidHandler.isFluidValid(tank, stack);
 	}
 
 	@Override
-	public int fill(FluidStack resource, FluidAction doFill) {
+	public int fill(FluidStack resource, FluidAction action) {
 		return 0;
 	}
 
+	@Nonnull
 	@Override
-	public FluidStack drain(FluidStack resource, FluidAction doDrain) {
-		return internalFluidHandler.drain(resource, doDrain);
+	public FluidStack drain(FluidStack resource, FluidAction action) {
+		return internalFluidHandler.drain(resource, action);
 	}
 
+	@Nonnull
 	@Override
-	public FluidStack drain(int maxDrain, FluidAction doDrain) {
-		return internalFluidHandler.drain(maxDrain, doDrain);
+	public FluidStack drain(int maxDrain, FluidAction action) {
+		return internalFluidHandler.drain(maxDrain, action);
 	}
 }

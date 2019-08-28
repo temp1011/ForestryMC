@@ -19,12 +19,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
-//import net.minecraftforge.common.property.IExtendedBlockState;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+//import net.minecraftforge.common.property.IExtendedBlockState;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class ModelBlockCustom<B extends Block, K> implements IBakedModel {

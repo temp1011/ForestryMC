@@ -11,6 +11,11 @@ import java.util.Collections;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+
 import forestry.api.apiculture.IBeekeepingMode;
 
 /**
@@ -72,7 +77,7 @@ public interface IBreedingTracker {
 	boolean isDiscovered(IAlleleSpecies species);
 
 	/**
-	 * @return A collection that contains the {@link IAllele#getUID()}s of all discovered species.
+	 * @return A collection that contains the {@link IAllele#getRegistryName()}s of all discovered species.
 	 */
 	default Collection<String> getDiscoveredSpecies() {
 		return Collections.emptyList();
@@ -99,8 +104,8 @@ public interface IBreedingTracker {
 	void synchToPlayer(PlayerEntity player);
 
 	/* LOADING & SAVING */
-	void decodeFromNBT(CompoundNBT CompoundNBT);
+	void decodeFromNBT(CompoundNBT compound);
 
-	void encodeToNBT(CompoundNBT CompoundNBT);
+	void encodeToNBT(CompoundNBT compound);
 
 }

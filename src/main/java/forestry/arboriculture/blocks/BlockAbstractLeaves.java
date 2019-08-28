@@ -1,25 +1,18 @@
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -29,8 +22,6 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
 
 import com.mojang.authlib.GameProfile;
 
@@ -38,14 +29,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.arboriculture.ITree;
-import forestry.api.core.IItemModelRegister;
-import forestry.arboriculture.LeafDecayHelper;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.items.ItemGrafter;
 import forestry.core.blocks.IColoredBlock;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.BlockUtil;
 
 /**
  * Parent class for shared behavior between {@link BlockDefaultLeaves} and {@link BlockForestryLeaves}
@@ -66,11 +53,6 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	protected abstract ITree getTree(IBlockReader world, BlockPos pos);
 
 	@Override
-	public void randomTick(BlockState state, World world, BlockPos pos, Random rand) {
-		LeafDecayHelper.leafDecay(this, world, pos);
-	}
-
-	@Override
 	public final void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
 		// creative menu shows BlockDecorativeLeaves instead of these
 	}
@@ -82,7 +64,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 			return ItemStack.EMPTY;
 		}
 
-		return tree.getGenome().getDecorativeLeaves();
+		return tree.getGenome().getPrimary(IAlleleTreeSpecies.class).getLeafProvider().getDecorativeLeaves();
 	}
 
 	//TODO since loot done in loot table I don't know if this works
@@ -90,10 +72,10 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	public List<ItemStack> onSheared(ItemStack item, IWorld world, BlockPos pos, int fortune) {
 		ITree tree = getTree(world, pos);
 		if (tree == null) {
-			tree = TreeDefinition.Oak.getIndividual();
+			tree = TreeDefinition.Oak.createIndividual();
 		}
 
-		ItemStack decorativeLeaves = tree.getGenome().getDecorativeLeaves();
+		ItemStack decorativeLeaves = tree.getGenome().getPrimary(IAlleleTreeSpecies.class).getLeafProvider().getDecorativeLeaves();
 		if (decorativeLeaves.isEmpty()) {
 			return Collections.emptyList();
 		} else {
@@ -104,7 +86,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		ITree tree = getTree(worldIn, pos);
-		if (tree != null && TreeDefinition.Willow.getUID().equals(tree.getIdent())) {
+		if (tree != null && TreeDefinition.Willow.getUID().equals(tree.getIdentifier())) {
 			return VoxelShapes.empty();
 		}
 		return super.getCollisionShape(state, worldIn, pos, context);

@@ -17,20 +17,17 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
@@ -118,7 +115,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 			FluidHelper.drainContainers(tankManager, this, InventoryStill.SLOT_CAN);
 
 			FluidStack fluidStack = productTank.getFluid();
-			if (!fluidStack.isEmpty()) {
+			if (fluidStack != null) {
 				FluidHelper.fillContainers(tankManager, this, InventoryStill.SLOT_RESOURCE, InventoryStill.SLOT_PRODUCT, fluidStack.getFluid(), true);
 			}
 		}
@@ -131,7 +128,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		FluidStack output = currentRecipe.getOutput();
 
 		FluidStack product = new FluidStack(output, output.getAmount() * cycles);
-		productTank.fill(product, IFluidHandler.FluidAction.EXECUTE);
+		productTank.fillInternal(product, IFluidHandler.FluidAction.EXECUTE);
 
 		bufferedLiquid = null;
 
@@ -160,13 +157,13 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 		if (hasRecipe) {
 			FluidStack fluidStack = currentRecipe.getOutput();
-			hasTankSpace = productTank.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount();
+			hasTankSpace = productTank.fillInternal(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount();
 			if (bufferedLiquid == null) {
 				int cycles = currentRecipe.getCyclesPerUnit();
 				FluidStack input = currentRecipe.getInput();
 				int drainAmount = cycles * input.getAmount();
 				FluidStack drained = resourceTank.drain(drainAmount, IFluidHandler.FluidAction.SIMULATE);
-				hasLiquidResource = !drained.isEmpty() && drained.getAmount() == drainAmount;
+				hasLiquidResource = drained != null && drained.getAmount() == drainAmount;
 				if (hasLiquidResource) {
 					bufferedLiquid = new FluidStack(input, drainAmount);
 					resourceTank.drain(drainAmount, IFluidHandler.FluidAction.EXECUTE);

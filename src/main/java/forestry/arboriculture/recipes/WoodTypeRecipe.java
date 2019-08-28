@@ -16,9 +16,9 @@
 //import java.util.Comparator;
 //
 //import net.minecraft.block.Block;
-//import net.minecraft.item.Items;
 //import net.minecraft.inventory.CraftingInventory;
 //import net.minecraft.item.ItemStack;
+//import net.minecraft.item.Items;
 //import net.minecraft.util.NonNullList;
 //import net.minecraft.world.World;
 //
@@ -32,7 +32,7 @@
 //import forestry.core.utils.ItemStackUtil;
 //
 //public class WoodTypeRecipe extends WoodTypeRecipeBase implements IShapedRecipe {
-////TODO do this with data generators and just have 100s of recipes.
+//
 //	private int width;
 //	private int height;
 //	private static final ItemStack STICK_STACK = new ItemStack(Items.STICK);

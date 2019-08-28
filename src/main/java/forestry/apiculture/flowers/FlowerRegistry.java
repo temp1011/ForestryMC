@@ -25,24 +25,26 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.core.IBlockPosPredicate;
 import forestry.api.genetics.IFlowerAcceptableRule;
 import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
-import forestry.api.genetics.IIndividual;
 import forestry.core.utils.BlockStateSet;
 import forestry.core.utils.VectUtil;
 import forestry.core.utils.WeightedCollection;
@@ -127,8 +129,8 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		}
 	}
 
-	private static Vec3i getArea(IBeeGenome genome, IBeeModifier beeModifier) {
-		Vec3i genomeTerritory = genome.getTerritory();
+	private static Vec3i getArea(IGenome genome, IBeeModifier beeModifier) {
+		Vec3i genomeTerritory = genome.getActiveValue(BeeChromosomes.TERRITORY);
 		float housingModifier = beeModifier.getTerritoryModifier(genome, 1f);
 		return VectUtil.scale(genomeTerritory, housingModifier * 3.0f);
 	}

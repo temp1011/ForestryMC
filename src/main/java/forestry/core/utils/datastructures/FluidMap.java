@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils.datastructures;
 
+
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
 
@@ -30,8 +31,8 @@ public class FluidMap<T> extends StackMap<Fluid, T> {
 		if (b instanceof String) {
 			return b.equals(a.getRegistryName().toString());
 		}
-		if(b instanceof ResourceLocation) {
-			return a.getRegistryName().equals(b);
+		if (b instanceof ResourceLocation) {
+			return b.equals(a.getRegistryName());
 		}
 		return false;
 	}
@@ -51,6 +52,9 @@ public class FluidMap<T> extends StackMap<Fluid, T> {
 		}
 		if (key instanceof String) {
 			return ForgeRegistries.FLUIDS.getValue(new ResourceLocation((String) key));
+		}
+		if (key instanceof ResourceLocation) {
+			return ForgeRegistries.FLUIDS.getValue((ResourceLocation) key);
 		}
 		return null;
 	}

@@ -15,17 +15,15 @@ import java.util.Collection;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
-
-//import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.fuels.FuelManager;
 import forestry.core.ModuleCore;
@@ -42,6 +40,8 @@ import forestry.core.utils.InventoryUtil;
 import forestry.energy.ModuleEnergy;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
+
+//import net.minecraftforge.fml.common.Optional;
 
 //import buildcraft.api.statements.ITriggerExternal;
 

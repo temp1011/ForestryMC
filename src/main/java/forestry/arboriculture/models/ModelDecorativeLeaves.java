@@ -18,18 +18,20 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
+import net.minecraftforge.client.model.data.IModelData;
+
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -79,7 +81,7 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 	}
 
 	@Override
-	protected Key getWorldKey(BlockState state) {
+	protected Key getWorldKey(BlockState state, IModelData extraData) {
 		Block block = state.getBlock();
 		Preconditions.checkArgument(block instanceof BlockDecorativeLeaves, "state must be for decorative leaves.");
 		BlockDecorativeLeaves bBlock = (BlockDecorativeLeaves) block;
@@ -87,12 +89,12 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 	}
 
 	@Override
-	protected void bakeBlock(BlockDecorativeLeaves block, Key key, ModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockDecorativeLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
 		TreeDefinition treeDefinition = key.definition;
 		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 
-		ITreeGenome genome = treeDefinition.getGenome();
-		IAlleleTreeSpecies species = genome.getPrimary();
+		IGenome genome = treeDefinition.getGenome();
+		IAlleleTreeSpecies species = genome.getPrimary(IAlleleTreeSpecies.class);
 		ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
 
 		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);
@@ -102,7 +104,7 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 		baker.addBlockModel(null, leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 
 		// Render overlay for fruit leaves.
-		ResourceLocation fruitSpriteLocation = genome.getFruitProvider().getDecorativeSprite();
+		ResourceLocation fruitSpriteLocation = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getDecorativeSprite();
 		if (fruitSpriteLocation != null) {
 			TextureAtlasSprite fruitSprite = map.getAtlasSprite(fruitSpriteLocation.toString());
 			baker.addBlockModel(null, fruitSprite, BlockAbstractLeaves.FRUIT_COLOR_INDEX);
@@ -113,10 +115,10 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 	}
 
 	@Override
-	protected IBakedModel bakeModel(BlockState state, Key key, BlockDecorativeLeaves block) {
+	protected IBakedModel bakeModel(BlockState state, Key key, BlockDecorativeLeaves block, IModelData extraData) {
 		ModelBaker baker = new ModelBaker();
 
-		bakeBlock(block, key, baker, false);
+		bakeBlock(block, extraData, key, baker, false);
 
 		blockModel = baker.bakeModel(false);
 		onCreateModel(blockModel);

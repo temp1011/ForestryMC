@@ -11,12 +11,11 @@
 package forestry.apiculture.entities;
 
 import javax.annotation.Nullable;
-
 import java.util.EnumSet;
 
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;

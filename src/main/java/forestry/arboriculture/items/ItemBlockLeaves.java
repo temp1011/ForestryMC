@@ -10,20 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
@@ -55,20 +50,18 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		if (Translator.canTranslateToLocal(customTreeKey)) {
 			return new TranslationTextComponent(customTreeKey);
 		}
-		String localizedName = Translator.translateToLocal(unlocalizedSpeciesName);
-		String leaves = Translator.translateToLocal("for.trees.grammar.leaves.type");
 
-		ITextComponent grammar = new TranslationTextComponent("for.trees.grammar.leaves", localizedName, leaves);
-		//TODO textcomponent formatting
-//		return grammar.replaceAll("%SPECIES", localizedName).replaceAll("%TYPE", leaves);
-		return grammar;
+		ITextComponent localizedName = new TranslationTextComponent(unlocalizedSpeciesName);
+
+		ITextComponent leaves = new TranslationTextComponent("for.trees.grammar.leaves.type");
+		return new TranslationTextComponent("for.trees.grammar.leaves", localizedName, leaves);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
+	public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
 		if (itemStack.getTag() == null) {
-			return ModuleArboriculture.proxy.getFoliageColorBasic();
+			return ModuleArboriculture.proxy.getFoliageColorDefault();
 		}
 
 		TileLeaves tileLeaves = new TileLeaves();
@@ -81,11 +74,5 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 			return tileLeaves.getFoliageColour(player);
 		}
 	}
-	//TODO
-//
-//	@Override
-//	public boolean placeBlockAt(ItemStack itemStack, PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, BlockState newState) {
-//		return false;
-//	}
 
 }

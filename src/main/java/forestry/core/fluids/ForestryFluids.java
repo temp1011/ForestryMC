@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
@@ -36,38 +37,11 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import forestry.core.items.DrinkProperties;
 import forestry.core.render.ForestryResource;
 
-//TODO - fluids
 public enum ForestryFluids {
-
-	BIO_ETHANOL(new Color(255, 111, 0), 790, 1000) {
-		@Override
-		public Block makeBlock() {
-			return new BlockForestryFluid(this, 300, true);
-		}
-	},
-	BIOMASS(new Color(100, 132, 41), 400, 6560) {
-		@Override
-		public Block makeBlock() {
-			return new BlockForestryFluid(this, 100, true);
-		}
-	},
-	GLASS(new Color(164, 164, 164), 2400, 10000) {
-		@Override
-		public int getTemperature() {
-			return 1200;
-		}
-
-		@Override
-		public Block makeBlock() {
-			return new BlockForestryFluid(this, 0, true);
-		}
-	},
+	BIO_ETHANOL(new Color(255, 111, 0), 790, 1000, 300),
+	BIOMASS(new Color(100, 132, 41), 400, 6560, 100),
+	GLASS(new Color(164, 164, 164), 2400, 10000, 0),
 	FOR_HONEY(new Color(255, 196, 35), 1420, 75600) {
-		@Override
-		public Block makeBlock() {
-			return new BlockForestryFluid(this);
-		}
-
 		@Override
 		public DrinkProperties getDrinkProperties() {
 			return new DrinkProperties(2, 0.2f, 64);
@@ -78,18 +52,8 @@ public enum ForestryFluids {
 		public int getTemperature() {
 			return 265;
 		}
-
-		@Override
-		public Block makeBlock() {
-			return new BlockForestryFluid(this);
-		}
 	},
 	JUICE(new Color(168, 201, 114)) {
-		@Override
-		public Block makeBlock() {
-			return new BlockForestryFluid(this);
-		}
-
 		@Override
 		public DrinkProperties getDrinkProperties() {
 			return new DrinkProperties(2, 0.2f, 32);
@@ -97,30 +61,14 @@ public enum ForestryFluids {
 	},
 	MILK(new Color(255, 255, 255), 1030, 3000) {
 		@Override
-		public Block makeBlock() {
-			return  new BlockForestryFluid(this);
-		}
-
-
-		@Override
 		public List<ItemStack> getOtherContainers() {
 			return Collections.singletonList(
 					new ItemStack(Items.MILK_BUCKET)
 			);
 		}
 	},
-	SEED_OIL(new Color(255, 255, 168), 885, 5000) {
-		@Override
-		public Block makeBlock() {
-			return new BlockForestryFluid(this, 2, true);
-		}
-	},
-	SHORT_MEAD(new Color(239, 154, 56), 1000, 1200) {
-		@Override
-		public Block makeBlock() {
-			return new BlockForestryFluid(this, 4, true);
-		}
-
+	SEED_OIL(new Color(255, 255, 168), 885, 5000, 2),
+	SHORT_MEAD(new Color(239, 154, 56), 1000, 1200, 4) {
 		@Override
 		public DrinkProperties getDrinkProperties() {
 			return new DrinkProperties(1, 0.2f, 32);
@@ -128,16 +76,25 @@ public enum ForestryFluids {
 
 	};
 
-	private static final Map<ResourceLocation, ForestryFluids> tagToFluid = new HashMap<>();
+	private static final Map<ResourceLocation, Fluids> tagToFluid = new HashMap<>();
+	private static final Map<ResourceLocation, Fluids> tagToFluidFlowing = new HashMap<>();
 
 	static {
 		for (ForestryFluids fluidDefinition : ForestryFluids.values()) {
 			tagToFluid.put(fluidDefinition.getFluid().getRegistryName(), fluidDefinition);
 		}
+		for (Fluids fluidDefinition : Fluids.values()) {
+			tagToFluidFlowing.put(fluidDefinition.getFlowingFluid().getRegistryName(), fluidDefinition);
+		}
 	}
 
 	private final ResourceLocation tag;
-	private final int density, viscosity;
+	private final int density, viscosity, flammability;
+	Block sourceBlock = Blocks.AIR;
+	Block flowingBlock = Blocks.AIR;
+	Fluid sourceFluid = net.minecraft.fluid.Fluids.EMPTY;
+	Fluid flowingFluid = net.minecraft.fluid.Fluids.EMPTY;
+
 
 	private final Color particleColor;
 
@@ -148,15 +105,36 @@ public enum ForestryFluids {
 	}
 
 	ForestryFluids(Color particleColor, int density, int viscosity) {
+		this(particleColor, density, viscosity, -1);
+	}
+
+	ForestryFluids(Color particleColor, int density, int viscosity, int flammability) {
 		this.tag = name().toLowerCase(Locale.ENGLISH).replace('_', '.');
 		this.particleColor = particleColor;
 		this.density = density;
 		this.viscosity = viscosity;
+		this.flammability = flammability;
 
-		resources[0] = new ForestryResource("blocks/liquid/" + getTag() + "_still");
+		resources[0] = new ForestryResource("block/liquid/" + getTag() + "_still");
 		if (flowTextureExists()) {
-			resources[1] = new ForestryResource("blocks/liquid/" + getTag() + "_flow");
+			resources[1] = new ForestryResource("block/liquid/" + getTag() + "_flow");
 		}
+	}
+
+	public void setFlowingBlock(Block flowingBlock) {
+		this.flowingBlock = flowingBlock;
+	}
+
+	public void setSourceBlock(Block sourceBlock) {
+		this.sourceBlock = sourceBlock;
+	}
+
+	public void setSourceFluid(Fluid sourceFluid) {
+		this.sourceFluid = sourceFluid;
+	}
+
+	public void setFlowingFluid(Fluid flowingFluid) {
+		this.flowingFluid = flowingFluid;
 	}
 
 	public int getTemperature() {
@@ -175,14 +153,24 @@ public enum ForestryFluids {
 		return viscosity;
 	}
 
-	@Nullable
+	//@Nullable
 	public final Fluid getFluid() {
-		return ForgeRegistries.FLUIDS.getValue(getTag());
+		//return ForgeRegistries.FLUIDS.getValue(new ResourceLocation(Constants.MOD_ID, getTag()));
+		return sourceFluid;
+	}
+
+	//@Nullable
+	public final Fluid getFlowing() {
+		//return ForgeRegistries.FLUIDS.getValue(new ResourceLocation(Constants.MOD_ID, getTag() + "_flowing"));
+		return flowingFluid;
 	}
 
 	public final FluidStack getFluid(int mb) {
 		Fluid fluid = getFluid();
-		return fluid == null ? FluidStack.EMPTY : new FluidStack(fluid, mb);
+		if (fluid == Fluids.EMPTY) {
+			return FluidStack.EMPTY;
+		}
+		return new FluidStack(fluid, mb);
 	}
 
 	public final Color getParticleColor() {
@@ -197,20 +185,27 @@ public enum ForestryFluids {
 		return getFluid() == fluidStack.getFluid();
 	}
 
-	public static boolean areEqual(@Nullable Fluid fluid, FluidStack fluidStack) {
+	public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
 		return fluid == fluidStack.getFluid();
 	}
 
 	@Nullable
-	public static ForestryFluids getFluidDefinition(@Nullable FluidStack fluidStack) {
-		if (fluidStack != null) {
-			Fluid fluid = fluidStack.getFluid();
-			if (fluid != null) {
-				ForestryFluids fluidDefinition = tagToFluid.get(fluid.getRegistryName());
-				if (fluidDefinition != null) {
-					return fluidDefinition;
-				}
+	public static Fluids getFluidDefinition(Fluid fluid) {
+		if (fluid instanceof ForestryFluid) {
+			if (((ForestryFluid) fluid).flowing) {
+				return tagToFluidFlowing.get(fluid.getRegistryName().getPath());
+			} else {
+				return tagToFluid.get(fluid.getRegistryName().getPath());
 			}
+		}
+
+		return null;
+	}
+
+	@Nullable
+	public static ForestryFluids getFluidDefinition(FluidStack fluidStack) {
+		if (!fluidStack.isEmpty()) {
+			return getFluidDefinition(fluidStack.getFluid());
 		}
 
 		return null;
@@ -225,10 +220,11 @@ public enum ForestryFluids {
 
 	/**
 	 * Create a FluidBlock for this fluid.
+	 * @param flowing
 	 */
 	@Nullable
-	public Block makeBlock() {
-		return null;
+	public Block makeBlock(boolean flowing) {
+		return new BlockForestryFluid(this, Math.max(flammability, 0), flammability > 0);
 	}
 
 	/**
@@ -244,7 +240,7 @@ public enum ForestryFluids {
 			return true;
 		}
 		try {
-			ResourceLocation resourceLocation = new ForestryResource("blocks/liquid/" + getTag() + "_flow");
+			ResourceLocation resourceLocation = new ForestryResource("block/liquid/" + getTag() + "_flow");
 			Minecraft minecraft = Minecraft.getInstance();
 			if (minecraft != null) {    //TODO - is it correct
 				IResourceManager resourceManager = minecraft.getResourceManager();

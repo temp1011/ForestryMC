@@ -22,16 +22,14 @@ import net.minecraft.client.renderer.model.BlockFaceUV;
 import net.minecraft.client.renderer.model.BlockPartFace;
 import net.minecraft.client.renderer.model.FaceBakery;
 import net.minecraft.client.renderer.model.ModelRotation;
-import net.minecraft.client.renderer.texture.MissingTextureSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.models.ModelManager;
 
 
@@ -81,7 +79,7 @@ public final class ModelBaker {
 	}
 
 	public void addFace(Direction facing, TextureAtlasSprite sprite) {
-		if (!(sprite instanceof MissingTextureSprite)){//sprite != MissingTextureSprite) { TODO - still not sure where this is
+		if (sprite != Minecraft.getInstance().getTextureMap().missingImage) {
 			faces.add(new ModelBakerFace(facing, colorIndex, sprite));
 		}
 	}

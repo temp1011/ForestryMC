@@ -7,12 +7,15 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.ITree;
+
+import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganism;
+
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.DatabaseMode;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.core.ModuleCore;
@@ -36,8 +39,12 @@ public class TreePlugin extends DatabasePlugin<ITree> {
 		NonNullList<ItemStack> treeList = NonNullList.create();
 		ModuleArboriculture.getItems().sapling.addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
-			IAlleleTreeSpecies species = TreeGenome.getSpecies(treeStack);
-			iconStacks.put(species.getUID(), treeStack);
+			IOrganism<?> organism = GeneticHelper.getOrganism(treeStack);
+			if (organism.isEmpty()) {
+				continue;
+			}
+			IAlleleTreeSpecies species = organism.getAllele(TreeChromosomes.SPECIES, true);
+			iconStacks.put(species.getRegistryName().toString(), treeStack);
 		}
 	}
 

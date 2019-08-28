@@ -29,19 +29,25 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+import genetics.api.root.components.ComponentKeys;
+
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.NetworkUtil;
@@ -56,23 +62,24 @@ public class ItemResearchNote extends ItemForestry {
 		public static final EnumNoteType[] VALUES = values();
 
 		@Nullable
-		private static IMutation getEncodedMutation(ISpeciesRoot root, CompoundNBT compound) {
-			IAllele allele0 = AlleleManager.alleleRegistry.getAllele(compound.getString("AL0"));
-			IAllele allele1 = AlleleManager.alleleRegistry.getAllele(compound.getString("AL1"));
+		private static IMutation getEncodedMutation(IIndividualRoot<IIndividual> root, CompoundNBT compound) {
+			IAllele allele0 = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(compound.getString("AL0")).orElse(null);
+			IAllele allele1 = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(compound.getString("AL1")).orElse(null);
 			if (allele0 == null || allele1 == null) {
 				return null;
 			}
 
 			IAllele result = null;
 			if (compound.contains("RST")) {
-				result = AlleleManager.alleleRegistry.getAllele(compound.getString("RST"));
+				result = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(compound.getString("RST")).orElse(null);
 			}
 
 			IMutation encoded = null;
-			for (IMutation mutation : root.getCombinations(allele0)) {
+			IMutationContainer<IIndividual, IMutation> container = root.getComponent(ComponentKeys.MUTATIONS);
+			for (IMutation mutation : container.getCombinations(allele0)) {
 				if (mutation.isPartner(allele1)) {
 					if (result == null
-							|| mutation.getTemplate()[0].getUID().equals(result.getUID())) {
+						|| mutation.getTemplate()[0].getRegistryName().equals(result.getRegistryName())) {
 						encoded = mutation;
 						break;
 					}
@@ -90,24 +97,25 @@ public class ItemResearchNote extends ItemForestry {
 			}
 
 			if (this == MUTATION) {
-				ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(compound.getString("ROT"));
-				if (root == null) {
+				IRootDefinition<IIndividualRoot> definition = GeneticsAPI.apiInstance.getRoot(compound.getString("ROT"));
+				if (!definition.isRootPresent()) {
 					return tooltips;
 				}
+				IIndividualRoot root = definition.get();
 
 				IMutation encoded = getEncodedMutation(root, compound);
 				if (encoded == null) {
 					return tooltips;
 				}
 
-				String species1 = encoded.getAllele0().getAlleleName();
-				String species2 = encoded.getAllele1().getAlleleName();
+				ITextComponent species1 = encoded.getFirstParent().getDisplayName();
+				ITextComponent species2 = encoded.getSecondParent().getDisplayName();
 				String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH);
 				String mutationChance = Translator.translateToLocal("for.researchNote.chance." + mutationChanceKey);
-				String speciesResult = encoded.getTemplate()[root.getSpeciesChromosomeType().ordinal()].getAlleleName();
+				ITextComponent speciesResult = encoded.getResultingSpecies().getDisplayName();
 
 				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.0"));
-				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.1", species1, species2));// TODO sort out format in lang file.replace("%SPEC1", species1).replace("%SPEC2", species2));
+				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.1", species1, species2));
 				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.2", mutationChance));
 				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.3", speciesResult));
 
@@ -117,47 +125,48 @@ public class ItemResearchNote extends ItemForestry {
 					}
 				}
 			} else if (this == SPECIES) {
-				IAlleleSpecies allele0 = (IAlleleSpecies) AlleleManager.alleleRegistry.getAllele(compound.getString("AL0"));
+				IAlleleForestrySpecies allele0 = (IAlleleForestrySpecies) GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(compound.getString("AL0")).orElse(null);
 				if (allele0 == null) {
 					return tooltips;
 				}
-				ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(compound.getString("ROT"));
-				if (root == null) {
+				IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString("ROT"));
+				if (!definition.isRootPresent()) {
 					return tooltips;
 				}
 
 				tooltips.add(new TranslationTextComponent("researchNote.discovered.0"));
-				tooltips.add(new TranslationTextComponent("for.researchNote.discovered.1", allele0.getAlleleName(), allele0.getBinomial()));
+				tooltips.add(new TranslationTextComponent("for.researchNote.discovered.1", allele0.getDisplayName(), allele0.getBinomial()));
 			}
 
 			return tooltips;
 		}
 
 		public boolean registerResults(World world, PlayerEntity player, CompoundNBT compound) {
-			if (this == NONE || world.isRemote) {
+			if (this == NONE) {
 				return false;
 			}
 
 			if (this == MUTATION) {
-				ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(compound.getString("ROT"));
-				if (root == null) {
+				IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString("ROT"));
+				if (!definition.isRootPresent()) {
 					return false;
 				}
+				IIndividualRoot<IIndividual> root = definition.get();
 
 				IMutation encoded = getEncodedMutation(root, compound);
 				if (encoded == null) {
 					return false;
 				}
 
-				IBreedingTracker tracker = encoded.getRoot().getBreedingTracker((ServerWorld) world, player.getGameProfile());
+				IBreedingTracker tracker = ((IForestrySpeciesRoot) encoded.getRoot()).getBreedingTracker(world, player.getGameProfile());
 				if (tracker.isResearched(encoded)) {
 					player.sendMessage(new TranslationTextComponent("for.chat.cannotmemorizeagain"));
 					return false;
 				}
 
-				IAlleleSpecies species0 = encoded.getAllele0();
-				IAlleleSpecies species1 = encoded.getAllele1();
-				IAlleleSpecies speciesResult = (IAlleleSpecies) encoded.getTemplate()[root.getSpeciesChromosomeType().ordinal()];
+				IAlleleSpecies species0 = encoded.getFirstParent();
+				IAlleleSpecies species1 = encoded.getSecondParent();
+				IAlleleSpecies speciesResult = encoded.getResultingSpecies();
 
 				tracker.registerSpecies(species0);
 				tracker.registerSpecies(species1);
@@ -167,9 +176,9 @@ public class ItemResearchNote extends ItemForestry {
 				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote"));
 
 				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote2",
-						TextFormatting.GRAY + species0.getAlleleName(),
-						TextFormatting.GRAY + species1.getAlleleName(),
-						TextFormatting.GREEN + speciesResult.getAlleleName()));
+					species0.getDisplayName().applyTextStyle(TextFormatting.GRAY),
+					species1.getDisplayName().applyTextStyle(TextFormatting.GRAY),
+					speciesResult.getDisplayName().applyTextStyle(TextFormatting.GREEN)));
 
 				return true;
 			}
@@ -181,9 +190,9 @@ public class ItemResearchNote extends ItemForestry {
 		public static ResearchNote createMutationNote(GameProfile researcher, IMutation mutation) {
 			CompoundNBT compound = new CompoundNBT();
 			compound.putString("ROT", mutation.getRoot().getUID());
-			compound.putString("AL0", mutation.getAllele0().getUID());
-			compound.putString("AL1", mutation.getAllele1().getUID());
-			compound.putString("RST", mutation.getTemplate()[0].getUID());
+			compound.putString("AL0", mutation.getFirstParent().getRegistryName().toString());
+			compound.putString("AL1", mutation.getSecondParent().getRegistryName().toString());
+			compound.putString("RST", mutation.getResultingSpecies().getRegistryName().toString());
 			return new ResearchNote(researcher, MUTATION, compound);
 		}
 
@@ -196,14 +205,14 @@ public class ItemResearchNote extends ItemForestry {
 			return created;
 		}
 
-		public static ResearchNote createSpeciesNote(GameProfile researcher, IAlleleSpecies species) {
+		public static ResearchNote createSpeciesNote(GameProfile researcher, IAlleleForestrySpecies species) {
 			CompoundNBT compound = new CompoundNBT();
 			compound.putString("ROT", species.getRoot().getUID());
-			compound.putString("AL0", species.getUID());
+			compound.putString("AL0", species.getRegistryName().toString());
 			return new ResearchNote(researcher, SPECIES, compound);
 		}
 
-		public static ItemStack createSpeciesNoteStack(Item item, GameProfile researcher, IAlleleSpecies species) {
+		public static ItemStack createSpeciesNoteStack(Item item, GameProfile researcher, IAlleleForestrySpecies species) {
 			ResearchNote note = createSpeciesNote(researcher, species);
 			CompoundNBT compound = new CompoundNBT();
 			note.writeToNBT(compound);
@@ -283,7 +292,7 @@ public class ItemResearchNote extends ItemForestry {
 		} else {
 			researcherName = note.researcher.getName();
 		}
-		return new TranslationTextComponent(getTranslationKey(itemstack) + ".name", researcherName);
+		return new TranslationTextComponent(getTranslationKey(itemstack), researcherName);
 	}
 
 	@Override

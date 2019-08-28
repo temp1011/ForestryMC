@@ -26,7 +26,7 @@
 //
 //@JEIPlugin
 //public class WoodTypeRecipePlugin implements IModPlugin {
-////TODO JEI
+//
 //	@Override
 //	public void register(IModRegistry registry) {
 //		IStackHelper helper = registry.getJeiHelpers().getStackHelper();

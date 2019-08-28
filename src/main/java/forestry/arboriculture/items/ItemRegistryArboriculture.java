@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.core.items.ItemRegistry;
 
 public class ItemRegistryArboriculture extends ItemRegistry {
@@ -21,8 +21,6 @@ public class ItemRegistryArboriculture extends ItemRegistry {
 
 	public ItemRegistryArboriculture() {
 		sapling = registerItem(new ItemGermlingGE(EnumGermlingType.SAPLING), "sapling");
-		//		OreDictionary.registerOre(OreDictUtil.TREE_SAPLING, sapling.getWildcard());
-		//TODO tags
 		pollenFertile = registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollen_fertile");
 
 		grafter = registerItem(new ItemGrafter(9), "grafter");

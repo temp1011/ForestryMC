@@ -29,89 +29,78 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.common.PlantType;
-import net.minecraftforge.common.IPlantable;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleLeafEffect;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.PlantType;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IChromosome;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeMatcher;
+import genetics.api.individual.Individual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
+
+import genetics.individual.Genome;
+
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.ITreeMutation;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleBoolean;
-import forestry.api.genetics.IChromosome;
+import forestry.api.arboriculture.genetics.IAlleleLeafEffect;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeMutation;
+import forestry.api.arboriculture.genetics.ITreeRoot;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.IMutation;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.config.Config;
-import forestry.core.genetics.Chromosome;
-import forestry.core.genetics.Individual;
-import forestry.core.utils.Translator;
+import forestry.core.genetics.TemplateMatcher;
 
 public class Tree extends Individual implements ITree, IPlantable {
-	private final ITreeGenome genome;
-	@Nullable
-	private ITreeGenome mate;
 
-	public Tree(ITreeGenome genome) {
-		this.genome = genome;
+	private final IGenomeMatcher matcher;
+
+	public Tree(IGenome genome) {
+		super(genome);
+		matcher = new TemplateMatcher(genome);
+	}
+
+	public Tree(IGenome genome, IGenome mate) {
+		super(genome, mate);
+		matcher = new TemplateMatcher(genome);
 	}
 
 	public Tree(CompoundNBT compoundNBT) {
 		super(compoundNBT);
-
-		if (compoundNBT.contains("Genome")) {
-			this.genome = new TreeGenome(compoundNBT.getCompound("Genome"));
-		} else {
-			throw new IllegalArgumentException("Nbt has no Genome " + compoundNBT);
-		}
-
-		if (compoundNBT.contains("Mate")) {
-			mate = new TreeGenome(compoundNBT.getCompound("Mate"));
-		}
+		matcher = new TemplateMatcher(genome);
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT CompoundNBT) {
-		CompoundNBT = super.write(CompoundNBT);
-
-		CompoundNBT nbtGenome = new CompoundNBT();
-		genome.write(nbtGenome);
-		CompoundNBT.put("Genome", nbtGenome);
-
-		if (mate != null) {
-			CompoundNBT nbtMate = new CompoundNBT();
-			mate.write(nbtMate);
-			CompoundNBT.put("Mate", nbtMate);
-		}
-		return CompoundNBT;
+	public ITreeRoot getRoot() {
+		return TreeManager.treeRoot;
 	}
 
-	/* INTERACTION */
 	@Override
-	public void mate(ITree other) {
-		mate = new TreeGenome(other.getGenome().getChromosomes());
+	public boolean matchesTemplateGenome() {
+		return matcher.matches();
 	}
 
 	/* EFFECTS */
 	@Override
 	public IEffectData[] doEffect(IEffectData[] storedData, World world, BlockPos pos) {
-		IAlleleLeafEffect effect = (IAlleleLeafEffect) getGenome().getActiveAllele(EnumTreeChromosome.EFFECT);
+		IAlleleLeafEffect effect = getGenome().getActiveAllele(TreeChromosomes.EFFECT);
 
 		storedData[0] = doEffect(effect, storedData[0], world, pos);
 
@@ -120,7 +109,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 			return storedData;
 		}
 
-		IAlleleLeafEffect secondary = (IAlleleLeafEffect) getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT);
+		IAlleleLeafEffect secondary = getGenome().getInactiveAllele(TreeChromosomes.EFFECT);
 		if (!secondary.isCombinable()) {
 			return storedData;
 		}
@@ -143,8 +132,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	/* GROWTH */
 	@Override
-	public Feature getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed) {
-		return genome.getPrimary().getGenerator().getWorldGenerator(this);
+	public Feature<NoFeatureConfig> getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed) {
+		return genome.getPrimary(IAlleleTreeSpecies.class).getGenerator().getTreeFeature(this);
 	}
 
 	@Override
@@ -158,7 +147,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public PlantType getPlantType(IBlockReader world, BlockPos pos) {
-		return genome.getPrimary().getPlantType();
+		return genome.getPrimary(IAlleleTreeSpecies.class).getPlantType();
 	}
 
 	@Override
@@ -168,82 +157,76 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	@Nullable
-	public BlockPos canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight) {
+	public BlockPos canGrow(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight) {
 		return TreeGrowthHelper.canGrow(world, genome, pos, expectedGirth, expectedHeight);
 	}
 
 	@Override
 	public int getRequiredMaturity() {
-		return genome.getMaturationTime();
+		return genome.getActiveValue(TreeChromosomes.MATURATION);
 	}
 
 	@Override
 	public int getGirth() {
-		return genome.getGirth();
+		return genome.getActiveValue(TreeChromosomes.GIRTH);
 	}
 
 	@Override
 	public int getResilience() {
-		int base = (int) (getGenome().getFertility() * getGenome().getSappiness() * 100);
-		return (base > 1 ? base : 1) * 10;
+		int base = (int) (getGenome().getActiveValue(TreeChromosomes.FERTILITY) * getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * 100);
+		return (Math.max(base, 1)) * 10;
 	}
 
 	@Override
 	public float getHeightModifier() {
-		return genome.getHeight();
+		return genome.getActiveValue(TreeChromosomes.HEIGHT);
 	}
 
 	@Override
-	public boolean setLeaves(World world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
-		return genome.getPrimary().getGenerator().setLeaves(genome, world, owner, pos, rand);
+	public boolean setLeaves(IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
+		return genome.getPrimary(IAlleleTreeSpecies.class).getGenerator().setLeaves(genome, world, owner, pos, rand);
 	}
 
 	@Override
-	public boolean setLogBlock(World world, BlockPos pos, Direction facing) {
-		return genome.getPrimary().getGenerator().setLogBlock(genome, world, pos, facing);
+	public boolean setLogBlock(IWorld world, BlockPos pos, Direction facing) {
+		return genome.getPrimary(IAlleleTreeSpecies.class).getGenerator().setLogBlock(genome, world, pos, facing);
 	}
 
 	@Override
 	public boolean allowsFruitBlocks() {
-		IFruitProvider provider = getGenome().getFruitProvider();
+		IFruitProvider provider = getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 		if (!provider.requiresFruitBlocks()) {
 			return false;
 		}
 
-		Collection<IFruitFamily> suitable = genome.getPrimary().getSuitableFruit();
+		Collection<IFruitFamily> suitable = genome.getPrimary(IAlleleTreeSpecies.class).getSuitableFruit();
 		return suitable.contains(provider.getFamily());
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(World world, Random rand, BlockPos pos) {
-		IFruitProvider provider = getGenome().getFruitProvider();
-		Collection<IFruitFamily> suitable = genome.getPrimary().getSuitableFruit();
+	public boolean trySpawnFruitBlock(IWorld world, Random rand, BlockPos pos) {
+		IFruitProvider provider = getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
+		Collection<IFruitFamily> suitable = genome.getPrimary(IAlleleTreeSpecies.class).getSuitableFruit();
 		return suitable.contains(provider.getFamily()) &&
 			provider.trySpawnFruitBlock(getGenome(), world, rand, pos);
 	}
 
 	/* INFORMATION */
 	@Override
-	public ITreeGenome getGenome() {
+	public IGenome getGenome() {
 		return genome;
 	}
 
 	@Override
 	public ITree copy() {
-		CompoundNBT CompoundNBT = new CompoundNBT();
-		this.write(CompoundNBT);
-		return new Tree(CompoundNBT);
-	}
-
-	@Nullable
-	@Override
-	public ITreeGenome getMate() {
-		return this.mate;
+		CompoundNBT compound = new CompoundNBT();
+		this.write(compound);
+		return new Tree(compound);
 	}
 
 	@Override
-	public boolean isPureBred(EnumTreeChromosome chromosome) {
-		return genome.getActiveAllele(chromosome).getUID().equals(genome.getInactiveAllele(chromosome).getUID());
+	public boolean isPureBred(IChromosomeType chromosome) {
+		return genome.getActiveAllele(chromosome).getRegistryName().equals(genome.getInactiveAllele(chromosome).getRegistryName());
 	}
 
 	@Override
@@ -256,47 +239,47 @@ public class Tree extends Individual implements ITree, IPlantable {
 		}
 
 		// You analyzed it? Juicy tooltip coming up!
-		IAlleleTreeSpecies primary = genome.getPrimary();
-		IAlleleTreeSpecies secondary = genome.getSecondary();
-		if (!isPureBred(EnumTreeChromosome.SPECIES)) {
-			list.add(new TranslationTextComponent("for.trees.hybrid",primary.getAlleleName(), secondary.getAlleleName()).applyTextStyle(TextFormatting.BLUE));	//TODO formatting
+		IAlleleTreeSpecies primary = genome.getPrimary(IAlleleTreeSpecies.class);
+		IAlleleTreeSpecies secondary = genome.getSecondary(IAlleleTreeSpecies.class);
+		if (!isPureBred(TreeChromosomes.SPECIES)) {
+			list.add(new TranslationTextComponent("for.trees.hybrid", primary.getDisplayName(), secondary.getDisplayName()).applyTextStyle(TextFormatting.BLUE));
 		}
 
-		String sappiness = TextFormatting.GOLD + "S: " + genome.getActiveAllele(EnumTreeChromosome.SAPPINESS).getAlleleName();
-		String maturation = TextFormatting.RED + "M: " + genome.getActiveAllele(EnumTreeChromosome.MATURATION).getAlleleName();
-		String height = TextFormatting.LIGHT_PURPLE + "H: " + genome.getActiveAllele(EnumTreeChromosome.HEIGHT).getAlleleName();
-		String girth = TextFormatting.AQUA + "G: " + String.format("%sx%s", genome.getGirth(), genome.getGirth());
-		String saplings = TextFormatting.YELLOW + "S: " + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getAlleleName();
-		String yield = TextFormatting.WHITE + "Y: " + genome.getActiveAllele(EnumTreeChromosome.YIELD).getAlleleName();
-		list.add(new StringTextComponent(String.format("%s, %s", saplings, maturation)));
-		list.add(new StringTextComponent(String.format("%s, %s", height, girth)));
-		list.add(new StringTextComponent(String.format("%s, %s", yield, sappiness)));
+		ITextComponent sappiness = new TranslationTextComponent("S: %1$s" + genome.getActiveAllele(TreeChromosomes.SAPPINESS)).applyTextStyle(TextFormatting.GOLD);
+		ITextComponent maturation = new TranslationTextComponent("M: %1$s" + genome.getActiveAllele(TreeChromosomes.MATURATION)).applyTextStyle(TextFormatting.RED);
+		ITextComponent height = new TranslationTextComponent("H: %1$s" + genome.getActiveAllele(TreeChromosomes.HEIGHT)).applyTextStyle(TextFormatting.LIGHT_PURPLE);
+		ITextComponent girth = new TranslationTextComponent("G: %1$sx%2$s", genome.getActiveAllele(TreeChromosomes.GIRTH).getDisplayName(), genome.getActiveAllele(TreeChromosomes.GIRTH).getDisplayName()).applyTextStyle(TextFormatting.AQUA);
+		ITextComponent saplings = new TranslationTextComponent("S: %1$s" + genome.getActiveAllele(TreeChromosomes.FERTILITY)).applyTextStyle(TextFormatting.YELLOW);
+		ITextComponent yield = new TranslationTextComponent("Y: %1$s" + genome.getActiveAllele(TreeChromosomes.YIELD)).applyTextStyle(TextFormatting.WHITE);
+		list.add(new TranslationTextComponent("%1$s %2$s", saplings, maturation));
+		list.add(new TranslationTextComponent("%1$s %2$s", height, girth));
+		list.add(new TranslationTextComponent("%1$s %2$s", yield, sappiness));
 
-		IAlleleBoolean primaryFireproof = (IAlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
-		if (primaryFireproof.getValue()) {
+		boolean primaryFireproof = genome.getActiveValue(TreeChromosomes.FIREPROOF);
+		if (primaryFireproof) {
 			list.add(new TranslationTextComponent("for.gui.fireresist").applyTextStyle(TextFormatting.RED));
 		}
 
-		IAllele fruit = getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
+		IAllele fruit = getGenome().getActiveAllele(TreeChromosomes.FRUITS);
 		if (fruit != AlleleFruits.fruitNone) {
 			String strike = "";
 			if (!canBearFruit()) {
 				strike = TextFormatting.STRIKETHROUGH.toString();
 			}
-			list.add(new StringTextComponent(strike + TextFormatting.GREEN + "F: " + genome.getFruitProvider().getDescription()));
+			list.add(new StringTextComponent(strike + TextFormatting.GREEN + "F: " + genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getDescription()));
 		}
 	}
 
 	/* REPRODUCTION */
 	@Override
-	public List<ITree> getSaplings(ServerWorld world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier) {
+	public List<ITree> getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier) {
 		List<ITree> prod = new ArrayList<>();
 
-		float chance = genome.getFertility() * modifier;
+		float chance = genome.getActiveValue(TreeChromosomes.FERTILITY) * modifier;
 
 		if (world.rand.nextFloat() <= chance) {
 			if (mate == null) {
-				prod.add(TreeManager.treeRoot.getTree(world, new TreeGenome(genome.getChromosomes())));
+				prod.add(TreeManager.treeRoot.getTree(world, new Genome(TreeManager.treeRoot.getKaryotype(), genome.getChromosomes())));
 			} else {
 				prod.add(createOffspring(world, mate, playerProfile, pos));
 			}
@@ -305,7 +288,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		return prod;
 	}
 
-	private ITree createOffspring(ServerWorld world, ITreeGenome mate, @Nullable GameProfile playerProfile, BlockPos pos) {
+	private ITree createOffspring(World world, IGenome mate, @Nullable GameProfile playerProfile, BlockPos pos) {
 		IChromosome[] chromosomes = new IChromosome[genome.getChromosomes().length];
 		IChromosome[] parent1 = genome.getChromosomes();
 		IChromosome[] parent2 = mate.getChromosomes();
@@ -318,37 +301,37 @@ public class Tree extends Individual implements ITree, IPlantable {
 		}
 
 		if (mutated != null) {
-			return new Tree(new TreeGenome(mutated));
+			return new Tree(new Genome(TreeManager.treeRoot.getKaryotype(), mutated));
 		}
 
 		for (int i = 0; i < parent1.length; i++) {
 			if (parent1[i] != null && parent2[i] != null) {
-				chromosomes[i] = Chromosome.inheritChromosome(world.rand, parent1[i], parent2[i]);
+				chromosomes[i] = parent1[i].inheritChromosome(world.rand, parent2[i]);
 			}
 		}
 
-		return new Tree(new TreeGenome(chromosomes));
+		return new Tree(new Genome(TreeManager.treeRoot.getKaryotype(), chromosomes));
 	}
 
 	@Nullable
-	private static IChromosome[] mutateSpecies(ServerWorld world, @Nullable GameProfile playerProfile, BlockPos pos, ITreeGenome genomeOne, ITreeGenome genomeTwo) {
+	private static IChromosome[] mutateSpecies(World world, @Nullable GameProfile playerProfile, BlockPos pos, IGenome genomeOne, IGenome genomeTwo) {
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
 
-		ITreeGenome genome0;
-		ITreeGenome genome1;
+		IGenome genome0;
+		IGenome genome1;
 		IAlleleTreeSpecies allele0;
 		IAlleleTreeSpecies allele1;
 
 		if (world.rand.nextBoolean()) {
-			allele0 = (IAlleleTreeSpecies) parent1[EnumTreeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = (IAlleleTreeSpecies) parent2[EnumTreeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = (IAlleleTreeSpecies) parent1[TreeChromosomes.SPECIES.ordinal()].getActiveAllele();
+			allele1 = (IAlleleTreeSpecies) parent2[TreeChromosomes.SPECIES.ordinal()].getInactiveAllele();
 
 			genome0 = genomeOne;
 			genome1 = genomeTwo;
 		} else {
-			allele0 = (IAlleleTreeSpecies) parent2[EnumTreeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = (IAlleleTreeSpecies) parent1[EnumTreeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = (IAlleleTreeSpecies) parent2[TreeChromosomes.SPECIES.ordinal()].getActiveAllele();
+			allele1 = (IAlleleTreeSpecies) parent1[TreeChromosomes.SPECIES.ordinal()].getInactiveAllele();
 
 			genome0 = genomeTwo;
 			genome1 = genomeOne;
@@ -359,7 +342,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 			breedingTracker = TreeManager.treeRoot.getBreedingTracker(world, playerProfile);
 		}
 
-		List<IMutation> combinations = TreeManager.treeRoot.getCombinations(allele0, allele1, true);
+		IMutationContainer<ITree, ? extends IMutation> container = TreeManager.treeRoot.getComponent(ComponentKeys.MUTATIONS);
+		List<? extends IMutation> combinations = container.getCombinations(allele0, allele1, true);
 		for (IMutation mutation : combinations) {
 			ITreeMutation treeMutation = (ITreeMutation) mutation;
 			// Stop blacklisted species.
@@ -380,7 +364,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 			}
 
 			if (chance > world.rand.nextFloat() * 100) {
-				return TreeManager.treeRoot.templateAsChromosomes(treeMutation.getTemplate());
+				return TreeManager.treeRoot.getKaryotype().templateAsChromosomes(treeMutation.getTemplate());
 			}
 		}
 
@@ -390,21 +374,21 @@ public class Tree extends Individual implements ITree, IPlantable {
 	/* PRODUCTION */
 	@Override
 	public boolean canBearFruit() {
-		return genome.getPrimary().getSuitableFruit().contains(genome.getFruitProvider().getFamily());
+		return genome.getPrimary(IAlleleTreeSpecies.class).getSuitableFruit().contains(genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getFamily());
 	}
 
 	@Override
 	public Map<ItemStack, Float> getProducts() {
-		return genome.getFruitProvider().getProducts();
+		return genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getProducts();
 	}
 
 	@Override
 	public Map<ItemStack, Float> getSpecialties() {
-		return genome.getFruitProvider().getSpecialty();
+		return genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getSpecialty();
 	}
 
 	@Override
 	public NonNullList<ItemStack> produceStacks(World world, BlockPos pos, int ripeningTime) {
-		return genome.getFruitProvider().getFruits(genome, world, pos, ripeningTime);
+		return genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getFruits(genome, world, pos, ripeningTime);
 	}
 }

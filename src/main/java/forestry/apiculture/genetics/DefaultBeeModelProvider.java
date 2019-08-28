@@ -17,12 +17,11 @@ import java.util.Locale;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.apiculture.EnumBeeType;
+
 import forestry.api.apiculture.IBeeModelProvider;
+import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.core.IModelManager;
 import forestry.apiculture.items.ItemBeeGE;
 

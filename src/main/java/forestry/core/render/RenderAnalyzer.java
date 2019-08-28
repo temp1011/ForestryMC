@@ -15,7 +15,6 @@ import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -27,7 +26,7 @@ import forestry.apiculture.render.ModelAnalyzer;
 import forestry.core.blocks.BlockBase;
 import forestry.core.tiles.TileAnalyzer;
 
-public class RenderAnalyzer extends TileEntityRenderer<TileAnalyzer> {
+public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
 
 	private final ModelAnalyzer model;
 	@Nullable
@@ -47,23 +46,19 @@ public class RenderAnalyzer extends TileEntityRenderer<TileAnalyzer> {
 		return dummyEntityItem;
 	}
 
-	/**
-	 * @param analyzer If it null its render the item else it render the tile entity.
-	 */
 	@Override
-	public void render(TileAnalyzer analyzer, double x, double y, double z, float partialTicks, int destroyStage) {
-		if (analyzer != null) {
-			World worldObj = analyzer.getWorldObj();
-			if (worldObj.isBlockLoaded(analyzer.getPos())) {
-				BlockState blockState = worldObj.getBlockState(analyzer.getPos());
-				if (blockState.getBlock() instanceof BlockBase) {
-					Direction facing = blockState.get(BlockBase.FACING);
-					render(analyzer.getIndividualOnDisplay(), worldObj, facing, x, y, z);
-					return;
-				}
-			}
+	public void renderTile(TileAnalyzer tile, double x, double y, double z, float partialTicks, int destroyStage) {
+		World worldObj = tile.getWorldObj();
+		BlockState blockState = worldObj.getBlockState(tile.getPos());
+		if (blockState.getBlock() instanceof BlockBase) {
+			Direction facing = blockState.get(BlockBase.FACING);
+			render(tile.getIndividualOnDisplay(), worldObj, facing, x, y, z);
 		}
-		render(ItemStack.EMPTY, null, Direction.WEST, x, y, z);
+	}
+
+	@Override
+	public void renderItem(ItemStack stack) {
+		render(ItemStack.EMPTY, null, Direction.WEST, 0, 0, 0);
 	}
 
 	private void render(ItemStack itemstack, @Nullable World world, Direction orientation, double x, double y, double z) {

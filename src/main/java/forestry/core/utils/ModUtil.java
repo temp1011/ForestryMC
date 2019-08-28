@@ -11,7 +11,6 @@
 package forestry.core.utils;
 
 import javax.annotation.Nullable;
-
 import java.util.Optional;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;

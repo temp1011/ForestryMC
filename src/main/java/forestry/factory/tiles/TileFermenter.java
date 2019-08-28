@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
@@ -26,7 +27,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -144,7 +144,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 		int fermented = Math.min(fermentationTime, fuelCurrentFerment);
 		int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
-		productTank.fill(new FluidStack(currentRecipe.getOutput(), productAmount), IFluidHandler.FluidAction.EXECUTE);
+		productTank.fillInternal(new FluidStack(currentRecipe.getOutput(), productAmount), IFluidHandler.FluidAction.EXECUTE);
 
 		fuelBurnTime--;
 		resourceTank.drain(fermented, IFluidHandler.FluidAction.EXECUTE);
@@ -167,7 +167,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		ItemStack resource = getStackInSlot(InventoryFermenter.SLOT_RESOURCE);
 		FluidStack fluid = resourceTank.getFluid();
 
-		if (fluid != null) {
+		if (!fluid.isEmpty()) {
 			currentRecipe = FermenterRecipeManager.findMatchingRecipe(resource, fluid);
 		}
 
@@ -241,7 +241,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
 			Fluid output = currentRecipe.getOutput();
 			FluidStack fluidStack = new FluidStack(output, productAmount);
-			hasFluidSpace = productTank.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount();
+			hasFluidSpace = productTank.fillInternal(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount();
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();

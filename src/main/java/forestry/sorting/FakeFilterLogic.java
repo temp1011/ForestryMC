@@ -9,7 +9,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 
-import forestry.api.genetics.IAllele;
+import genetics.api.alleles.IAllele;
+
 import forestry.api.genetics.IFilterData;
 import forestry.api.genetics.IFilterLogic;
 import forestry.api.genetics.IFilterRuleType;

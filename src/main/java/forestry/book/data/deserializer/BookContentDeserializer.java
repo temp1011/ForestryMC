@@ -9,10 +9,9 @@ import java.lang.reflect.Type;
 
 import net.minecraft.util.JSONUtils;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.book.BookContent;
 import forestry.book.BookLoader;
 import forestry.book.data.content.TextContent;

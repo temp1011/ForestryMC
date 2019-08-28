@@ -17,20 +17,39 @@
 //
 //import org.apache.commons.lang3.StringUtils;
 //
+//import net.minecraft.command.CommandSource;
+//import net.minecraft.command.Commands;
 //import net.minecraft.command.ICommandSender;
+//import net.minecraft.command.arguments.serializers.StringArgumentSerializer;
 //import net.minecraft.entity.player.PlayerEntity;
 //import net.minecraft.server.MinecraftServer;
 //import net.minecraft.util.math.BlockPos;
 //
-//import forestry.api.arboriculture.IAlleleTreeSpecies;
+//import com.mojang.brigadier.arguments.StringArgumentType;
+//import com.mojang.brigadier.builder.ArgumentBuilder;
+//
+//import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 //import forestry.api.genetics.AlleleManager;
 //import forestry.api.genetics.IAllele;
 //import forestry.core.commands.CommandHelpers;
 //import forestry.core.commands.SpeciesNotFoundException;
-//import forestry.core.commands.SubCommand;
 //import forestry.core.commands.TemplateNotFoundException;
 //
-//public final class CommandTreeSpawn extends SubCommand {
+//public final class CommandTreeSpawn {
+//
+//	static ArgumentBuilder<CommandSource, ?> register(String name, ITreeSpawner treeSpawner) {
+//		return Commands.literal(name)
+//			.requires(cs->cs.hasPermissionLevel(2))
+//			.then(Commands.argument("tree_name", StringArgumentType.word()).executes(context -> {
+//				PlayerEntity playerEntity = context.getSource().asPlayer();
+//				String treeName = StringArgumentType.getString(context, "tree_name");
+//				return treeSpawner.spawn(context.getSource(), treeName, playerEntity);
+//				})
+//			/*.then(Commands.literal("help").executes((context) -> {
+//
+//			})*/)
+//	}
+//
 ////TODO commands
 //	private final ITreeSpawner treeSpawner;
 //

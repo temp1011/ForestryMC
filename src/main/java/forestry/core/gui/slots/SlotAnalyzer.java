@@ -2,10 +2,9 @@ package forestry.core.gui.slots;
 
 import javax.annotation.Nullable;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.gui.GuiAnalyzerProvider;
 import forestry.core.inventory.ItemInventoryAlyzer;
 

@@ -12,6 +12,7 @@ package forestry.core.models;
 
 import com.google.common.base.Preconditions;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
@@ -29,15 +30,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
-//import net.minecraftforge.common.property.IExtendedBlockState;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.IModelData;
 
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.models.baker.ModelBakerModel;
+
+//import net.minecraftforge.common.property.IExtendedBlockState;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class ModelBlockDefault<B extends Block, K> implements IBakedModel {
@@ -55,7 +56,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		this.blockClass = blockClass;
 	}
 
-	protected IBakedModel bakeModel(BlockState state, K key, B block) {
+	protected IBakedModel bakeModel(BlockState state, K key, B block, IModelData extraData) {
 		ModelBaker baker = new ModelBaker();
 
 //		if (state instanceof IExtendedBlockState) {
@@ -64,19 +65,19 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 //			BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
 //		}
 
-		bakeBlock(block, key, baker, false);
+		bakeBlock(block, extraData, key, baker, false);
 
 		blockModel = baker.bakeModel(false);
 		onCreateModel(blockModel);
 		return blockModel;
 	}
 
-	protected IBakedModel getModel(BlockState state) {
+	protected IBakedModel getModel(BlockState state, IModelData extraData) {
 		Preconditions.checkArgument(blockClass.isInstance(state.getBlock()));
 
-		K worldKey = getWorldKey(state);
+		K worldKey = getWorldKey(state, extraData);
 		B block = blockClass.cast(state.getBlock());
-		return bakeModel(state, worldKey, block);
+		return bakeModel(state, worldKey, block, extraData);
 	}
 
 	protected IBakedModel bakeModel(ItemStack stack, World world, K key) {
@@ -84,7 +85,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		Block block = Block.getBlockFromItem(stack.getItem());
 		Preconditions.checkArgument(blockClass.isInstance(block));
 		B bBlock = blockClass.cast(block);
-		bakeBlock(bBlock, key, baker, true);
+		bakeBlock(bBlock, EmptyModelData.INSTANCE, key, baker, true);
 
 		return itemModel = baker.bakeModel(true);
 	}
@@ -93,11 +94,17 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		return bakeModel(stack, world, getInventoryKey(stack));
 	}
 
+	@Nonnull
+	@Override
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+		Preconditions.checkNotNull(state);
+		IBakedModel model = getModel(state, extraData);
+		return model.getQuads(state, side, rand, extraData);
+	}
+
 	@Override
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-		Preconditions.checkNotNull(state);
-		IBakedModel model = getModel(state);
-		return model.getQuads(state, side, rand);
+		return getQuads(state, side, rand, EmptyModelData.INSTANCE);
 	}
 
 	protected void onCreateModel(ModelBakerModel model) {
@@ -151,9 +158,9 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
 	protected abstract K getInventoryKey(ItemStack stack);
 
-	protected abstract K getWorldKey(BlockState state);
+	protected abstract K getWorldKey(BlockState state, IModelData extraData);
 
-	protected abstract void bakeBlock(B block, K key, ModelBaker baker, boolean inventory);
+	protected abstract void bakeBlock(B block, IModelData extraData, K key, ModelBaker baker, boolean inventory);
 
 	private class DefaultItemOverrideList extends ItemOverrideList {
 		public DefaultItemOverrideList() {

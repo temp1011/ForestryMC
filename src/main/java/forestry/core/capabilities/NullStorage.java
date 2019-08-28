@@ -2,7 +2,6 @@ package forestry.core.capabilities;
 
 import javax.annotation.Nullable;
 
-
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 

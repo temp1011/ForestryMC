@@ -123,7 +123,7 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 
 	public <T> LazyOptional<T> getCapability(Capability<T> capability) {
 		if (!hasCapability(capability)) {
-			return null;
+			return LazyOptional.empty();
 		}
 		if (capability == CapabilityEnergy.ENERGY) {
 			IEnergyStorage energyStorage = new EnergyStorageWrapper(this, externalMode);

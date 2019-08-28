@@ -29,7 +29,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -37,15 +36,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.core.IToolScoop;
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.arboriculture.ModuleArboriculture;
-import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
@@ -54,15 +52,11 @@ import forestry.core.utils.NetworkUtil;
 
 public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowable {
 
-	//TODO this should be used. Maybe for tile?
-	private TreeDefinition definition;
-
-	public BlockForestryLeaves(TreeDefinition definition) {
+	public BlockForestryLeaves() {
 		super(Block.Properties.create(Material.LEAVES)
-				.hardnessAndResistance(0.2F)
-				.tickRandomly()
-				.sound(SoundType.PLANT));    //TODO sort out constructor block properties hierarchy
-		this.definition = definition;
+			.hardnessAndResistance(0.2f)
+			.sound(SoundType.PLANT)
+			.tickRandomly());
 	}
 
 	@Override
@@ -70,9 +64,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves != null) {
 			ITree tree = leaves.getTree();
-			if (tree != null) {
-				return tree;
-			}
+			return tree;
 		}
 
 		return null;
@@ -91,11 +83,11 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	//TODO extended state
-	//	@Override
-	//	public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
-	//		return super.getExtendedState(state, world, pos).with(UnlistedBlockPos.POS, pos)
-	//				.with(UnlistedBlockAccess.BLOCKACCESS, world);
-	//	}
+//	@Override
+//	public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
+//		return super.getExtendedState(state, world, pos).with(UnlistedBlockPos.POS, pos)
+//				.with(UnlistedBlockAccess.BLOCKACCESS, world);
+//	}
 
 	/* TILE ENTITY */
 	@Override
@@ -121,11 +113,11 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 		}
 
 		// Add saplings	//TODO cast
-		List<ITree> saplings = tree.getSaplings((ServerWorld) world, playerProfile, pos, saplingModifier);
+		List<ITree> saplings = tree.getSaplings(world, playerProfile, pos, saplingModifier);
 
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
-				drops.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING));
+				drops.add(TreeManager.treeRoot.getTypes().createStack(sapling, EnumGermlingType.SAPLING));
 			}
 		}
 
@@ -136,11 +128,11 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	/* MODELS */
-	//	@Override
-	//	@OnlyIn(Dist.CLIENT)
-	//	public void registerModel(Item item, IModelManager manager) {
-	//		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:leaves", "inventory"));
-	//	}
+//	@Override
+//	@OnlyIn(Dist.CLIENT)
+//	public void registerModel(Item item, IModelManager manager) {
+//		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:leaves", "inventory"));
+//	}
 
 	@Override
 	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
@@ -159,7 +151,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 					return true;
 				}
 			} else if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
-				ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR);
+				ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.CATERPILLAR);
 				ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
 				leaves.setCaterpillar(null);
 				return true;
@@ -204,6 +196,6 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 				}
 			}
 		}
-		return ModuleArboriculture.proxy.getFoliageColorBasic();
+		return ModuleArboriculture.proxy.getFoliageColorDefault();
 	}
 }

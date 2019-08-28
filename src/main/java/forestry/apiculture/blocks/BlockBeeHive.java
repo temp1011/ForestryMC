@@ -14,9 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -26,17 +26,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IHiveDrop;
-import forestry.api.apiculture.IHiveTile;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.hives.IHiveDrop;
 import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
+import forestry.api.apiculture.hives.IHiveTile;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileHive;
+import forestry.core.items.ItemScoop;
 import forestry.core.tiles.TileUtil;
 
 public class BlockBeeHive extends ContainerBlock {
@@ -46,9 +46,9 @@ public class BlockBeeHive extends ContainerBlock {
 	public BlockBeeHive(HiveType type) {
 		super(Properties.create(MaterialBeehive.BEEHIVE_WORLD)
 				.lightValue((int) (0.4f * 15))    //TODO - correct?
-				.hardnessAndResistance(2.5f));
-		//		setCreativeTab(ItemGroups.tabApiculture); TODO done in item
-		//		setHarvestLevel("scoop", 0); TODO harvest level, addToolType in item?
+			.hardnessAndResistance(2.5f)
+			.harvestLevel(0)
+			.harvestTool(ItemScoop.SCOOP));
 		this.type = type;
 	}
 
@@ -65,6 +65,7 @@ public class BlockBeeHive extends ContainerBlock {
 
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		super.onBlockHarvested(world, pos, state, player);
 		boolean canHarvest = canHarvestBlock(state, world, pos, player);
 		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onBroken(world, pos, player, canHarvest));
 	}
@@ -98,7 +99,7 @@ public class BlockBeeHive extends ContainerBlock {
 						bee.setIsNatural(false);
 					}
 
-					ItemStack princess = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.PRINCESS);
+					ItemStack princess = BeeManager.beeRoot.getTypes().createStack(bee, EnumBeeType.PRINCESS);
 					drops.add(princess);
 					hasPrincess = true;
 					break;
@@ -110,7 +111,7 @@ public class BlockBeeHive extends ContainerBlock {
 		for (IHiveDrop drop : hiveDrops) {
 			if (random.nextDouble() < drop.getChance(world, pos, fortune)) {
 				IBee bee = drop.getBeeType(world, pos);
-				ItemStack drone = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.DRONE);
+				ItemStack drone = BeeManager.beeRoot.getTypes().createStack(bee, EnumBeeType.DRONE);
 				drops.add(drone);
 				break;
 			}

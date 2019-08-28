@@ -17,8 +17,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IHiveDrop;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.hives.IHiveDrop;
 
 public class HiveDrop implements IHiveDrop {
 
@@ -41,7 +41,7 @@ public class HiveDrop implements IHiveDrop {
 
 	@Override
 	public IBee getBeeType(IBlockReader world, BlockPos pos) {
-		return beeTemplate.getIndividual();
+		return beeTemplate.createIndividual();
 	}
 
 	@Override

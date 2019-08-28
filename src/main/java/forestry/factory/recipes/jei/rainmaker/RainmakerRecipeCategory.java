@@ -16,7 +16,7 @@
 //	private final IDrawable slot;
 //
 //	public RainmakerRecipeCategory(IGuiHelper guiHelper) {
-//		super(guiHelper.createBlankDrawable(150, 30), "tile.for.rainmaker.name");
+//		super(guiHelper.createBlankDrawable(150, 30), "block.forestry.rainmaker.name");
 //		this.slot = guiHelper.getSlotDrawable();
 //	}
 //

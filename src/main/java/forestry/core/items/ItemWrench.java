@@ -22,9 +22,11 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-//import net.minecraftforge.fml.common.Optional;
-
 import net.minecraftforge.common.ToolType;
+
+import forestry.core.ItemGroupForestry;
+
+//import net.minecraftforge.fml.common.Optional;
 
 //import buildcraft.api.tools.IToolWrench;
 
@@ -33,7 +35,7 @@ public class ItemWrench extends ItemForestry {//implements IToolWrench {
 
 	public ItemWrench() {
 		super((new Item.Properties())
-		.addToolType(ToolType.get("wrench"),0));
+			.addToolType(ToolType.get("wrench"), 0).group(ItemGroupForestry.tabForestry));
 	}
 
 	@Override

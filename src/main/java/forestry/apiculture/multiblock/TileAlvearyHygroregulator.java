@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 
@@ -24,7 +24,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-
 
 import forestry.api.climate.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
@@ -78,7 +77,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 				currentRecipe = HygroregulatorManager.findMatchingRecipe(fluid);
 
 				if (currentRecipe != null) {
-					liquidTank.drain(currentRecipe.getResource().getAmount(), IFluidHandler.FluidAction.EXECUTE);
+					liquidTank.drainInternal(currentRecipe.getResource().getAmount(), IFluidHandler.FluidAction.EXECUTE);
 					transferTime = currentRecipe.getTransferTime();
 				}
 			}

@@ -14,25 +14,26 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -74,6 +75,11 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	@Override
+	public String getTranslationKey() {
+		return "item.forestry.letter";
+	}
+
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack heldItem = playerIn.getHeldItem(handIn);
 		if (heldItem.getCount() == 1) {
@@ -84,12 +90,6 @@ public class ItemLetter extends ItemWithGui {
 		}
 	}
 
-	//TODO I think this is correct replacement
-	@Override
-	public boolean shouldSyncTag() {
-		return true;
-	}
-
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
@@ -97,12 +97,19 @@ public class ItemLetter extends ItemWithGui {
 
 		CompoundNBT compoundNBT = itemstack.getTag();
 		if (compoundNBT == null) {
-			list.add(new StringTextComponent("<").appendSibling(new TranslationTextComponent("for.gui.blank").appendText(">")));
+			list.add(new StringTextComponent("<").appendSibling(new TranslationTextComponent("for.gui.blank").appendText(">")).applyTextStyle(TextFormatting.GRAY));
 			return;
 		}
 
 		ILetter letter = new Letter(compoundNBT);
 		letter.addTooltip(list);
+	}
+
+	@Override
+	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> stacks) {
+		if (isInGroup(group) && state == State.FRESH && size == Size.EMPTY) {
+			stacks.add(new ItemStack(this));
+		}
 	}
 
 	@Override

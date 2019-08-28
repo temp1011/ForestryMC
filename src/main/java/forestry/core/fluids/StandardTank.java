@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.fluid.Fluid;
@@ -18,6 +19,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
@@ -33,9 +35,9 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	private ITankUpdateHandler tankUpdateHandler = FakeTankUpdateHandler.instance;
 	private int tankIndex;
-	//TODO I think this is the best way to handle this
-	private boolean canFill = true;
-	private boolean canDrain = true;
+	private final boolean canFill;
+	private final boolean canDrain;
+	private boolean internalTest;
 
 	@OnlyIn(Dist.CLIENT)
 	@Nullable
@@ -43,12 +45,14 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	public StandardTank(int capacity, boolean canFill, boolean canDrain) {
 		super(capacity);
-		this.canFill = canFill;
 		this.canDrain = canDrain;
+		this.canFill = canFill;
 	}
 
 	public StandardTank(int capacity) {
 		super(capacity);
+		this.canFill = true;
+		this.canDrain = true;
 	}
 
 	public void setTankIndex(int index) {
@@ -71,12 +75,9 @@ public class StandardTank extends FluidTank implements IStreamable {
 		return f.getAttributes().getColor(getFluid());
 	}
 
-//	@Override
-//	public boolean isEmpty() {
-//		//TODO fluids simpler now?
-////		return getFluid() == null || getFluid().getAmount() <= 0;
-//		return getFluid().isEmpty();
-//	}
+	public boolean isEmpty() {
+		return getFluid().isEmpty() || getFluid().getAmount() <= 0;
+	}
 
 	public boolean isFull() {
 		return !getFluid().isEmpty() && getFluid().getAmount() == getCapacity();
@@ -92,26 +93,67 @@ public class StandardTank extends FluidTank implements IStreamable {
 	}
 
 	@Override
-	public int fill(FluidStack resource, FluidAction doFill) {
-//		return canFill ? 0 : super.fill(resource, doFill);
-		//TODO - unsure about tankUpdateHandler so for now keep longer method.
-		if(!canFill) {
-			return 0;
-		}
-		int filled = super.fill(resource, doFill);
-		if (doFill.execute() && filled > 0) {
-			tankUpdateHandler.updateTankLevels(this);
-		}
-		return filled;
+	public boolean isFluidValid(FluidStack stack) {
+		return !internalTest && validator.test(stack);
+	}
+
+	public boolean canFill() {
+		return canFill;
+	}
+
+	public boolean canDrain() {
+		return canDrain;
 	}
 
 	@Override
+	public int fill(FluidStack resource, FluidAction action) {
+		if (!canFill() || !isFluidValid(resource)) {
+			return 0;
+		}
+		return fillInternal(resource, action);
+	}
+
+	public int fillInternal(FluidStack resource, FluidAction action) {
+		internalTest = true;
+		int filled = super.fill(resource, action);
+		if (action == FluidAction.EXECUTE && filled > 0) {
+			tankUpdateHandler.updateTankLevels(this);
+		}
+		internalTest = false;
+		return filled;
+	}
+
+	@Nonnull
+	@Override
 	public FluidStack drain(int maxDrain, FluidAction action) {
-		if(!canDrain) {
+		if (!canDrain) {
 			return FluidStack.EMPTY;
 		}
+		return drainInternal(maxDrain, action);
+	}
+
+	@Nonnull
+	public FluidStack drainInternal(int maxDrain, FluidAction action) {
 		FluidStack drained = super.drain(maxDrain, action);
-		if (action.execute() && !drained.isEmpty() && drained.getAmount() > 0) {
+		if (action == FluidAction.EXECUTE && !drained.isEmpty() && drained.getAmount() > 0) {
+			tankUpdateHandler.updateTankLevels(this);
+		}
+		return drained;
+	}
+
+	@Nonnull
+	@Override
+	public FluidStack drain(FluidStack resource, FluidAction action) {
+		if (!canDrain) {
+			return FluidStack.EMPTY;
+		}
+		return drainInternal(resource, action);
+	}
+
+	@Nonnull
+	public FluidStack drainInternal(FluidStack resource, FluidAction action) {
+		FluidStack drained = super.drain(resource, action);
+		if (action == FluidAction.EXECUTE && !drained.isEmpty() && drained.getAmount() > 0) {
 			tankUpdateHandler.updateTankLevels(this);
 		}
 		return drained;
@@ -119,18 +161,12 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	@Override
 	public String toString() {
-		return String.format("Tank: %s, %d/%d", !fluid.isEmpty() && fluid.getFluid() != null ? fluid.getFluid().getRegistryName() : "Empty", getFluidAmount(), getCapacity());
+		return String.format("Tank: %s, %d/%d", !fluid.isEmpty() ? fluid.getFluid().getRegistryName() : "Empty", getFluidAmount(), getCapacity());
 	}
 
 	protected boolean hasFluid() {
 		FluidStack fluid = getFluid();
 		return !fluid.isEmpty() && fluid.getAmount() > 0 && fluid.getFluid() != null;
-	}
-
-	@Override
-	protected void onContentsChanged()
-	{
-		tankUpdateHandler.updateTankLevels(this);
 	}
 
 	@Override
@@ -159,11 +195,12 @@ public class StandardTank extends FluidTank implements IStreamable {
 		FluidStack fluidStack = getFluid();
 		if (!fluidStack.isEmpty()) {
 			Fluid fluidType = fluidStack.getFluid();
-			Rarity rarity = fluidType.getAttributes().getRarity();
+			FluidAttributes attributes = fluidType.getAttributes();
+			Rarity rarity = attributes.getRarity();
 			if (rarity == null) {
 				rarity = Rarity.COMMON;
 			}
-			toolTip.add(new TranslationTextComponent(fluidType.getAttributes().getTranslationKey(fluidStack)), rarity.color);
+			toolTip.add(new TranslationTextComponent(attributes.getTranslationKey(fluidStack)), rarity.color);
 			amount = getFluid().getAmount();
 		}
 		TranslationTextComponent liquidAmount = new TranslationTextComponent("for.gui.tooltip.liquid.amount", amount, getCapacity());

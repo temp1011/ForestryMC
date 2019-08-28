@@ -13,7 +13,7 @@ import java.util.Stack;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -29,7 +29,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -104,7 +103,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		this.hydrationManager = new FarmHydrationManager(this);
 		this.fertilizerManager = new FarmFertilizerManager();
 
-		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(Fluids.WATER);
+		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters((Fluid)null/*FluidRegistry.WATER TODO fluids*/);
 
 		this.tankManager = new TankManager(this, resourceTank);
 		setEnergyPerWorkCycle(10);
@@ -272,7 +271,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		// Check water
 		float hydrationModifier = hydrationManager.getHydrationModifier();
 		int waterConsumption = logic.getWaterConsumption(hydrationModifier);
-		FluidStack requiredLiquid = new FluidStack(Fluids.WATER, waterConsumption);
+		FluidStack requiredLiquid = new FluidStack((Fluid)null/*FluidRegistry.WATER TODO fluids*/, waterConsumption);
 		boolean hasLiquid = requiredLiquid.getAmount() == 0 || hasLiquid(requiredLiquid);
 
 		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {
@@ -318,7 +317,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
 			final int fertilizerConsumption = Math.round(logic.getFertilizerConsumption() * Config.fertilizerModifier * 2);
 			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
-			final FluidStack liquid = new FluidStack(Fluids.WATER, liquidConsumption);
+			final FluidStack liquid = new FluidStack((Fluid)null/*FluidRegistry.WATER TODO fluids*/, liquidConsumption);
 
 			for (FarmTarget target : farmTargets) {
 				// Check fertilizer and water
@@ -378,7 +377,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 	@Override
 	public boolean hasLiquid(FluidStack liquid) {
-		FluidStack drained = resourceTank.drain(liquid, IFluidHandler.FluidAction.SIMULATE);
+		FluidStack drained = resourceTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
 		return liquid.isFluidStackIdentical(drained);
 	}
 

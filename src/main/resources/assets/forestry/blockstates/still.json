@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "forestry:block/still" }
+    "": {
+      "model": "forestry:block/still"
+    }
   }
 }

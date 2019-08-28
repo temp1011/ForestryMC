@@ -2,10 +2,9 @@ package forestry.book.data;
 
 import net.minecraft.item.ItemStack;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.book.BookContent;
 
 @OnlyIn(Dist.CLIENT)

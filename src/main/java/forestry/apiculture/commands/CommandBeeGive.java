@@ -25,10 +25,10 @@
 //import net.minecraft.util.math.BlockPos;
 //
 //import forestry.api.apiculture.BeeManager;
-//import forestry.api.apiculture.EnumBeeType;
-//import forestry.api.apiculture.IAlleleBeeSpecies;
-//import forestry.api.apiculture.IBee;
-//import forestry.api.apiculture.IBeeGenome;
+//import forestry.api.apiculture.genetics.EnumBeeType;
+//import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+//import forestry.api.apiculture.genetics.IBee;
+//import forestry.api.apiculture.genetics.IBeeGenome;
 //import forestry.api.genetics.AlleleManager;
 //import forestry.api.genetics.IAllele;
 //import forestry.core.commands.CommandHelpers;

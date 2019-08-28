@@ -14,7 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 
@@ -22,7 +22,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.tiles.TileMill;
 
-public class RenderMill extends TileEntityRenderer<TileMill> {
+public class RenderMill implements IForestryRenderer<TileMill> {
 	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
 
 	private final ResourceLocation[] textures;
@@ -81,17 +81,14 @@ public class RenderMill extends TileEntityRenderer<TileMill> {
 		this(baseTexture);
 	}
 
-	/**
-	 * @param mill If it null its render the item else it render the tile entity.
-	 */
 	@Override
-	public void render(TileMill mill, double x, double y, double z, float partialTicks, int destroyStage) {
-		if (mill != null) {
-			render(mill.progress, mill.charge, Direction.WEST, x, y, z);
-		} else {
-			byte charge = 0;
-			render(0.0f, charge, Direction.WEST, x, y, z);
-		}
+	public void renderTile(TileMill tile, double x, double y, double z, float partialTicks, int destroyStage) {
+		render(tile.progress, tile.charge, Direction.WEST, x, y, z);
+	}
+
+	@Override
+	public void renderItem(ItemStack stack) {
+		render(0.0f, 0, Direction.WEST, 0, 0, 0);
 	}
 
 	private void render(float progress, int charge, Direction orientation, double x, double y, double z) {

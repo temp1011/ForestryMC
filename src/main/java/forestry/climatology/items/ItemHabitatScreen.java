@@ -27,13 +27,11 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.climate.IClimateHousing;
@@ -173,7 +171,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+	public int getColorFromItemStack(ItemStack stack, int tintIndex) {
 		if (tintIndex == 2) {
 			return isValid(stack, Minecraft.getInstance().world) ? 0x14B276 : 0xBA1F17;
 		} else if (tintIndex == 1) {

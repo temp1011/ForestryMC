@@ -15,7 +15,7 @@ import java.util.Random;
 
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -44,7 +44,7 @@ public class TreeBlockTypeLeaf implements ITreeBlockType {
 	}
 
 	@Override
-	public boolean setBlock(World world, BlockPos pos) {
-		return tree.setLeaves(world, owner, pos, rand == null ? world.rand : rand);
+	public boolean setBlock(IWorld world, BlockPos pos) {
+		return tree.setLeaves(world, owner, pos, rand == null ? world.getRandom() : rand);
 	}
 }

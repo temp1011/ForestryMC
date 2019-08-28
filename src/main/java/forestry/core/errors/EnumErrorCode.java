@@ -10,11 +10,11 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
 import forestry.core.config.Constants;
-import forestry.core.render.TextureManagerForestry;
 
 public enum EnumErrorCode implements IErrorState {
 
@@ -114,9 +114,9 @@ public enum EnumErrorCode implements IErrorState {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void registerSprite() {
+	public void registerSprite(TextureStitchEvent.Pre event) {
 		ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "gui/errors/" + iconName);
-		texture = TextureManagerForestry.getInstance().registerGuiSprite(location);
+		event.addSprite(location);
 	}
 
 	@OnlyIn(Dist.CLIENT)

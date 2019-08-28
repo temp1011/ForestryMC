@@ -33,14 +33,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
-import org.lwjgl.opengl.GL11;
-
 import forestry.api.gui.events.GuiEvent;
 import forestry.book.data.structure.BlockData;
 import forestry.book.data.structure.StructureBlockAccess;
 import forestry.book.data.structure.StructureInfo;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.elements.GuiElement;
+
+import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class MultiblockElement extends GuiElement {

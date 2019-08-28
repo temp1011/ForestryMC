@@ -7,10 +7,9 @@ package forestry.api.book;
 
 import java.util.Collection;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.gui.IGuiElement;
 
 /**

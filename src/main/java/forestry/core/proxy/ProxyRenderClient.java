@@ -12,10 +12,10 @@ package forestry.core.proxy;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 
@@ -29,7 +29,6 @@ import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.RenderNaturalistChest;
 import forestry.core.render.TextureManagerForestry;
-import forestry.core.render.TextureMapForestry;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
@@ -48,7 +47,7 @@ public class ProxyRenderClient extends ProxyRender {
 	@Override
 	public void initRendering() {
 		TextureManagerForestry textureManagerForestry = TextureManagerForestry.getInstance();
-		TextureMapForestry textureMap = textureManagerForestry.getTextureMap();
+		AtlasTexture textureMap = textureManagerForestry.getTextureMap();
 
 		Minecraft minecraft = Minecraft.getInstance();
 		minecraft.getTextureManager().loadTickableTexture(TextureManagerForestry.getInstance().getGuiTextureMap(), textureMap);
