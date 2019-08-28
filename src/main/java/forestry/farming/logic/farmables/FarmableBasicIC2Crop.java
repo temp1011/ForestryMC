@@ -9,11 +9,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-//import net.minecraftforge.fml.common.Optional;
-
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.farming.logic.crops.CropBasicIC2Crop;
+
+//import net.minecraftforge.fml.common.Optional;
 //import forestry.plugins.PluginIC2;
 
 //import ic2.api.crops.ICropTile;
@@ -46,10 +46,8 @@ public class FarmableBasicIC2Crop implements IFarmable {
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
 		TileEntity crop = world.getTileEntity(pos);
-		if (false){//CropBasicIC2Crop.isIC2Crop(crop)) {
-//			babysitCrop(crop);
-			return true;
-		}
+		//CropBasicIC2Crop.isIC2Crop(crop)) {
+		//			babysitCrop(crop);
 		return false;
 	}
 

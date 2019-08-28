@@ -8,7 +8,7 @@
 //import net.minecraft.item.ItemStack;
 //import net.minecraft.server.MinecraftServer;
 //
-//import forestry.api.apiculture.EnumBeeChromosome;
+//import forestry.api.apiculture.genetics.EnumBeeChromosome;
 //import forestry.api.arboriculture.EnumTreeChromosome;
 //import forestry.api.genetics.AlleleManager;
 //import forestry.api.genetics.IChromosomeType;

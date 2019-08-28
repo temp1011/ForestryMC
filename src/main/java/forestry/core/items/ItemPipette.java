@@ -13,7 +13,6 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-//import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -22,17 +21,16 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.core.IToolPipette;
 import forestry.core.fluids.PipetteContents;
+
+//import net.minecraft.client.renderer.ItemMeshDefinition;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 	@OnlyIn(Dist.CLIENT)

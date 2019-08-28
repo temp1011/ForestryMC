@@ -8,9 +8,7 @@ package forestry.api.core;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * @deprecated TODO Remove in 1.13: Not needed in the api, just pass in resourcelocations

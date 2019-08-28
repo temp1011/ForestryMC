@@ -13,9 +13,7 @@ package forestry.core.gui;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 public interface IContainerSocketed {
 	@OnlyIn(Dist.CLIENT)

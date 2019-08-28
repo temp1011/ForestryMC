@@ -18,10 +18,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeRoot;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.genetics.IBeeGenome;
+import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.genetics.IAllele;
 import forestry.apiculture.genetics.Bee;
 import forestry.core.inventory.ItemInventory;

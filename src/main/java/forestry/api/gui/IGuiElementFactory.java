@@ -7,18 +7,17 @@ package forestry.api.gui;
 
 import javax.annotation.Nullable;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IAlleleInteger;
-import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestryMutation;
 import forestry.api.genetics.IGeneticAnalyzer;
 import forestry.api.genetics.IGeneticAnalyzerProvider;
-import forestry.api.genetics.IMutation;
 import forestry.api.gui.style.ITextStyle;
 
 /**
@@ -42,20 +41,20 @@ public interface IGuiElementFactory {
 	ITextStyle getGuiStyle();
 
 	/**
-	 * @return Null if the mutation is secret and undiscovered. {@link IMutation#isSecret()}
+	 * @return Null if the mutation is secret and undiscovered. {@link IForestryMutation#isSecret()}
 	 */
 	@Nullable
-	IGuiElement createMutation(int x, int y, int width, int height, IMutation mutation, IAllele species, IBreedingTracker breedingTracker);
+	IGuiElement createMutation(int x, int y, int width, int height, IForestryMutation mutation, IAllele species, IBreedingTracker breedingTracker);
 
 	/**
-	 * @return Null if the mutation is secret and undiscovered. {@link IMutation#isSecret()}
+	 * @return Null if the mutation is secret and undiscovered. {@link IForestryMutation#isSecret()}
 	 */
 	@Nullable
-	IGuiElement createMutationResultant(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker);
+	IGuiElement createMutationResultant(int x, int y, int width, int height, IForestryMutation mutation, IBreedingTracker breedingTracker);
 
 	IGuiElement createFertilityInfo(IAlleleInteger fertilityAllele, int texOffset);
 
-	IGuiElement createToleranceInfo(IAlleleTolerance toleranceAllele, IAlleleSpecies species, String text);
+	IGuiElement createToleranceInfo(IAlleleTolerance toleranceAllele, IAlleleForestrySpecies species, String text);
 
 	IGuiElement createToleranceInfo(IAlleleTolerance toleranceAllele);
 

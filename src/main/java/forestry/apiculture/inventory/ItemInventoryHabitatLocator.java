@@ -12,6 +12,7 @@ package forestry.apiculture.inventory;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.util.Optional;
 import java.util.Set;
 
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.Biome;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.apiculture.ModuleApiculture;
@@ -73,8 +74,9 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 		}
 
 		ItemStack analyzed = getStackInSlot(SLOT_ANALYZED);
-		IBee bee = BeeManager.beeRoot.getMember(analyzed);
-		if (bee != null) {
+		Optional<IBee> optionalBee = BeeManager.beeRoot.create(analyzed);
+		if (optionalBee.isPresent()) {
+			IBee bee = optionalBee.get();
 			locatorLogic.startBiomeSearch(bee, player);
 		}
 	}

@@ -21,7 +21,7 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.commands.IStatsSaveHelper;
 
@@ -37,8 +37,8 @@ public class TreeStatsSaveHelper implements IStatsSaveHelper {
 	}
 
 	@Override
-	public Collection<IAlleleSpecies> getSpecies() {
-		Collection<IAlleleSpecies> species = new ArrayList<>();
+	public Collection<IAlleleForestrySpecies> getSpecies() {
+		Collection<IAlleleForestrySpecies> species = new ArrayList<>();
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies) {
 				species.add((IAlleleTreeSpecies) allele);

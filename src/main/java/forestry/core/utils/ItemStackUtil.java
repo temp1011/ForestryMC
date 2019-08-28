@@ -21,8 +21,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -381,16 +381,13 @@ public abstract class ItemStackUtil {
 			return false;
 		}
 
-		if (base.getTag() == null || base.getTag().isEmpty()) {
-			// tool uses meta for damage
-			return true;
-		} else {
-			// tool uses NBT for damage
-//			if (base.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-//				return true;
-//			}
-			return false;//base.getItemDamage() == comparison.getItemDamage();
-		}
+		// tool uses meta for damage
+		// tool uses NBT for damage
+		//			if (base.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+		//				return true;
+		//			}
+		//base.getItemDamage() == comparison.getItemDamage();
+		return base.getTag() == null || base.getTag().isEmpty();
 	}
 
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z) {

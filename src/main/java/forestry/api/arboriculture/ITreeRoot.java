@@ -32,7 +32,7 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	ITree getMember(ItemStack itemstack);
 
 	@Override
-	ITree getMember(CompoundNBT compound);
+	ITree create(CompoundNBT compound);
 
 	@Override
 	ITree templateAsIndividual(IAllele[] template);

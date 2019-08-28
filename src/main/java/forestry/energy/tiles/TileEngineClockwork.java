@@ -17,7 +17,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
 
-
 import forestry.core.config.Constants;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;

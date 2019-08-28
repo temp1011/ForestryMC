@@ -39,7 +39,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleRegistry;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.ApiaristAI;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.config.Constants;
@@ -83,8 +83,8 @@ public class EventHandlerCore {
 
 	private static void syncBreedingTrackers(PlayerEntity player) {
 		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
-		Collection<ISpeciesRoot> speciesRoots = alleleRegistry.getSpeciesRoot().values();
-		for (ISpeciesRoot speciesRoot : speciesRoots) {
+		Collection<IForestrySpeciesRoot> speciesRoots = alleleRegistry.getSpeciesRoot().values();
+		for (IForestrySpeciesRoot speciesRoot : speciesRoots) {
 			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
 			breedingTracker.synchToPlayer(player);
 		}

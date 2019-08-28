@@ -12,9 +12,7 @@ package forestry.arboriculture.models;
 
 import com.google.common.collect.ImmutableMap;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public abstract class WoodTexture {

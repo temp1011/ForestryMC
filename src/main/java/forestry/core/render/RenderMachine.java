@@ -16,8 +16,6 @@ import java.util.Locale;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -25,6 +23,8 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.fluids.Fluids;

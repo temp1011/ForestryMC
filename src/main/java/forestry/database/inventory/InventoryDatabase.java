@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.GeneticsUtil;
 import forestry.database.tiles.TileDatabase;
@@ -17,7 +17,7 @@ public class InventoryDatabase extends InventoryAdapterTile<TileDatabase> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
-		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
+		IForestrySpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
 		return speciesRoot != null;
 	}
 

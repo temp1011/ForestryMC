@@ -11,24 +11,25 @@
 package forestry.core.tiles;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 import com.mojang.authlib.GameProfile;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IIndividual;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.core.ModuleCore;
 import forestry.core.gui.ContainerEscritoire;
 import forestry.core.inventory.InventoryAnalyzer;
@@ -80,12 +81,13 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 			return;
 		}
 
-		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(getStackInSlot(InventoryEscritoire.SLOT_ANALYZE));
-		if (individual == null) {
+		Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(getStackInSlot(InventoryEscritoire.SLOT_ANALYZE));
+		if (!optional.isPresent()) {
 			return;
 		}
+		IIndividual individual = optional.get();
 
-		IAlleleSpecies species = individual.getGenome().getPrimary();
+		IAlleleForestrySpecies species = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
 		for (ItemStack itemstack : species.getResearchBounty(world, gameProfile, individual, game.getBountyLevel())) {
 			InventoryUtil.addStack(getInternalInventory(), itemstack, InventoryEscritoire.SLOT_RESULTS_1, InventoryEscritoire.SLOTS_RESULTS_COUNT, true);
 		}

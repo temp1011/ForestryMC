@@ -11,7 +11,7 @@
 package forestry.apiculture;
 
 import forestry.api.apiculture.DefaultBeeModifier;
-import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.genetics.IBeeGenome;
 
 public class AlvearyBeeModifier extends DefaultBeeModifier {
 	@Override

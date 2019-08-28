@@ -15,9 +15,10 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -25,21 +26,26 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+
+import genetics.api.GeneticHelper;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.core.IModelManager;
 import forestry.api.core.ItemGroups;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeGenome;
+import forestry.apiculture.genetics.BeeHelper;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
@@ -58,18 +64,25 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		}
 	}
 
+	@Nullable
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+		return GeneticHelper.createOrganism(stack, type, BeeHelper.getRoot().getDefinition());
+	}
+
 	@Nonnull
 	@Override
 	public IBee getIndividual(ItemStack itemstack) {
-		IBee individual = BeeManager.beeRoot.getMember(itemstack);
+		IBee individual = BeeManager.beeRoot.create(itemstack);
 		if (individual == null) {
 			individual = BeeDefinition.FOREST.getIndividual();
 		}
 		return individual;
 	}
 
+
 	@Override
-	protected IAlleleSpecies getSpecies(ItemStack itemStack) {
+	protected IAlleleForestrySpecies getSpecies(ItemStack itemStack) {
 		return BeeGenome.getSpecies(itemStack);
 	}
 
@@ -81,7 +94,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		}
 
 		IBee individual = getIndividual(itemstack);
-		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
+		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getLocalisationKey().replace("bees.species.", "");
 		if (Translator.canTranslateToLocal(customBeeKey)) {
 			return new TranslationTextComponent(customBeeKey);
 		}
@@ -120,16 +133,15 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	public void addCreativeItems(NonNullList<ItemStack> subItems, boolean hideSecrets) {
 		//TODO beeRoot only set in setupAPI but this is called earlier
 		//so need to adjust init sequence
-		for (IBee bee : new IBee[0]) {//BeeManager.beeRoot.getIndividualTemplates()) {
+		IBeeRoot root = BeeHelper.getRoot();
+		for (IBee bee : root.getIndividualTemplates()) {//BeeManager.beeRoot.getIndividualTemplates()) {
 			// Don't show secret bees unless ordered to.
 			if (hideSecrets && bee.isSecret() && !Config.isDebug) {
 				continue;
 			}
-
-			ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, type);
-			if (!beeStack.isEmpty()) {
-				subItems.add(beeStack);
-			}
+			ItemStack stack = new ItemStack(this);
+			GeneticHelper.setIndividual(stack, bee);
+			subItems.add(stack);
 		}
 	}
 
@@ -151,7 +163,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(BeeChromosomes.SPECIES)) {
 			if (allele instanceof IAlleleBeeSpecies) {
 				((IAlleleBeeSpecies) allele).registerModels(item, manager);
 			}

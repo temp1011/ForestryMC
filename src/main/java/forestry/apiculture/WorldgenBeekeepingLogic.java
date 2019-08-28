@@ -22,8 +22,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.tiles.TileHive;

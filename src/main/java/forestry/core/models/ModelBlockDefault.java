@@ -29,15 +29,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
-//import net.minecraftforge.common.property.IExtendedBlockState;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.models.baker.ModelBakerModel;
+
+//import net.minecraftforge.common.property.IExtendedBlockState;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class ModelBlockDefault<B extends Block, K> implements IBakedModel {

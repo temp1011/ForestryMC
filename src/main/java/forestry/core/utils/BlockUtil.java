@@ -14,10 +14,9 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.HorizontalBlock;
-//import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.HorizontalBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.Direction;
@@ -29,13 +28,14 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
-
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
+
+//import net.minecraft.block.BlockStaticLiquid;
 
 public abstract class BlockUtil {
 
@@ -78,12 +78,9 @@ public abstract class BlockUtil {
 		}
 		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		if (block == Blocks.JUNGLE_LOG) {
-			return true;
-		} else {
-			//TODO - tags or something
-			return false;//block.isWood(world, pos);
-		}
+		//TODO - tags or something
+		//block.isWood(world, pos);
+		return block == Blocks.JUNGLE_LOG;
 	}
 
 	public static boolean isWoodSlabBlock(BlockState blockState, Block block, IBlockReader world, BlockPos pos) {

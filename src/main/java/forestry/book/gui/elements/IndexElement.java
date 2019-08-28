@@ -2,10 +2,9 @@ package forestry.book.gui.elements;
 
 import net.minecraft.util.text.TextFormatting;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.events.GuiEvent;
 import forestry.api.gui.style.ITextStyle;

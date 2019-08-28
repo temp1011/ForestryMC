@@ -12,6 +12,7 @@ package forestry.core.utils;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import net.minecraft.block.BlockState;
@@ -26,19 +27,23 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.util.LazyOptional;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+
 import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IChromosomeType;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
+import forestry.api.genetics.IForestryMutation;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IPollinatable;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.genetics.ISpeciesRootPollinatable;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
@@ -82,7 +87,7 @@ public class GeneticsUtil {
 
 		IIndividual pollen = getPollen(world, pos);
 		if (pollen != null) {
-			ISpeciesRoot root = pollen.getGenome().getSpeciesRoot();
+			IForestrySpeciesRoot root = pollen.getGenome().getSpeciesRoot();
 			if (root instanceof ISpeciesRootPollinatable) {
 				return ((ISpeciesRootPollinatable) root).createPollinatable(pollen);
 			}
@@ -100,7 +105,7 @@ public class GeneticsUtil {
 		if (pollinatable == null && convertVanilla) {
 			final IIndividual pollen = getPollen(world, pos);
 			if (pollen != null) {
-				ISpeciesRoot root = pollen.getGenome().getSpeciesRoot();
+				IForestrySpeciesRoot root = pollen.getGenome().getSpeciesRoot();
 				if (root instanceof ISpeciesRootPollinatable) {
 					ISpeciesRootPollinatable rootPollinatable = (ISpeciesRootPollinatable) root;
 					pollinatable = rootPollinatable.tryConvertToPollinatable(owner, world, pos, pollen);
@@ -151,10 +156,11 @@ public class GeneticsUtil {
 
 		BlockState blockState = world.getBlockState(pos);
 
-		for (ISpeciesRoot root : AlleleManager.alleleRegistry.getSpeciesRoot().values()) {
-			IIndividual individual = root.translateMember(blockState);
-			if (individual != null) {
-				return individual;
+		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
+			IIndividualRoot root = definition.get();
+			Optional<IIndividual> individual = root.getTranslator().translateMember(blockState);
+			if (individual.isPresent()) {
+				return individual.get();
 			}
 		}
 
@@ -168,10 +174,11 @@ public class GeneticsUtil {
 			return ((ItemGE) item).getIndividual(itemStack);
 		}
 
-		for (ISpeciesRoot root : AlleleManager.alleleRegistry.getSpeciesRoot().values()) {
-			IIndividual individual = root.translateMember(itemStack);
-			if (individual != null) {
-				return individual;
+		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
+			IIndividualRoot root = definition.get();
+			Optional<IIndividual> individual = root.getTranslator().translateMember(itemStack);
+			if (individual.isPresent()) {
+				return individual.get();
 			}
 		}
 
@@ -190,15 +197,15 @@ public class GeneticsUtil {
 		return foreign;
 	}
 
-	public static int getResearchComplexity(IAlleleSpecies species, IChromosomeType speciesChromosome) {
+	public static int getResearchComplexity(IAlleleForestrySpecies species, IChromosomeType speciesChromosome) {
 		return 1 + getGeneticAdvancement(species, new HashSet<>(), speciesChromosome);
 	}
 
-	private static int getGeneticAdvancement(IAlleleSpecies species, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
+	private static int getGeneticAdvancement(IAlleleForestrySpecies species, Set<IAlleleForestrySpecies> exclude, IChromosomeType speciesChromosome) {
 		int highest = 0;
 		exclude.add(species);
 
-		for (IMutation mutation : species.getRoot().getPaths(species, speciesChromosome)) {
+		for (IForestryMutation mutation : species.getRoot().getPaths(species, speciesChromosome)) {
 			highest = getHighestAdvancement(mutation.getAllele0(), highest, exclude, speciesChromosome);
 			highest = getHighestAdvancement(mutation.getAllele1(), highest, exclude, speciesChromosome);
 		}
@@ -206,7 +213,7 @@ public class GeneticsUtil {
 		return 1 + highest;
 	}
 
-	private static int getHighestAdvancement(IAlleleSpecies mutationSpecies, int highest, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
+	private static int getHighestAdvancement(IAlleleForestrySpecies mutationSpecies, int highest, Set<IAlleleForestrySpecies> exclude, IChromosomeType speciesChromosome) {
 		if (exclude.contains(mutationSpecies) || AlleleManager.alleleRegistry.isBlacklisted(mutationSpecies.getUID())) {
 			return highest;
 		}

@@ -3,9 +3,9 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.apiculture;
+package forestry.api.apiculture.genetics;
 
-import forestry.api.genetics.IClassification;
+import genetics.api.classification.IClassification;
 
 public interface IBeeFactory {
 

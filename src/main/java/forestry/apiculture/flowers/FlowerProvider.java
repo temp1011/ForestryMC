@@ -17,10 +17,11 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.PlantType;
 
+import genetics.api.individual.IIndividual;
+
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IFlowerProvider;
-import forestry.api.genetics.IIndividual;
 import forestry.core.utils.Translator;
 
 public class FlowerProvider implements IFlowerProvider {

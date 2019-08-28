@@ -6,10 +6,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.core.config.Constants;

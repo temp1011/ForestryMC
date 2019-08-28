@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.biome.Biome;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.common.BiomeDictionary;
 

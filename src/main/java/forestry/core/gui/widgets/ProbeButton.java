@@ -11,9 +11,10 @@
 package forestry.core.gui.widgets;
 
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.tooltips.ToolTip;

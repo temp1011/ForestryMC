@@ -17,16 +17,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 
-import net.minecraftforge.common.capabilities.Capability;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.core.IErrorLogic;
-//import forestry.core.capabilities.HasWorkWrapper;
 import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.IStreamableGui;
@@ -35,6 +31,8 @@ import forestry.core.render.TankRenderInfo;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
+
+//import forestry.core.capabilities.HasWorkWrapper;
 
 //import static forestry.core.capabilities.HasWorkWrapper.CAPABILITY_HAS_WORK;
 

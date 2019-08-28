@@ -22,7 +22,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.core.circuits.ContainerSolderingIron;

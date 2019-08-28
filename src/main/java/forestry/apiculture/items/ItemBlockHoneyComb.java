@@ -2,10 +2,9 @@ package forestry.apiculture.items;
 
 import net.minecraft.item.ItemStack;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.apiculture.blocks.BlockHoneyComb;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;

@@ -21,21 +21,20 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IAlleleBeeSpeciesBuilder;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModelProvider;
-import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IBeeSpriteColourProvider;
 import forestry.api.apiculture.IJubilanceProvider;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IAlleleBeeSpeciesBuilder;
+import forestry.api.apiculture.genetics.IBeeGenome;
+import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.core.IModelManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
@@ -65,7 +64,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	@Override
 	public IAlleleBeeSpecies build() {
-		AlleleManager.alleleRegistry.registerAllele(this, EnumBeeChromosome.SPECIES);
+		AlleleManager.alleleRegistry.registerAllele(this, BeeChromosomes.SPECIES);
 		return this;
 	}
 

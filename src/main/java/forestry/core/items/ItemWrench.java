@@ -22,9 +22,9 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-//import net.minecraftforge.fml.common.Optional;
-
 import net.minecraftforge.common.ToolType;
+
+//import net.minecraftforge.fml.common.Optional;
 
 //import buildcraft.api.tools.IToolWrench;
 

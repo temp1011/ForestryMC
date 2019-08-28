@@ -11,10 +11,10 @@
 package forestry.core.gui;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.network.PacketBuffer;
 
 import forestry.core.ModuleCore;

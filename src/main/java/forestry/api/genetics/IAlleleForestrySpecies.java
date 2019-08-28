@@ -11,43 +11,16 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IIndividual;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 
 /**
  * Basic species allele.
  */
-public interface IAlleleSpecies extends IAllele {
-
-	/**
-	 * @return the {@link ISpeciesRoot} associated with this species.
-	 */
-	ISpeciesRoot getRoot();
-
-	/**
-	 * @return Localized short description of this species. (May be null.)
-	 */
-	String getDescription();
-
-	/**
-	 * Binomial name of the species sans genus ("Apis"). Returning "humboldti" will have the bee species flavour name be "Apis humboldti". Feel free to use fun
-	 * names or return null.
-	 *
-	 * @return flavour text
-	 */
-	String getBinomial();
-
-	/**
-	 * Authority for the binomial name, e.g. "Sengir" on species of base Forestry.
-	 *
-	 * @return flavour text
-	 */
-	String getAuthority();
-
-	/**
-	 * @return Branch this species is associated with.
-	 */
-	IClassification getBranch();
+public interface IAlleleForestrySpecies extends IAlleleSpecies {
 
 	/* RESEARCH */
 

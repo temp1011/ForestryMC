@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 
-import forestry.api.apiculture.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
@@ -49,7 +49,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 		for (ItemStack beeStack : beeList) {
 			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
 			if (species != null) {
-				iconStacks.put(species.getUID(), beeStack);
+				iconStacks.put(species.getRegistryName().toString(), beeStack);
 			}
 		}
 	}
@@ -63,11 +63,11 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 
 		IAlleleBeeSpecies primary = itemInventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
-		getFontRenderer().drawString(primary.getAlleleName(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawString(primary.getLocalizedName(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
 
 		IAlleleBeeSpecies secondary = itemInventory.getSecondary();
 		drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
-		getFontRenderer().drawString(secondary.getAlleleName(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawString(secondary.getLocalizedName(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
 
 		String youCheater = Translator.translateToLocal("for.gui.imprinter.cheater");
 		offset = (138 - getFontRenderer().getStringWidth(youCheater)) / 2;
@@ -76,7 +76,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	}
 
 	private void drawBeeSpeciesIcon(IAlleleBeeSpecies bee, int x, int y) {
-		GuiUtil.drawItemStack(this, iconStacks.get(bee.getUID()), x, y);
+		GuiUtil.drawItemStack(this, iconStacks.get(bee.getRegistryName().toString()), x, y);
 	}
 
 	private static int getHabitatSlotAtPosition(double i, double j) {

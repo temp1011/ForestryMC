@@ -27,8 +27,8 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.GeneticCapabilities;
 import forestry.api.genetics.IFilterData;
 import forestry.api.genetics.IFilterLogic;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.genetics.ISpeciesType;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.network.IStreamableGui;
@@ -140,11 +140,11 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	}
 
 	public Collection<Direction> getValidDirections(ItemStack itemStack, Direction from) {
-		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
+		IForestrySpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
 		IIndividual individual = null;
 		ISpeciesType type = null;
 		if (root != null) {
-			individual = root.getMember(itemStack);
+			individual = root.create(itemStack);
 			type = root.getType(itemStack);
 		}
 		IFilterData filterData = new FilterData(root, individual, type);

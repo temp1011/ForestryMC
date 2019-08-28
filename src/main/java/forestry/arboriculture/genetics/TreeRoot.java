@@ -60,9 +60,9 @@ import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IDatabasePlugin;
+import forestry.api.genetics.IForestryMutation;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.ISpeciesType;
 import forestry.arboriculture.ModuleArboriculture;
@@ -180,7 +180,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public ITree getMember(CompoundNBT compound) {
+	public ITree create(CompoundNBT compound) {
 		return new Tree(compound);
 	}
 
@@ -393,7 +393,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public void registerMutation(IMutation mutation) {
+	public void registerMutation(IForestryMutation mutation) {
 		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID())) {
 			return;
 		}

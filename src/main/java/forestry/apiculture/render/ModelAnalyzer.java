@@ -11,18 +11,17 @@
 package forestry.apiculture.render;
 
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.render.ForestryResource;
 
 @OnlyIn(Dist.CLIENT)

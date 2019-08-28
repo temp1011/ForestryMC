@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IClassification;
 import forestry.core.utils.Translator;
 
@@ -27,7 +27,7 @@ public class Classification implements IClassification {
 	@Nullable
 	private IClassification parent;
 
-	private final ArrayList<IAlleleSpecies> members = new ArrayList<>();
+	private final ArrayList<IAlleleForestrySpecies> members = new ArrayList<>();
 	private final ArrayList<IClassification> groups = new ArrayList<>();
 
 	public Classification(EnumClassLevel level, String uid, String scientific) {
@@ -85,12 +85,12 @@ public class Classification implements IClassification {
 	}
 
 	@Override
-	public IAlleleSpecies[] getMemberSpecies() {
-		return members.toArray(new IAlleleSpecies[0]);
+	public IAlleleForestrySpecies[] getMemberSpecies() {
+		return members.toArray(new IAlleleForestrySpecies[0]);
 	}
 
 	@Override
-	public void addMemberSpecies(IAlleleSpecies species) {
+	public void addMemberSpecies(IAlleleForestrySpecies species) {
 		members.add(species);
 	}
 

@@ -5,10 +5,9 @@ import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.book.BookContent;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IBookPageFactory;

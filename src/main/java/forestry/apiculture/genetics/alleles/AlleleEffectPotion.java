@@ -23,13 +23,12 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.genetics.IEffectData;
 import forestry.core.render.ParticleRender;
 

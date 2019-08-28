@@ -14,8 +14,8 @@ import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.ISpeciesRoot;
 
 public enum EnumTreeChromosome implements IChromosomeType {
 
@@ -77,7 +77,7 @@ public enum EnumTreeChromosome implements IChromosomeType {
 	}
 
 	@Override
-	public ISpeciesRoot getSpeciesRoot() {
+	public IForestrySpeciesRoot getSpeciesRoot() {
 		return TreeManager.treeRoot;
 	}
 

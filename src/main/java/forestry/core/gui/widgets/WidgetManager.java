@@ -16,10 +16,9 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.gui.GuiForestry;
 
 @OnlyIn(Dist.CLIENT)

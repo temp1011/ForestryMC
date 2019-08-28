@@ -8,12 +8,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestryMutation;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.gui.GuiConstants;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IDatabaseElement;
@@ -29,14 +29,14 @@ public class MutationsTab extends DatabaseTab {
 	@Override
 	public void createElements(IDatabaseElement container, IIndividual individual, ItemStack itemStack) {
 		IGenome genome = individual.getGenome();
-		ISpeciesRoot speciesRoot = genome.getSpeciesRoot();
-		IAlleleSpecies species = genome.getPrimary();
+		IForestrySpeciesRoot speciesRoot = genome.getSpeciesRoot();
+		IAlleleForestrySpecies species = genome.getPrimary();
 
 		PlayerEntity player = Minecraft.getInstance().player;
 		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
 
 		IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 1, y, 16), 100, 0);
-		Collection<? extends IMutation> mutations = getValidMutations(speciesRoot.getCombinations(species));
+		Collection<? extends IForestryMutation> mutations = getValidMutations(speciesRoot.getCombinations(species));
 		if (!mutations.isEmpty()) {
 			container.label(Translator.translateToLocal("for.gui.database.mutations.further"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
 			mutations.forEach(mutation -> groupHelper.add(GuiElementFactory.INSTANCE.createMutation(0, 0, 50, 16, mutation, species, breedingTracker)));
@@ -51,8 +51,8 @@ public class MutationsTab extends DatabaseTab {
 		groupHelper.finish(true);
 	}
 
-	private Collection<? extends IMutation> getValidMutations(List<? extends IMutation> mutations) {
-		mutations.removeIf(IMutation::isSecret);
+	private Collection<? extends IForestryMutation> getValidMutations(List<? extends IForestryMutation> mutations) {
+		mutations.removeIf(IForestryMutation::isSecret);
 		return mutations;
 	}
 }

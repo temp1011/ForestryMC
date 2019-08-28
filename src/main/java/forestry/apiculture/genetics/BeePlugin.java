@@ -7,12 +7,11 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBee;
+
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.genetics.DatabaseMode;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.EnumHoneyComb;

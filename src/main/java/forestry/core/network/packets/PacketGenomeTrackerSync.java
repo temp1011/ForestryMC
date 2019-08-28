@@ -15,16 +15,14 @@ import java.io.IOException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.genetics.BreedingTracker;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
@@ -57,7 +55,7 @@ public class PacketGenomeTrackerSync extends ForestryPacket implements IForestry
 			if (nbt != null) {
 				String type = nbt.getString(BreedingTracker.TYPE_KEY);
 
-				ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
+				IForestrySpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
 				if (root != null) {
 					IBreedingTracker tracker = root.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
 					tracker.decodeFromNBT(nbt);

@@ -1,11 +1,12 @@
 package forestry.storage.models;
 
+import com.google.common.collect.ImmutableList;
+
 import javax.annotation.Nullable;
 import javax.vecmath.Vector3f;
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;

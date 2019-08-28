@@ -23,13 +23,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.util.Constants;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -106,7 +104,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		if (compoundNBT.contains("CATER")) {
 			maturationTime = compoundNBT.getInt("CATMAT");
-			caterpillar = ButterflyManager.butterflyRoot.getMember(compoundNBT.getCompound("CATER"));
+			caterpillar = ButterflyManager.butterflyRoot.create(compoundNBT.getCompound("CATER"));
 		}
 
 		ITree tree = getTree();

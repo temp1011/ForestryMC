@@ -6,10 +6,11 @@
 package forestry.api.apiculture;
 
 import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IIndividual;
 
 /**
- * Can be used to garner information on bee breeding. See {@link forestry.api.genetics.ISpeciesRoot} for retrieval functions.
+ * Can be used to garner information on bee breeding. See {@link IForestrySpeciesRoot} for retrieval functions.
  *
  * @author SirSengir
  */

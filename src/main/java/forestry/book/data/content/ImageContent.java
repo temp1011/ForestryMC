@@ -2,10 +2,9 @@ package forestry.book.data.content;
 
 import javax.annotation.Nullable;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.book.BookContent;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IElementGroup;

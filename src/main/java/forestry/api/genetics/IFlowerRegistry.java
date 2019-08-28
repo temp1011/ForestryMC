@@ -13,8 +13,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.apiculture.IBee;
+import genetics.api.individual.IIndividual;
+
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.core.IBlockPosPredicate;
 
 // See {@link forestry.api.apiculture.FlowerManager}.FlowerType___ for basic Forestry flower types.

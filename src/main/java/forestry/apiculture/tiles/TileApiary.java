@@ -23,14 +23,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 
-//import net.minecraftforge.fml.common.Optional;
-
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
-import forestry.api.apiculture.IHiveFrame;
+import forestry.api.apiculture.hives.IHiveFrame;
 import forestry.apiculture.ApiaryBeeListener;
 import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
@@ -40,6 +38,8 @@ import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.core.network.PacketBufferForestry;
+
+//import net.minecraftforge.fml.common.Optional;
 
 //import buildcraft.api.statements.ITriggerExternal;
 

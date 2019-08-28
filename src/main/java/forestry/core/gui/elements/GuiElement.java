@@ -17,10 +17,9 @@ import net.minecraft.util.text.StringTextComponent;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.ITooltipSupplier;

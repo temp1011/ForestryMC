@@ -15,7 +15,6 @@ import com.google.common.base.MoreObjects;
 import java.util.List;
 import java.util.Optional;
 
-
 import net.minecraft.state.IProperty;
 
 import forestry.api.genetics.AlleleManager;

@@ -15,8 +15,8 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,10 +28,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.core.IModelManager;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
@@ -106,10 +105,7 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 			return -1;
 		}
 		int color = colors.getColor(contained, renderPass);
-		if (color != -1) {
-			return color;
-		}
-		return -1;
+		return color;
 	}
 
 }

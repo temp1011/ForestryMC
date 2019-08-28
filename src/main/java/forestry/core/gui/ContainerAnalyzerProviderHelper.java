@@ -8,18 +8,20 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
+import genetics.api.individual.IIndividual;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.ModuleCore;
 import forestry.core.gui.slots.SlotAnalyzer;
 import forestry.core.gui.slots.SlotLockable;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.GeneticsUtil;
-//import forestry.database.inventory.InventoryDatabaseAnalyzer;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+
+//import forestry.database.inventory.InventoryDatabaseAnalyzer;
 
 public class ContainerAnalyzerProviderHelper {
 	/* Attributes - Final*/
@@ -80,14 +82,14 @@ public class ContainerAnalyzerProviderHelper {
 			specimen = convertedSpecimen;
 		}
 
-		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(specimen);
+		IForestrySpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(specimen);
 
 		// No individual, abort
 		if (speciesRoot == null) {
 			return;
 		}
 
-		IIndividual individual = speciesRoot.getMember(specimen);
+		IIndividual individual = speciesRoot.create(specimen);
 
 		// Analyze if necessary
 		if (individual != null && !individual.isAnalyzed()) {

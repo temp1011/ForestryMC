@@ -23,8 +23,9 @@ import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-//import forestry.arboriculture.ModuleArboriculture;
 import forestry.farming.logic.crops.CropDestroy;
+
+//import forestry.arboriculture.ModuleArboriculture;
 
 public class FarmableGE implements IFarmable {
 

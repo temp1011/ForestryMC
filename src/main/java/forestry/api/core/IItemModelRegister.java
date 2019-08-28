@@ -7,9 +7,7 @@ package forestry.api.core;
 
 import net.minecraft.item.Item;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 public interface IItemModelRegister {
 

@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
-import com.google.common.collect.HashMultimap;
-
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,31 +23,24 @@ import net.minecraft.item.ItemStack;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.genetics.IAllele;
+import genetics.api.GeneticsAPI;
+import genetics.api.classification.IClassification;
+import genetics.api.classification.IClassification.EnumClassLevel;
+import genetics.api.classification.IClassificationRegistry;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IAlleleHandler;
 import forestry.api.genetics.IAlleleRegistry;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IChromosomeType;
-import forestry.api.genetics.IClassification;
-import forestry.api.genetics.IClassification.EnumClassLevel;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.ModuleCore;
-import forestry.core.genetics.Classification;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
 
 public class AlleleRegistry implements IAlleleRegistry {
 
-	private static final int ALLELE_ARRAY_SIZE = 2048;
-
 	/* ALLELES */
-	private final LinkedHashMap<String, IAllele> alleleMap = new LinkedHashMap<>(ALLELE_ARRAY_SIZE);
-	private final HashMultimap<IChromosomeType, IAllele> allelesByType = HashMultimap.create();
-	private final HashMultimap<IAllele, IChromosomeType> typesByAllele = HashMultimap.create();
-	private final LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<>(32);
-	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<>(128);
 	private final LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<>(64);
 
 	/*
@@ -57,33 +48,25 @@ public class AlleleRegistry implements IAlleleRegistry {
 	 */
 	private final Set<IAlleleHandler> alleleHandlers = new HashSet<>();
 
-	/* SPECIES ROOT */
-	private final LinkedHashMap<String, ISpeciesRoot> rootMap = new LinkedHashMap<>(16);
-
 	@Override
-	public void registerSpeciesRoot(ISpeciesRoot root) {
-		rootMap.put(root.getUID(), root);
-	}
-
-	@Override
-	public Map<String, ISpeciesRoot> getSpeciesRoot() {
+	public Map<String, IForestrySpeciesRoot> getSpeciesRoot() {
 		return Collections.unmodifiableMap(rootMap);
 	}
 
 	@Override
 	@Nullable
-	public ISpeciesRoot getSpeciesRoot(String uid) {
+	public IForestrySpeciesRoot getSpeciesRoot(String uid) {
 		return rootMap.get(uid);
 	}
 
 	@Override
 	@Nullable
-	public ISpeciesRoot getSpeciesRoot(ItemStack stack) {
+	public IForestrySpeciesRoot getSpeciesRoot(ItemStack stack) {
 		if (stack.isEmpty()) {
 			return null;
 		}
 
-		for (ISpeciesRoot root : rootMap.values()) {
+		for (IForestrySpeciesRoot root : rootMap.values()) {
 			if (root.isMember(stack)) {
 				return root;
 			}
@@ -93,8 +76,8 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 	@Override
 	@Nullable
-	public ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> individualClass) {
-		for (ISpeciesRoot root : rootMap.values()) {
+	public IForestrySpeciesRoot getSpeciesRoot(Class<? extends IIndividual> individualClass) {
+		for (IForestrySpeciesRoot root : rootMap.values()) {
 			if (root.getMemberClass().isAssignableFrom(individualClass)) {
 				return root;
 			}
@@ -103,149 +86,41 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
-	public ISpeciesRoot getSpeciesRoot(IIndividual individual) {
+	public IForestrySpeciesRoot getSpeciesRoot(IIndividual individual) {
 		return individual.getGenome().getSpeciesRoot();
 	}
 
 	/* INDIVIDUALS */
 	@Override
-	public boolean isIndividual(ItemStack stack) {
-		return getSpeciesRoot(stack) != null;
-	}
-
-	@Override
 	@Nullable
 	public IIndividual getIndividual(ItemStack stack) {
-		ISpeciesRoot root = getSpeciesRoot(stack);
+		IForestrySpeciesRoot root = getSpeciesRoot(stack);
 		if (root == null) {
 			return null;
 		}
 
-		return root.getMember(stack);
+		return root.create(stack);
 	}
 
 	public void initialize() {
 
-		createAndRegisterClassification(EnumClassLevel.DOMAIN, "archaea", "Archaea");
-		createAndRegisterClassification(EnumClassLevel.DOMAIN, "bacteria", "Bacteria");
-		IClassification eukarya = createAndRegisterClassification(EnumClassLevel.DOMAIN, "eukarya", "Eukarya");
+		IClassificationRegistry registry = GeneticsAPI.apiInstance.getClassificationRegistry();
+		registry.createAndRegisterClassification(IClassification.EnumClassLevel.DOMAIN, "archaea", "Archaea");
+		registry.createAndRegisterClassification(EnumClassLevel.DOMAIN, "bacteria", "Bacteria");
+		IClassification eukarya = registry.createAndRegisterClassification(EnumClassLevel.DOMAIN, "eukarya", "Eukarya");
 
-		eukarya.addMemberGroup(createAndRegisterClassification(EnumClassLevel.KINGDOM, "animalia", "Animalia"));
-		eukarya.addMemberGroup(createAndRegisterClassification(EnumClassLevel.KINGDOM, "plantae", "Plantae"));
-		eukarya.addMemberGroup(createAndRegisterClassification(EnumClassLevel.KINGDOM, "fungi", "Fungi"));
-		eukarya.addMemberGroup(createAndRegisterClassification(EnumClassLevel.KINGDOM, "protista", "Protista"));
+		eukarya.addMemberGroup(registry.createAndRegisterClassification(EnumClassLevel.KINGDOM, "animalia", "Animalia"));
+		eukarya.addMemberGroup(registry.createAndRegisterClassification(EnumClassLevel.KINGDOM, "plantae", "Plantae"));
+		eukarya.addMemberGroup(registry.createAndRegisterClassification(EnumClassLevel.KINGDOM, "fungi", "Fungi"));
+		eukarya.addMemberGroup(registry.createAndRegisterClassification(EnumClassLevel.KINGDOM, "protista", "Protista"));
 
-		getClassification("kingdom.animalia").addMemberGroup(createAndRegisterClassification(EnumClassLevel.PHYLUM, "arthropoda", "Arthropoda"));
+		registry.getClassification("kingdom.animalia")
+			.addMemberGroup(registry.createAndRegisterClassification(EnumClassLevel.PHYLUM, "arthropoda", "Arthropoda"));
 
 		// Animalia
-		getClassification("phylum.arthropoda").addMemberGroup(createAndRegisterClassification(EnumClassLevel.CLASS, "insecta", "Insecta"));
+		registry.getClassification("phylum.arthropoda")
+			.addMemberGroup(registry.createAndRegisterClassification(EnumClassLevel.CLASS, "insecta", "Insecta"));
 
-	}
-
-	@Override
-	public Map<String, IAllele> getRegisteredAlleles() {
-		return Collections.unmodifiableMap(alleleMap);
-	}
-
-	@Override
-	public Map<String, IAllele> getDeprecatedAlleleReplacements() {
-		return Collections.unmodifiableMap(deprecatedAlleleMap);
-	}
-
-	@Override
-	public void registerAllele(IAllele allele, IChromosomeType... chromosomeTypes) {
-		addValidAlleleTypes(allele, chromosomeTypes);
-
-		alleleMap.put(allele.getUID(), allele);
-		if (allele instanceof IAlleleSpecies) {
-			IClassification branch = ((IAlleleSpecies) allele).getBranch();
-			branch.addMemberSpecies((IAlleleSpecies) allele);
-		}
-
-		for (IAlleleHandler handler : this.alleleHandlers) {
-			handler.onRegisterAllele(allele);
-		}
-	}
-
-	@Override
-	public void addValidAlleleTypes(IAllele allele, IChromosomeType... chromosomeTypes) {
-		for (IChromosomeType chromosomeType : chromosomeTypes) {
-			if (!chromosomeType.getAlleleClass().isAssignableFrom(allele.getClass())) {
-				throw new IllegalArgumentException("Allele class (" + allele.getClass() + ") does not match chromosome type (" + chromosomeType.getAlleleClass() + ").");
-			}
-			allelesByType.put(chromosomeType, allele);
-			typesByAllele.put(allele, chromosomeType);
-		}
-	}
-
-	@Override
-	public void registerDeprecatedAlleleReplacement(String deprecatedUID, IAllele replacementAllele) {
-		if (deprecatedAlleleMap.containsKey(deprecatedUID)) {
-			return;
-		}
-
-		deprecatedAlleleMap.put(deprecatedUID, replacementAllele);
-	}
-
-	@Override
-	@Nullable
-	public IAllele getAllele(String uid) {
-		IAllele allele = alleleMap.get(uid);
-
-		if (allele == null) {
-			allele = deprecatedAlleleMap.get(uid);
-		}
-
-		return allele;
-	}
-
-	@Override
-	public Collection<IAllele> getRegisteredAlleles(IChromosomeType type) {
-		return Collections.unmodifiableSet(allelesByType.get(type));
-	}
-
-	@Override
-	public Collection<IChromosomeType> getChromosomeTypes(IAllele allele) {
-		return Collections.unmodifiableSet(typesByAllele.get(allele));
-	}
-
-	/* CLASSIFICATIONS */
-	@Override
-	public void registerClassification(IClassification branch) {
-
-		if (classificationMap.containsKey(branch.getUID())) {
-			throw new RuntimeException(String.format("Could not add new classification '%s', because the key is already taken by %s.", branch.getUID(),
-				classificationMap.get(branch.getUID())));
-		}
-
-		classificationMap.put(branch.getUID(), branch);
-		for (IAlleleHandler handler : this.alleleHandlers) {
-			handler.onRegisterClassification(branch);
-		}
-	}
-
-	@Override
-	public Map<String, IClassification> getRegisteredClassifications() {
-		return Collections.unmodifiableMap(classificationMap);
-	}
-
-	@Override
-	public IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific) {
-		return new Classification(level, uid, scientific);
-	}
-
-	@Override
-	public IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific, IClassification... members) {
-		IClassification classification = new Classification(level, uid, scientific);
-		for (IClassification member : members) {
-			classification.addMemberGroup(member);
-		}
-		return classification;
-	}
-
-	@Override
-	public IClassification getClassification(String uid) {
-		return classificationMap.get(uid);
 	}
 
 	/* FRUIT FAMILIES */
@@ -293,7 +168,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 	/* RESEARCH */
 	@Override
-	public ItemStack getSpeciesNoteStack(GameProfile researcher, IAlleleSpecies species) {
+	public ItemStack getSpeciesNoteStack(GameProfile researcher, IAlleleForestrySpecies species) {
 		return EnumNoteType.createSpeciesNoteStack(ModuleCore.getItems().researchNote, researcher, species);
 	}
 

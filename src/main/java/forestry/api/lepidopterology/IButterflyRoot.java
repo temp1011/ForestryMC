@@ -17,9 +17,9 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 
-public interface IButterflyRoot extends ISpeciesRoot {
+public interface IButterflyRoot extends IForestrySpeciesRoot {
 
 	@Override
 	boolean isMember(ItemStack stack);
@@ -29,7 +29,7 @@ public interface IButterflyRoot extends ISpeciesRoot {
 	IButterfly getMember(ItemStack stack);
 
 	@Override
-	IButterfly getMember(CompoundNBT compound);
+	IButterfly create(CompoundNBT compound);
 
 	/* GENOME CONVERSION */
 	@Override

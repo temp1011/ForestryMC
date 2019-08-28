@@ -22,27 +22,23 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-//import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-//import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IEnviromentBlockReader;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.model.IModelState;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
@@ -50,6 +46,9 @@ import forestry.core.blocks.IColoredBlock;
 import forestry.core.config.Constants;
 import forestry.core.items.IColoredItem;
 import forestry.core.utils.ModelUtil;
+
+//import net.minecraft.client.renderer.ItemMeshDefinition;
+//import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelManager implements IModelManager {

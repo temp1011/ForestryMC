@@ -14,9 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -26,14 +26,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IHiveDrop;
-import forestry.api.apiculture.IHiveTile;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.hives.IHiveDrop;
 import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
+import forestry.api.apiculture.hives.IHiveTile;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileHive;

@@ -3,10 +3,9 @@ package forestry.api.gui.events;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
 

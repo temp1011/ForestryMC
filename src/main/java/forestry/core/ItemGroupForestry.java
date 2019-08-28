@@ -10,25 +10,26 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
+import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.genetics.BeeDefinition;
-//import forestry.arboriculture.genetics.Tree;
-//import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.config.Constants;
-//import forestry.lepidopterology.genetics.Butterfly;
-//import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+
+//import forestry.arboriculture.genetics.Tree;
+//import forestry.arboriculture.genetics.TreeDefinition;
+//import forestry.lepidopterology.genetics.Butterfly;
+//import forestry.lepidopterology.genetics.ButterflyDefinition;
 
 public class ItemGroupForestry extends ItemGroup {
 

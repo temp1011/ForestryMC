@@ -14,7 +14,7 @@ import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosomeType;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 
 public enum EnumButterflyChromosome implements IChromosomeType {
 	/**
@@ -89,7 +89,7 @@ public enum EnumButterflyChromosome implements IChromosomeType {
 	}
 
 	@Override
-	public ISpeciesRoot getSpeciesRoot() {
+	public IForestrySpeciesRoot getSpeciesRoot() {
 		return ButterflyManager.butterflyRoot;
 	}
 }

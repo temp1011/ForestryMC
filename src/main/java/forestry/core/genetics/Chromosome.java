@@ -19,7 +19,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 
 public class Chromosome implements IChromosome {
 	private static final String UID0_TAG = "UID0";
@@ -40,7 +40,7 @@ public class Chromosome implements IChromosome {
 
 	private static IAllele validateAllele(@Nullable String speciesUid, IChromosomeType chromosomeType, @Nullable IAllele allele) {
 		if (!chromosomeType.getAlleleClass().isInstance(allele)) {
-			ISpeciesRoot speciesRoot = chromosomeType.getSpeciesRoot();
+			IForestrySpeciesRoot speciesRoot = chromosomeType.getSpeciesRoot();
 
 			IAllele[] template = null;
 

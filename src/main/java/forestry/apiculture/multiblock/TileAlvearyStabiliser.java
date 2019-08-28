@@ -11,8 +11,8 @@
 package forestry.apiculture.multiblock;
 
 import forestry.api.apiculture.DefaultBeeModifier;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.multiblock.IAlvearyComponent;
 
 public class TileAlvearyStabiliser extends TileAlveary implements IAlvearyComponent.BeeModifier {

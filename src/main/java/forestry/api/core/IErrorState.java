@@ -7,9 +7,7 @@ package forestry.api.core;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

@@ -11,9 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.Stitcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-//import net.minecraft.client.renderer.texture.TextureUtil;
-//import net.minecraft.client.resources.IResource;
-//import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.crash.ReportedException;
@@ -21,14 +18,16 @@ import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
-//import net.minecraftforge.fml.client.FMLClientHandler;
-//import net.minecraftforge.fml.common.ProgressManager;
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.utils.Log;
+
+//import net.minecraft.client.renderer.texture.TextureUtil;
+//import net.minecraft.client.resources.IResource;
+//import net.minecraft.client.resources.IResourceManager;
+//import net.minecraftforge.fml.client.FMLClientHandler;
+//import net.minecraftforge.fml.common.ProgressManager;
 
 
 //TODO - not sure this is possible yet, and I'm not 100% sure why it is needed, possibly because the other one only allows blocks

@@ -7,10 +7,9 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.DatabaseMode;

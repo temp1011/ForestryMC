@@ -19,7 +19,7 @@ import java.util.Map;
 
 import net.minecraft.util.math.Vec3i;
 
-import forestry.api.apiculture.EnumBeeChromosome;
+import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
@@ -52,28 +52,28 @@ public class AlleleHelper implements IAlleleHelper {
 
 	private void init() {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			createAlleles(EnumAllele.Fertility.class, EnumBeeChromosome.FERTILITY);
-			createAlleles(EnumAllele.Flowering.class, EnumBeeChromosome.FLOWERING);
-			createAlleles(EnumAllele.Territory.class, EnumBeeChromosome.TERRITORY);
+			createAlleles(EnumAllele.Fertility.class, BeeChromosomes.FERTILITY);
+			createAlleles(EnumAllele.Flowering.class, BeeChromosomes.FLOWERING);
+			createAlleles(EnumAllele.Territory.class, BeeChromosomes.TERRITORY);
 		}
 
 		if (ModuleHelper.anyEnabled(ForestryModuleUids.APICULTURE, ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			createAlleles(EnumAllele.Speed.class,
-				EnumBeeChromosome.SPEED,
+				BeeChromosomes.SPEED,
 				EnumButterflyChromosome.SPEED
 			);
 			createAlleles(EnumAllele.Lifespan.class,
-				EnumBeeChromosome.LIFESPAN,
+				BeeChromosomes.LIFESPAN,
 				EnumButterflyChromosome.LIFESPAN
 			);
 			createAlleles(EnumAllele.Tolerance.class,
-				EnumBeeChromosome.TEMPERATURE_TOLERANCE,
-				EnumBeeChromosome.HUMIDITY_TOLERANCE,
+				BeeChromosomes.TEMPERATURE_TOLERANCE,
+				BeeChromosomes.HUMIDITY_TOLERANCE,
 				EnumButterflyChromosome.TEMPERATURE_TOLERANCE,
 				EnumButterflyChromosome.HUMIDITY_TOLERANCE
 			);
 			createAlleles(EnumAllele.Flowers.class,
-				EnumBeeChromosome.FLOWER_PROVIDER,
+				BeeChromosomes.FLOWER_PROVIDER,
 				EnumButterflyChromosome.FLOWER_PROVIDER
 			);
 		}
@@ -108,9 +108,9 @@ public class AlleleHelper implements IAlleleHelper {
 		booleans.put(false, new AlleleBoolean(modId, "bool", false, false));
 		for (IAlleleBoolean alleleBoolean : booleans.values()) {
 			AlleleManager.alleleRegistry.registerAllele(alleleBoolean,
-				EnumBeeChromosome.NEVER_SLEEPS,
-				EnumBeeChromosome.TOLERATES_RAIN,
-				EnumBeeChromosome.CAVE_DWELLING,
+				BeeChromosomes.NEVER_SLEEPS,
+				BeeChromosomes.TOLERATES_RAIN,
+				BeeChromosomes.CAVE_DWELLING,
 				EnumButterflyChromosome.NOCTURNAL,
 				EnumButterflyChromosome.TOLERANT_FLYER,
 				EnumButterflyChromosome.FIRE_RESIST

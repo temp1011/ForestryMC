@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-
 
 import forestry.core.config.Config;
 

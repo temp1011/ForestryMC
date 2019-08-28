@@ -8,15 +8,13 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.glfw.GLFW;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IDatabasePlugin;
 import forestry.api.genetics.IDatabaseTab;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IGeneticAnalyzer;
 import forestry.api.genetics.IGeneticAnalyzerProvider;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IWindowElement;
 import forestry.api.gui.events.GuiEvent;
@@ -28,6 +26,8 @@ import forestry.core.gui.widgets.IScrollable;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
+
+import org.lwjgl.glfw.GLFW;
 
 public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, IScrollable {
 	/* Textures */
@@ -126,11 +126,11 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 			return;
 		}
 		ItemStack stack = provider.getSpecimen(selectedSlot);
-		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(stack);
+		IForestrySpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(stack);
 		if (root != null) {
 			IDatabasePlugin databasePlugin = root.getSpeciesPlugin();
 			if (databasePlugin != null) {
-				IIndividual individual = root.getMember(stack);
+				IIndividual individual = root.create(stack);
 				if (individual != null) {
 					if (individual.isAnalyzed()) {
 						tabs.setPlugin(databasePlugin);

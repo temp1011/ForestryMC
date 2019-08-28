@@ -15,52 +15,44 @@ import javax.annotation.Nullable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
-import forestry.api.genetics.IGenome;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.Individual;
+
 import forestry.api.genetics.IIndividualLiving;
 
 public abstract class IndividualLiving extends Individual implements IIndividualLiving {
+	private static final String NBT_HEALTH = "Health";
+	private static final String NBT_MAX_HEALTH = "MaxH";
 
 	private int health;
 	private int maxHealth;
 
-	protected IndividualLiving() {
+	protected IndividualLiving(IGenome genome, @Nullable IGenome mate) {
+		super(genome, mate);
 	}
 
-	protected IndividualLiving(int newHealth) {
+	protected IndividualLiving(IGenome genome, @Nullable IGenome mate, int newHealth) {
+		super(genome, mate);
 		health = maxHealth = newHealth;
 	}
 
 	protected IndividualLiving(CompoundNBT nbt) {
 		super(nbt);
-		health = nbt.getInt("Health");
-		maxHealth = nbt.getInt("MaxH");
+		health = nbt.getInt(NBT_HEALTH);
+		maxHealth = nbt.getInt(NBT_MAX_HEALTH);
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT compound) {
+		compound = super.write(compound);
 
-		CompoundNBT = super.write(CompoundNBT);
+		compound.putInt(NBT_HEALTH, health);
+		compound.putInt(NBT_MAX_HEALTH, maxHealth);
 
-		CompoundNBT.putInt("Health", health);
-		CompoundNBT.putInt("MaxH", maxHealth);
-
-		CompoundNBT nbtGenome = new CompoundNBT();
-		getGenome().write(nbtGenome);
-		CompoundNBT.put("Genome", nbtGenome);
-
-		if (getMate() != null) {
-			CompoundNBT nbtMate = new CompoundNBT();
-			getMate().write(nbtMate);
-			CompoundNBT.put("Mate", nbtMate);
-		}
-		return CompoundNBT;
+		return compound;
 	}
 
 	/* GENERATION */
-	@Override
-	@Nullable
-	public abstract IGenome getMate();
-
 	@Override
 	public boolean isAlive() {
 		return health > 0;

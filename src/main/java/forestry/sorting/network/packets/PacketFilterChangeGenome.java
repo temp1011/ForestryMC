@@ -8,9 +8,10 @@ import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.common.util.LazyOptional;
 
-import forestry.api.genetics.AlleleManager;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+
 import forestry.api.genetics.GeneticCapabilities;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IFilterLogic;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketHandlerServer;
@@ -43,7 +44,7 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 		data.writeBoolean(active);
 		if (allele != null) {
 			data.writeBoolean(true);
-			data.writeString(allele.getUID());
+			data.writeString(allele.getRegistryName().toString());
 		} else {
 			data.writeBoolean(false);
 		}
@@ -63,7 +64,7 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 			boolean active = data.readBoolean();
 			IAllele allele;
 			if (data.readBoolean()) {
-				allele = AlleleManager.alleleRegistry.getAllele(data.readString());
+				allele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(data.readString()).orElse(null);
 			} else {
 				allele = null;
 			}

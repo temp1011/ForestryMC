@@ -14,7 +14,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.PlayerEntity;
 
 import forestry.core.commands.SpeciesNotFoundException;
-import forestry.core.commands.TemplateNotFoundException;
 
 public interface ITreeSpawner {
 

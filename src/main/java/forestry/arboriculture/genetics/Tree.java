@@ -35,13 +35,11 @@ import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.common.PlantType;
-import net.minecraftforge.common.IPlantable;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.PlantType;
+
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -55,13 +53,12 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.IForestryMutation;
 import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.IMutation;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.config.Config;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
-import forestry.core.utils.Translator;
 
 public class Tree extends Individual implements ITree, IPlantable {
 	private final ITreeGenome genome;
@@ -359,8 +356,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 			breedingTracker = TreeManager.treeRoot.getBreedingTracker(world, playerProfile);
 		}
 
-		List<IMutation> combinations = TreeManager.treeRoot.getCombinations(allele0, allele1, true);
-		for (IMutation mutation : combinations) {
+		List<IForestryMutation> combinations = TreeManager.treeRoot.getCombinations(allele0, allele1, true);
+		for (IForestryMutation mutation : combinations) {
 			ITreeMutation treeMutation = (ITreeMutation) mutation;
 			// Stop blacklisted species.
 			// if (BeeManager.breedingManager.isBlacklisted(mutation.getTemplate()[0].getUID())) {

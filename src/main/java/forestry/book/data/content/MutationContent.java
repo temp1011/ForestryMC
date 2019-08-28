@@ -2,16 +2,15 @@ package forestry.book.data.content;
 
 import javax.annotation.Nullable;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.book.BookContent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.IForestryMutation;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IGuiElementFactory;
@@ -33,12 +32,12 @@ public class MutationContent extends BookContent {
 	@Override
 	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		IAllele allele = AlleleManager.alleleRegistry.getAllele(species);
-		if (!(allele instanceof IAlleleSpecies)) {
+		if (!(allele instanceof IAlleleForestrySpecies)) {
 			return false;
 		}
-		IAlleleSpecies s = (IAlleleSpecies) allele;
-		ISpeciesRoot root = s.getRoot();
-		page.add(new MutationElement(0, 0, root.getResultantMutations(s).toArray(new IMutation[0])));
+		IAlleleForestrySpecies s = (IAlleleForestrySpecies) allele;
+		IForestrySpeciesRoot root = s.getRoot();
+		page.add(new MutationElement(0, 0, root.getResultantMutations(s).toArray(new IForestryMutation[0])));
 		return true;
 	}
 }

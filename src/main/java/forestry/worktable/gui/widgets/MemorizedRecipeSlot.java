@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.worktable.gui.widgets;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.gui.widgets.ItemStackWidgetBase;
 import forestry.core.gui.widgets.WidgetManager;

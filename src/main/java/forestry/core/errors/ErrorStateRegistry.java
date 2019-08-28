@@ -18,10 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.core.IErrorStateRegistry;
@@ -47,7 +46,7 @@ public class ErrorStateRegistry implements IErrorStateRegistry {
 
 	@Override
 	public void addAlias(IErrorState state, String name) {
-		if (!states.values().contains(state)) {
+		if (!states.containsValue(state)) {
 			throw new RuntimeException("Forestry Error State did not exist while trying to register alias.");
 		}
 

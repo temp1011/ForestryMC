@@ -21,11 +21,11 @@ import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestryMutation;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.buttons.GuiBetterButton;
@@ -36,7 +36,7 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 
 public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInventory> {
-	private final ISpeciesRoot speciesRoot;
+	private final IForestrySpeciesRoot speciesRoot;
 	private final IBreedingTracker breedingTracker;
 	private final HashMap<String, ItemStack> iconStacks = new HashMap<>();
 	private final int pageCurrent, pageMax;
@@ -122,7 +122,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 			return null;
 		}
 
-		return speciesRoot.getMember(slot.getStack());
+		return speciesRoot.create(slot.getStack());
 	}
 
 	private void displayBreedingStatistics(int x) {
@@ -148,7 +148,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 		textLayout.endPage();
 	}
 
-	private void displaySpeciesInformation(boolean analyzed, IAlleleSpecies species, ItemStack iconStack, int x) {
+	private void displaySpeciesInformation(boolean analyzed, IAlleleForestrySpecies species, ItemStack iconStack, int x) {
 
 		if (!analyzed) {
 			textLayout.drawLine(Translator.translateToLocal("for.gui.unknown"), x);
@@ -164,7 +164,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 		int columnWidth = 16;
 		int column = 10;
 
-		for (IMutation combination : speciesRoot.getCombinations(species)) {
+		for (IForestryMutation combination : speciesRoot.getCombinations(species)) {
 			if (combination.isSecret()) {
 				continue;
 			}
@@ -186,7 +186,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 		textLayout.newLine();
 	}
 
-	private void drawMutationIcon(IMutation combination, IAlleleSpecies species, int x) {
+	private void drawMutationIcon(IForestryMutation combination, IAlleleForestrySpecies species, int x) {
 		GuiUtil.drawItemStack(this, iconStacks.get(combination.getPartner(species).getUID()), guiLeft + x, guiTop + textLayout.getLineY());
 
 		int line = 48;
@@ -217,7 +217,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 
 	}
 
-	private void drawUnknownIcon(IMutation mutation, int x) {
+	private void drawUnknownIcon(IForestryMutation mutation, int x) {
 
 		float chance = mutation.getBaseChance();
 

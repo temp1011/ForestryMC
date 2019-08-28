@@ -20,12 +20,10 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-//import net.minecraft.block.BlockOldLog;
-//import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.Items;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -37,6 +35,9 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.farming.logic.farmables.FarmableCocoa;
+
+//import net.minecraft.block.BlockOldLog;
+//import net.minecraft.block.BlockPlanks;
 
 public class FarmLogicCocoa extends FarmLogic {
 	private final IFarmable cocoa = new FarmableCocoa();

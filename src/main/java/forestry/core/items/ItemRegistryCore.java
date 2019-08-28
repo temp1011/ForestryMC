@@ -16,8 +16,6 @@ import java.util.Map;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-//import net.minecraftforge.oredict.OreDictionary;
-
 import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.ItemGroups;
@@ -26,6 +24,8 @@ import forestry.core.genetics.ItemResearchNote;
 import forestry.core.utils.OreDictUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+
+//import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemRegistryCore extends ItemRegistry {
 	/* Fertilizer */

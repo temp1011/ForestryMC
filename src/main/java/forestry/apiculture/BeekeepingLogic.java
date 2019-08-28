@@ -37,15 +37,15 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IApiaristTracker;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
@@ -98,7 +98,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		if (compoundNBT.contains("queen")) {
 			CompoundNBT queenNBT = compoundNBT.getCompound("queen");
 			queenStack = ItemStack.read(queenNBT);
-			queen = BeeManager.beeRoot.getMember(queenStack);
+			queen = BeeManager.beeRoot.create(queenStack);
 		}
 
 		setActive(compoundNBT.getBoolean("Active"));
@@ -153,7 +153,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		setActive(active);
 		if (active) {
 			queenStack = data.readItemStack();
-			queen = BeeManager.beeRoot.getMember(queenStack);
+			queen = BeeManager.beeRoot.create(queenStack);
 			hasFlowersCache.readData(data);
 		}
 	}
@@ -194,7 +194,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		if (beeType == EnumBeeType.QUEEN) {
 			if (!isQueenAlive(queenStack)) {
-				IBee dyingQueen = BeeManager.beeRoot.getMember(queenStack);
+				IBee dyingQueen = BeeManager.beeRoot.create(queenStack);
 				Collection<ItemStack> spawned = killQueen(dyingQueen, housing, beeListener);
 				spawn.addAll(spawned);
 				queenStack = ItemStack.EMPTY;
@@ -205,7 +205,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		if (this.queenStack != queenStack) {
 			if (!queenStack.isEmpty()) {
-				this.queen = BeeManager.beeRoot.getMember(queenStack);
+				this.queen = BeeManager.beeRoot.create(queenStack);
 				if (this.queen != null) {
 					hasFlowersCache.onNewQueen(queen, housing);
 				}
@@ -375,8 +375,8 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		}
 
 		// Mate and replace princess with queen
-		IBee princess = BeeManager.beeRoot.getMember(princessStack);
-		IBee drone = BeeManager.beeRoot.getMember(droneStack);
+		IBee princess = BeeManager.beeRoot.create(princessStack);
+		IBee drone = BeeManager.beeRoot.create(droneStack);
 		princess.mate(drone);
 
 		CompoundNBT CompoundNBT = new CompoundNBT();

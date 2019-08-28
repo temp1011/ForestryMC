@@ -15,13 +15,12 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 
-
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlvearySieve;
@@ -72,7 +71,7 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 				return false;
 			}
 
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(pollen);
+			IForestrySpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(pollen);
 
 			ItemStack pollenStack = speciesRoot.getMemberStack(pollen, EnumGermlingType.POLLEN);
 			if (!pollenStack.isEmpty()) {

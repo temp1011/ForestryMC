@@ -13,10 +13,9 @@ package forestry.apiculture.items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;

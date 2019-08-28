@@ -7,10 +7,9 @@ import java.util.Locale;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;

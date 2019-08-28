@@ -11,9 +11,9 @@
 package forestry.apiculture.genetics;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBeeMutationBuilder;
-import forestry.api.apiculture.IBeeMutationFactory;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBeeMutationBuilder;
+import forestry.api.apiculture.genetics.IBeeMutationFactory;
 import forestry.api.genetics.IAllele;
 
 public class BeeMutationFactory implements IBeeMutationFactory {

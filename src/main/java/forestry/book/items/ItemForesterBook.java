@@ -13,7 +13,6 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-
 import forestry.api.book.IForesterBook;
 import forestry.book.BookLoader;
 import forestry.book.gui.GuiForesterBook;

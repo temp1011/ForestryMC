@@ -29,10 +29,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.models.WoodTexture.SimpleTexture;

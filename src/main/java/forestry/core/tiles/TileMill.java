@@ -12,12 +12,11 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-
 import net.minecraft.tileentity.TileEntityType;
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.network.PacketBufferForestry;
 
 //TODO - move to factory?

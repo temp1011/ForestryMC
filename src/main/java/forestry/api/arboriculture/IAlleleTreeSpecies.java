@@ -10,18 +10,16 @@ import java.util.Collection;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.PlantType;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IModelManager;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IAlleleProperty;
-import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IFruitFamily;
 
-public interface IAlleleTreeSpecies extends IAlleleSpecies, IAlleleProperty<IAlleleTreeSpecies> {
+public interface IAlleleTreeSpecies extends IAlleleForestrySpecies, IAlleleProperty<IAlleleTreeSpecies> {
 
 	@Override
 	ITreeRoot getRoot();

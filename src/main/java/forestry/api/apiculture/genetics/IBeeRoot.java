@@ -3,51 +3,34 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.apiculture;
+package forestry.api.apiculture.genetics;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.ISpeciesRoot;
+import genetics.api.individual.IGenome;
 
-public interface IBeeRoot extends ISpeciesRoot {
+import forestry.api.apiculture.IApiaristTracker;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeListener;
+import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.apiculture.IBeekeepingMode;
+import forestry.api.genetics.IForestrySpeciesRoot;
+
+public interface IBeeRoot extends IForestrySpeciesRoot<IBee> {
 
 	/**
 	 * @return true if passed item is a Forestry bee. Equal to getType(ItemStack stack) != null
 	 */
 	@Override
 	boolean isMember(ItemStack stack);
-
-	/**
-	 * @return {@link IBee} pattern parsed from the passed stack's nbt data. Null if the ItemStack is not a valid member.
-	 */
-	@Override
-	@Nullable
-	IBee getMember(ItemStack stack);
-
-	@Override
-	IBee getMember(CompoundNBT compound);
-
-	/* GENOME CONVERSION */
-	@Override
-	IBee templateAsIndividual(IAllele[] template);
-
-	@Override
-	IBee templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive);
-
-	@Override
-	IBeeGenome templateAsGenome(IAllele[] template);
-
-	@Override
-	IBeeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive);
 
 	/* BREEDING TRACKER */
 
@@ -60,13 +43,6 @@ public interface IBeeRoot extends ISpeciesRoot {
 	/* BEE SPECIFIC */
 
 	/**
-	 * @return type of bee encoded on the itemstack. null if it isn't a bee.
-	 */
-	@Nullable
-	@Override
-	EnumBeeType getType(ItemStack stack);
-
-	/**
 	 * @return true if passed item is a drone. Equal to getType(ItemStack stack) == EnumBeeType.DRONE
 	 */
 	boolean isDrone(ItemStack stack);
@@ -77,28 +53,13 @@ public interface IBeeRoot extends ISpeciesRoot {
 	boolean isMated(ItemStack stack);
 
 	/**
-	 * @param genome Valid {@link IBeeGenome}
-	 * @return {@link IBee} from the passed genome
-	 */
-	IBee getBee(IBeeGenome genome);
-
-	/**
 	 * Creates an IBee suitable for a queen containing the necessary second genome for the mate.
 	 *
-	 * @param genome Valid {@link IBeeGenome}
+	 * @param genome Valid {@link IGenome}
 	 * @param mate   Valid {@link IBee} representing the mate.
 	 * @return Mated {@link IBee} from the passed genomes.
 	 */
-	IBee getBee(World world, IBeeGenome genome, IBee mate);
-
-	/* TEMPLATES */
-
-	@Override
-	List<IBee> getIndividualTemplates();
-
-	/* MUTATIONS */
-	@Override
-	List<IBeeMutation> getMutations(boolean shuffle);
+	IBee getBee(World world, IGenome genome, IBee mate);
 
 	/* GAME MODE */
 	void resetBeekeepingMode();

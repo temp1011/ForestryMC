@@ -20,9 +20,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.ColourUtil;
@@ -70,9 +70,9 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 
 	private void setTokenSpecies(String speciesUid) {
 		IAllele allele = AlleleManager.alleleRegistry.getAllele(speciesUid);
-		if (allele instanceof IAlleleSpecies) {
-			IAlleleSpecies species = (IAlleleSpecies) allele;
-			ISpeciesRoot root = species.getRoot();
+		if (allele instanceof IAlleleForestrySpecies) {
+			IAlleleForestrySpecies species = (IAlleleForestrySpecies) allele;
+			IForestrySpeciesRoot root = species.getRoot();
 			IAllele[] template = root.getTemplate(species);
 			this.tokenIndividual = root.templateAsIndividual(template);
 			this.tokenStack = root.getMemberStack(this.tokenIndividual, root.getIconType());

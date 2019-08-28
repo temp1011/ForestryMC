@@ -16,26 +16,25 @@ import java.io.IOException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IIndividual;
 import forestry.core.ModuleCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -94,7 +93,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 		if (!stackToAnalyze.isEmpty()) {
-			specimenToAnalyze = AlleleManager.alleleRegistry.getIndividual(stackToAnalyze);
+			specimenToAnalyze = GeneticsAPI.apiInstance.getRootHelper().getIndividual(stackToAnalyze).orElse(null);
 		}
 	}
 
@@ -146,7 +145,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	private Integer getInputSlotIndex() {
 		for (int slotIndex = 0; slotIndex < invInput.getSizeInventory(); slotIndex++) {
 			ItemStack inputStack = invInput.getStackInSlot(slotIndex);
-			if (AlleleManager.alleleRegistry.isIndividual(inputStack)) {
+			if (GeneticsAPI.apiInstance.getRootHelper().isIndividual(inputStack)) {
 				return slotIndex;
 			}
 		}
@@ -227,7 +226,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			inputStack = GeneticsUtil.convertToGeneticEquivalent(inputStack);
 		}
 
-		specimenToAnalyze = AlleleManager.alleleRegistry.getIndividual(inputStack);
+		specimenToAnalyze = GeneticsAPI.apiInstance.getRootHelper().getIndividual(inputStack).orElse(null);
 		if (specimenToAnalyze == null) {
 			return;
 		}

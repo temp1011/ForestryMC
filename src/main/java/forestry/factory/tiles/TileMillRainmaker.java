@@ -14,10 +14,10 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.render.ParticleRender;

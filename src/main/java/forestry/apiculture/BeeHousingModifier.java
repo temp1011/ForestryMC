@@ -12,9 +12,9 @@ package forestry.apiculture;
 
 import javax.annotation.Nullable;
 
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.genetics.IBeeGenome;
 
 public class BeeHousingModifier implements IBeeModifier {
 	private final IBeeHousing beeHousing;

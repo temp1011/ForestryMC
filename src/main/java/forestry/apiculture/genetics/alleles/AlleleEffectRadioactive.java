@@ -23,8 +23,8 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.core.tiles.TileUtil;

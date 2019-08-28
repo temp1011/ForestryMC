@@ -10,15 +10,13 @@ import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.BiomeDictionary;
 
+import forestry.api.genetics.IAlleleForestrySpecies;
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.genetics.IAlleleSpecies;
-
-public interface IAlleleButterflySpecies extends IAlleleSpecies {
+public interface IAlleleButterflySpecies extends IAlleleForestrySpecies {
 
 	/**
 	 * @return the IButterflyRoot

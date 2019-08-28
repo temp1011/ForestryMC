@@ -18,21 +18,19 @@ import java.io.File;
 import java.util.List;
 
 import net.minecraft.block.BeetrootBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.NetherWartBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.item.Items;
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -51,7 +49,6 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.modules.ForestryModule;
-//import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBogEarth;
 import forestry.core.blocks.BlockRegistryCore;
@@ -94,6 +91,8 @@ import forestry.farming.triggers.FarmingTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+
+//import forestry.arboriculture.genetics.alleles.AlleleFruits;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.farming.description")
 public class ModuleFarming extends BlankForestryModule {

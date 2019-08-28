@@ -8,13 +8,13 @@ package forestry.api.arboriculture;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestryMutation;
+import forestry.api.genetics.IForestrySpeciesRoot;
 
-public interface ITreeMutation extends IMutation {
+public interface ITreeMutation extends IForestryMutation {
 
 	/**
-	 * @return {@link ISpeciesRoot} this mutation is associated with.
+	 * @return {@link IForestrySpeciesRoot} this mutation is associated with.
 	 */
 	@Override
 	ITreeRoot getRoot();

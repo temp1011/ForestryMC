@@ -3,19 +3,18 @@ package forestry.apiculture.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-//import net.minecraft.block.BlockStateContainer;
-//import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.core.blocks.IColoredBlock;
+
+//import net.minecraft.block.BlockStateContainer;
+//import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 
 public class BlockHoneyComb extends Block implements IColoredBlock {
 	public final EnumHoneyComb type;

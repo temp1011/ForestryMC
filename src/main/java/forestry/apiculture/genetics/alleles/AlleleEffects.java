@@ -5,8 +5,8 @@ import java.util.List;
 
 import net.minecraft.potion.Effects;
 
-import forestry.api.apiculture.EnumBeeChromosome;
-import forestry.api.apiculture.IAlleleBeeEffect;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IAlleleBeeEffect;
 import forestry.api.genetics.AlleleManager;
 
 public class AlleleEffects {
@@ -57,7 +57,7 @@ public class AlleleEffects {
 
 	public static void registerAlleles() {
 		for (IAlleleBeeEffect beeEffect : beeEffects) {
-			AlleleManager.alleleRegistry.registerAllele(beeEffect, EnumBeeChromosome.EFFECT);
+			AlleleManager.alleleRegistry.registerAllele(beeEffect, BeeChromosomes.EFFECT);
 		}
 	}
 }

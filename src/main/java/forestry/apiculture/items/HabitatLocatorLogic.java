@@ -24,7 +24,7 @@ import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
 
-import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.utils.NetworkUtil;

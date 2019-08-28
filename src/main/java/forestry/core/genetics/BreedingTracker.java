@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,13 +29,15 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.root.IRootDefinition;
+
 import forestry.api.core.ForestryEvent;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.advancements.SpeciesDiscoveredTrigger;
 import forestry.core.network.packets.PacketGenomeTrackerSync;
 import forestry.core.utils.NetworkUtil;
@@ -122,13 +125,14 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 				String modeName = breedingTracker.getModeName();
 				setModeName(modeName);
 
-				CompoundNBT CompoundNBT = new CompoundNBT();
-				writeToNBT(CompoundNBT, discoveredSpecies, discoveredMutations, researchedMutations);
-				PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(CompoundNBT);
+				CompoundNBT compound = new CompoundNBT();
+				writeToNBT(compound, discoveredSpecies, discoveredMutations, researchedMutations);
+				PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(compound);
 				NetworkUtil.sendToPlayer(packet, player);
 
 				for (String species : discoveredSpecies) {
-					SpeciesDiscoveredTrigger.INSTANCE.trigger((ServerPlayerEntity) player, AlleleManager.alleleRegistry.getAllele(species));
+					Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(species);
+					optionalAllele.ifPresent(allele -> SpeciesDiscoveredTrigger.INSTANCE.trigger((ServerPlayerEntity) player, allele));
 				}
 			}
 		}
@@ -136,13 +140,13 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 	/* HELPER FUNCTIONS TO PREVENT OBFUSCATION OF INTERFACE METHODS */
 	@Override
-	public void decodeFromNBT(CompoundNBT CompoundNBT) {
-		read(CompoundNBT);
+	public void decodeFromNBT(CompoundNBT compound) {
+		read(compound);
 	}
 
 	@Override
-	public void encodeToNBT(CompoundNBT CompoundNBT) {
-		write(CompoundNBT);
+	public void encodeToNBT(CompoundNBT compound) {
+		write(compound);
 	}
 
 	@Override
@@ -203,9 +207,9 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	}
 
 	private static String getMutationString(IMutation mutation) {
-		String species0 = mutation.getAllele0().getUID();
-		String species1 = mutation.getAllele1().getUID();
-		String resultSpecies = mutation.getTemplate()[0].getUID();
+		String species0 = mutation.getFirstParent().getRegistryName().toString();
+		String species1 = mutation.getSecondParent().getRegistryName().toString();
+		String resultSpecies = mutation.getResultingSpecies().getRegistryName().toString();
 		return String.format(MUTATION_FORMAT, species0, species1, resultSpecies);
 	}
 
@@ -216,7 +220,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 			discoveredMutations.add(mutationString);
 			markDirty();
 
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRootUID());
+			IRootDefinition speciesRoot = GeneticsAPI.apiInstance.getRoot(speciesRootUID());
 			ForestryEvent event = new ForestryEvent.MutationDiscovered(speciesRoot, username, mutation, this);
 			MinecraftForge.EVENT_BUS.post(event);
 
@@ -232,7 +236,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 	@Override
 	public boolean isDiscovered(IAlleleSpecies species) {
-		return discoveredSpecies.contains(species.getUID());
+		return discoveredSpecies.contains(species.getRegistryName().toString());
 	}
 
 	@Override
@@ -253,14 +257,15 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 	@Override
 	public void registerSpecies(IAlleleSpecies species) {
-		if (!discoveredSpecies.contains(species.getUID())) {
-			discoveredSpecies.add(species.getUID());
+		String registryName = species.getRegistryName().toString();
+		if (!discoveredSpecies.contains(registryName)) {
+			discoveredSpecies.add(registryName);
 
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRootUID());
+			IRootDefinition speciesRoot = GeneticsAPI.apiInstance.getRoot(speciesRootUID());
 			ForestryEvent event = new ForestryEvent.SpeciesDiscovered(speciesRoot, username, species, this);
 			MinecraftForge.EVENT_BUS.post(event);
 
-			syncToPlayer(Collections.singleton(species.getUID()), emptyStringCollection, emptyStringCollection);
+			syncToPlayer(Collections.singleton(registryName), emptyStringCollection, emptyStringCollection);
 		}
 	}
 

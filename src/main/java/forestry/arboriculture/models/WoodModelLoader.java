@@ -18,17 +18,13 @@ import net.minecraft.client.renderer.model.BlockModelDefinition.MissingVariantEx
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.model.VariantList;
-import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.client.model.ICustomModelLoader;
-import net.minecraftforge.client.model.IModel;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.ICustomModelLoader;
+
 import forestry.core.config.Constants;
 import forestry.core.utils.ModelUtil;
 

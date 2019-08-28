@@ -4,8 +4,8 @@ package forestry.api.gui.events;
 import net.minecraft.client.util.InputMappings;
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IWindowElement;
 

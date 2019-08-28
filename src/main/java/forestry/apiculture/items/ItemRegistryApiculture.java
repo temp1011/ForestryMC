@@ -17,7 +17,7 @@ import java.util.Random;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.apiculture.EnumBeeType;
+import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemOverlay;

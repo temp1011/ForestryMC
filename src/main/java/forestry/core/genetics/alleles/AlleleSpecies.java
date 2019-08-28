@@ -25,12 +25,12 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IAlleleSpeciesBuilder;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IClassification;
+import forestry.api.genetics.IForestryMutation;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.ItemHoneyComb;
 import forestry.apiculture.items.ItemRegistryApiculture;
@@ -41,7 +41,7 @@ import forestry.core.utils.Translator;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
-public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleSpecies {
+public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleForestrySpecies {
 	private final String binomial;
 	private final String authority;
 	private final String description;
@@ -124,17 +124,17 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 	@Override
 	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 		if (world.rand.nextFloat() < bountyLevel / 16.0f) {
-			List<? extends IMutation> allMutations = getRoot().getCombinations(this);
+			List<? extends IForestryMutation> allMutations = getRoot().getCombinations(this);
 			if (!allMutations.isEmpty()) {
-				List<IMutation> unresearchedMutations = new ArrayList<>();
+				List<IForestryMutation> unresearchedMutations = new ArrayList<>();
 				IBreedingTracker tracker = individual.getGenome().getSpeciesRoot().getBreedingTracker(world, researcher);
-				for (IMutation mutation : allMutations) {
+				for (IForestryMutation mutation : allMutations) {
 					if (!tracker.isResearched(mutation)) {
 						unresearchedMutations.add(mutation);
 					}
 				}
 
-				IMutation chosenMutation;
+				IForestryMutation chosenMutation;
 				if (!unresearchedMutations.isEmpty()) {
 					chosenMutation = unresearchedMutations.get(world.rand.nextInt(unresearchedMutations.size()));
 				} else {

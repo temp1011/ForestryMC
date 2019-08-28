@@ -13,8 +13,8 @@ package forestry.core.blocks;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.util.math.BlockPos;
@@ -23,8 +23,8 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 

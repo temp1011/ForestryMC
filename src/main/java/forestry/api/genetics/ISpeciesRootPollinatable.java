@@ -16,7 +16,7 @@ import com.mojang.authlib.GameProfile;
  * @author Nedelosk
  * @since 5.12.16
  */
-public interface ISpeciesRootPollinatable extends ISpeciesRoot {
+public interface ISpeciesRootPollinatable extends IForestrySpeciesRoot {
 
 	ICheckPollinatable createPollinatable(IIndividual individual);
 

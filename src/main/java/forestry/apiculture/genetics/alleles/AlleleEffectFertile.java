@@ -21,8 +21,8 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.IPlantable;
 
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.genetics.IEffectData;
 
 public class AlleleEffectFertile extends AlleleEffectThrottled {

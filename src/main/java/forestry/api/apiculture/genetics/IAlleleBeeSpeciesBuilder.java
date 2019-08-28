@@ -3,10 +3,13 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.apiculture;
+package forestry.api.apiculture.genetics;
 
 import net.minecraft.item.ItemStack;
 
+import forestry.api.apiculture.IBeeModelProvider;
+import forestry.api.apiculture.IBeeSpriteColourProvider;
+import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.genetics.IAlleleSpeciesBuilder;
 
 public interface IAlleleBeeSpeciesBuilder extends IAlleleSpeciesBuilder {

@@ -3,12 +3,13 @@ package forestry.sorting.gui;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.api.genetics.IFilterLogic;
 import forestry.core.config.Constants;

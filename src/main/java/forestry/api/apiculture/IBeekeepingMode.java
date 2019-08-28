@@ -10,6 +10,8 @@ import java.util.List;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.genetics.IBee;
+
 public interface IBeekeepingMode {
 
 	/**

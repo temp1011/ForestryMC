@@ -1,11 +1,9 @@
 package forestry.storage.proxy;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.storage.models.ModelLoaderCrate;
 
 @SuppressWarnings("unused")

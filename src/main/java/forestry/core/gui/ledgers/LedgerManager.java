@@ -17,10 +17,9 @@ import java.util.List;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.core.config.SessionVars;

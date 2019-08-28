@@ -35,14 +35,11 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.Direction;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.client.model.pipeline.VertexTransformer;
 import net.minecraftforge.common.model.TRSRTransformation;
-
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 // for those wondering TRSR stands for Translation Rotation Scale Rotation
 @OnlyIn(Dist.CLIENT)
 public class TRSRBakedModel implements IBakedModel {
@@ -148,7 +145,7 @@ public class TRSRBakedModel implements IBakedModel {
 		public Transformer(TRSRTransformation transformation, VertexFormat format) {
 			super(new UnpackedBakedQuad.Builder(format));
 			// position transform
-			this.transformation = transformation.getMatrix(Direction.UP/*this.parent.getVertexFormat()*/);	//TODO how to access direction
+			this.transformation = TRSRTransformation.getMatrix(Direction.UP/*this.parent.getVertexFormat()*/);    //TODO how to access direction
 			// normal transform
 			this.normalTransformation = new Matrix3f();
 			this.transformation.getRotationScale(this.normalTransformation);

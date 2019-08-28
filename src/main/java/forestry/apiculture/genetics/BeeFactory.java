@@ -12,8 +12,8 @@ package forestry.apiculture.genetics;
 
 import com.google.common.base.Preconditions;
 
-import forestry.api.apiculture.IAlleleBeeSpeciesBuilder;
-import forestry.api.apiculture.IBeeFactory;
+import forestry.api.apiculture.genetics.IAlleleBeeSpeciesBuilder;
+import forestry.api.apiculture.genetics.IBeeFactory;
 import forestry.api.genetics.IClassification;
 import forestry.apiculture.genetics.alleles.AlleleBeeSpecies;
 

@@ -10,20 +10,23 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleRegistry;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+
 import forestry.api.core.ILocatable;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IFilterData;
 import forestry.api.genetics.IFilterLogic;
 import forestry.api.genetics.IFilterRuleType;
-import forestry.api.genetics.IGenome;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.genetics.ISpeciesType;
 import forestry.core.utils.NetworkUtil;
 import forestry.sorting.network.packets.PacketFilterChangeGenome;
 import forestry.sorting.network.packets.PacketFilterChangeRule;
@@ -60,10 +63,10 @@ public class FilterLogic implements IFilterLogic {
 					continue;
 				}
 				if (filter.activeAllele != null) {
-					data.putString("GenomeFilterS" + i + "-" + j + "-" + 0, filter.activeAllele.getUID());
+					data.putString("GenomeFilterS" + i + "-" + j + "-" + 0, filter.activeAllele.getRegistryName().toString());
 				}
 				if (filter.inactiveAllele != null) {
-					data.putString("GenomeFilterS" + i + "-" + j + "-" + 1, filter.inactiveAllele.getUID());
+					data.putString("GenomeFilterS" + i + "-" + j + "-" + 1, filter.inactiveAllele.getRegistryName().toString());
 				}
 			}
 		}
@@ -76,14 +79,15 @@ public class FilterLogic implements IFilterLogic {
 			filterRules[i] = AlleleManager.filterRegistry.getRuleOrDefault(data.getString("TypeFilter" + i));
 		}
 
+		IAlleleRegistry alleleRegistry = GeneticsAPI.apiInstance.getAlleleRegistry();
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
 				AlleleFilter filter = new AlleleFilter();
 				if (data.contains("GenomeFilterS" + i + "-" + j + "-" + 0)) {
-					filter.activeAllele = AlleleManager.alleleRegistry.getAllele(data.getString("GenomeFilterS" + i + "-" + j + "-" + 0));
+					filter.activeAllele = alleleRegistry.getAllele(data.getString("GenomeFilterS" + i + "-" + j + "-" + 0)).orElse(null);
 				}
 				if (data.contains("GenomeFilterS" + i + "-" + j + "-" + 1)) {
-					filter.inactiveAllele = AlleleManager.alleleRegistry.getAllele(data.getString("GenomeFilterS" + i + "-" + j + "-" + 1));
+					filter.inactiveAllele = alleleRegistry.getAllele(data.getString("GenomeFilterS" + i + "-" + j + "-" + 1)).orElse(null);
 				}
 				genomeFilter[i][j] = filter;
 			}
@@ -106,13 +110,13 @@ public class FilterLogic implements IFilterLogic {
 				}
 				if (filter.activeAllele != null) {
 					data.writeBoolean(true);
-					data.writeString(filter.activeAllele.getUID());
+					data.writeString(filter.activeAllele.getRegistryName().toString());
 				} else {
 					data.writeBoolean(false);
 				}
 				if (filter.inactiveAllele != null) {
 					data.writeBoolean(true);
-					data.writeString(filter.inactiveAllele.getUID());
+					data.writeString(filter.inactiveAllele.getRegistryName().toString());
 				} else {
 					data.writeBoolean(false);
 				}
@@ -127,14 +131,15 @@ public class FilterLogic implements IFilterLogic {
 			filterRules[i] = AlleleManager.filterRegistry.getRule(data.readShort());
 		}
 
+		IAlleleRegistry alleleRegistry = GeneticsAPI.apiInstance.getAlleleRegistry();
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
 				AlleleFilter filter = new AlleleFilter();
 				if (data.readBoolean()) {
-					filter.activeAllele = AlleleManager.alleleRegistry.getAllele(data.readString(1024));
+					filter.activeAllele = alleleRegistry.getAllele(data.readString(1024)).orElse(null);
 				}
 				if (data.readBoolean()) {
-					filter.inactiveAllele = AlleleManager.alleleRegistry.getAllele(data.readString(1024));
+					filter.inactiveAllele = alleleRegistry.getAllele(data.readString(1024)).orElse(null);
 				}
 				genomeFilter[i][j] = filter;
 			}
@@ -142,14 +147,15 @@ public class FilterLogic implements IFilterLogic {
 	}
 
 	public Collection<Direction> getValidDirections(ItemStack itemStack, Direction from) {
-		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
+		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
 		IIndividual individual = null;
-		ISpeciesType type = null;
-		if (root != null) {
-			individual = root.getMember(itemStack);
-			type = root.getType(itemStack);
+		IOrganismType type = null;
+		if (definition.isRootPresent()) {
+			IIndividualRoot<IIndividual> root = definition.get();
+			individual = root.create(itemStack).orElse(null);
+			type = root.getTypes().getType(itemStack).orElse(null);
 		}
-		IFilterData filterData = new FilterData(root, individual, type);
+		IFilterData filterData = new FilterData(definition, individual, type);
 		List<Direction> validFacings = new LinkedList<>();
 		for (Direction facing : Direction.VALUES) {
 			if (facing == from) {
@@ -164,14 +170,15 @@ public class FilterLogic implements IFilterLogic {
 
 	@Override
 	public boolean isValid(ItemStack itemStack, Direction facing) {
-		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
+		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack, IIndividualRoot.class);
 		IIndividual individual = null;
-		ISpeciesType type = null;
-		if (root != null) {
-			individual = root.getMember(itemStack);
-			type = root.getType(itemStack);
+		IOrganismType type = null;
+		if (definition.isRootPresent()) {
+			IIndividualRoot<IIndividual> root = definition.get();
+			individual = root.create(itemStack).orElse(null);
+			type = root.getTypes().getType(itemStack).orElse(null);
 		}
-		return isValid(facing, itemStack, new FilterData(root, individual, type));
+		return isValid(facing, itemStack, new FilterData(definition, individual, type));
 	}
 
 	public boolean isValid(Direction facing, ItemStack itemStack, IFilterData filterData) {
@@ -192,7 +199,7 @@ public class FilterLogic implements IFilterLogic {
 				IGenome genome = ind.getGenome();
 				IAllele active = genome.getPrimary();
 				IAllele inactive = genome.getSecondary();
-				return isValidAllelePair(facing, active.getUID(), inactive.getUID());
+				return isValidAllelePair(facing, active.getRegistryName().toString(), inactive.getRegistryName().toString());
 			}
 			return true;
 		}

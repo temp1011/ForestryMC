@@ -27,10 +27,10 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleFloat;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IAlleleInteger;
-import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.genetics.Genome;
 
 public class TreeGenome extends Genome implements ITreeGenome {
@@ -49,7 +49,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	public static IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
 		Preconditions.checkArgument(TreeManager.treeRoot.isMember(itemStack), "ItemStack must be a tree");
 
-		IAlleleSpecies species = getSpeciesDirectly(TreeManager.treeRoot, itemStack);
+		IAlleleForestrySpecies species = getSpeciesDirectly(TreeManager.treeRoot, itemStack);
 		if (species instanceof IAlleleTreeSpecies) {
 			return (IAlleleTreeSpecies) species;
 		}
@@ -119,7 +119,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	}
 
 	@Override
-	public ISpeciesRoot getSpeciesRoot() {
+	public IForestrySpeciesRoot getSpeciesRoot() {
 		return TreeManager.treeRoot;
 	}
 

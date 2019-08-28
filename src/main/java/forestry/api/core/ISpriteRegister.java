@@ -7,7 +7,6 @@ package forestry.api.core;
 
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 public interface ISpriteRegister {
 

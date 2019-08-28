@@ -42,7 +42,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.ItemGroups;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
@@ -82,7 +82,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		if (itemstack.getTag() == null) {
 			return new StringTextComponent( "Unknown");
 		}
-		IAlleleSpecies species = getSpecies(itemstack);
+		IAlleleForestrySpecies species = getSpecies(itemstack);
 
 		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getUnlocalizedName().replace("trees.species.", "");
 		if (Translator.canTranslateToLocal(customTreeKey)) {
@@ -144,7 +144,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		RayTraceResult raytraceresult = this.rayTrace(worldIn, playerIn, true);
+		RayTraceResult raytraceresult = rayTrace(worldIn, playerIn, true);
 
 		ItemStack itemStack = playerIn.getHeldItem(handIn);
 

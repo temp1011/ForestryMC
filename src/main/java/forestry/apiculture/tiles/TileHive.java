@@ -43,21 +43,22 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
-import forestry.api.apiculture.IHiveTile;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.hives.IHiveRegistry;
+import forestry.api.apiculture.hives.IHiveTile;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
-import forestry.api.genetics.IAllele;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.WorldgenBeekeepingLogic;
 import forestry.apiculture.blocks.BlockBeeHive;
@@ -140,10 +141,10 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 
 	public IBee getContainedBee() {
 		if (this.containedBee == null) {
-			IBeeGenome beeGenome = null;
+			IGenome beeGenome = null;
 			ItemStack containedBee = contained.getStackInSlot(0);
 			if (!containedBee.isEmpty()) {
-				IBee bee = BeeManager.beeRoot.getMember(containedBee);
+				IBee bee = BeeManager.beeRoot.create(containedBee);
 				if (bee != null) {
 					beeGenome = bee.getGenome();
 				}
@@ -154,13 +155,13 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 			if (beeGenome == null) {
 				beeGenome = BeeDefinition.FOREST.getGenome();
 			}
-			this.containedBee = BeeManager.beeRoot.getBee(beeGenome);
+			this.containedBee = BeeManager.beeRoot.create(beeGenome);
 		}
 		return this.containedBee;
 	}
 
 	@Nullable
-	private IBeeGenome getGenomeFromBlock() {
+	private IGenome getGenomeFromBlock() {
 		if (world.isBlockLoaded(pos)) {
 			BlockState blockState = world.getBlockState(pos);
 			Block block = blockState.getBlock();

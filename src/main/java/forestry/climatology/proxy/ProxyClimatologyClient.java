@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.climatology.proxy;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.climatology.PreviewHandlerClient;
 
 @OnlyIn(Dist.CLIENT)

@@ -7,6 +7,8 @@ package forestry.api.apiculture;
 
 import javax.annotation.Nullable;
 
+import forestry.api.apiculture.genetics.IBeeGenome;
+
 /**
  * Easily extendable default IBeeModifier.
  * By itself, this IBeeModifier does nothing.

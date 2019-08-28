@@ -2,10 +2,10 @@ package forestry.core.gui.elements;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.api.gui.IWindowElement;
 import forestry.core.gui.Drawable;

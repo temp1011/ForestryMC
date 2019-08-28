@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.arboriculture.ITreekeepingMode;

@@ -12,8 +12,8 @@ package forestry.core.inventory;
 
 import java.util.function.Predicate;
 
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.FurnaceTileEntity;
 
 /**

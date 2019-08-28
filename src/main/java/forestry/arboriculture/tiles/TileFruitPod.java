@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.block.CocoaBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.CocoaBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -25,10 +25,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;

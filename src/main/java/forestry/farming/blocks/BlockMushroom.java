@@ -42,7 +42,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
-//import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.storage.loot.LootContext;
 
@@ -52,6 +51,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.config.Constants;
+
+//import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 
 //TODO - figure out why this class exists
 public class BlockMushroom extends BushBlock implements IItemModelRegister, IGrowable {

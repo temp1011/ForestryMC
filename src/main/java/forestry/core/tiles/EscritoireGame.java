@@ -12,17 +12,19 @@ package forestry.core.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Random;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 
@@ -111,16 +113,17 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 			return;
 		}
 
-		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(specimen);
-		if (individual == null) {
+		Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(specimen);
+		if (!optional.isPresent()) {
 			return;
 		}
+		IIndividual individual = optional.get();
 
 		if (bountyLevel > 1) {
 			bountyLevel--;
 		}
 
-		IAlleleSpecies species = individual.getGenome().getPrimary();
+		IAlleleForestrySpecies species = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
 		gameBoard.hideProbedTokens();
 
 		int revealCount = getSampleSize(slotCount);

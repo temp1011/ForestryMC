@@ -3,10 +3,9 @@ package forestry.arboriculture.items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;

@@ -19,8 +19,9 @@ import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-//import forestry.core.gui.slots.SlotCrafter;
 import forestry.core.gui.slots.SlotForestry;
+
+//import forestry.core.gui.slots.SlotCrafter;
 
 public abstract class SlotUtil {
 

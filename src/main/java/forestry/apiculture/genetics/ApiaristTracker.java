@@ -13,12 +13,13 @@ package forestry.apiculture.genetics;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
+import genetics.api.individual.IIndividual;
+
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IApiaristTracker;
+import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.genetics.BreedingTracker;
 
@@ -59,12 +60,12 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	@Override
 	public void registerPickup(IIndividual individual) {
-		ISpeciesRoot speciesRoot = individual.getGenome().getPrimary().getRoot();
+		IForestrySpeciesRoot speciesRoot = individual.getGenome().getPrimary().getRoot();
 		if (!speciesRoot.getUID().equals(speciesRootUID())) {
 			return;
 		}
 
-		if (!individual.isPureBred(EnumBeeChromosome.SPECIES)) {
+		if (!individual.isPureBred(BeeChromosomes.SPECIES)) {
 			return;
 		}
 

@@ -13,7 +13,7 @@ package forestry.apiculture;
 import javax.annotation.Nullable;
 
 import forestry.api.apiculture.DefaultBeeModifier;
-import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.genetics.IBeeGenome;
 
 public class BeehouseBeeModifier extends DefaultBeeModifier {
 	@Override

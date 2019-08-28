@@ -3,12 +3,15 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.apiculture;
+package forestry.api.apiculture.genetics;
 
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAlleleEffect;
 import forestry.api.genetics.IEffectData;
 
@@ -22,7 +25,7 @@ public interface IAlleleBeeEffect extends IAlleleEffect {
 	 * @param housing    {@link IBeeHousing} the bee currently resides in.
 	 * @return storedData, may have been manipulated.
 	 */
-	IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing);
+	IEffectData doEffect(IGenome genome, IEffectData storedData, IBeeHousing housing);
 
 	/**
 	 * Is called to produce visual bee effects. (client)
@@ -33,6 +36,6 @@ public interface IAlleleBeeEffect extends IAlleleEffect {
 	 * @return storedData, may have been manipulated.
 	 */
 	@OnlyIn(Dist.CLIENT)
-	IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing);
+	IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing);
 
 }

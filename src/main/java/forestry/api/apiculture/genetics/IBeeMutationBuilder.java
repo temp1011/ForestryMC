@@ -3,15 +3,11 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.genetics;
+package forestry.api.apiculture.genetics;
 
-import net.minecraft.util.math.Vec3i;
+import forestry.api.genetics.IMutationBuilder;
 
-/**
- * Simple interface to allow adding additional alleles containing float values.
- */
-public interface IAlleleArea extends IAllele {
-
-	Vec3i getValue();
-
+public interface IBeeMutationBuilder extends IMutationBuilder {
+	@Override
+	IBeeMutation build();
 }

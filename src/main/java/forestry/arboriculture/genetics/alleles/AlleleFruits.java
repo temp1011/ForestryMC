@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.item.Items;
-import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -20,7 +19,6 @@ import forestry.arboriculture.FruitProviderPod.EnumPodType;
 import forestry.arboriculture.FruitProviderRipening;
 import forestry.core.ModuleCore;
 import forestry.core.items.ItemFruit.EnumFruit;
-import forestry.core.items.ItemRegistry;
 import forestry.core.items.ItemRegistryCore;
 
 import static forestry.api.arboriculture.EnumFruitFamily.JUNGLE;

@@ -3,7 +3,7 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.apiculture;
+package forestry.api.apiculture.genetics;
 
 import java.util.Map;
 
@@ -11,20 +11,23 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.core.IModelManager;
-import forestry.api.genetics.IAlleleSpecies;
 
-public interface IAlleleBeeSpecies extends IAlleleSpecies {
+import genetics.api.individual.IGenome;
+import genetics.api.root.IIndividualRoot;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.core.IModelManager;
+import forestry.api.genetics.IAlleleForestrySpecies;
+
+public interface IAlleleBeeSpecies extends IAlleleForestrySpecies {
 
 	/**
 	 * @return the IBeeRoot
 	 */
 	@Override
-	IBeeRoot getRoot();
+	IIndividualRoot<IBee> getRoot();
 
 	/**
 	 * @return true if this species is only active at night.
@@ -46,7 +49,7 @@ public interface IAlleleBeeSpecies extends IAlleleSpecies {
 	 *
 	 * @return true if the bee is jubilant, false otherwise.
 	 */
-	boolean isJubilant(IBeeGenome genome, IBeeHousing housing);
+	boolean isJubilant(IGenome genome, IBeeHousing housing);
 
 	@OnlyIn(Dist.CLIENT)
 	ModelResourceLocation getModel(EnumBeeType type);

@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.VineBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,12 +27,8 @@ public class WorldGenHelper {
 		}
 
 		BlockState blockState = world.getBlockState(pos);
-		if (replaceMode.canReplace(blockState, world, pos)) {
-//			type.setBlock(world, pos);
-			return true;
-		}
-
-		return false;
+		//			type.setBlock(world, pos);
+		return replaceMode.canReplace(blockState, world, pos);
 	}
 
 	/**
