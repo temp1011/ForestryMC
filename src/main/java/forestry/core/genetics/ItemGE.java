@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 
 import forestry.api.genetics.IAlleleForestrySpecies;
@@ -38,8 +39,6 @@ public abstract class ItemGE extends ItemForestry {
 		//TODO - properties
 //		setHasSubtypes(true);
 	}
-
-	public abstract Optional<IIndividual> getIndividual(ItemStack itemstack);
 
 	protected abstract IAlleleForestrySpecies getSpecies(ItemStack itemStack);
 
@@ -70,13 +69,16 @@ public abstract class ItemGE extends ItemForestry {
 			return;
 		}
 
-		IIndividual individual = getIndividual(itemstack);
+		Optional<IIndividual> optionalIndividual = GeneticHelper.getIndividual(itemstack);
 
-		if (individual != null && individual.isAnalyzed()) {
-			if (Screen.hasShiftDown()) {
-				individual.addTooltip(list);
-			} else {
-				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle((new Style()).setItalic(true)));
+		if (optionalIndividual.isPresent()) {
+			IIndividual individual = optionalIndividual.get();
+			if (individual.isAnalyzed()) {
+				if (Screen.hasShiftDown()) {
+					individual.addTooltip(list);
+				} else {
+					list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle((new Style()).setItalic(true)));
+				}
 			}
 		} else {
 			list.add(new TranslationTextComponent("for.gui.unknown",  "< %s >"));

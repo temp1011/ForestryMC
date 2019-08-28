@@ -54,6 +54,11 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.classification.IClassification;
+import genetics.api.classification.IClassification.EnumClassLevel;
+import genetics.api.classification.IClassificationRegistry;
+
 import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
@@ -62,8 +67,6 @@ import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IClassification;
-import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.genetics.IFlowerAcceptableRule;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
@@ -76,7 +79,6 @@ import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeFactory;
 import forestry.apiculture.genetics.BeeMutationFactory;
-import forestry.apiculture.genetics.BeeRoot;
 import forestry.apiculture.genetics.BeekeepingMode;
 import forestry.apiculture.genetics.HiveDrop;
 import forestry.apiculture.genetics.JubilanceFactory;
@@ -206,10 +208,6 @@ public class ModuleApiculture extends BlankForestryModule {
 		BeeManager.jubilanceFactory = new JubilanceFactory();
 		BeeManager.armorApiaristHelper = new ArmorApiaristHelper();
 
-		// Init bee interface
-		BeeManager.beeRoot = new BeeRoot();
-		AlleleManager.alleleRegistry.registerSpeciesRoot(BeeManager.beeRoot);
-
 		// Modes
 		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.easy);
 		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.normal);
@@ -255,8 +253,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	public void preInit() {
 		// Capabilities
 		CapabilityManager.INSTANCE.register(IArmorApiarist.class, new NullStorage<>(), () -> ArmorApiarist.INSTANCE);
-
-		BeeDefinition.preInit();
 
 		MinecraftForge.EVENT_BUS.register(this);
 
@@ -739,10 +735,11 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	private static void createAlleles() {
 
-		IClassification hymnoptera = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "hymnoptera", "Hymnoptera");
-		AlleleManager.alleleRegistry.getClassification("class.insecta").addMemberGroup(hymnoptera);
+		IClassificationRegistry registry = GeneticsAPI.apiInstance.getClassificationRegistry();
+		IClassification hymnoptera = registry.createAndRegisterClassification(EnumClassLevel.ORDER, "hymnoptera", "Hymnoptera");
+		registry.getClassification("class.insecta").addMemberGroup(hymnoptera);
 
-		IClassification apidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "apidae", "Apidae");
+		IClassification apidae = registry.createAndRegisterClassification(EnumClassLevel.FAMILY, "apidae", "Apidae");
 		hymnoptera.addMemberGroup(apidae);
 
 		for (BeeBranchDefinition beeBranch : BeeBranchDefinition.values()) {

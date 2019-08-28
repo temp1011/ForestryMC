@@ -12,6 +12,7 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Stack;
 
 import net.minecraft.entity.player.PlayerEntity;
@@ -91,9 +92,13 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		}
 
 		// Queue swarm spawn
-		IBee princess = BeeManager.beeRoot.create(princessStack);
+		Optional<IBee> optionalPrincess = BeeManager.beeRoot.create(princessStack);
+		if (!optionalPrincess.isPresent()) {
+			return;
+		}
+		IBee princess = optionalPrincess.get();
 		princess.setIsNatural(false);
-		pendingSpawns.push(BeeManager.beeRoot.getMemberStack(princess, EnumBeeType.PRINCESS));
+		pendingSpawns.push(BeeManager.beeRoot.getTypes().createStack(princess, EnumBeeType.PRINCESS));
 	}
 
 	@Override

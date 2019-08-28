@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -34,7 +34,6 @@ import genetics.api.GeneticHelper;
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
@@ -43,7 +42,6 @@ import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.core.IModelManager;
 import forestry.api.core.ItemGroups;
 import forestry.api.genetics.IAlleleForestrySpecies;
-import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.genetics.BeeHelper;
 import forestry.core.config.Config;
@@ -70,17 +68,6 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		return GeneticHelper.createOrganism(stack, type, BeeHelper.getRoot().getDefinition());
 	}
 
-	@Nonnull
-	@Override
-	public IBee getIndividual(ItemStack itemstack) {
-		IBee individual = BeeManager.beeRoot.create(itemstack);
-		if (individual == null) {
-			individual = BeeDefinition.FOREST.getIndividual();
-		}
-		return individual;
-	}
-
-
 	@Override
 	protected IAlleleForestrySpecies getSpecies(ItemStack itemStack) {
 		return BeeGenome.getSpecies(itemStack);
@@ -92,14 +79,18 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		if (itemstack.getTag() == null) {
 			return super.getDisplayName(itemstack);
 		}
+		Optional<IBee> optionalIndividual = GeneticHelper.getIndividual(itemstack);
+		if (!optionalIndividual.isPresent()) {
+			return super.getDisplayName(itemstack);
+		}
 
-		IBee individual = getIndividual(itemstack);
+		IBee individual = optionalIndividual.get();
 		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getLocalisationKey().replace("bees.species.", "");
 		if (Translator.canTranslateToLocal(customBeeKey)) {
 			return new TranslationTextComponent(customBeeKey);
 		}
 		String beeGrammar = Translator.translateToLocal("for.bees.grammar." + type.getName());
-		String beeSpecies = individual.getDisplayName();
+		String beeSpecies = individual.getGenome().getPrimary().getLocalizedName();
 		String beeType = Translator.translateToLocal("for.bees.grammar." + type.getName() + ".type");
 		return new TranslationTextComponent(beeGrammar.replaceAll("%SPECIES", beeSpecies).replaceAll("%TYPE", beeType));
 	}
@@ -112,7 +103,12 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		}
 
 		if (type != EnumBeeType.DRONE) {
-			IBee individual = getIndividual(itemstack);
+			Optional<IBee> optionalIndividual = GeneticHelper.getIndividual(itemstack);
+			if (!optionalIndividual.isPresent()) {
+				return;
+			}
+
+			IBee individual = optionalIndividual.get();
 			if (individual.isNatural()) {
 				list.add(new TranslationTextComponent("for.bees.stock.pristine").setStyle((new Style()).setColor(TextFormatting.YELLOW).setItalic(true)));
 			} else {

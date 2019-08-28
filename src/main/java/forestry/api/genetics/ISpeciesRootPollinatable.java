@@ -12,10 +12,13 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import genetics.api.individual.IIndividual;
+
 /**
  * @author Nedelosk
  * @since 5.12.16
  */
+//TODO: Move to a component ?
 public interface ISpeciesRootPollinatable extends IForestrySpeciesRoot {
 
 	ICheckPollinatable createPollinatable(IIndividual individual);

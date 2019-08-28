@@ -2,13 +2,14 @@ package forestry.apiculture;
 
 import net.minecraft.item.ItemStack;
 
+import genetics.api.individual.IIndividual;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IBee;
 import forestry.api.genetics.IFilterData;
 import forestry.api.genetics.IFilterRule;
 import forestry.api.genetics.IFilterRuleType;
-import forestry.api.genetics.IIndividual;
 import forestry.sorting.DefaultFilterRuleType;
 
 public enum ApicultureFilterRule implements IFilterRule {
@@ -21,37 +22,37 @@ public enum ApicultureFilterRule implements IFilterRule {
 	NOCTURNAL(DefaultFilterRuleType.NOCTURNAL) {
 		@Override
 		protected boolean isValid(IBee bee) {
-			return bee.getGenome().getNeverSleeps();
+			return bee.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS);
 		}
 	},
 	PURE_NOCTURNAL(DefaultFilterRuleType.PURE_NOCTURNAL) {
 		@Override
 		protected boolean isValid(IBee bee) {
-			return bee.getGenome().getNeverSleeps() && bee.isPureBred(BeeChromosomes.NEVER_SLEEPS);
+			return bee.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS) && bee.isPureBred(BeeChromosomes.NEVER_SLEEPS);
 		}
 	},
 	FLYER(DefaultFilterRuleType.FLYER) {
 		@Override
 		protected boolean isValid(IBee bee) {
-			return bee.getGenome().getToleratesRain();
+			return bee.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN);
 		}
 	},
 	PURE_FLYER((DefaultFilterRuleType.PURE_FLYER)) {
 		@Override
 		protected boolean isValid(IBee bee) {
-			return bee.getGenome().getToleratesRain() && bee.isPureBred(BeeChromosomes.TOLERATES_RAIN);
+			return bee.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN) && bee.isPureBred(BeeChromosomes.TOLERATES_RAIN);
 		}
 	},
 	CAVE(DefaultFilterRuleType.CAVE) {
 		@Override
 		protected boolean isValid(IBee bee) {
-			return bee.getGenome().getCaveDwelling();
+			return bee.getGenome().getActiveValue(BeeChromosomes.CAVE_DWELLING);
 		}
 	},
 	PURE_CAVE(DefaultFilterRuleType.PURE_CAVE) {
 		@Override
 		protected boolean isValid(IBee bee) {
-			return bee.getGenome().getCaveDwelling() && bee.isPureBred(BeeChromosomes.CAVE_DWELLING);
+			return bee.getGenome().getActiveValue(BeeChromosomes.CAVE_DWELLING) && bee.isPureBred(BeeChromosomes.CAVE_DWELLING);
 		}
 	};
 

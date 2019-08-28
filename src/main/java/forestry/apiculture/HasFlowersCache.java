@@ -23,10 +23,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IBee;
-import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.core.IBlockPosPredicate;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -62,9 +64,9 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 		public Iterator<BlockPos.MutableBlockPos> areaIterator;
 
 		public FlowerData(IBee queen, IBeeHousing beeHousing) {
-			IFlowerProvider flowerProvider = queen.getGenome().getFlowerProvider();
+			IFlowerProvider flowerProvider = queen.getGenome().getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider();
 			this.flowerType = flowerProvider.getFlowerType();
-			this.territory = queen.getGenome().getTerritory();
+			this.territory = queen.getGenome().getActiveValue(BeeChromosomes.TERRITORY);
 			this.flowerPredicate = FlowerManager.flowerRegistry.createAcceptedFlowerPredicate(flowerType);
 			this.areaIterator = FlowerManager.flowerRegistry.getAreaIterator(beeHousing, queen);
 		}
@@ -122,10 +124,10 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 
 	public void onNewQueen(IBee queen, IBeeHousing housing) {
 		if (this.flowerData != null) {
-			IBeeGenome genome = queen.getGenome();
-			String flowerType = genome.getFlowerProvider().getFlowerType();
+			IGenome genome = queen.getGenome();
+			String flowerType = genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getFlowerType();
 			if (!this.flowerData.flowerType.equals(flowerType)
-				|| !this.flowerData.territory.equals(genome.getTerritory())) {
+				|| !this.flowerData.territory.equals(genome.getActiveValue(BeeChromosomes.TERRITORY))) {
 				flowerData = new FlowerData(queen, housing);
 				flowerCoords.clear();
 				flowers.clear();

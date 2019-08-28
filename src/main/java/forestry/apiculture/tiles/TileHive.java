@@ -15,6 +15,7 @@ import com.google.common.base.Predicate;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -144,8 +145,9 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 			IGenome beeGenome = null;
 			ItemStack containedBee = contained.getStackInSlot(0);
 			if (!containedBee.isEmpty()) {
-				IBee bee = BeeManager.beeRoot.create(containedBee);
-				if (bee != null) {
+				Optional<IBee> optionalBee = BeeManager.beeRoot.create(containedBee);
+				if (optionalBee.isPresent()) {
+					IBee bee = optionalBee.get();
 					beeGenome = bee.getGenome();
 				}
 			}
@@ -168,9 +170,9 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 			if (block instanceof BlockBeeHive) {
 				IHiveRegistry.HiveType hiveType = ((BlockBeeHive) block).getType();
 				String speciesUid = hiveType.getSpeciesUid();
-				IAllele[] template = BeeManager.beeRoot.getTemplate(speciesUid);
+				IAllele[] template = BeeManager.beeRoot.getTemplates().getTemplate(speciesUid);
 				if (template != null) {
-					return BeeManager.beeRoot.templateAsGenome(template);
+					return BeeManager.beeRoot.getKaryotype().templateAsGenome(template);
 				}
 			}
 		}

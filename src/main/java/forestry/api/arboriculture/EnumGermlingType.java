@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import forestry.api.genetics.ISpeciesType;
+import genetics.api.organism.IOrganismType;
 
-public enum EnumGermlingType implements ISpeciesType {
+public enum EnumGermlingType implements IOrganismType {
 	SAPLING("sapling"), POLLEN("pollen");
 
 	public static final EnumGermlingType[] VALUES = values();

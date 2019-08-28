@@ -23,11 +23,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.genetics.IBee;
-import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.apiculture.hives.IHiveFrame;
 import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemForestry;
@@ -79,12 +80,12 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 		}
 
 		@Override
-		public float getProductionModifier(IBeeGenome genome, float currentModifier) {
+		public float getProductionModifier(IGenome genome, float currentModifier) {
 			return currentModifier < 10f ? production : 1f;
 		}
 
 		@Override
-		public float getGeneticDecay(IBeeGenome genome, float currentModifier) {
+		public float getGeneticDecay(IGenome genome, float currentModifier) {
 			return this.geneticDecay;
 		}
 
