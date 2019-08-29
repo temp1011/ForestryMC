@@ -12,19 +12,17 @@ package forestry.arboriculture.genetics.alleles;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.PlantType;
 
-import forestry.api.arboriculture.IFruitProvider;
+import genetics.api.classification.IClassification;
+
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ILeafProvider;
@@ -38,7 +36,6 @@ import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.IModelManager;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.ClimateGrowthProvider;
 import forestry.arboriculture.genetics.LeafProvider;
@@ -172,34 +169,6 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 	@Override
 	public ILeafProvider getLeafProvider() {
 		return leafProvider;
-	}
-
-	@Override
-	public float getResearchSuitability(ItemStack itemstack) {
-		if (itemstack.isEmpty()) {
-			return 0f;
-		}
-
-		List<IFruitFamily> suitableFruit = getSuitableFruit();
-		for (IFruitFamily fruitFamily : suitableFruit) {
-			Collection<IFruitProvider> fruitProviders = TreeManager.treeRoot.getFruitProvidersForFruitFamily(fruitFamily);
-			for (IFruitProvider fruitProvider : fruitProviders) {
-				Map<ItemStack, Float> products = fruitProvider.getProducts();
-				for (ItemStack stack : products.keySet()) {
-					if (stack.isItemEqual(itemstack)) {
-						return 1.0f;
-					}
-				}
-				Map<ItemStack, Float> specialtyChances = fruitProvider.getSpecialty();
-				for (ItemStack stack : specialtyChances.keySet()) {
-					if (stack.isItemEqual(itemstack)) {
-						return 1.0f;
-					}
-				}
-			}
-		}
-
-		return super.getResearchSuitability(itemstack);
 	}
 
 	@Override

@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -34,17 +32,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.individual.IIndividual;
+
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.IModelManager;
 import forestry.api.core.ItemGroups;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.ICheckPollinatable;
-import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -67,12 +67,6 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 	@Override
-	@Nullable
-	public ITree getIndividual(ItemStack itemstack) {
-		return TreeManager.treeRoot.getMember(itemstack);
-	}
-
-	@Override
 	protected IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
 		return TreeGenome.getSpecies(itemStack);
 	}
@@ -84,12 +78,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		}
 		IAlleleForestrySpecies species = getSpecies(itemstack);
 
-		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getUnlocalizedName().replace("trees.species.", "");
+		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getLocalisationKey().replace("trees.species.", "");
 		if (Translator.canTranslateToLocal(customTreeKey)) {
 			return new TranslationTextComponent(customTreeKey);
 		}
 		String typeString = Translator.translateToLocal("for.trees.grammar." + type.getName() + ".type");
-		return Translator.translateToLocal("for.trees.grammar." + type.getName()).replaceAll("%SPECIES", species.getAlleleName()).replaceAll("%TYPE", typeString);
+		return Translator.translateToLocal("for.trees.grammar." + type.getName()).replaceAll("%SPECIES", species.getLocalizedName()).replaceAll("%TYPE", typeString);
 	}
 
 	@Override
@@ -220,7 +214,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		if (tree == null) {
 			return 1.0f;
 		}
-		return tree.getGenome().getSappiness() * 10;
+		return tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * 10;
 	}
 
 	@Override

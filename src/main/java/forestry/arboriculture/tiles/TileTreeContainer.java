@@ -15,7 +15,6 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -27,9 +26,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.alleles.IAllele;
+
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.genetics.IAllele;
 import forestry.arboriculture.genetics.Tree;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
@@ -37,6 +37,7 @@ import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
 import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.RenderUtil;
 
 /**
  * This is the base TE class for any block that needs to contain tree genome information.
@@ -79,7 +80,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		String speciesUID = "";
 		ITree tree = getTree();
 		if (tree != null) {
-			speciesUID = tree.getIdent();
+			speciesUID = tree.getIdentifier();
 		}
 		data.writeString(speciesUID);
 	}
@@ -92,8 +93,8 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	private static ITree getTree(String speciesUID) {
-		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
-		Preconditions.checkArgument(treeTemplate != null, "There is no tree template for speciesUID %s", speciesUID);
+		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplates().getTemplate(speciesUID);
+		Preconditions.checkArgument(treeTemplate.length > 0, "There is no tree template for speciesUID %s", speciesUID);
 		return TreeManager.treeRoot.templateAsIndividual(treeTemplate);
 	}
 
@@ -103,7 +104,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	public void setTree(ITree tree) {
 		this.containedTree = tree;
 		if (world != null && world.isRemote) {
-			world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			RenderUtil.markForUpdate(getPos());
 		}
 	}
 
@@ -123,15 +124,6 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	 * Leaves and saplings will implement their logic here.
 	 */
 	public abstract void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand);
-
-	/**
-	 * Called from Chunk.setBlockIDWithMetadata, determines if this tile entity should be re-created when the ID, or Metadata changes.
-	 * Use with caution as this will leave straggler TileEntities, or create conflicts with other TileEntities if not used properly.
-	 */
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newSate) {
-		return !Block.isEqualTo(oldState.getBlock(), newSate.getBlock());
-	}
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {

@@ -8,12 +8,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.genetics.IAlleleForestrySpecies;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
+
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.IGenome;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
 import forestry.api.gui.GuiConstants;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IDatabaseElement;
@@ -29,20 +32,21 @@ public class MutationsTab extends DatabaseTab {
 	@Override
 	public void createElements(IDatabaseElement container, IIndividual individual, ItemStack itemStack) {
 		IGenome genome = individual.getGenome();
-		IForestrySpeciesRoot speciesRoot = genome.getSpeciesRoot();
-		IAlleleForestrySpecies species = genome.getPrimary();
+		IForestrySpeciesRoot<IIndividual> speciesRoot = (IForestrySpeciesRoot<IIndividual>) individual.getRoot();
+		IAlleleSpecies species = genome.getPrimary();
+		IMutationContainer<IMutation> mutationContainer = speciesRoot.getComponent(ComponentKeys.MUTATIONS).get();
 
 		PlayerEntity player = Minecraft.getInstance().player;
 		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
 
 		IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 1, y, 16), 100, 0);
-		Collection<? extends IMutation> mutations = getValidMutations(speciesRoot.getCombinations(species));
+		Collection<? extends IMutation> mutations = getValidMutations(mutationContainer.getCombinations(species));
 		if (!mutations.isEmpty()) {
 			container.label(Translator.translateToLocal("for.gui.database.mutations.further"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
 			mutations.forEach(mutation -> groupHelper.add(GuiElementFactory.INSTANCE.createMutation(0, 0, 50, 16, mutation, species, breedingTracker)));
 			groupHelper.finish(true);
 		}
-		mutations = getValidMutations(speciesRoot.getResultantMutations(species));
+		mutations = getValidMutations(mutationContainer.getResultantMutations(species));
 		if (mutations.isEmpty()) {
 			return;
 		}

@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
+import genetics.api.alleles.AlleleCategorized;
+
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IFlowerProvider;
-import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleFlowers extends AlleleCategorized implements IAlleleFlowers {
 
@@ -29,7 +30,7 @@ public class AlleleFlowers extends AlleleCategorized implements IAlleleFlowers {
 	}
 
 	@Override
-	public String getAlleleName() {
+	public String getLocalizedName() {
 		return getProvider().getDescription();
 	}
 }

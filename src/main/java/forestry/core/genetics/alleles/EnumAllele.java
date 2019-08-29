@@ -11,7 +11,7 @@ import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.flowers.FlowerProvider;
 
 public class EnumAllele {
-	public enum Fertility implements IAlleleValue<Integer> {
+	public enum Fertility implements IAlleleData<Integer> {
 		LOW(1, true),
 		NORMAL(2, true),
 		HIGH(3),
@@ -38,9 +38,19 @@ public class EnumAllele {
 		public boolean isDominant() {
 			return dominant;
 		}
+
+		@Override
+		public String getCategory() {
+			return "fertility";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
-	public enum Fireproof implements IAlleleValue<Boolean> {
+	public enum Fireproof implements IAlleleData<Boolean> {
 		TRUE(true),
 		FALSE(false);
 
@@ -65,9 +75,19 @@ public class EnumAllele {
 		public Boolean getValue() {
 			return value;
 		}
+
+		@Override
+		public String getCategory() {
+			return "fireproof";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
-	public enum Flowering implements IAlleleValue<Integer> {
+	public enum Flowering implements IAlleleData<Integer> {
 		SLOWEST(5, true),
 		SLOWER(10),
 		SLOW(15),
@@ -98,9 +118,19 @@ public class EnumAllele {
 		public boolean isDominant() {
 			return dominant;
 		}
+
+		@Override
+		public String getCategory() {
+			return "flowering";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
-	public enum Flowers implements IAlleleValue<FlowerProvider> {
+	public enum Flowers implements IAlleleData<FlowerProvider> {
 		VANILLA(FlowerManager.FlowerTypeVanilla, true),
 		NETHER(FlowerManager.FlowerTypeNether),
 		CACTI(FlowerManager.FlowerTypeCacti),
@@ -132,6 +162,16 @@ public class EnumAllele {
 		@Override
 		public boolean isDominant() {
 			return dominant;
+		}
+
+		@Override
+		public String getCategory() {
+			return "flowers";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
 
@@ -178,7 +218,7 @@ public class EnumAllele {
 		}
 	}
 
-	public enum Lifespan implements IAlleleValue<Integer> {
+	public enum Lifespan implements IAlleleData<Integer> {
 		SHORTEST(10),
 		SHORTER(20, true),
 		SHORT(30, true),
@@ -210,9 +250,19 @@ public class EnumAllele {
 		public boolean isDominant() {
 			return dominant;
 		}
+
+		@Override
+		public String getCategory() {
+			return "lifespan";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
-	public enum Maturation implements IAlleleValue<Integer> {
+	public enum Maturation implements IAlleleData<Integer> {
 		SLOWEST(10, true),
 		SLOWER(7),
 		SLOW(5, true),
@@ -242,9 +292,19 @@ public class EnumAllele {
 		public boolean isDominant() {
 			return dominant;
 		}
+
+		@Override
+		public String getCategory() {
+			return "maturation";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
-	public enum Saplings implements IAlleleValue<Float> {
+	public enum Saplings implements IAlleleData<Float> {
 		LOWEST(0.01f, true),
 		LOWER(0.025f, true),
 		LOW(0.035f, true),
@@ -274,9 +334,19 @@ public class EnumAllele {
 		public boolean isDominant() {
 			return dominant;
 		}
+
+		@Override
+		public String getCategory() {
+			return "saplings";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
-	public enum Sappiness implements IAlleleValue<Float> {
+	public enum Sappiness implements IAlleleData<Float> {
 		LOWEST(0.1f, true),
 		LOWER(0.2f, true),
 		LOW(0.3f, true),
@@ -306,9 +376,19 @@ public class EnumAllele {
 		public boolean isDominant() {
 			return dominant;
 		}
+
+		@Override
+		public String getCategory() {
+			return "sappiness";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
-	public enum Size implements IAlleleValue<Float> {
+	public enum Size implements IAlleleData<Float> {
 		SMALLEST(0.3f),
 		SMALLER(0.4f),
 		SMALL(0.5f),
@@ -338,9 +418,19 @@ public class EnumAllele {
 		public boolean isDominant() {
 			return dominant;
 		}
+
+		@Override
+		public String getCategory() {
+			return "size";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
-	public enum Speed implements IAlleleValue<Float> {
+	public enum Speed implements IAlleleData<Float> {
 		SLOWEST(0.3f, true),
 		SLOWER(0.6f, true),
 		SLOW(0.8f, true),
@@ -370,9 +460,19 @@ public class EnumAllele {
 		public boolean isDominant() {
 			return dominant;
 		}
+
+		@Override
+		public String getCategory() {
+			return "speed";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
-	public enum Territory implements IAlleleValue<Vec3i> {
+	public enum Territory implements IAlleleData<Vec3i> {
 		AVERAGE(9, 6, 9),
 		LARGE(11, 8, 11),
 		LARGER(13, 12, 13),
@@ -399,9 +499,19 @@ public class EnumAllele {
 		public boolean isDominant() {
 			return dominant;
 		}
+
+		@Override
+		public String getCategory() {
+			return "territory";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
-	public enum Tolerance implements IAlleleValue<EnumTolerance> {
+	public enum Tolerance implements IAlleleData<EnumTolerance> {
 		NONE,
 		BOTH_1(true), BOTH_2, BOTH_3, BOTH_4, BOTH_5,
 		UP_1(true), UP_2, UP_3, UP_4, UP_5,
@@ -433,9 +543,19 @@ public class EnumAllele {
 		public boolean isDominant() {
 			return dominant;
 		}
+
+		@Override
+		public String getCategory() {
+			return "folerance";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
-	public enum Yield implements IAlleleValue<Float> {
+	public enum Yield implements IAlleleData<Float> {
 		LOWEST(0.025f, true),
 		LOWER(0.05f, true),
 		LOW(0.1f, true),
@@ -464,6 +584,16 @@ public class EnumAllele {
 		@Override
 		public boolean isDominant() {
 			return dominant;
+		}
+
+		@Override
+		public String getCategory() {
+			return "yield";
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
 }

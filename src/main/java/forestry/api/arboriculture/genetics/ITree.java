@@ -15,7 +15,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -33,6 +32,8 @@ public interface ITree extends IIndividual, ITreeGenData {
 	@Override
 	ITreeRoot getRoot();
 
+	boolean matchesTemplateGenome();
+
 	IEffectData[] doEffect(IEffectData[] storedData, World world, BlockPos pos);
 
 	@OnlyIn(Dist.CLIENT)
@@ -41,7 +42,7 @@ public interface ITree extends IIndividual, ITreeGenData {
 	/**
 	 * @since Forestry 4.0
 	 */
-	List<ITree> getSaplings(ServerWorld world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier);
+	List<ITree> getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier);
 
 	// Products, Chance
 	Map<ItemStack, Float> getProducts();

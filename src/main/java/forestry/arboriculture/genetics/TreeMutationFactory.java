@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import genetics.api.alleles.IAllele;
+
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITreeMutationBuilder;
 import forestry.api.arboriculture.genetics.ITreeMutationFactory;
-import forestry.api.genetics.IAllele;
 
 public class TreeMutationFactory implements ITreeMutationFactory {
 

@@ -23,8 +23,9 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.genetics.IEffectData;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -87,7 +88,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		List<ItemEntity> entities = getEntitiesInRange(genome, housing, ItemEntity.class);
 		if (entities.isEmpty()) {
 			return storedData;

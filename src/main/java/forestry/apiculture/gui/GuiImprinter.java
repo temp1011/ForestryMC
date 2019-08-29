@@ -20,7 +20,6 @@ import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.apiculture.ModuleApiculture;
-import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;

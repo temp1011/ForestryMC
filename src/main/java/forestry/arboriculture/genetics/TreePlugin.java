@@ -36,7 +36,7 @@ public class TreePlugin extends DatabasePlugin<ITree> {
 		ModuleArboriculture.getItems().sapling.addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
 			IAlleleTreeSpecies species = TreeGenome.getSpecies(treeStack);
-			iconStacks.put(species.getUID(), treeStack);
+			iconStacks.put(species.getRegistryName().toString(), treeStack);
 		}
 	}
 

@@ -10,6 +10,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.alleles.IAlleleValue;
+
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
@@ -17,7 +19,6 @@ import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.DatabaseMode;
-import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IDatabaseTab;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.gui.GuiConstants;
@@ -43,8 +44,8 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 
 	@Override
 	public void createElements(IDatabaseElement container, ITree tree, ItemStack itemStack) {
-		IAlleleTreeSpecies primarySpecies = tree.getGenome().getPrimary();
-		IAlleleTreeSpecies species = mode == DatabaseMode.ACTIVE ? primarySpecies : tree.getGenome().getSecondary();
+		IAlleleTreeSpecies primarySpecies = tree.getGenome().getPrimary(IAlleleTreeSpecies.class);
+		IAlleleTreeSpecies species = mode == DatabaseMode.ACTIVE ? primarySpecies : tree.getGenome().getSecondary(IAlleleTreeSpecies.class);
 		ITextStyle speciesStyle = GuiElementFactory.INSTANCE.getStateStyle(species.isDominant());
 
 		container.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.DATABASE_TITLE);
@@ -55,17 +56,17 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 		container.addLine(Translator.translateToLocal("for.gui.maturity"), TreeChromosomes.MATURATION);
 		container.addLine(Translator.translateToLocal("for.gui.height"), TreeChromosomes.HEIGHT);
 
-		container.addLine(Translator.translateToLocal("for.gui.girth"), (IAlleleInteger girth, Boolean active) -> String.format("%sx%s", girth.getValue(), girth.getValue()), TreeChromosomes.GIRTH);
+		container.addLine(Translator.translateToLocal("for.gui.girth"), (IAlleleValue<Integer> girth, Boolean active) -> String.format("%sx%s", girth.getValue(), girth.getValue()), TreeChromosomes.GIRTH);
 
 		container.addLine(Translator.translateToLocal("for.gui.yield"), TreeChromosomes.YIELD);
 		container.addLine(Translator.translateToLocal("for.gui.sappiness"), TreeChromosomes.SAPPINESS);
 
 		container.addLine(Translator.translateToLocal("for.gui.effect"), TreeChromosomes.EFFECT);
 
-		container.addLine(Translator.translateToLocal("for.gui.native"), Translator.translateToLocal("for.gui." + tree.getGenome().getPrimary().getPlantType().toString().toLowerCase(Locale.ENGLISH)), species.isDominant());
+		container.addLine(Translator.translateToLocal("for.gui.native"), Translator.translateToLocal("for.gui." + primarySpecies.getPlantType().toString().toLowerCase(Locale.ENGLISH)), species.isDominant());
 
 		container.label(Translator.translateToLocal("for.gui.supports"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
-		List<IFruitFamily> families = new ArrayList<>(tree.getGenome().getPrimary().getSuitableFruit());
+		List<IFruitFamily> families = new ArrayList<>(primarySpecies.getSuitableFruit());
 
 		for (IFruitFamily fruitFamily : families) {
 			container.label(fruitFamily.getName(), GuiElementAlignment.TOP_CENTER, speciesStyle);

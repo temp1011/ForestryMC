@@ -1047,7 +1047,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		} else if (key == ComponentKeys.MUTATIONS) {
 			IMutationRegistry<BeeMutation> mutationRegistry = (IMutationRegistry<BeeMutation>) builder;
 
-			mutationRegistry.registerMutation()
+			//mutationRegistry.registerMutation()
 		}
 	}
 

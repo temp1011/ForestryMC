@@ -27,9 +27,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IShearable;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.genetics.ITreeGenome;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.proxy.Proxies;
@@ -127,13 +130,13 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
-		ITreeGenome genome = definition.getGenome();
+		IGenome genome = definition.getGenome();
 
 		if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
-			IFruitProvider fruitProvider = genome.getFruitProvider();
+			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			return fruitProvider.getDecorativeColor();
 		}
-		ILeafSpriteProvider spriteProvider = genome.getPrimary().getLeafSpriteProvider();
+		ILeafSpriteProvider spriteProvider = genome.getPrimary(IAlleleTreeSpecies.class).getLeafSpriteProvider();
 		return spriteProvider.getColor(false);
 	}
 }

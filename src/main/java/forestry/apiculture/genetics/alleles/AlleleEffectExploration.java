@@ -14,8 +14,9 @@ import java.util.List;
 
 import net.minecraft.entity.player.PlayerEntity;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.genetics.IEffectData;
 
 public class AlleleEffectExploration extends AlleleEffectThrottled {
@@ -25,7 +26,7 @@ public class AlleleEffectExploration extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
 		for (PlayerEntity player : players) {
 			player.giveExperiencePoints(2);

@@ -17,12 +17,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
-import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.apiculture.genetics.IBeeRoot;
-import forestry.api.genetics.IAllele;
 import forestry.apiculture.genetics.Bee;
 import forestry.core.inventory.ItemInventory;
 
@@ -70,20 +71,20 @@ public class ItemInventoryImprinter extends ItemInventory {
 	}
 
 	public IAlleleBeeSpecies getPrimary() {
-		return BeeManager.beeRoot.getIndividualTemplates().get(primaryIndex).getGenome().getPrimary();
+		return BeeManager.beeRoot.getIndividualTemplates().get(primaryIndex).getGenome().getPrimary(IAlleleBeeSpecies.class);
 	}
 
 	public IAlleleBeeSpecies getSecondary() {
-		return BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getGenome().getPrimary();
+		return BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getGenome().getPrimary(IAlleleBeeSpecies.class);
 	}
 
 	public IBee getSelectedBee() {
 		IBeeRoot beeRoot = BeeManager.beeRoot;
 		List<IBee> individualTemplates = beeRoot.getIndividualTemplates();
-		Map<String, IAllele[]> genomeTemplates = beeRoot.getGenomeTemplates();
-		IAllele[] templateActive = genomeTemplates.get(individualTemplates.get(primaryIndex).getIdent());
-		IAllele[] templateInactive = genomeTemplates.get(individualTemplates.get(secondaryIndex).getIdent());
-		IBeeGenome genome = beeRoot.templateAsGenome(templateActive, templateInactive);
+		Map<String, IAllele[]> genomeTemplates = beeRoot.getTemplates().getGenomeTemplates();
+		IAllele[] templateActive = genomeTemplates.get(individualTemplates.get(primaryIndex).getIdentifier());
+		IAllele[] templateInactive = genomeTemplates.get(individualTemplates.get(secondaryIndex).getIdentifier());
+		IGenome genome = beeRoot.getKaryotype().templateAsGenome(templateActive, templateInactive);
 		return new Bee(genome);
 	}
 

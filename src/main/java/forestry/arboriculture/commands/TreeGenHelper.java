@@ -16,12 +16,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
 
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.ITreeGenome;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
 import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.utils.BlockUtil;
 import forestry.core.worldgen.WorldGenBase;
@@ -29,7 +30,7 @@ import forestry.core.worldgen.WorldGenBase;
 public final class TreeGenHelper {
 
 	public static Feature getWorldGen(String treeName, PlayerEntity player, BlockPos pos) throws SpeciesNotFoundException {
-		ITreeGenome treeGenome = getTreeGenome(treeName);
+		IGenome treeGenome = getTreeGenome(treeName);
 		ITree tree = TreeManager.treeRoot.getTree(player.world, treeGenome);
 		return tree.getTreeGenerator(player.world, pos, true);
 	}
@@ -69,7 +70,7 @@ public final class TreeGenHelper {
 		return false;
 	}
 
-	private static ITreeGenome getTreeGenome(String speciesName) throws SpeciesNotFoundException {
+	private static IGenome getTreeGenome(String speciesName) throws SpeciesNotFoundException {
 		IAlleleTreeSpecies species = null;
 
 		for (String uid : AlleleManager.alleleRegistry.getRegisteredAlleles().keySet()) {

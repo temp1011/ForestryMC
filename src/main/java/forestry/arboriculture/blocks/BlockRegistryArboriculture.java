@@ -23,14 +23,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.common.MinecraftForge;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
-import forestry.api.genetics.AlleleRegisterEvent;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
@@ -243,13 +239,11 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		}
 
 		// Pods
-		AlleleFruits.registerAlleles();
-		MinecraftForge.EVENT_BUS.post(new AlleleRegisterEvent<>(IAlleleFruit.class));
 		podsMap = new HashMap<>();
 		for (BlockFruitPod pod : BlockFruitPod.create()) {
 			IAlleleFruit fruit = pod.getFruit();
 			registerBlock(pod, "pods." + fruit.getModelName());
-			podsMap.put(fruit.getUID(), pod);
+			podsMap.put(fruit.getRegistryName().toString(), pod);
 		}
 
 		// Machines
@@ -283,6 +277,6 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 	@Nullable
 	public BlockFruitPod getFruitPod(IAlleleFruit fruit) {
-		return podsMap.get(fruit.getUID());
+		return podsMap.get(fruit.getRegistryName().toString());
 	}
 }

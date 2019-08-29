@@ -35,7 +35,7 @@ public class BeePlugin extends DatabasePlugin<IBee> {
 		ModuleApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
-			iconStacks.put(species.getUID(), beeStack);
+			iconStacks.put(species.getRegistryName().toString(), beeStack);
 		}
 	}
 

@@ -16,13 +16,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
 
 import com.mojang.authlib.GameProfile;
 
@@ -33,8 +33,13 @@ import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IGenomeWrapper;
+import genetics.api.individual.IIndividual;
+import genetics.api.individual.IKaryotype;
 import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IndividualRoot;
+import genetics.api.root.components.ComponentKey;
+import genetics.api.root.components.IRootComponent;
 
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.IBeeHousing;
@@ -49,13 +54,16 @@ import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.genetics.IBeeMutation;
 import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.genetics.IAlyzerPlugin;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IBreedingTrackerHandler;
 import forestry.api.genetics.IDatabasePlugin;
 import forestry.apiculture.BeeHousingListener;
 import forestry.apiculture.BeeHousingModifier;
 import forestry.apiculture.BeekeepingLogic;
+import forestry.core.genetics.root.BreedingTrackerManager;
 import forestry.core.utils.Log;
 
-public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot {
+public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreedingTrackerHandler {
 
 	private static int beeSpeciesCount = -1;
 	private static final List<IBee> beeTemplates = new ArrayList<>();
@@ -69,6 +77,10 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot {
 
 	@Nullable
 	private static IBeekeepingMode activeBeekeepingMode;
+
+	public BeeRoot(String uid, IKaryotype karyotype, Function<IIndividualRoot<IBee>, Map<ComponentKey, IRootComponent>> components) {
+		super(uid, karyotype, components);
+	}
 
 	@Override
 	public Class<? extends IBee> getMemberClass() {
@@ -165,7 +177,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot {
 	}
 
 	@Override
-	public IBeekeepingMode getBeekeepingMode(ServerWorld world) {
+	public IBeekeepingMode getBeekeepingMode(World world) {
 		if (activeBeekeepingMode != null) {
 			return activeBeekeepingMode;
 		}
@@ -188,7 +200,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot {
 	}
 
 	@Override
-	public void setBeekeepingMode(ServerWorld world, IBeekeepingMode mode) {
+	public void setBeekeepingMode(World world, IBeekeepingMode mode) {
 		Preconditions.checkNotNull(world);
 		Preconditions.checkNotNull(mode);
 		activeBeekeepingMode = mode;
@@ -208,18 +220,33 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot {
 	}
 
 	@Override
-	public IApiaristTracker getBreedingTracker(ServerWorld world, @Nullable GameProfile player) {
-		String filename = "ApiaristTracker." + (player == null ? "common" : player.getId());
-		//TODO ServerWorld needed
-		DimensionSavedDataManager manager = world.getSavedData();
-		ApiaristTracker tracker = manager.getOrCreate(() -> new ApiaristTracker(filename), filename);
+	public IApiaristTracker getBreedingTracker(World world, @Nullable GameProfile player) {
+		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
+	}
 
+	@Override
+	public String getFileName(@Nullable GameProfile profile) {
+		return "ApiaristTracker." + (profile == null ? "common" : profile.getId());
+	}
 
-		tracker.setUsername(player);
-		tracker.setWorld(world);
+	@Override
+	public IBreedingTracker createTracker(String fileName) {
+		return new ApiaristTracker(fileName);
+	}
 
-		return tracker;
+	@Override
+	public void populateTracker(IBreedingTracker tracker, @Nullable World world, @Nullable GameProfile profile) {
+		if (!(tracker instanceof ApiaristTracker)) {
+			return;
+		}
+		ApiaristTracker apiaristTracker = (ApiaristTracker) tracker;
+		apiaristTracker.setWorld(world);
+		apiaristTracker.setUsername(profile);
+	}
 
+	@Override
+	public boolean isMember(IIndividual individual) {
+		return individual instanceof IBee;
 	}
 
 	@Override

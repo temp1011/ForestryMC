@@ -10,7 +10,6 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -38,7 +37,7 @@ public interface IBeeRoot extends IForestrySpeciesRoot<IBee> {
 	 * @return {@link IApiaristTracker} associated with the passed world.
 	 */
 	@Override
-	IApiaristTracker getBreedingTracker(ServerWorld world, @Nullable GameProfile player);
+	IApiaristTracker getBreedingTracker(World world, @Nullable GameProfile player);
 
 	/* BEE SPECIFIC */
 
@@ -66,14 +65,14 @@ public interface IBeeRoot extends IForestrySpeciesRoot<IBee> {
 
 	List<IBeekeepingMode> getBeekeepingModes();
 
-	IBeekeepingMode getBeekeepingMode(ServerWorld world);
+	IBeekeepingMode getBeekeepingMode(World world);
 
 	@Nullable
 	IBeekeepingMode getBeekeepingMode(String name);
 
 	void registerBeekeepingMode(IBeekeepingMode mode);
 
-	void setBeekeepingMode(ServerWorld world, IBeekeepingMode mode);
+	void setBeekeepingMode(World world, IBeekeepingMode mode);
 
 	/* MISC */
 

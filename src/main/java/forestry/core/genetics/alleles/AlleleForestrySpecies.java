@@ -11,40 +11,19 @@
 package forestry.core.genetics.alleles;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
 
 import genetics.api.classification.IClassification;
-import genetics.api.individual.IIndividual;
-import genetics.api.mutation.IMutation;
-import genetics.api.root.components.ComponentKeys;
 
 import genetics.alleles.Allele;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IAlleleSpeciesBuilder;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.apiculture.ModuleApiculture;
-import forestry.apiculture.items.ItemHoneyComb;
-import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.items.ItemOverlay;
 import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Translator;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 public abstract class AlleleForestrySpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleForestrySpecies {
 	private final String binomial;
@@ -83,38 +62,6 @@ public abstract class AlleleForestrySpecies extends Allele implements IAlleleSpe
 	}
 
 	@Override
-	public float getResearchSuitability(ItemStack itemstack) {
-		if (itemstack.isEmpty()) {
-			return 0f;
-		}
-
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
-			Item item = itemstack.getItem();
-			if ( item instanceof ItemOverlay && beeItems.honeyDrops.containsValue(item)) {
-				return 0.5f;
-			} else if (beeItems.honeydew == item) {
-				return 0.7f;
-				//TODO tag lookup?
-			} else if (item instanceof ItemHoneyComb) {
-				return 0.4f;
-			}
-		}
-
-		if (getRoot().isMember(itemstack)) {
-			return 1.0f;
-		}
-
-		for (Map.Entry<ItemStack, Float> entry : getRoot().getResearchCatalysts().entrySet()) {
-			if (ItemStackUtil.isIdenticalItem(entry.getKey(), itemstack)) {
-				return entry.getValue();
-			}
-		}
-
-		return 0f;
-	}
-
-	@Override
 	public int getComplexity() {
 		if (complexityOverride != null) {
 			return complexityOverride;
@@ -125,36 +72,6 @@ public abstract class AlleleForestrySpecies extends Allele implements IAlleleSpe
 	@Override
 	public void setComplexity(int complexity) {
 		this.complexityOverride = complexity;
-	}
-
-	@Override
-	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		if (world.rand.nextFloat() < bountyLevel / 16.0f) {
-			List<? extends IMutation> allMutations = getRoot().getComponent(ComponentKeys.MUTATIONS).get().getCombinations(this);
-			if (!allMutations.isEmpty()) {
-				List<IMutation> unresearchedMutations = new ArrayList<>();
-				IBreedingTracker tracker = individual.getRoot().getBreedingTracker(world, researcher);
-				for (IMutation mutation : allMutations) {
-					if (!tracker.isResearched(mutation)) {
-						unresearchedMutations.add(mutation);
-					}
-				}
-
-				IMutation chosenMutation;
-				if (!unresearchedMutations.isEmpty()) {
-					chosenMutation = unresearchedMutations.get(world.rand.nextInt(unresearchedMutations.size()));
-				} else {
-					chosenMutation = allMutations.get(world.rand.nextInt(allMutations.size()));
-				}
-
-				ItemStack researchNote = AlleleManager.alleleRegistry.getMutationNoteStack(researcher, chosenMutation);
-				NonNullList<ItemStack> bounty = NonNullList.create();
-				bounty.add(researchNote);
-				return bounty;
-			}
-		}
-
-		return NonNullList.create();
 	}
 
 	@Override

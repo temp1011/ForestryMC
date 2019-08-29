@@ -15,9 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockStateContainer;
 import net.minecraft.block.IGrowable;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -28,14 +26,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.chunk.BlockStateContainer;
 
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import forestry.api.arboriculture.TreeManager;
@@ -124,11 +120,11 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 		}
 
 		// Add saplings	//TODO cast
-		List<ITree> saplings = tree.getSaplings((ServerWorld) world, playerProfile, pos, saplingModifier);
+		List<ITree> saplings = tree.getSaplings(world, playerProfile, pos, saplingModifier);
 
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
-				drops.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING));
+				drops.add(TreeManager.treeRoot.getTypes().createStack(sapling, EnumGermlingType.SAPLING));
 			}
 		}
 
@@ -162,7 +158,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 					return true;
 				}
 			} else if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
-				ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR);
+				ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.CATERPILLAR);
 				ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
 				leaves.setCaterpillar(null);
 				return true;

@@ -4,9 +4,11 @@ package forestry.core.genetics.analyzer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.individual.IIndividual;
+
 import forestry.api.genetics.IDatabasePlugin;
 import forestry.api.genetics.IDatabaseTab;
-import forestry.api.genetics.IIndividual;
+
 
 @OnlyIn(Dist.CLIENT)
 public abstract class DatabasePlugin<I extends IIndividual> implements IDatabasePlugin<I> {

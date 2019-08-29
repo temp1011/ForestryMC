@@ -6,8 +6,8 @@ import genetics.api.individual.IKaryotype;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IBeeRoot;
+import forestry.apiculture.BeePlugin;
 import forestry.apiculture.genetics.alleles.AlleleEffects;
-import forestry.apiculture.genetics_new.BeePlugin;
 import forestry.core.genetics.alleles.EnumAllele;
 
 public class BeeHelper {

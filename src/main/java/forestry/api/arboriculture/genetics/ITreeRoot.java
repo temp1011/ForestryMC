@@ -11,7 +11,6 @@ import java.util.List;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -30,7 +29,7 @@ public interface ITreeRoot extends ISpeciesRootPollinatable<ITree> {
 	 * @return {@link IArboristTracker} associated with the passed world.
 	 */
 	@Override
-	IArboristTracker getBreedingTracker(ServerWorld world, @Nullable GameProfile player);
+	IArboristTracker getBreedingTracker(World world, @Nullable GameProfile player);
 
 	/* TREE SPECIFIC */
 
@@ -55,14 +54,14 @@ public interface ITreeRoot extends ISpeciesRootPollinatable<ITree> {
 	/* GAME MODE */
 	List<ITreekeepingMode> getTreekeepingModes();
 
-	ITreekeepingMode getTreekeepingMode(ServerWorld world);
+	ITreekeepingMode getTreekeepingMode(World world);
 
 	@Nullable
 	ITreekeepingMode getTreekeepingMode(String name);
 
 	void registerTreekeepingMode(ITreekeepingMode mode);
 
-	void setTreekeepingMode(ServerWorld world, ITreekeepingMode mode);
+	void setTreekeepingMode(World world, ITreekeepingMode mode);
 
 	Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily);
 }

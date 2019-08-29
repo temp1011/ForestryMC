@@ -14,8 +14,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.EffectData;
 import forestry.core.utils.VectUtil;
@@ -39,7 +40,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		doBlockEffect(genome, housing);
 
@@ -55,7 +56,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		return storedData;
 	}
 
-	private void doBlockEffect(IBeeGenome genome, IBeeHousing housing) {
+	private void doBlockEffect(IGenome genome, IBeeHousing housing) {
 		World world = housing.getWorldObj();
 		BlockPos housingCoordinates = housing.getCoordinates();
 		Vec3i area = getModifiedArea(genome, housing);
@@ -75,7 +76,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		}
 	}
 
-	private static void doEntityEffect(IBeeGenome genome, IBeeHousing housing) {
+	private static void doEntityEffect(IGenome genome, IBeeHousing housing) {
 		List<CowEntity> cows = getEntitiesInRange(genome, housing, CowEntity.class);
 		for (CowEntity cow : cows) {
 			if (convertCowToMooshroom(cow)) {

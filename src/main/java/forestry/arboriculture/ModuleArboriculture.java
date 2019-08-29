@@ -55,6 +55,8 @@ import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
+import genetics.api.alleles.IAlleleRegistry;
+
 import forestry.Forestry;
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
@@ -369,9 +371,9 @@ public class ModuleArboriculture extends BlankForestryModule {
 		}
 	}
 
-	private static void registerAlleles() {
-		TreeBranchDefinition.registerAlleles();
-		AlleleLeafEffects.registerAlleles();
+	private static void registerAlleles(IAlleleRegistry registry) {
+		TreeBranchDefinition.registerBranches();
+		AlleleLeafEffects.registerAlleles(registry);
 	}
 
 	private static void registerErsatzGenomes() {

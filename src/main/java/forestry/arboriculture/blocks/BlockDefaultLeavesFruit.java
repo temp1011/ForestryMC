@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockStateContainer;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,6 +16,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
 
 import com.mojang.authlib.GameProfile;
 
@@ -25,12 +25,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.ITreeGenome;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.IModelManager;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -88,9 +91,9 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 			if (tree == null) {
 				return false;
 			}
-			IFruitProvider fruitProvider = tree.getGenome().getFruitProvider();
+			IFruitProvider fruitProvider = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			NonNullList<ItemStack> products = tree.produceStacks(world, pos, fruitProvider.getRipeningPeriod());
-			world.setBlockState(pos, ModuleArboriculture.getBlocks().getDefaultLeaves(tree.getIdent()), 2);
+			world.setBlockState(pos, ModuleArboriculture.getBlocks().getDefaultLeaves(tree.getIdentifier()), 2);
 			for (ItemStack fruit : products) {
 				ItemHandlerHelper.giveItemToPlayer(player, fruit);
 			}
@@ -111,13 +114,13 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 		List<ITree> saplings = tree.getSaplings(world, playerProfile, pos, saplingModifier);
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
-				drops.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING));
+				drops.add(TreeManager.treeRoot.getTypes().createStack(sapling, EnumGermlingType.SAPLING));
 			}
 		}
 
 		// Add fruitsk
-		ITreeGenome genome = tree.getGenome();
-		IFruitProvider fruitProvider = genome.getFruitProvider();
+		IGenome genome = tree.getGenome();
+		IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 		if (fruitProvider.isFruitLeaf(genome, world, pos)) {
 			NonNullList<ItemStack> produceStacks = tree.produceStacks(world, pos, Integer.MAX_VALUE);
 			drops.addAll(produceStacks);
@@ -188,7 +191,7 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 		BlockState blockState = world.getBlockState(pos);
 		PropertyTreeTypeFruit.LeafVariant treeDefinition = getLeafVariant(blockState);
 		if (treeDefinition != null) {
-			return treeDefinition.definition.getIndividual();
+			return treeDefinition.definition.createIndividual();
 		} else {
 			return null;
 		}
@@ -225,13 +228,13 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 		} else {
 			treeDefinition = TreeDefinition.Oak;
 		}
-		ITreeGenome genome = treeDefinition.getGenome();
+		IGenome genome = treeDefinition.getGenome();
 		if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
-			IFruitProvider fruitProvider = genome.getFruitProvider();
+			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			return fruitProvider.getDecorativeColor();
 		}
 
-		ILeafSpriteProvider spriteProvider = genome.getPrimary().getLeafSpriteProvider();
+		ILeafSpriteProvider spriteProvider = genome.getPrimary(IAlleleTreeSpecies.class).getLeafSpriteProvider();
 		return spriteProvider.getColor(false);
 	}
 }

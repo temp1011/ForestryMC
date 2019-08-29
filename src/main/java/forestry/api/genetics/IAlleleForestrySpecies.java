@@ -5,14 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
-
 import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IIndividual;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -31,16 +24,6 @@ public interface IAlleleForestrySpecies extends IAlleleSpecies {
 	 * @return Values between 3 - 11 are useful.
 	 */
 	int getComplexity();
-
-	/**
-	 * @return A float signifying the chance for the passed itemstack to yield a research success.
-	 */
-	float getResearchSuitability(ItemStack itemstack);
-
-	/**
-	 * @return itemstacks representing the bounty for this research success.
-	 */
-	NonNullList<ItemStack> getResearchBounty(World world, GameProfile gameProfile, IIndividual individual, int bountyLevel);
 
 	/* CLIMATE */
 

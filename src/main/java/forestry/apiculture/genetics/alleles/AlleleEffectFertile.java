@@ -21,8 +21,9 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.IPlantable;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.genetics.IBeeGenome;
 import forestry.api.genetics.IEffectData;
 
 public class AlleleEffectFertile extends AlleleEffectThrottled {
@@ -34,7 +35,7 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorldObj();
 		BlockPos housingCoordinates = housing.getCoordinates();

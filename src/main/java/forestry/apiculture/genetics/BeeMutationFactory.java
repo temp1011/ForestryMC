@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import genetics.api.alleles.IAllele;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBeeMutationBuilder;
 import forestry.api.apiculture.genetics.IBeeMutationFactory;
-import forestry.api.genetics.IAllele;
 
 public class BeeMutationFactory implements IBeeMutationFactory {
 

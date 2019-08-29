@@ -30,6 +30,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.arboriculture.IToolGrafter;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.LeafDecayHelper;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -70,7 +71,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 			return ItemStack.EMPTY;
 		}
 
-		return tree.getGenome().getDecorativeLeaves();
+		return tree.getGenome().getPrimary(IAlleleTreeSpecies.class).getLeafProvider().getDecorativeLeaves();
 	}
 
 	//TODO since loot done in loot table I don't know if this works
@@ -78,10 +79,10 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	public List<ItemStack> onSheared(ItemStack item, IWorld world, BlockPos pos, int fortune) {
 		ITree tree = getTree(world, pos);
 		if (tree == null) {
-			tree = TreeDefinition.Oak.getIndividual();
+			tree = TreeDefinition.Oak.createIndividual();
 		}
 
-		ItemStack decorativeLeaves = tree.getGenome().getDecorativeLeaves();
+		ItemStack decorativeLeaves = tree.getGenome().getPrimary(IAlleleTreeSpecies.class).getLeafProvider().getDecorativeLeaves();
 		if (decorativeLeaves.isEmpty()) {
 			return Collections.emptyList();
 		} else {
@@ -92,7 +93,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		ITree tree = getTree(worldIn, pos);
-		if (tree != null && TreeDefinition.Willow.getUID().equals(tree.getIdent())) {
+		if (tree != null && TreeDefinition.Willow.getUID().equals(tree.getIdentifier())) {
 			return VoxelShapes.empty();
 		}
 		return super.getCollisionShape(state, worldIn, pos, context);

@@ -5,9 +5,11 @@ import java.util.function.Supplier;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.genetics.IDatabaseTab;
-import forestry.api.genetics.IIndividual;
+import genetics.api.individual.IIndividual;
 
+import forestry.api.genetics.IDatabaseTab;
+
+//TODO: Rework the database and the analyser
 public abstract class DatabaseTab<I extends IIndividual> implements IDatabaseTab<I> {
 	private final Supplier<ItemStack> stackSupplier;
 	private final String name;

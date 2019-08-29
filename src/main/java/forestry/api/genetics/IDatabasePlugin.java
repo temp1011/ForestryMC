@@ -12,6 +12,9 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.individual.IIndividual;
+
 /**
  * An ISpeciesPlugin provides methods that are used in the alyzer and database to display information about an
  * individual.

@@ -12,10 +12,10 @@ package forestry.arboriculture.genetics.alleles;
 
 import javax.annotation.Nullable;
 
+import genetics.api.alleles.AlleleCategorized;
+
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
-import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	private final IFruitProvider provider;
@@ -25,7 +25,7 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	}
 
 	public AlleleFruit(String name, IFruitProvider provider, boolean isDominant) {
-		super(Constants.MOD_ID, "fruit", name, isDominant);
+		super(provider.getModID(), "fruit", name, isDominant);
 		this.provider = provider;
 	}
 
@@ -35,7 +35,7 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	}
 
 	@Override
-	public String getAlleleName() {
+	public String getLocalizedName() {
 		return getProvider().getDescription();
 	}
 
@@ -43,12 +43,6 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	@Override
 	public String getModelName() {
 		return getProvider().getModelName();
-	}
-
-
-	@Override
-	public String getModID() {
-		return getProvider().getModID();
 	}
 
 	@Override

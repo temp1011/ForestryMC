@@ -20,6 +20,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.alleles.AlleleCategorized;
 import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.BeeManager;
@@ -30,7 +31,6 @@ import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeEffect;
 import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.render.ParticleRender;
 import forestry.core.utils.VectUtil;
 

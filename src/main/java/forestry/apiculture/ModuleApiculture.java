@@ -55,9 +55,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.fml.InterModComms;
 
 import genetics.api.GeneticsAPI;
-import genetics.api.classification.IClassification;
-import genetics.api.classification.IClassification.EnumClassLevel;
-import genetics.api.classification.IClassificationRegistry;
 
 import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
@@ -66,7 +63,6 @@ import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFlowerAcceptableRule;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
@@ -75,14 +71,12 @@ import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.apiculture.capabilities.ArmorApiarist;
 import forestry.apiculture.flowers.FlowerRegistry;
-import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeFactory;
 import forestry.apiculture.genetics.BeeMutationFactory;
 import forestry.apiculture.genetics.BeekeepingMode;
 import forestry.apiculture.genetics.HiveDrop;
 import forestry.apiculture.genetics.JubilanceFactory;
-import forestry.apiculture.genetics.alleles.AlleleEffects;
 import forestry.apiculture.gui.ApicultureContainerTypes;
 import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.ContainerMinecartBeehouse;
@@ -322,7 +316,6 @@ public class ModuleApiculture extends BlankForestryModule {
 		config.save();
 
 		// Genetics
-		createAlleles();
 		BeeDefinition.initBees();
 
 		// Hives
@@ -733,22 +726,6 @@ public class ModuleApiculture extends BlankForestryModule {
 		hiveRegistry.registerHive(HiveType.SWAMP.getHiveUid(), HiveDescription.SWAMP);
 	}
 
-	private static void createAlleles() {
-
-		IClassificationRegistry registry = GeneticsAPI.apiInstance.getClassificationRegistry();
-		IClassification hymnoptera = registry.createAndRegisterClassification(EnumClassLevel.ORDER, "hymnoptera", "Hymnoptera");
-		registry.getClassification("class.insecta").addMemberGroup(hymnoptera);
-
-		IClassification apidae = registry.createAndRegisterClassification(EnumClassLevel.FAMILY, "apidae", "Apidae");
-		hymnoptera.addMemberGroup(apidae);
-
-		for (BeeBranchDefinition beeBranch : BeeBranchDefinition.values()) {
-			apidae.addMemberGroup(beeBranch.getBranch());
-		}
-
-		AlleleEffects.registerAlleles();
-	}
-
 	public static double getSecondPrincessChance() {
 		return secondPrincessChance;
 	}
@@ -760,7 +737,7 @@ public class ModuleApiculture extends BlankForestryModule {
 			}
 
 			Log.debug("Blacklisting bee species identified by " + item);
-			AlleleManager.alleleRegistry.blacklistAllele(item);
+			GeneticsAPI.apiInstance.getAlleleRegistry().blacklistAllele(item);
 		}
 	}
 

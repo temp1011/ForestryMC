@@ -18,11 +18,13 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.ITreeGenome;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.proxy.Proxies;
 
@@ -61,7 +63,7 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 		List<ITree> saplings = tree.getSaplings(world, playerProfile, pos, saplingModifier);
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
-				drops.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING));
+				drops.add(TreeManager.treeRoot.getTypes().createStack(sapling, EnumGermlingType.SAPLING));
 			}
 		}
 	}
@@ -71,7 +73,7 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 		BlockState blockState = world.getBlockState(pos);
 		TreeDefinition treeDefinition = getTreeDefinition(blockState);
 		if (treeDefinition != null) {
-			return treeDefinition.getIndividual();
+			return treeDefinition.createIndividual();
 		} else {
 			return null;
 		}
@@ -93,9 +95,9 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 		if (treeDefinition == null) {
 			treeDefinition = TreeDefinition.Oak;
 		}
-		ITreeGenome genome = treeDefinition.getGenome();
+		IGenome genome = treeDefinition.getGenome();
 
-		ILeafSpriteProvider spriteProvider = genome.getPrimary().getLeafSpriteProvider();
+		ILeafSpriteProvider spriteProvider = genome.getPrimary(IAlleleTreeSpecies.class).getLeafSpriteProvider();
 		return spriteProvider.getColor(false);
 	}
 }

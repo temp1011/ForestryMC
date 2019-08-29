@@ -12,17 +12,19 @@ package forestry.arboriculture.genetics;
 
 import net.minecraft.item.ItemStack;
 
+import genetics.api.individual.ISpeciesDefinition;
+
 import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.ITreeGenome;
-import forestry.core.genetics.IGeneticDefinition;
 
-public interface ITreeDefinition extends IGeneticDefinition {
-	@Override
-	ITreeGenome getGenome();
+public interface ITreeDefinition extends ISpeciesDefinition {
 
 	@Override
-	ITree getIndividual();
+	ITree createIndividual();
+
+	@Override
+	IAlleleTreeSpecies getSpecies();
 
 	ItemStack getMemberStack(EnumGermlingType treeType);
 }

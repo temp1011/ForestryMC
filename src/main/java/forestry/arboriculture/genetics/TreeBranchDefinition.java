@@ -10,24 +10,16 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Locale;
 
 import org.apache.commons.lang3.text.WordUtils;
 
 import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleTemplate;
+import genetics.api.classification.IBranchDefinition;
 import genetics.api.classification.IClassification;
 import genetics.api.classification.IClassification.EnumClassLevel;
 import genetics.api.classification.IClassificationRegistry;
-
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
-import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
-import forestry.core.genetics.IBranchDefinition;
-import forestry.core.genetics.alleles.AlleleHelper;
-import forestry.core.genetics.alleles.EnumAllele;
 
 public enum TreeBranchDefinition implements IBranchDefinition {
 	ACACIA,
@@ -79,25 +71,9 @@ public enum TreeBranchDefinition implements IBranchDefinition {
 		branch = new BranchTrees(name, scientific);
 	}
 
-	@Nullable
-	private static IAllele[] defaultTemplate;
-
 	@Override
-	public IAllele[] getTemplate() {
-		if (defaultTemplate == null) {
-			defaultTemplate = new IAllele[TreeChromosomes.values().length];
-
-			AlleleHelper.getInstance().set(defaultTemplate, TreeChromosomes.FRUITS, AlleleFruits.fruitNone);
-			AlleleHelper.getInstance().set(defaultTemplate, TreeChromosomes.HEIGHT, EnumAllele.Height.SMALL);
-			AlleleHelper.getInstance().set(defaultTemplate, TreeChromosomes.FERTILITY, EnumAllele.Saplings.LOWER);
-			AlleleHelper.getInstance().set(defaultTemplate, TreeChromosomes.YIELD, EnumAllele.Yield.LOWEST);
-			AlleleHelper.getInstance().set(defaultTemplate, TreeChromosomes.SAPPINESS, EnumAllele.Sappiness.LOWEST);
-			AlleleHelper.getInstance().set(defaultTemplate, TreeChromosomes.EFFECT, AlleleLeafEffects.leavesNone);
-			AlleleHelper.getInstance().set(defaultTemplate, TreeChromosomes.MATURATION, EnumAllele.Maturation.AVERAGE);
-			AlleleHelper.getInstance().set(defaultTemplate, TreeChromosomes.GIRTH, 1);
-			AlleleHelper.getInstance().set(defaultTemplate, TreeChromosomes.FIREPROOF, EnumAllele.Fireproof.FALSE);
-		}
-		return Arrays.copyOf(defaultTemplate, defaultTemplate.length);
+	public IAlleleTemplate getTemplate() {
+		return TreeHelper.getKaryotype().getDefaultTemplate();
 	}
 
 	@Override
@@ -105,8 +81,7 @@ public enum TreeBranchDefinition implements IBranchDefinition {
 		return branch;
 	}
 
-	public static void registerAlleles() {
-
+	public static void registerBranches() {
 		IClassificationRegistry classRegistry = GeneticsAPI.apiInstance.getClassificationRegistry();
 
 		IClassification plantae = classRegistry.getClassification("kingdom.plantae");

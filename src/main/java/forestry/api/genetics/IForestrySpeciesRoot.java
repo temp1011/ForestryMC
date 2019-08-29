@@ -6,10 +6,8 @@
 package forestry.api.genetics;
 
 import javax.annotation.Nullable;
-import java.util.Map;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
@@ -44,7 +42,7 @@ public interface IForestrySpeciesRoot<I extends IIndividual> extends IIndividual
 	IOrganismType getIconType();
 
 	/* BREEDING TRACKER */
-	IBreedingTracker getBreedingTracker(ServerWorld world, @Nullable GameProfile player);
+	IBreedingTracker getBreedingTracker(World world, @Nullable GameProfile player);
 
 	/**
 	 * The type of the species that will be used at the given position of the mutation recipe in the gui.
@@ -54,21 +52,6 @@ public interface IForestrySpeciesRoot<I extends IIndividual> extends IIndividual
 	default IOrganismType getTypeForMutation(int position) {
 		return getIconType();
 	}
-
-	/* RESEARCH */
-
-	/**
-	 * @return List of generic catalysts which should be accepted for research by species of this class.
-	 */
-	Map<ItemStack, Float> getResearchCatalysts();
-
-	/**
-	 * Sets an item stack as a valid (generic) research catalyst for this class.
-	 *
-	 * @param itemstack   ItemStack to set as suitable.
-	 * @param suitability Float between 0 and 1 to indicate suitability.
-	 */
-	void setResearchSuitability(ItemStack itemstack, float suitability);
 
 	/**
 	 * Plugin to add information for the handheld genetic analyzer.

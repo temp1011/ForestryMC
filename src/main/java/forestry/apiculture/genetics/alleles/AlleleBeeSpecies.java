@@ -16,17 +16,12 @@ import java.util.Map;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.classification.IClassification;
 import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
@@ -44,7 +39,6 @@ import forestry.apiculture.genetics.DefaultBeeModelProvider;
 import forestry.apiculture.genetics.DefaultBeeSpriteColourProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
-import forestry.core.utils.ItemStackUtil;
 
 public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBeeSpecies, IAlleleBeeSpeciesBuilder {
 	private final Map<ItemStack, Float> productChances = new HashMap<>();
@@ -120,43 +114,6 @@ public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBe
 	public IAlleleBeeSpeciesBuilder setCustomBeeSpriteColourProvider(IBeeSpriteColourProvider beeIconColourProvider) {
 		this.beeSpriteColourProvider = beeIconColourProvider;
 		return this;
-	}
-
-	/* RESEARCH */
-	@Override
-	public float getResearchSuitability(ItemStack itemstack) {
-		if (itemstack.isEmpty()) {
-			return 0f;
-		}
-
-		for (ItemStack stack : productChances.keySet()) {
-			if (stack.isItemEqual(itemstack)) {
-				return 1.0f;
-			}
-		}
-		for (ItemStack stack : specialtyChances.keySet()) {
-			if (stack.isItemEqual(itemstack)) {
-				return 1.0f;
-			}
-		}
-
-		return super.getResearchSuitability(itemstack);
-	}
-
-	@Override
-	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		NonNullList<ItemStack> bounty = NonNullList.create();
-		bounty.addAll(super.getResearchBounty(world, researcher, individual, bountyLevel));
-
-		if (bountyLevel > 10) {
-			for (ItemStack stack : specialtyChances.keySet()) {
-				bounty.add(ItemStackUtil.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
-			}
-		}
-		for (ItemStack stack : productChances.keySet()) {
-			bounty.add(ItemStackUtil.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
-		}
-		return bounty;
 	}
 
 	/* OTHER */

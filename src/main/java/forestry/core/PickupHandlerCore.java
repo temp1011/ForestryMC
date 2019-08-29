@@ -32,7 +32,7 @@ public class PickupHandlerCore implements IPickupHandler {
 			return false;
 		}
 
-		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemstack, IForestrySpeciesRoot.class);
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemstack);
 		if (definition.isRootPresent()) {
 			IForestrySpeciesRoot<IIndividual> root = definition.get();
 			Optional<IIndividual> optionalIndividual = root.create(itemstack);

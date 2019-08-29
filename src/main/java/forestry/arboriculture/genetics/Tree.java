@@ -31,7 +31,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -44,6 +43,7 @@ import genetics.api.alleles.IAllele;
 import genetics.api.individual.IChromosome;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeMatcher;
 import genetics.api.individual.Individual;
 import genetics.api.mutation.IMutation;
 import genetics.api.root.components.ComponentKeys;
@@ -63,20 +63,35 @@ import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.config.Config;
+import forestry.core.genetics.TemplateMatcher;
 
 public class Tree extends Individual implements ITree, IPlantable {
 
+	private final IGenomeMatcher matcher;
+
 	public Tree(IGenome genome) {
 		super(genome);
+		matcher = new TemplateMatcher(genome);
+	}
+
+	public Tree(IGenome genome, IGenome mate) {
+		super(genome, mate);
+		matcher = new TemplateMatcher(genome);
 	}
 
 	public Tree(CompoundNBT compoundNBT) {
 		super(compoundNBT);
+		matcher = new TemplateMatcher(genome);
 	}
 
 	@Override
 	public ITreeRoot getRoot() {
 		return TreeManager.treeRoot;
+	}
+
+	@Override
+	public boolean matchesTemplateGenome() {
+		return matcher.matches();
 	}
 
 	/* EFFECTS */
@@ -254,7 +269,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	/* REPRODUCTION */
 	@Override
-	public List<ITree> getSaplings(ServerWorld world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier) {
+	public List<ITree> getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier) {
 		List<ITree> prod = new ArrayList<>();
 
 		float chance = genome.getActiveValue(TreeChromosomes.FERTILITY) * modifier;
@@ -270,7 +285,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		return prod;
 	}
 
-	private ITree createOffspring(ServerWorld world, IGenome mate, @Nullable GameProfile playerProfile, BlockPos pos) {
+	private ITree createOffspring(World world, IGenome mate, @Nullable GameProfile playerProfile, BlockPos pos) {
 		IChromosome[] chromosomes = new IChromosome[genome.getChromosomes().length];
 		IChromosome[] parent1 = genome.getChromosomes();
 		IChromosome[] parent2 = mate.getChromosomes();
@@ -296,7 +311,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Nullable
-	private static IChromosome[] mutateSpecies(ServerWorld world, @Nullable GameProfile playerProfile, BlockPos pos, IGenome genomeOne, IGenome genomeTwo) {
+	private static IChromosome[] mutateSpecies(World world, @Nullable GameProfile playerProfile, BlockPos pos, IGenome genomeOne, IGenome genomeTwo) {
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
 

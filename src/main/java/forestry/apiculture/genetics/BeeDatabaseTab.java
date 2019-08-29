@@ -1,5 +1,6 @@
 package forestry.apiculture.genetics;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
@@ -7,9 +8,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.organism.IOrganismType;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.DatabaseMode;
@@ -20,7 +24,6 @@ import forestry.api.gui.IDatabaseElement;
 import forestry.api.gui.style.ITextStyle;
 import forestry.api.gui.style.TextStyleBuilder;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
-import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.StringUtil;
@@ -43,12 +46,13 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 
 	@Override
 	public void createElements(IDatabaseElement container, IBee bee, ItemStack itemStack) {
-		EnumBeeType type = BeeManager.beeRoot.getType(itemStack);
-		if (type == null) {
+		Optional<IOrganismType> optionalType = BeeManager.beeRoot.getTypes().getType(itemStack);
+		if (!optionalType.isPresent()) {
 			return;
 		}
-		IAlleleForestrySpecies primarySpecies = bee.getGenome().getPrimary();
-		IAlleleForestrySpecies secondarySpecies = bee.getGenome().getSecondary();
+		IOrganismType type = optionalType.get();
+		IAlleleBeeSpecies primarySpecies = bee.getGenome().getPrimary(IAlleleBeeSpecies.class);
+		IAlleleBeeSpecies secondarySpecies = bee.getGenome().getSecondary(IAlleleBeeSpecies.class);
 
 		container.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.DATABASE_TITLE);
 
@@ -80,18 +84,18 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 
 		String diurnal, nocturnal;
 		if (mode == DatabaseMode.ACTIVE) {
-			if (bee.getGenome().getNeverSleeps()) {
+			if (bee.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS)) {
 				nocturnal = diurnal = yes;
 			} else {
-				nocturnal = bee.getGenome().getPrimary().isNocturnal() ? yes : no;
-				diurnal = !bee.getGenome().getPrimary().isNocturnal() ? yes : no;
+				nocturnal = primarySpecies.isNocturnal() ? yes : no;
+				diurnal = !primarySpecies.isNocturnal() ? yes : no;
 			}
 		} else {
-			if (((AlleleBoolean) bee.getGenome().getInactiveAllele(ButterflyChromosomes.NOCTURNAL)).getValue()) {
+			if (bee.getGenome().getInactiveValue(ButterflyChromosomes.NOCTURNAL)) {
 				nocturnal = diurnal = yes;
 			} else {
-				nocturnal = bee.getGenome().getSecondary().isNocturnal() ? yes : no;
-				diurnal = !bee.getGenome().getSecondary().isNocturnal() ? yes : no;
+				nocturnal = secondarySpecies.isNocturnal() ? yes : no;
+				diurnal = !secondarySpecies.isNocturnal() ? yes : no;
 			}
 		}
 
@@ -99,10 +103,10 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 
 		container.addLine(Translator.translateToLocal("for.gui.nocturnal"), nocturnal, false);
 
-		Function<Boolean, String> flyer = active -> StringUtil.readableBoolean(active ? bee.getGenome().getToleratesRain() : ((AlleleBoolean) bee.getGenome().getInactiveAllele(BeeChromosomes.TOLERATES_RAIN)).getValue(), yes, no);
+		Function<Boolean, String> flyer = active -> StringUtil.readableBoolean(active ? bee.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN) : bee.getGenome().getInactiveValue(BeeChromosomes.TOLERATES_RAIN), yes, no);
 		container.addLine(Translator.translateToLocal("for.gui.flyer"), flyer, BeeChromosomes.TOLERATES_RAIN);
 
-		Function<Boolean, String> cave = active -> StringUtil.readableBoolean(active ? bee.getGenome().getCaveDwelling() : ((AlleleBoolean) bee.getGenome().getInactiveAllele(BeeChromosomes.CAVE_DWELLING)).getValue(), yes, no);
+		Function<Boolean, String> cave = active -> StringUtil.readableBoolean(active ? bee.getGenome().getActiveValue(BeeChromosomes.CAVE_DWELLING) : bee.getGenome().getInactiveValue(BeeChromosomes.CAVE_DWELLING), yes, no);
 		container.addLine(Translator.translateToLocal("for.gui.cave"), cave, BeeChromosomes.CAVE_DWELLING);
 
 		String displayText;

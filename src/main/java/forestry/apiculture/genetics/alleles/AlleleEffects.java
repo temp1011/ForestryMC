@@ -5,9 +5,10 @@ import java.util.List;
 
 import net.minecraft.potion.Effects;
 
+import genetics.api.alleles.IAlleleRegistry;
+
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeEffect;
-import forestry.api.genetics.AlleleManager;
 
 public class AlleleEffects {
 	public static final IAlleleBeeEffect effectNone;
@@ -55,9 +56,9 @@ public class AlleleEffects {
 		);
 	}
 
-	public static void registerAlleles() {
+	public static void registerAlleles(IAlleleRegistry registry) {
 		for (IAlleleBeeEffect beeEffect : beeEffects) {
-			AlleleManager.alleleRegistry.registerAllele(beeEffect, BeeChromosomes.EFFECT);
+			registry.registerAllele(beeEffect, BeeChromosomes.EFFECT);
 		}
 	}
 }

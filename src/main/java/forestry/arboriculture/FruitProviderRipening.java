@@ -21,7 +21,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.genetics.ITreeGenome;
+import genetics.api.individual.IGenome;
+
 import forestry.api.genetics.IFruitFamily;
 
 public class FruitProviderRipening extends FruitProviderNone {
@@ -61,7 +62,7 @@ public class FruitProviderRipening extends FruitProviderNone {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
+	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
 		NonNullList<ItemStack> product = NonNullList.create();
 		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
 			if (world.rand.nextFloat() <= entry.getValue()) {
@@ -78,12 +79,12 @@ public class FruitProviderRipening extends FruitProviderNone {
 	}
 
 	@Override
-	public boolean isFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
+	public boolean isFruitLeaf(IGenome genome, World world, BlockPos pos) {
 		return true;
 	}
 
 	@Override
-	public int getColour(ITreeGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
+	public int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
 		float stage = getRipeningStage(ripeningTime);
 		return getColour(stage);
 	}
