@@ -17,10 +17,12 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -31,6 +33,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
+import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
 import forestry.arboriculture.genetics.Tree;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
@@ -49,6 +52,10 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	@Nullable
 	private ITree containedTree;
 	private final OwnerHandler ownerHandler = new OwnerHandler();
+
+	public TileTreeContainer(TileEntityType<?> type) {
+		super(type);
+	}
 
 	/* SAVING & LOADING */
 	@Override
@@ -104,7 +111,8 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	public void setTree(ITree tree) {
 		this.containedTree = tree;
 		if (world != null && world.isRemote) {
-			world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			Minecraft.getInstance().worldRenderer.markForRerender(getPos().getX(), getPos().getY(), getPos().getZ());
+//			world.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
 
@@ -129,10 +137,11 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	 * Called from Chunk.setBlockIDWithMetadata, determines if this tile entity should be re-created when the ID, or Metadata changes.
 	 * Use with caution as this will leave straggler TileEntities, or create conflicts with other TileEntities if not used properly.
 	 */
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newSate) {
-		return !Block.isEqualTo(oldState.getBlock(), newSate.getBlock());
-	}
+	//TODO
+//	@Override
+//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newSate) {
+//		return !Block.isEqualTo(oldState.getBlock(), newSate.getBlock());
+//	}
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {

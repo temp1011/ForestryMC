@@ -44,7 +44,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		}
 
 		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.readFromNBT(itemstack.getTag());
+		tileLeaves.read(itemstack.getTag());
 
 		String unlocalizedName = tileLeaves.getUnlocalizedName();
 		return getDisplayName(unlocalizedName);
@@ -55,12 +55,13 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		if (Translator.canTranslateToLocal(customTreeKey)) {
 			return new TranslationTextComponent(customTreeKey);
 		}
-
-		String grammar = Translator.translateToLocal("for.trees.grammar.leaves");
 		String localizedName = Translator.translateToLocal(unlocalizedSpeciesName);
-
 		String leaves = Translator.translateToLocal("for.trees.grammar.leaves.type");
-		return grammar.replaceAll("%SPECIES", localizedName).replaceAll("%TYPE", leaves);
+
+		ITextComponent grammar = new TranslationTextComponent("for.trees.grammar.leaves", localizedName, leaves);
+		//TODO textcomponent formatting
+//		return grammar.replaceAll("%SPECIES", localizedName).replaceAll("%TYPE", leaves);
+		return grammar;
 	}
 
 	@Override
@@ -71,7 +72,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		}
 
 		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.readFromNBT(itemStack.getTag());
+		tileLeaves.read(itemStack.getTag());
 
 		if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 			return tileLeaves.getFruitColour();
@@ -80,10 +81,11 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 			return tileLeaves.getFoliageColour(player);
 		}
 	}
-
-	@Override
-	public boolean placeBlockAt(ItemStack itemStack, PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, BlockState newState) {
-		return false;
-	}
+	//TODO
+//
+//	@Override
+//	public boolean placeBlockAt(ItemStack itemStack, PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, BlockState newState) {
+//		return false;
+//	}
 
 }

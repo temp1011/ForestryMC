@@ -11,14 +11,20 @@
 package forestry.core.utils;
 
 import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.compress.utils.IOUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -85,54 +91,54 @@ public class ModelUtil {
 		return new BufferedReader(new InputStreamReader(iresource.getInputStream(), Charsets.UTF_8));
 	}
 
-//	public static BlockModelDefinition getModelBlockDefinition(ResourceLocation location) {
-//		try {
-//			ResourceLocation resourcelocation = getBlockstateLocation(location);
-//			return blockDefinitions.computeIfAbsent(resourcelocation,
-//				k -> loadMultipartMBD(location, resourcelocation));
-//		} catch (Exception exception) {
-//			Log.error("Failed to getModelBlockDefinition", exception);
-//		}
-//		return new BlockModelDefinition(new ArrayList<>());
-//	}
+	public static BlockModelDefinition getModelBlockDefinition(ResourceLocation location) {
+		try {
+			ResourceLocation resourcelocation = getBlockstateLocation(location);
+			return blockDefinitions.computeIfAbsent(resourcelocation,
+				k -> loadMultipartMBD(location, resourcelocation));
+		} catch (Exception exception) {
+			Log.error("Failed to getModelBlockDefinition", exception);
+		}
+		return new BlockModelDefinition(new ArrayList<>());
+	}
 
 	private static ResourceLocation getBlockstateLocation(ResourceLocation location) {
 		return new ResourceLocation(location.getNamespace(),
 			"blockstates/" + location.getPath() + ".json");
 	}
 
-//	private static BlockModelDefinition loadMultipartMBD(ResourceLocation location, ResourceLocation fileIn) {
-//		List<BlockModelDefinition> list = Lists.newArrayList();
-//		Minecraft mc = Minecraft.getInstance();
-//		IResourceManager manager = mc.getResourceManager();
-//
-//		try {
-//			for (IResource resource : manager.getAllResources(fileIn)) {
-//				list.add(loadModelBlockDefinition(location, resource));
-//			}
-//		} catch (IOException e) {
-//			throw new RuntimeException("Encountered an exception when loading model definition of model " + fileIn, e);
-//		}
-//
-//		return new BlockModelDefinition(list);
-//	}
+	private static BlockModelDefinition loadMultipartMBD(ResourceLocation location, ResourceLocation fileIn) {
+		List<BlockModelDefinition> list = Lists.newArrayList();
+		Minecraft mc = Minecraft.getInstance();
+		IResourceManager manager = mc.getResourceManager();
+
+		try {
+			for (IResource resource : manager.getAllResources(fileIn)) {
+				list.add(loadModelBlockDefinition(location, resource));
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Encountered an exception when loading model definition of model " + fileIn, e);
+		}
+
+		return new BlockModelDefinition(list);
+	}
 
 	//TODO - how to load from arbitary stream now, then can uncomment
-//	private static BlockModelDefinition loadModelBlockDefinition(ResourceLocation location, IResource resource) {
-//		InputStream inputStream = null;
-//		BlockModelDefinition definition;
-//
-//		try {
-//			inputStream = resource.getInputStream();
-//			definition = BlockModelDefinition.parseFromReader(new InputStreamReader(inputStream, Charsets.UTF_8), location);
-//		} catch (Exception exception) {
-//			throw new RuntimeException("Encountered an exception when loading model definition of \'" + location
-//				+ "\' from: \'" + resource.getLocation() + "\' in resourcepack: \'"
-//				+ resource.getPackName() + "\'", exception);
-//		} finally {
-//			IOUtils.closeQuietly(inputStream);
-//		}
-//
-//		return definition;
-//	}
+	private static BlockModelDefinition loadModelBlockDefinition(ResourceLocation location, IResource resource) {
+		InputStream inputStream = null;
+		BlockModelDefinition definition;
+
+		try {
+			inputStream = resource.getInputStream();
+			definition = BlockModelDefinition.fromJson(new BlockModelDefinition.ContainerHolder(), new InputStreamReader(inputStream, Charsets.UTF_8), location);
+		} catch (Exception exception) {
+			throw new RuntimeException("Encountered an exception when loading model definition of \'" + location
+				+ "\' from: \'" + resource.getLocation() + "\' in resourcepack: \'"
+				+ resource.getPackName() + "\'", exception);
+		} finally {
+			IOUtils.closeQuietly(inputStream);
+		}
+
+		return definition;
+	}
 }

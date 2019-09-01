@@ -17,14 +17,20 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import forestry.api.arboriculture.ITreeModifier;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.world.ITreeGenData;
 import forestry.core.worldgen.WorldGenHelper;
 
-public abstract class WorldGenTree extends WorldGenArboriculture {
+//TODO temp feature stuff
+public abstract class WorldGenTree extends Feature<NoFeatureConfig> {//TODO worldgen extends WorldGenArboriculture {
 	private static final int minHeight = 4;
 	private static final int maxHeight = 80;
 
@@ -35,18 +41,19 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 	protected int height;
 
 	protected WorldGenTree(ITreeGenData tree, int baseHeight, int heightVariation) {
-		super(tree);
+		super(NoFeatureConfig::deserialize, false);
+		//		super(tree);
 		this.baseHeight = baseHeight;
 		this.heightVariation = heightVariation;
 	}
 
-	@Override
+//	@Override
 	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
 		return Collections.emptySet();
 	}
 
-	@Override
+//	@Override
 	protected void generateLeaves(World world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
 		int leafHeight = height + 1;
 		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafHeight--, 0), girth, girth, 1, WorldGenHelper.EnumReplaceMode.AIR);
@@ -55,36 +62,46 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 		WorldGenHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafHeight, 0), girth, 1.9f + girth, 1, WorldGenHelper.EnumReplaceMode.AIR);
 	}
 
-	@Override
+//	@Override
 	protected void generateExtras(World world, Random rand, BlockPos startPos) {
-		if (hasPods()) {
-			WorldGenHelper.generatePods(tree, world, rand, startPos, height, minPodHeight, girth, WorldGenHelper.EnumReplaceMode.AIR);
-		}
+//		if (hasPods()) {
+//			WorldGenHelper.generatePods(tree, world, rand, startPos, height, minPodHeight, girth, WorldGenHelper.EnumReplaceMode.AIR);
+//		}
 	}
 
-	@Override
+//	@Override
 	@Nullable
 	public BlockPos getValidGrowthPos(World world, BlockPos pos) {
-		return tree.canGrow(world, pos, girth, height);
+		return BlockPos.ZERO;
+//		return tree.canGrow(world, pos, girth, height);
 	}
 
-	@Override
+//	@Override
 	public final void preGenerate(World world, Random rand, BlockPos startPos) {
-		super.preGenerate(world, rand, startPos);
+//		super.preGenerate(world, rand, startPos);
 		height = determineHeight(world, rand, baseHeight, heightVariation);
-		girth = tree.getGirth();
+//		girth = tree.getGirth();
 	}
 
 	protected int modifyByHeight(World world, int val, int min, int max) {
-		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
-		int determined = Math.round(val * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));
-		return determined < min ? min : determined > max ? max : determined;
+//		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
+//		int determined = Math.round(val * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));
+//		return determined < min ? min : determined > max ? max : determined;
+		return 0;
 	}
 
 	private int determineHeight(World world, Random rand, int required, int variation) {
-		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
+//		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
 		int baseHeight = required + rand.nextInt(variation);
-		int height = Math.round(baseHeight * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));
-		return height < minHeight ? minHeight : height > maxHeight ? maxHeight : height;
+//		int height = Math.round(baseHeight * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));
+//		return height < minHeight ? minHeight : height > maxHeight ? maxHeight : height;
+		return 0;
 	}
+
+	//TODO temp
+	@Override
+	public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+		return false;
+	}
+
 }

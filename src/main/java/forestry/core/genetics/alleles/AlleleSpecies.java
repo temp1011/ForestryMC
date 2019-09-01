@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -67,7 +68,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 
 		this.branch = branch;
 		this.binomial = binomial;
-		this.description = Translator.translateToLocal(unlocalizedDescription);	//TODO translation maybe on server side
+		this.description = unlocalizedDescription; //TODO this crashes even in client, not sure why. Translator.translateToLocal(unlocalizedDescription);	//TODO translation maybe on server side
 		this.authority = authority;
 	}
 
@@ -123,11 +124,11 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesBuil
 
 	@Override
 	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		if (world.rand.nextFloat() < bountyLevel / 16.0f) {
+		if (world.rand.nextFloat() < bountyLevel / 16.0f && !world.isRemote) {	//TODO checking for client so can cast for world saved data
 			List<? extends IMutation> allMutations = getRoot().getCombinations(this);
 			if (!allMutations.isEmpty()) {
 				List<IMutation> unresearchedMutations = new ArrayList<>();
-				IBreedingTracker tracker = individual.getGenome().getSpeciesRoot().getBreedingTracker(world, researcher);
+				IBreedingTracker tracker = individual.getGenome().getSpeciesRoot().getBreedingTracker((ServerWorld) world, researcher);
 				for (IMutation mutation : allMutations) {
 					if (!tracker.isResearched(mutation)) {
 						unresearchedMutations.add(mutation);

@@ -14,21 +14,17 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockNewLog;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockWoodSlab;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.Items;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodAccess;
@@ -41,8 +37,8 @@ import forestry.arboriculture.blocks.BlockForestryLog;
 import forestry.arboriculture.blocks.BlockForestryPlank;
 import forestry.arboriculture.blocks.BlockForestrySlab;
 import forestry.arboriculture.blocks.BlockForestryStairs;
-import forestry.arboriculture.blocks.PropertyWoodType;
 
+//TODO - Perhaps a nicer way to manage this would be to have a tag for this purpose.
 public class WoodAccess implements IWoodAccess {
 	@Nullable
 	private static WoodAccess INSTANCE;
@@ -54,6 +50,7 @@ public class WoodAccess implements IWoodAccess {
 		return INSTANCE;
 	}
 
+	//TODO table?
 	private final Map<WoodBlockKind, WoodMap> woodMaps = new EnumMap<>(WoodBlockKind.class);
 	private final List<IWoodType> registeredWoodTypes = new ArrayList<>();
 
@@ -64,84 +61,75 @@ public class WoodAccess implements IWoodAccess {
 		registerVanilla();
 	}
 
-	public void registerLogs(List<? extends BlockForestryLog> blocks) {
+	//TODO implement getWoodBlockKind on superclass of all wood blocks to simplify this
+	public void registerLogs(Collection<? extends BlockForestryLog> blocks) {
 		for (BlockForestryLog block : blocks) {
 			//noinspection unchecked
-			registerWithVariants(block, WoodBlockKind.LOG, block.getVariant());
+			registerWithoutVariants(block, WoodBlockKind.LOG);
 		}
 	}
 
-	public void registerPlanks(List<? extends BlockForestryPlank> blocks) {
+	public void registerPlanks(Collection<? extends BlockForestryPlank> blocks) {
 		for (BlockForestryPlank block : blocks) {
 			//noinspection unchecked
-			registerWithVariants(block, WoodBlockKind.PLANKS, block.getVariant());
+			registerWithoutVariants(block, WoodBlockKind.PLANKS);
 		}
 	}
 
-	public void registerSlabs(List<? extends BlockForestrySlab> blocks) {
+	public void registerSlabs(Collection<? extends BlockForestrySlab> blocks) {
 		for (BlockForestrySlab block : blocks) {
 			//noinspection unchecked
-			registerWithVariants(block, WoodBlockKind.SLAB, block.getVariant());
+			registerWithoutVariants(block, WoodBlockKind.SLAB);
 		}
 	}
 
-	public void registerFences(List<? extends BlockForestryFence> blocks) {
+	public void registerFences(Collection<? extends BlockForestryFence> blocks) {
 		for (BlockForestryFence block : blocks) {
 			//noinspection unchecked
-			registerWithVariants(block, WoodBlockKind.FENCE, block.getVariant());
+			registerWithoutVariants(block, WoodBlockKind.FENCE);
 		}
 	}
 
-	public void registerFenceGates(List<BlockForestryFenceGate> blocks) {
+	public void registerFenceGates(Collection<BlockForestryFenceGate> blocks) {
 		for (BlockForestryFenceGate block : blocks) {
 			registerWithoutVariants(block, WoodBlockKind.FENCE_GATE);
 		}
 	}
 
-	public void registerStairs(List<? extends BlockForestryStairs> blocks) {
+	public void registerStairs(Collection<? extends BlockForestryStairs> blocks) {
 		for (BlockForestryStairs block : blocks) {
 			registerWithoutVariants(block, WoodBlockKind.STAIRS);
 		}
 	}
 
-	public void registerDoors(List<BlockForestryDoor> blocks) {
+	public void registerDoors(Collection<BlockForestryDoor> blocks) {
 		for (BlockForestryDoor block : blocks) {
 			registerWithoutVariants(block, WoodBlockKind.DOOR);
 		}
 	}
 
 	private void registerVanilla() {
-		BlockState defaultLogState = Blocks.LOG.getDefaultState();
-		List<EnumVanillaWoodType> oldLogTypes = Arrays.asList(EnumVanillaWoodType.OAK, EnumVanillaWoodType.SPRUCE, EnumVanillaWoodType.BIRCH, EnumVanillaWoodType.JUNGLE);
-		for (EnumVanillaWoodType woodType : oldLogTypes) {
-			BlockPlanks.EnumType vanillaType = woodType.getVanillaType();
-			ItemStack itemStack = new ItemStack(Blocks.LOG, 1, vanillaType.getMetadata());
-			BlockState blockState = defaultLogState.with(BlockOldLog.VARIANT, vanillaType);
-			register(woodType, WoodBlockKind.LOG, false, blockState, itemStack);
-		}
+		//TODO can this be done with tags?
+		register(EnumVanillaWoodType.OAK, WoodBlockKind.SLAB, false, Blocks.OAK_SLAB.getDefaultState(), new ItemStack(Blocks.OAK_SLAB));
+		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.SLAB, false, Blocks.SPRUCE_SLAB.getDefaultState(), new ItemStack(Blocks.SPRUCE_SLAB));
+		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.SLAB, false, Blocks.BIRCH_SLAB.getDefaultState(), new ItemStack(Blocks.BIRCH_SLAB));
+		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.SLAB, false, Blocks.JUNGLE_SLAB.getDefaultState(), new ItemStack(Blocks.JUNGLE_SLAB));
+		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.SLAB, false, Blocks.ACACIA_SLAB.getDefaultState(), new ItemStack(Blocks.ACACIA_SLAB));
+		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.SLAB, false, Blocks.DARK_OAK_SLAB.getDefaultState(), new ItemStack(Blocks.DARK_OAK_SLAB));
 
-		BlockState defaultLog2State = Blocks.LOG2.getDefaultState();
-		List<EnumVanillaWoodType> newLogTypes = Arrays.asList(EnumVanillaWoodType.ACACIA, EnumVanillaWoodType.DARK_OAK);
-		for (EnumVanillaWoodType woodType : newLogTypes) {
-			BlockPlanks.EnumType vanillaType = woodType.getVanillaType();
-			ItemStack itemStack = new ItemStack(Blocks.LOG2, 1, vanillaType.getMetadata() - 4);
-			BlockState blockState = defaultLog2State.with(BlockNewLog.VARIANT, vanillaType);
-			register(woodType, WoodBlockKind.LOG, false, blockState, itemStack);
-		}
+		register(EnumVanillaWoodType.OAK, WoodBlockKind.PLANKS, false, Blocks.OAK_PLANKS.getDefaultState(), new ItemStack(Blocks.OAK_PLANKS));
+		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.PLANKS, false, Blocks.SPRUCE_PLANKS.getDefaultState(), new ItemStack(Blocks.SPRUCE_PLANKS));
+		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.PLANKS, false, Blocks.BIRCH_PLANKS.getDefaultState(), new ItemStack(Blocks.BIRCH_PLANKS));
+		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.PLANKS, false, Blocks.JUNGLE_PLANKS.getDefaultState(), new ItemStack(Blocks.JUNGLE_PLANKS));
+		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.PLANKS, false, Blocks.ACACIA_PLANKS.getDefaultState(), new ItemStack(Blocks.ACACIA_PLANKS));
+		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.PLANKS, false, Blocks.DARK_OAK_PLANKS.getDefaultState(), new ItemStack(Blocks.DARK_OAK_PLANKS));
 
-		BlockState defaultPlanksState = Blocks.PLANKS.getDefaultState();
-		BlockState defaultSlabState = Blocks.WOODEN_SLAB.getDefaultState();
-		for (EnumVanillaWoodType woodType : EnumVanillaWoodType.VALUES) {
-			BlockPlanks.EnumType vanillaType = woodType.getVanillaType();
-
-			ItemStack plankStack = new ItemStack(Blocks.PLANKS, 1, vanillaType.getMetadata());
-			BlockState plankState = defaultPlanksState.with(BlockPlanks.VARIANT, vanillaType);
-			register(woodType, WoodBlockKind.PLANKS, false, plankState, plankStack);
-
-			ItemStack slabStack = new ItemStack(Blocks.WOODEN_SLAB, 1, vanillaType.getMetadata());
-			BlockState slabState = defaultSlabState.with(BlockWoodSlab.VARIANT, vanillaType);
-			register(woodType, WoodBlockKind.SLAB, false, slabState, slabStack);
-		}
+		register(EnumVanillaWoodType.OAK, WoodBlockKind.LOG, false, Blocks.OAK_LOG.getDefaultState(), new ItemStack(Blocks.OAK_LOG));
+		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.LOG, false, Blocks.SPRUCE_LOG.getDefaultState(), new ItemStack(Blocks.SPRUCE_LOG));
+		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.LOG, false, Blocks.BIRCH_LOG.getDefaultState(), new ItemStack(Blocks.BIRCH_LOG));
+		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.LOG, false, Blocks.JUNGLE_LOG.getDefaultState(), new ItemStack(Blocks.JUNGLE_LOG));
+		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.LOG, false, Blocks.ACACIA_LOG.getDefaultState(), new ItemStack(Blocks.ACACIA_LOG));
+		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.LOG, false, Blocks.DARK_OAK_LOG.getDefaultState(), new ItemStack(Blocks.DARK_OAK_LOG));
 
 		register(EnumVanillaWoodType.OAK, WoodBlockKind.FENCE, false, Blocks.OAK_FENCE.getDefaultState(), new ItemStack(Blocks.OAK_FENCE));
 		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.FENCE, false, Blocks.SPRUCE_FENCE.getDefaultState(), new ItemStack(Blocks.SPRUCE_FENCE));
@@ -172,27 +160,13 @@ public class WoodAccess implements IWoodAccess {
 		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.DOOR, false, Blocks.DARK_OAK_DOOR.getDefaultState(), new ItemStack(Items.DARK_OAK_DOOR));
 	}
 
-	private <T extends Block & IWoodTyped, V extends Enum<V> & IWoodType> void registerWithVariants(T woodTyped, WoodBlockKind woodBlockKind, PropertyWoodType<V> property) {
-		boolean fireproof = woodTyped.isFireproof();
-
-		for (V value : property.getAllowedValues()) {
-			BlockState blockState = woodTyped.getDefaultState().with(property, value);
-			IWoodType woodType = woodTyped.getWoodType();
-			ItemStack itemStack = new ItemStack(woodTyped, 1, meta);
-			if (!(woodType instanceof EnumVanillaWoodType)) {
-				ModuleArboriculture.proxy.registerWoodModel(woodTyped, true);
-			}
-			register(woodType, woodBlockKind, fireproof, blockState, itemStack);
-		}
-	}
-
 	/**
 	 * Register wood blocks that have no variant property
 	 */
 	private <T extends Block & IWoodTyped> void registerWithoutVariants(T woodTyped, WoodBlockKind woodBlockKind) {
 		boolean fireproof = woodTyped.isFireproof();
 		BlockState blockState = woodTyped.getDefaultState();
-		IWoodType woodType = woodTyped.getWoodType(0);
+		IWoodType woodType = woodTyped.getWoodType();
 		ItemStack itemStack = new ItemStack(woodTyped);
 		if (!(woodType instanceof EnumVanillaWoodType)) {
 			ModuleArboriculture.proxy.registerWoodModel(woodTyped, false);

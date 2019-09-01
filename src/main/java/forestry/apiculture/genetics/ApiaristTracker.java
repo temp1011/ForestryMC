@@ -12,6 +12,7 @@ package forestry.apiculture.genetics;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -109,7 +110,8 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	@Override
 	protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
-		return BeeManager.beeRoot.getBreedingTracker(player.world, player.getGameProfile());
+		//TODO world cast
+		return BeeManager.beeRoot.getBreedingTracker((ServerWorld) player.world, player.getGameProfile());
 	}
 
 	@Override

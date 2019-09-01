@@ -13,13 +13,18 @@ package forestry.arboriculture.models;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Set;
 import java.util.function.Function;
 
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
+import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.MultipartBakedModel;
 import net.minecraft.client.renderer.model.multipart.Multipart;
 import net.minecraft.client.renderer.model.multipart.Selector;
+import net.minecraft.client.renderer.texture.ISprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
@@ -32,8 +37,9 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+//TODO models
 @OnlyIn(Dist.CLIENT)
-public class MultipartModel implements IModel {
+public class MultipartModel implements IUnbakedModel {
 
 	private final ResourceLocation location;
 	private final Multipart multipart;
@@ -61,25 +67,27 @@ public class MultipartModel implements IModel {
 	}
 
 	@Override
-	public Collection<ResourceLocation> getTextures() {
+	public Collection<ResourceLocation> getTextures(Function<ResourceLocation, IUnbakedModel> modelGetter, Set<String> missingTextureErrors) {
 		return ImmutableSet.of();
 	}
 
+	@Nullable
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		MultipartBakedModel.Builder builder = new MultipartBakedModel.Builder();
-
-		for (Selector selector : multipart.getSelectors()) {
-			IModel model = partModels.get(selector);
-			IBakedModel bakedModel = model.bake(model.getDefaultState(), format, bakedTextureGetter);
-			builder.putModel(selector.getPredicate(multipart.getStateContainer()), bakedModel);
-		}
-
-		return builder.makeMultipartModel();
+	public IBakedModel bake(ModelBakery bakery, Function<ResourceLocation, TextureAtlasSprite> spriteGetter, ISprite sprite, VertexFormat format) {
+//		MultipartBakedModel.Builder builder = new MultipartBakedModel.Builder();
+//
+//		for (Selector selector : multipart.getSelectors()) {
+//			IModel model = partModels.get(selector);
+//			IBakedModel bakedModel = model.bake(model.getDefaultState(), format, bakedTextureGetter);
+//			builder.putModel(selector.getPredicate(multipart.getStateContainer()), bakedModel);
+//		}
+//
+//		return builder.makeMultipartModel();
+		return null;
 	}
 
 	@Override
-	public IModel retexture(ImmutableMap<String, String> textures) {
+	public IUnbakedModel retexture(ImmutableMap<String, String> textures) {
 		try {
 			ImmutableMap.Builder<Selector, IModel> builder = ImmutableMap.builder();
 			for (Selector selector : multipart.getSelectors()) {

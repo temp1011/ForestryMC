@@ -89,7 +89,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			logs.put(woodType, log);
 
 			//logs fireproof
-			BlockForestryLog fireproofLog = new BlockForestryLog(false, woodType);
+			BlockForestryLog fireproofLog = new BlockForestryLog(true, woodType);
 			registerBlock(fireproofLog, new ItemBlockWood<>(fireproofLog), woodType.toString() + "_fireproof_log");
 			logsFireproof.put(woodType, fireproofLog);
 
@@ -110,7 +110,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 			//fences fireproof
 			BlockForestryFence fireproofFence = new BlockForestryFence(true, woodType);
-			registerBlock(fireproofFence, new ItemBlockWood<>(fence), woodType.toString() + "_fireproof_fence");
+			registerBlock(fireproofFence, new ItemBlockWood<>(fireproofFence), woodType.toString() + "_fireproof_fence");
 			fencesFireproof.put(woodType, fireproofFence);
 
 			//doors
@@ -145,12 +145,12 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 			//slabs
 			BlockForestrySlab slab = new BlockForestrySlab(plank);
-			registerBlock(slab, woodType.toString() + "_slab");
+			registerBlock(slab, new ItemBlockWood<>(slab), woodType.toString() + "_slab");
 			slabs.put(woodType, slab);
 
 			//stairs
 			BlockForestryStairs stair = new BlockForestryStairs(plank);
-			registerBlock(stair, woodType.toString() + "_stairs");
+			registerBlock(stair, new ItemBlockWood<>(stair), woodType.toString() + "_stairs");
 			stairs.put(woodType, stair);
 		}
 
@@ -160,12 +160,12 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 			//slabs
 			BlockForestrySlab slab = new BlockForestrySlab(plank);
-			registerBlock(slab, woodType.toString() + "_fireproof_slab");
+			registerBlock(slab, new ItemBlockWood<>(slab), woodType.toString() + "_fireproof_slab");
 			slabsFireproof.put(woodType, slab);
 
 			//stairs
 			BlockForestryStairs stair = new BlockForestryStairs(plank);
-			registerBlock(stair, woodType.toString() + "_fireproof_stairs");
+			registerBlock(stair, new ItemBlockWood<>(stair), woodType.toString() + "_fireproof_stairs");
 			stairsFireproof.put(woodType, stair);
 		}
 
@@ -175,12 +175,12 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 			//slabs
 			BlockForestrySlab slab = new BlockForestrySlab(plank);
-			registerBlock(slab, woodType.toString() + "_fireproof_slab");
+			registerBlock(slab, new ItemBlockWood<>(slab), woodType.toString() + "_fireproof_slab");
 			slabsVanillaFireproof.put(woodType, slab);
 
 			//stairs
 			BlockForestryStairs stair = new BlockForestryStairs(plank);
-			registerBlock(stair, woodType.toString() + "_fireproof_stairs");
+			registerBlock(stair, new ItemBlockWood<>(stair), woodType.toString() + "_fireproof_stairs");
 			stairsVanillaFireproof.put(woodType, stair);
 		}
 

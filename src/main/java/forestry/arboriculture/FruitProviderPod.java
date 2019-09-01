@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -35,6 +37,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.utils.BlockUtil;
 
+//TODO this is horribly hacky. Cleanup once dependancy issues with AlleleFruits is fixed.
 public class FruitProviderPod extends FruitProviderNone {
 
 	public enum EnumPodType {
@@ -47,13 +50,13 @@ public class FruitProviderPod extends FruitProviderNone {
 
 	private final EnumPodType type;
 
-	private final Map<ItemStack, Float> drops;
+	private final Map<Supplier<ItemStack>, Float> drops;
 
-	public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, ItemStack... dropOnMature) {
+	public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, Supplier<ItemStack>... dropOnMature) {
 		super(unlocalizedDescription, family);
 		this.type = type;
 		this.drops = new HashMap<>();
-		for (ItemStack drop : dropOnMature) {
+		for (Supplier<ItemStack> drop : dropOnMature) {
 			this.drops.put(drop, 1.0f);
 		}
 	}
@@ -71,8 +74,8 @@ public class FruitProviderPod extends FruitProviderNone {
 
 		if (ripeningTime >= 2) {
 			NonNullList<ItemStack> products = NonNullList.create();
-			for (ItemStack aDrop : this.drops.keySet()) {
-				products.add(aDrop.copy());
+			for (Supplier<ItemStack> drop : this.drops.keySet()) {
+				products.add(drop.get().copy());
 			}
 			return products;
 		}
@@ -106,7 +109,7 @@ public class FruitProviderPod extends FruitProviderNone {
 
 	@Override
 	public Map<ItemStack, Float> getProducts() {
-		return Collections.unmodifiableMap(drops);
+		return drops.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().get(), Map.Entry::getValue));
 	}
 
 	@Override

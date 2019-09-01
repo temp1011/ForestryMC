@@ -16,8 +16,10 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.block.LogBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
@@ -684,7 +686,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			// vanilla
 		}
 	},
-	Acacia(TreeBranchDefinition.ACACIA, "desertAcacia", "erioloba", true, EnumLeafType.DECIDUOUS, new Color(0x748C1C), new Color(0xb3b302), EnumForestryWoodType.ACACIA) {
+	Acacia(TreeBranchDefinition.ACACIA, "desertAcacia", "erioloba", true, EnumLeafType.DECIDUOUS, new Color(0x748C1C), new Color(0xb3b302), EnumForestryWoodType.ACACIA_FORESTRY) {
 		@Override
 		public Feature getWorldGenerator(ITreeGenData tree) {
 			return new WorldGenAcacia(tree);
@@ -1028,8 +1030,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		boolean fireproof = fireproofAllele.getValue();
 		BlockState logBlock = TreeManager.woodAccess.getBlock(woodType, WoodBlockKind.LOG, fireproof);
 
-		Direction.Axis axis = Direction.Axis.fromFacingAxis(facing.getAxis());
-		return world.setBlockState(pos, logBlock.with(LogBlock.LOG_AXIS, axis));
+		Direction.Axis axis = facing.getAxis();
+		return world.setBlockState(pos, logBlock.with(LogBlock.AXIS, axis));
 	}
 
 	@Override
@@ -1045,7 +1047,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			}
 			return world.setBlockState(pos, defaultLeaves);
 		} else {
-			BlockState leaves = ModuleArboriculture.getBlocks().leaves.getDefaultState();
+			BlockState leaves = ModuleArboriculture.getBlocks().leaves.get(this).getDefaultState();
 			boolean placed = world.setBlockState(pos, leaves);
 			if (!placed) {
 				return false;
@@ -1053,7 +1055,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 			TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
 			if (tileLeaves == null) {
-				world.setBlockToAir(pos);
+				world.setBlockState(pos, Blocks.AIR.getDefaultState());
 				return false;
 			}
 
@@ -1062,7 +1064,9 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			}
 			tileLeaves.setTree(new Tree(genome));
 
-			world.markBlockRangeForRenderUpdate(pos, pos);
+			//TODO
+			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+//			world.markBlockRangeForRenderUpdate(pos, pos);
 			return true;
 		}
 	}

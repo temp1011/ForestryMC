@@ -12,6 +12,7 @@ package forestry.apiculture.genetics;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -50,8 +51,9 @@ public class BeeMutation extends Mutation implements IBeeMutation, IBeeMutationB
 			return 0;
 		}
 
+		//TODO world cast
 		IBeeModifier beeHousingModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
-		IBeeModifier beeModeModifier = BeeManager.beeRoot.getBeekeepingMode(world).getBeeModifier();
+		IBeeModifier beeModeModifier = BeeManager.beeRoot.getBeekeepingMode((ServerWorld) world).getBeeModifier();
 
 		processedChance *= beeHousingModifier.getMutationModifier(genome0, genome1, processedChance);
 		processedChance *= beeModeModifier.getMutationModifier(genome0, genome1, processedChance);

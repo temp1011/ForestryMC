@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
@@ -97,8 +98,8 @@ public class ContainerAnalyzerProviderHelper {
 				return;
 			}
 
-			if (individual.analyze()) {
-				IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
+			if (individual.analyze()) {	//TODO client world.
+				IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker((ServerWorld) player.world, player.getGameProfile());
 				breedingTracker.registerSpecies(individual.getGenome().getPrimary());
 				breedingTracker.registerSpecies(individual.getGenome().getSecondary());
 

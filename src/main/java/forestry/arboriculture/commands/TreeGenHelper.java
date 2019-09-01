@@ -47,9 +47,9 @@ public final class TreeGenHelper {
 		BlockState blockState = world.getBlockState(pos);
 		if (BlockUtil.canPlaceTree(blockState, world, pos)) {
 			if (gen instanceof WorldGenBase) {
-				return ((WorldGenBase) gen).generate(world, world.rand, pos, true);
+				return false;//TODO worldgen((WorldGenBase) gen).generate(world, world.rand, pos, true);
 			} else {
-				return gen.generate(world, world.rand, pos);
+				return false;//TODO worldgen gen.generate(world, world.rand, pos);
 			}
 		}
 		return false;
@@ -61,9 +61,9 @@ public final class TreeGenHelper {
 		BlockState blockState = world.getBlockState(pos);
 		if (BlockUtil.canPlaceTree(blockState, world, pos)) {
 			if (gen instanceof WorldGenBase) {
-				return ((WorldGenBase) gen).generate(world, world.rand, pos, true);
+				return false;//TODO worldgen ((WorldGenBase) gen).generate(world, world.rand, pos, true);
 			} else {
-				return gen.generate(world, world.rand, pos);
+				return false; //TODO worldgen gen.generate(world, world.rand, pos);
 			}
 		}
 		return false;

@@ -45,11 +45,12 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
 		if (type == EnumGermlingType.SAPLING) {
 			germlingModel = manager.getModelLocation("germlings/sapling." + name);
-			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:germlings/sapling." + name));
+//			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:germlings/sapling." + name));
 		} else if (type == EnumGermlingType.POLLEN) {
 			pollenModel = manager.getModelLocation("pollen");
-			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:pollen"));
+//			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:pollen"));
 		}
+		//TODO models
 	}
 
 	@Override

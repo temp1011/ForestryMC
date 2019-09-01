@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -54,7 +55,8 @@ public class TreeStatsSaveHelper implements IStatsSaveHelper {
 
 	@Override
 	public IBreedingTracker getBreedingTracker(World world, GameProfile gameProfile) {
-		return TreeManager.treeRoot.getBreedingTracker(world, gameProfile);
+		//TODO world cast
+		return TreeManager.treeRoot.getBreedingTracker((ServerWorld) world, gameProfile);
 	}
 
 }

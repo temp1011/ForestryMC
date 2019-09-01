@@ -13,6 +13,7 @@ package forestry.core;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
@@ -32,7 +33,8 @@ public class PickupHandlerCore implements IPickupHandler {
 		if (root != null) {
 			IIndividual individual = root.getMember(itemstack);
 			if (individual != null) {
-				IBreedingTracker tracker = root.getBreedingTracker(entityitem.world, PlayerEntity.getGameProfile());
+				//TODO server world
+				IBreedingTracker tracker = root.getBreedingTracker((ServerWorld) entityitem.world, PlayerEntity.getGameProfile());
 				tracker.registerPickup(individual);
 			}
 		}

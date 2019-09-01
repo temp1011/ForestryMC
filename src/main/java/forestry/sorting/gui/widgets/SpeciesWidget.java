@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -44,8 +45,9 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 		this.gui = gui;
 		ImmutableSet.Builder<IAlleleSpecies> entries = ImmutableSet.builder();
 		for (ISpeciesRoot root : AlleleManager.alleleRegistry.getSpeciesRoot().values()) {
-			IBreedingTracker tracker = root.getBreedingTracker(manager.minecraft.world, manager.minecraft.player.getGameProfile());
-			for (String uid : tracker.getDiscoveredSpecies()) {
+			//TODO can't use client world here as we need world saved data?
+//			IBreedingTracker tracker = root.getBreedingTracker(manager.minecraft.world, manager.minecraft.player.getGameProfile());
+			for (String uid : new String[0]){//tracker.getDiscoveredSpecies()) {
 				IAllele allele = AlleleManager.alleleRegistry.getAllele(uid);
 				if (allele instanceof IAlleleSpecies) {
 					IAlleleSpecies species = (IAlleleSpecies) allele;

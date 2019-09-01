@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -46,7 +47,7 @@ public interface IButterflyRoot extends ISpeciesRoot {
 
 	/* BUTTERFLY SPECIFIC */
 	@Override
-	ILepidopteristTracker getBreedingTracker(World world, @Nullable GameProfile player);
+	ILepidopteristTracker getBreedingTracker(ServerWorld world, @Nullable GameProfile player);
 
 	/**
 	 * Spawns the given butterfly in the world.

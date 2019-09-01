@@ -8,12 +8,10 @@ public class Translator {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	public static String translateToLocal(String key) {
 		return translateToLocalFormatted(key);
 	}
 
-	@SuppressWarnings("deprecation")
 	public static boolean canTranslateToLocal(String key) {
 		return I18n.hasKey(key);
 	}

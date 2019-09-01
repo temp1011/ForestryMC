@@ -15,31 +15,23 @@ import java.util.Objects;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-
-import net.minecraftforge.common.property.IExtendedBlockState;
-
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.blocks.properties.UnlistedBlockAccess;
-import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeaves.Key> {
@@ -75,11 +67,11 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 
 	@Override
 	protected Key getInventoryKey(ItemStack itemStack) {
-		AtlasTexture map = Minecraft.getInstance().getTextureMapBlocks();
+		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 
 		TileLeaves leaves = new TileLeaves();
 		if (itemStack.getTag() != null) {
-			leaves.readFromNBT(itemStack.getTag());
+			leaves.read(itemStack.getTag());
 		} else {
 			leaves.setTree(TreeRoot.treeTemplates.get(0));
 		}
@@ -89,35 +81,35 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 		ResourceLocation fruitLocation = leaves.getFruitSprite();
 
 		return new Key(map.getAtlasSprite(leafLocation.toString()),
-			fruitLocation != null ? map.getAtlasSprite(fruitLocation.toString()) : null,
-			fancy);
+				fruitLocation != null ? map.getAtlasSprite(fruitLocation.toString()) : null,
+				fancy);
 	}
 
 	@Override
 	protected Key getWorldKey(BlockState state) {
-		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-		IBlockReader world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
-		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
-
+		//		IBlockReader world = state.get(UnlistedBlockAccess.BLOCKACCESS);
+		//		BlockPos pos = state.get(UnlistedBlockPos.POS);
+		//
 		boolean fancy = Proxies.render.fancyGraphicsEnabled();
-		AtlasTexture map = Minecraft.getInstance().getTextureMapBlocks();
-
-		if (world == null || pos == null) {
-			return createEmptyKey(map, fancy);
-		}
-
-		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
-
-		if (tile == null) {
-			return createEmptyKey(map, fancy);
-		}
-
-		ResourceLocation leafLocation = tile.getLeaveSprite(fancy);
-		ResourceLocation fruitLocation = tile.getFruitSprite();
-
-		return new Key(map.getAtlasSprite(leafLocation.toString()),
-			fruitLocation != null ? map.getAtlasSprite(fruitLocation.toString()) : null,
-			fancy);
+		AtlasTexture map = Minecraft.getInstance().getTextureMap();
+		//
+		//		if (world == null || pos == null) {
+		//			return createEmptyKey(map, fancy);
+		//		}
+		//
+		//		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
+		//
+		//		if (tile == null) {
+		//			return createEmptyKey(map, fancy);
+		//		}
+		//
+		//		ResourceLocation leafLocation = tile.getLeaveSprite(fancy);
+		//		ResourceLocation fruitLocation = tile.getFruitSprite();
+		//
+		//		return new Key(map.getAtlasSprite(leafLocation.toString()),
+		//			fruitLocation != null ? map.getAtlasSprite(fruitLocation.toString()) : null,
+		//			fancy);
+		return createEmptyKey(map, fancy);
 	}
 
 	private Key createEmptyKey(AtlasTexture map, boolean fancy) {

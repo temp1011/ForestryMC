@@ -29,6 +29,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -133,7 +134,7 @@ public class ItemResearchNote extends ItemForestry {
 		}
 
 		public boolean registerResults(World world, PlayerEntity player, CompoundNBT compound) {
-			if (this == NONE) {
+			if (this == NONE || world.isRemote) {
 				return false;
 			}
 
@@ -148,7 +149,7 @@ public class ItemResearchNote extends ItemForestry {
 					return false;
 				}
 
-				IBreedingTracker tracker = encoded.getRoot().getBreedingTracker(world, player.getGameProfile());
+				IBreedingTracker tracker = encoded.getRoot().getBreedingTracker((ServerWorld) world, player.getGameProfile());
 				if (tracker.isResearched(encoded)) {
 					player.sendMessage(new TranslationTextComponent("for.chat.cannotmemorizeagain"));
 					return false;

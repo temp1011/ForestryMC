@@ -27,6 +27,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.AlleleManager;
@@ -313,7 +314,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		int x = 0;
 
 		PlayerEntity player = Minecraft.getInstance().player;
-		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
+		//TODO world cast
+		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker((ServerWorld) player.world, player.getGameProfile());
 
 		for (IMutation mutation : speciesRoot.getCombinations(species)) {
 			if (breedingTracker.isDiscovered(mutation)) {

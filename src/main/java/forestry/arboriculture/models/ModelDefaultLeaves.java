@@ -75,7 +75,7 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 		Block block = Block.getBlockFromItem(stack.getItem());
 		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "ItemStack must be for default leaves.");
 		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
-		return new Key(bBlock.getTreeType(stack.getMetadata()), Proxies.render.fancyGraphicsEnabled());
+		return new Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 	@Override
 	protected void bakeBlock(BlockDefaultLeaves block, Key key, ModelBaker baker, boolean inventory) {
 		TreeDefinition treeDefinition = key.definition;
-		AtlasTexture map = Minecraft.getInstance().getTextureMapBlocks();
+		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 
 		ITreeGenome genome = treeDefinition.getGenome();
 		IAlleleTreeSpecies species = genome.getPrimary();

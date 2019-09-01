@@ -32,6 +32,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -428,7 +429,8 @@ public class Bee extends IndividualLiving implements IBee {
 
 	@Override
 	public void age(World world, float housingLifespanModifier) {
-		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
+		//TODO world cast
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode((ServerWorld) world);
 		IBeeModifier beeModifier = mode.getBeeModifier();
 		float finalModifier = housingLifespanModifier * beeModifier.getLifespanModifier(genome, mate, housingLifespanModifier);
 
@@ -477,7 +479,8 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public NonNullList<ItemStack> produceStacks(IBeeHousing housing) {
 		World world = housing.getWorldObj();
-		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
+		//TODO world cast
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode((ServerWorld) world);
 
 		NonNullList<ItemStack> products = NonNullList.create();
 
@@ -527,7 +530,8 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		// Fatigued queens do not produce princesses.
-		if (BeeManager.beeRoot.getBeekeepingMode(housing.getWorldObj()).isFatigued(this, housing)) {
+		//TODO world cast
+		if (BeeManager.beeRoot.getBeekeepingMode((ServerWorld) housing.getWorldObj()).isFatigued(this, housing)) {
 			return null;
 		}
 
@@ -547,7 +551,8 @@ public class Bee extends IndividualLiving implements IBee {
 		List<IBee> bees = new ArrayList<>();
 
 		BlockPos housingPos = housing.getCoordinates();
-		int toCreate = BeeManager.beeRoot.getBeekeepingMode(world).getFinalFertility(this, world, housingPos);
+		//TODO world cast
+		int toCreate = BeeManager.beeRoot.getBeekeepingMode((ServerWorld) world).getFinalFertility(this, world, housingPos);
 
 		if (toCreate <= 0) {
 			toCreate = 1;
@@ -587,7 +592,8 @@ public class Bee extends IndividualLiving implements IBee {
 			}
 		}
 
-		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
+		//TODO world cast
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode((ServerWorld) world);
 		return new Bee(new BeeGenome(chromosomes), mode.isNaturalOffspring(this), generation);
 	}
 
@@ -620,7 +626,8 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		GameProfile playerProfile = housing.getOwner();
-		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, playerProfile);
+		//TODO world cast
+		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker((ServerWorld) world, playerProfile);
 
 		List<IMutation> combinations = BeeManager.beeRoot.getCombinations(allele0, allele1, true);
 		for (IMutation mutation : combinations) {

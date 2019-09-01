@@ -11,6 +11,7 @@
 package forestry.arboriculture.genetics;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.TreeManager;
@@ -30,7 +31,8 @@ public class ArboristTracker extends BreedingTracker implements IArboristTracker
 
 	@Override
 	protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
-		return TreeManager.treeRoot.getBreedingTracker(player.world, player.getGameProfile());
+		//TODO world cast
+		return TreeManager.treeRoot.getBreedingTracker((ServerWorld) player.world, player.getGameProfile());
 	}
 
 	@Override

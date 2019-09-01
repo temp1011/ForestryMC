@@ -27,6 +27,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalBlock;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -235,7 +236,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling == null) {
-			world.setBlockToAir(pos);
+			world.setBlockState(pos, Blocks.AIR.getDefaultState());
 			return false;
 		}
 
@@ -268,10 +269,12 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 						TileFruitPod pod = TileUtil.getTile(world, pos, TileFruitPod.class);
 						if (pod != null) {
 							pod.setProperties(genome, allele, yield);
-							world.markBlockRangeForRenderUpdate(pos, pos);
+							//TODO render update
+							Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+//							world.markBlockRangeForRenderUpdate(pos, pos);
 							return true;
 						} else {
-							world.setBlockToAir(pos);
+							world.setBlockState(pos, Blocks.AIR.getDefaultState());
 							return false;
 						}
 					}

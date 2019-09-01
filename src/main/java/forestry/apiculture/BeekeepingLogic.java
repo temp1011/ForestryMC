@@ -32,6 +32,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -387,7 +388,8 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		beeInventory.setQueen(queenStack);
 
 		// Register the new queen with the breeding tracker
-		BeeManager.beeRoot.getBreedingTracker(housing.getWorldObj(), housing.getOwner()).registerQueen(princess);
+		//TODO world cast
+		BeeManager.beeRoot.getBreedingTracker((ServerWorld) housing.getWorldObj(), housing.getOwner()).registerQueen(princess);
 
 		// Remove drone
 		beeInventory.getDrone().shrink(1);
@@ -431,7 +433,8 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		World world = beeHousing.getWorldObj();
 
 		Stack<ItemStack> offspring = new Stack<>();
-		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, beeHousing.getOwner());
+		//TODO world cast
+		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker((ServerWorld) world, beeHousing.getOwner());
 
 		// Princess
 		boolean secondPrincess = world.rand.nextInt(10000) < ModuleApiculture.getSecondPrincessChance() * 100;

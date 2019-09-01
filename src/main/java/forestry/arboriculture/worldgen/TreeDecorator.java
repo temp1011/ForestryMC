@@ -25,11 +25,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.Heightmap;
 
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate;
-
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -48,15 +48,17 @@ public class TreeDecorator {
 	private static final Map<ResourceLocation, Set<ITree>> biomeCache = new HashMap<>();
 
 	@SubscribeEvent
-	public void decorateTrees(Decorate event) {
-		if (event.getType() == Decorate.EventType.TREE) {
-			decorateTrees(event.getWorld(), event.getRand(), event.getPos().getX() + 8, event.getPos().getZ() + 8);
-		}
-	}
+	//TODO worldgen
+	//	public void decorateTrees(Decorate event) {
+	//		if (event.getType() == Decorate.EventType.TREE) {
+	//			decorateTrees(event.getWorld(), event.getRand(), event.getPos().getX() + 8, event.getPos().getZ() + 8);
+	//		}
+	//	}
 
+	//TODO using int IDs is bad as dimensions are now a registry I believe
 	public static void decorateTrees(World world, Random rand, int worldX, int worldZ) {
 		float globalRarity = TreeConfig.getSpawnRarity(null);
-		if (globalRarity <= 0.0F || !TreeConfig.isValidDimension(null, world.provider.getDimension())) {
+		if (globalRarity <= 0.0F || !TreeConfig.isValidDimension(null, world.getDimension().getType().getId())) {
 			return;
 		}
 		if (biomeCache.isEmpty()) {
@@ -71,7 +73,7 @@ public class TreeDecorator {
 			Set<ITree> trees = biomeCache.computeIfAbsent(biome.getRegistryName(), k -> new HashSet<>());
 			for (ITree tree : trees) {
 				String treeUID = tree.getGenome().getPrimary().getUID();
-				if (!TreeConfig.isValidDimension(treeUID, world.provider.getDimension())) {
+				if (!TreeConfig.isValidDimension(treeUID, world.getDimension().getType().getId())) {
 					continue;
 				}
 				IAlleleTreeSpecies species = tree.getGenome().getPrimary();
@@ -95,7 +97,7 @@ public class TreeDecorator {
 	@Nullable
 	private static BlockPos getValidPos(World world, int x, int z, ITree tree) {
 		// get to the ground
-		final BlockPos topPos = world.getHeight(new BlockPos(x, 0, z));
+		final BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z));
 		if (topPos.getY() == 0) {
 			return null;
 		}
@@ -138,7 +140,7 @@ public class TreeDecorator {
 			ITree tree = TreeManager.treeRoot.getTree(world, genome);
 			String treeUID = genome.getPrimary().getUID();
 			IGrowthProvider growthProvider = species.getGrowthProvider();
-			for (Biome biome : Biome.REGISTRY) {
+			for (Biome biome : ForgeRegistries.BIOMES) {
 				Set<ITree> trees = biomeCache.computeIfAbsent(biome.getRegistryName(), k -> new HashSet<>());
 				if (growthProvider.isBiomeValid(tree, biome) && TreeConfig.isValidBiome(treeUID, biome)) {
 					trees.add(tree);

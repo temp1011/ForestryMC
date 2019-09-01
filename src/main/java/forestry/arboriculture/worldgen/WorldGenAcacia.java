@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -29,13 +30,13 @@ public class WorldGenAcacia extends WorldGenTree {
 
 	@Override
 	public Set<BlockPos> generateTrunk(World world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
-		WorldGenHelper.Direction leanDirection = WorldGenHelper.Direction.getRandom(rand);
+		Direction leanDirection = WorldGenHelper.DirectionHelper.getRandom(rand);
 		float leanAmount = height / 4.0f;
 
-		Set<BlockPos> treeTops = WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, leanDirection.facing, leanAmount);
+		Set<BlockPos> treeTops = WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, leanDirection, leanAmount);
 		if (height > 5 && rand.nextBoolean()) {
-			WorldGenHelper.Direction branchDirection = WorldGenHelper.Direction.getRandomOther(rand, leanDirection);
-			Set<BlockPos> treeTops2 = WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, Math.round(height * 0.66f), girth, 0, 0, branchDirection.facing, leanAmount);
+			Direction branchDirection = WorldGenHelper.DirectionHelper.getRandomOther(rand, leanDirection);
+			Set<BlockPos> treeTops2 = WorldGenHelper.generateTreeTrunk(world, rand, wood, startPos, Math.round(height * 0.66f), girth, 0, 0, branchDirection, leanAmount);
 			treeTops.addAll(treeTops2);
 		}
 

@@ -29,86 +29,87 @@ public class LeafDecayHelper {
 		if (world.isRemote) {
 			return;
 		}
-		BlockState state = world.getBlockState(pos);
-
-		if (!state.getProperties().contains(LeavesBlock.DECAYABLE)) {
-			return;
-		}
-
-		// Fix a bug where Forestry leaves were not decayable.
-		// The non-decayable Forestry leaves are all BlockDecorativeLeaves.
-		if (!state.get(LeavesBlock.DECAYABLE)) {
-			state = state.with(LeavesBlock.DECAYABLE, true);
-			world.setBlockState(pos, state);
-		}
-
-		if (state.get(LeavesBlock.CHECK_DECAY) && state.get(LeavesBlock.DECAYABLE)) {
-			byte radius = 4;
-			int arrayOffset = ARRAY_SIZE / 2;
-
-			if (world.isAreaLoaded(pos, radius + 1)) {
-				for (int xOffset = -radius; xOffset <= radius; ++xOffset) {
-					for (int yOffset = -radius; yOffset <= radius; ++yOffset) {
-						for (int zOffset = -radius; zOffset <= radius; ++zOffset) {
-							BlockPos blockPos = pos.add(xOffset, yOffset, zOffset);
-							BlockState blockState = world.getBlockState(blockPos);
-							Block block = blockState.getBlock();
-							if (!block.canSustainLeaves(blockState, world, blockPos)) {
-								if (block.isLeaves(blockState, world, blockPos)) {
-									leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset] = IS_LEAVES;
-								} else {
-									leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset] = NOT_SUSTAINS_LEAVES;
-								}
-							} else {
-								leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset] = SUSTAINS_LEAVES;
-							}
-						}
-					}
-				}
-
-				for (byte sustainedValue = 1; sustainedValue <= 8; ++sustainedValue) {
-					for (int xOffset = -radius; xOffset <= radius; ++xOffset) {
-						for (int yOffset = -radius; yOffset <= radius; ++yOffset) {
-							for (int zOffset = -radius; zOffset <= radius; ++zOffset) {
-								if (leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset] == sustainedValue - 1) {
-									if (leafDecayValues[(xOffset + arrayOffset - 1)][yOffset + arrayOffset][zOffset + arrayOffset] == IS_LEAVES) {
-										leafDecayValues[(xOffset + arrayOffset - 1)][yOffset + arrayOffset][zOffset + arrayOffset] = sustainedValue;
-									}
-
-									if (leafDecayValues[(xOffset + arrayOffset + 1)][yOffset + arrayOffset][zOffset + arrayOffset] == IS_LEAVES) {
-										leafDecayValues[(xOffset + arrayOffset + 1)][yOffset + arrayOffset][zOffset + arrayOffset] = sustainedValue;
-									}
-
-									if (leafDecayValues[xOffset + arrayOffset][(yOffset + arrayOffset - 1)][zOffset + arrayOffset] == IS_LEAVES) {
-										leafDecayValues[xOffset + arrayOffset][(yOffset + arrayOffset - 1)][zOffset + arrayOffset] = sustainedValue;
-									}
-
-									if (leafDecayValues[xOffset + arrayOffset][(yOffset + arrayOffset + 1)][zOffset + arrayOffset] == IS_LEAVES) {
-										leafDecayValues[xOffset + arrayOffset][(yOffset + arrayOffset + 1)][zOffset + arrayOffset] = sustainedValue;
-									}
-
-									if (leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset - 1] == IS_LEAVES) {
-										leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset - 1] = sustainedValue;
-									}
-
-									if (leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset + 1] == IS_LEAVES) {
-										leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset + 1] = sustainedValue;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-
-			byte sustainValue = leafDecayValues[arrayOffset][arrayOffset][arrayOffset];
-
-			if (sustainValue >= 0) {
-				world.setBlockState(pos, state.with(LeavesBlock.CHECK_DECAY, false), 4); // stop trying to decay
-			} else {
-				leaves.dropBlockAsItem(world, pos, state, 0);
-				world.setBlockToAir(pos);
-			}
-		}
+		//TODO needs rewrite with new properties
+//		BlockState state = world.getBlockState(pos);
+//
+//		if (!state.getProperties().contains(LeavesBlock.DECAYABLE)) {
+//			return;
+//		}
+//
+//		// Fix a bug where Forestry leaves were not decayable.
+//		// The non-decayable Forestry leaves are all BlockDecorativeLeaves.
+//		if (!state.get(LeavesBlock.DECAYABLE)) {
+//			state = state.with(LeavesBlock.DECAYABLE, true);
+//			world.setBlockState(pos, state);
+//		}
+//
+//		if (state.get(LeavesBlock.CHECK_DECAY) && state.get(LeavesBlock.DECAYABLE)) {
+//			byte radius = 4;
+//			int arrayOffset = ARRAY_SIZE / 2;
+//
+//			if (world.isAreaLoaded(pos, radius + 1)) {
+//				for (int xOffset = -radius; xOffset <= radius; ++xOffset) {
+//					for (int yOffset = -radius; yOffset <= radius; ++yOffset) {
+//						for (int zOffset = -radius; zOffset <= radius; ++zOffset) {
+//							BlockPos blockPos = pos.add(xOffset, yOffset, zOffset);
+//							BlockState blockState = world.getBlockState(blockPos);
+//							Block block = blockState.getBlock();
+//							if (!block.canSustainLeaves(blockState, world, blockPos)) {
+//								if (block.isLeaves(blockState, world, blockPos)) {
+//									leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset] = IS_LEAVES;
+//								} else {
+//									leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset] = NOT_SUSTAINS_LEAVES;
+//								}
+//							} else {
+//								leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset] = SUSTAINS_LEAVES;
+//							}
+//						}
+//					}
+//				}
+//
+//				for (byte sustainedValue = 1; sustainedValue <= 8; ++sustainedValue) {
+//					for (int xOffset = -radius; xOffset <= radius; ++xOffset) {
+//						for (int yOffset = -radius; yOffset <= radius; ++yOffset) {
+//							for (int zOffset = -radius; zOffset <= radius; ++zOffset) {
+//								if (leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset] == sustainedValue - 1) {
+//									if (leafDecayValues[(xOffset + arrayOffset - 1)][yOffset + arrayOffset][zOffset + arrayOffset] == IS_LEAVES) {
+//										leafDecayValues[(xOffset + arrayOffset - 1)][yOffset + arrayOffset][zOffset + arrayOffset] = sustainedValue;
+//									}
+//
+//									if (leafDecayValues[(xOffset + arrayOffset + 1)][yOffset + arrayOffset][zOffset + arrayOffset] == IS_LEAVES) {
+//										leafDecayValues[(xOffset + arrayOffset + 1)][yOffset + arrayOffset][zOffset + arrayOffset] = sustainedValue;
+//									}
+//
+//									if (leafDecayValues[xOffset + arrayOffset][(yOffset + arrayOffset - 1)][zOffset + arrayOffset] == IS_LEAVES) {
+//										leafDecayValues[xOffset + arrayOffset][(yOffset + arrayOffset - 1)][zOffset + arrayOffset] = sustainedValue;
+//									}
+//
+//									if (leafDecayValues[xOffset + arrayOffset][(yOffset + arrayOffset + 1)][zOffset + arrayOffset] == IS_LEAVES) {
+//										leafDecayValues[xOffset + arrayOffset][(yOffset + arrayOffset + 1)][zOffset + arrayOffset] = sustainedValue;
+//									}
+//
+//									if (leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset - 1] == IS_LEAVES) {
+//										leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset - 1] = sustainedValue;
+//									}
+//
+//									if (leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset + 1] == IS_LEAVES) {
+//										leafDecayValues[xOffset + arrayOffset][yOffset + arrayOffset][zOffset + arrayOffset + 1] = sustainedValue;
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//
+//			byte sustainValue = leafDecayValues[arrayOffset][arrayOffset][arrayOffset];
+//
+//			if (sustainValue >= 0) {
+//				world.setBlockState(pos, state.with(LeavesBlock.CHECK_DECAY, false), 4); // stop trying to decay
+//			} else {
+//				leaves.dropBlockAsItem(world, pos, state, 0);
+//				world.setBlockToAir(pos);
+//			}
+//		}
 	}
 }

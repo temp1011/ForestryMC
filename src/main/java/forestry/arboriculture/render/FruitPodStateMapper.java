@@ -18,23 +18,24 @@ import forestry.core.render.ForestryStateMapper;
 @OnlyIn(Dist.CLIENT)
 public class FruitPodStateMapper extends ForestryStateMapper {
 
-	@Override
-	public Map<BlockState, ModelResourceLocation> putStateModelLocations(Block block) {
-		if (block instanceof BlockFruitPod) {
-			BlockFruitPod blockFruitPod = (BlockFruitPod) block;
-			IAlleleFruit fruit = blockFruitPod.getFruit();
-			String modID = fruit.getModID();
-			if (modID == null) {
-				modID = Constants.MOD_ID;
-			}
-			String modelName = fruit.getModelName();
-			String resourcePath = modID + ":pods/" + modelName;
-			for (BlockState state : block.getBlockState().getValidStates()) {
-				String propertyString = getPropertyString(state.getProperties());
-				mapStateModelLocations.put(state, new ModelResourceLocation(resourcePath, propertyString));
-			}
-		}
-		return mapStateModelLocations;
-	}
+	//TODO models
+//	@Override
+//	public Map<BlockState, ModelResourceLocation> putStateModelLocations(Block block) {
+//		if (block instanceof BlockFruitPod) {
+//			BlockFruitPod blockFruitPod = (BlockFruitPod) block;
+//			IAlleleFruit fruit = blockFruitPod.getFruit();
+//			String modID = fruit.getModID();
+//			if (modID == null) {
+//				modID = Constants.MOD_ID;
+//			}
+//			String modelName = fruit.getModelName();
+//			String resourcePath = modID + ":pods/" + modelName;
+//			for (BlockState state : block.getBlockState().getValidStates()) {
+//				String propertyString = getPropertyString(state.getProperties());
+//				mapStateModelLocations.put(state, new ModelResourceLocation(resourcePath, propertyString));
+//			}
+//		}
+//		return mapStateModelLocations;
+//	}
 
 }

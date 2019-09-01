@@ -14,6 +14,8 @@ import java.awt.Color;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -24,14 +26,16 @@ import net.minecraft.world.World;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IFruitFamily;
 
+//TODO this class is a massive hack. Hopefully temporary until I work out how to separate AlleleFruits Block/Item dependancy problem
+//TODO double supplier probably not needed here...
 public class FruitProviderRipening extends FruitProviderNone {
-	private final Map<ItemStack, Float> products = new HashMap<>();
+	private final Map<Supplier<Supplier<ItemStack>>, Float> products = new HashMap<>();
 	private int colourCallow = 0xffffff;
 	private int diffR;
 	private int diffG;
 	private int diffB;
 
-	public FruitProviderRipening(String unlocalizedDescription, IFruitFamily family, ItemStack product, float modifier) {
+	public FruitProviderRipening(String unlocalizedDescription, IFruitFamily family, Supplier<Supplier<ItemStack>> product, float modifier) {
 		super(unlocalizedDescription, family);
 		products.put(product, modifier);
 	}
@@ -63,9 +67,9 @@ public class FruitProviderRipening extends FruitProviderNone {
 	@Override
 	public NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
 		NonNullList<ItemStack> product = NonNullList.create();
-		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
+		for (Map.Entry<Supplier<Supplier<ItemStack>>, Float> entry : products.entrySet()) {
 			if (world.rand.nextFloat() <= entry.getValue()) {
-				product.add(entry.getKey().copy());
+				product.add(entry.getKey().get().get().copy());
 			}
 		}
 
@@ -73,8 +77,9 @@ public class FruitProviderRipening extends FruitProviderNone {
 	}
 
 	@Override
-	public Map<ItemStack, Float> getProducts() {
-		return Collections.unmodifiableMap(products);
+	public Map<ItemStack, Float> getProducts() {	//TODO very ugly
+		return Collections.unmodifiableMap(products.entrySet().stream()
+		.collect(Collectors.toMap(e -> e.getKey().get().get(), Map.Entry::getValue)));
 	}
 
 	@Override

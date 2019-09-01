@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.common.MinecraftForge;
 
@@ -59,7 +60,8 @@ public class PacketGenomeTrackerSync extends ForestryPacket implements IForestry
 
 				ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
 				if (root != null) {
-					IBreedingTracker tracker = root.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
+					//TODO world cast
+					IBreedingTracker tracker = root.getBreedingTracker((ServerWorld) player.getEntityWorld(), player.getGameProfile());
 					tracker.decodeFromNBT(nbt);
 					MinecraftForge.EVENT_BUS.post(new ForestryEvent.SyncedBreedingTracker(tracker, player));
 				}

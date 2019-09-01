@@ -48,6 +48,10 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 		this.definition = definition;
 	}
 
+	public TreeDefinition getDefinition() {
+		return definition;
+	}
+
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		if (TreeDefinition.Willow.equals(definition)) {

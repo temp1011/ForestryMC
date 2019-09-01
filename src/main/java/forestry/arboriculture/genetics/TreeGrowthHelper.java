@@ -40,9 +40,9 @@ public class TreeGrowthHelper {
 				for (int z = 0; z < area.getZ(); z++) {
 					BlockPos pos = start.add(x, y, z);
 					BlockState blockState = world.getBlockState(pos);
-					if (!blockState.getBlock().isReplaceable(world, pos)) {
-						return false;
-					}
+//					if (!blockState.isReplaceable(world, pos)) {
+//						return false;
+//					} //TODO worldgen
 				}
 			}
 		}

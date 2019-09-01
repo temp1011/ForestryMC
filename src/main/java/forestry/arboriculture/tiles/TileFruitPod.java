@@ -16,6 +16,7 @@ import java.util.Random;
 
 import net.minecraft.block.CocoaBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -36,6 +37,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
+import forestry.arboriculture.ModuleArboriculture;
 import forestry.core.config.Constants;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
@@ -54,7 +56,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	private float yield;
 
 	public TileFruitPod() {
-
+		super(ModuleArboriculture.getTiles().FRUIT_POD);
 	}
 
 	public void setProperties(ITreeGenome genome, IAlleleFruit allele, float yield) {
@@ -196,10 +198,11 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		}
 	}
 
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
-		return oldState.getBlock() != newState.getBlock();
-	}
+	//TODO
+//	@Override
+//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
+//		return oldState.getBlock() != newState.getBlock();
+//	}
 
 	@Override
 	public void writeData(PacketBufferForestry data) {
@@ -218,6 +221,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		} else {
 			allele = defaultAllele;
 		}
-		world.markBlockRangeForRenderUpdate(getPos(), getPos());
+		Minecraft.getInstance().worldRenderer.markForRerender(getPos().getX(), getPos().getY(), getPos().getZ());
+//		world.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
 }

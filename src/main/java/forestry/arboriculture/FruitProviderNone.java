@@ -153,7 +153,8 @@ public class FruitProviderNone implements IFruitProvider {
 	public void registerSprites() {
 		if (overlay != null) {
 			AtlasTexture map = Minecraft.getInstance().getTextureMap();
-			map.registerSprite(overlay.sprite);
+//			map.registerSprite(overlay.sprite);
+			//TODO textures
 		}
 	}
 

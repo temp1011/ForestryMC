@@ -12,6 +12,7 @@ package forestry.arboriculture.genetics;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITreeGenome;
@@ -46,7 +47,8 @@ public class TreeMutation extends Mutation implements ITreeMutation, ITreeMutati
 			return 0;
 		}
 
-		processedChance *= getRoot().getTreekeepingMode(world).getMutationModifier(genome0, genome1, 1f);
+		//TODO world cast
+		processedChance *= getRoot().getTreekeepingMode((ServerWorld) world).getMutationModifier(genome0, genome1, 1f);
 
 		return processedChance;
 	}

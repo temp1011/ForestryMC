@@ -45,6 +45,7 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 		this.definition = definition;
 	}
 
+	//TODO needed?
 	@Nullable
 	public TreeDefinition getTreeDefinition(BlockState blockState) {
 		if (blockState.getBlock() == this) {
@@ -52,6 +53,10 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 		} else {
 			return null;
 		}
+	}
+
+	public TreeDefinition getDefinition() {
+		return definition;
 	}
 
 	@Override

@@ -14,9 +14,11 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -94,6 +96,10 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	 * This boolean keeps track of whether this leaf has checked if it should replace itself.
 	 */
 	private boolean checkedForConversionToDefaultLeaves;
+
+	public TileLeaves() {
+		super(ModuleArboriculture.getTiles().LEAVES);
+	}
 
 	/* SAVING & LOADING */
 	@Override
@@ -435,7 +441,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 			setTree(tree);
 
-			world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			Minecraft.getInstance().worldRenderer.markForRerender(getPos().getX(), getPos().getY(), getPos().getZ());
+//			world.markBlockRangeForRenderUpdate(getPos(), getPos());
 		}
 	}
 
@@ -445,7 +452,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			return;
 		}
 		colourFruits = newColourFruits;
-		world.markBlockRangeForRenderUpdate(getPos(), getPos());
+		Minecraft.getInstance().worldRenderer.markForRerender(getPos().getX(), getPos().getY(), getPos().getZ());
+//		world.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
 
 	/* IFRUITBEARER */

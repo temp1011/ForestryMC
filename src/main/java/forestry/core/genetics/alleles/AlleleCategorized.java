@@ -24,7 +24,7 @@ public abstract class AlleleCategorized extends Allele {
 
 	private static String getUnlocalizedName(String modId, String category, String valueName) {
 		String customName = modId + '.' + "allele." + category + '.' + valueName;
-		if (Translator.canTranslateToLocal(customName)) {
+		if (true || Translator.canTranslateToLocal(customName)) {	//TODO canTranslateToLocal crashes if called too early/ on wrong side?
 			return customName;
 		} else {
 			return modId + '.' + "allele." + valueName;

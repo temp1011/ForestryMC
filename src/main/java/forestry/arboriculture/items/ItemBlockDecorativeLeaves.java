@@ -22,9 +22,8 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 
 	@Override
 	public ITextComponent getDisplayName(ItemStack itemStack) {
-		int meta = itemStack.getMetadata();
 		BlockDecorativeLeaves block = getBlock();
-		TreeDefinition treeDefinition = block.getTreeType(meta);
+		TreeDefinition treeDefinition = block.getDefinition();
 		String unlocalizedSpeciesName = treeDefinition.getUnlocalizedName();
 		return ItemBlockLeaves.getDisplayName(unlocalizedSpeciesName);
 	}
@@ -32,9 +31,8 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
-		int meta = itemStack.getMetadata();
 		BlockDecorativeLeaves block = getBlock();
-		TreeDefinition treeDefinition = block.getTreeType(meta);
+		TreeDefinition treeDefinition = block.getDefinition();
 
 		ITreeGenome genome = treeDefinition.getGenome();
 

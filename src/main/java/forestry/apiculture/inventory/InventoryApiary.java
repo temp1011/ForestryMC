@@ -16,6 +16,7 @@ import java.util.Collection;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
@@ -66,7 +67,8 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 
 	@Override
 	public void wearOutFrames(IBeeHousing beeHousing, int amount) {
-		IBeekeepingMode beekeepingMode = BeeManager.beeRoot.getBeekeepingMode(beeHousing.getWorldObj());
+		//TODO world cast
+		IBeekeepingMode beekeepingMode = BeeManager.beeRoot.getBeekeepingMode((ServerWorld) beeHousing.getWorldObj());
 		int wear = Math.round(amount * beekeepingMode.getWearModifier());
 
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {

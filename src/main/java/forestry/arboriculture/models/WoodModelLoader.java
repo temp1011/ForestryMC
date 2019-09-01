@@ -14,21 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.model.BlockModelDefinition;
-import net.minecraft.client.renderer.model.BlockModelDefinition.MissingVariantException;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.model.VariantList;
-import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.client.model.ICustomModelLoader;
-import net.minecraftforge.client.model.IModel;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.ICustomModelLoader;
+
 import forestry.core.config.Constants;
 import forestry.core.utils.ModelUtil;
 
@@ -57,8 +52,8 @@ public enum WoodModelLoader implements ICustomModelLoader {
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
 		if (!(modelLocation instanceof ModelResourceLocation)
-			|| !modelLocation.getNamespace().equals(Constants.MOD_ID)
-			|| !modelLocation.getPath().contains("arboriculture")) {
+				|| !modelLocation.getNamespace().equals(Constants.MOD_ID)
+				|| !modelLocation.getPath().contains("arboriculture")) {
 			return false;
 		}
 		String path = modelLocation.getPath();
@@ -75,12 +70,12 @@ public enum WoodModelLoader implements ICustomModelLoader {
 		ModelResourceLocation variant = (ModelResourceLocation) modelLocation;
 		BlockModelDefinition definition = ModelUtil.getModelBlockDefinition(variant);
 		try {
-			VariantList variants = definition.getVariant(variant.getVariant());
+			VariantList variants = definition.getVariants().get(variant.getVariant());
 			return new SimpleModel(variant, variants);
-		} catch (MissingVariantException e) {
+		} catch (Exception e) {
 			if (definition.hasMultipartData()) {
 				return new MultipartModel(new ResourceLocation(variant.getNamespace(), variant.getPath()),
-					definition.getMultipartData());
+						definition.getMultipartData());
 			}
 			throw e;
 		}

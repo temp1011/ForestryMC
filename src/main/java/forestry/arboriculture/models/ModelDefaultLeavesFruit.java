@@ -76,7 +76,7 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
 		Block block = Block.getBlockFromItem(stack.getItem());
 		Preconditions.checkArgument(block instanceof BlockDefaultLeavesFruit, "ItemStack must be for default fruit leaves.");
 		BlockDefaultLeavesFruit bBlock = (BlockDefaultLeavesFruit) block;
-		return new Key(bBlock.getTreeType(stack.getMetadata()).definition, Proxies.render.fancyGraphicsEnabled());
+		return new Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());
 	}
 
 	@Override
@@ -84,15 +84,13 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
 		Block block = state.getBlock();
 		Preconditions.checkArgument(block instanceof BlockDefaultLeavesFruit, "state must be for default fruit leaves.");
 		BlockDefaultLeavesFruit bBlock = (BlockDefaultLeavesFruit) block;
-		PropertyTreeTypeFruit.LeafVariant leafVariant = bBlock.getLeafVariant(state);
-		Preconditions.checkNotNull(leafVariant);
-		return new ModelDefaultLeavesFruit.Key(leafVariant.definition, Proxies.render.fancyGraphicsEnabled());
+		return new ModelDefaultLeavesFruit.Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());
 	}
 
 	@Override
 	protected void bakeBlock(BlockDefaultLeavesFruit block, Key key, ModelBaker baker, boolean inventory) {
 		TreeDefinition treeDefinition = key.definition;
-		AtlasTexture map = Minecraft.getInstance().getTextureMapBlocks();
+		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 
 		ITreeGenome genome = treeDefinition.getGenome();
 		IAlleleTreeSpecies species = genome.getPrimary();

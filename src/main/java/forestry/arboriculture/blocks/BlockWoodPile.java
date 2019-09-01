@@ -6,25 +6,17 @@ import java.util.Collection;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.BooleanProperty;
-import net.minecraft.block.properties.IntegerProperty;
-import net.minecraft.block.BlockStateContainer;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.particles.ParticleType;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
@@ -32,18 +24,12 @@ import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-import net.minecraftforge.client.model.ModelLoader;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.ICharcoalPileWall;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.models.IStateMapperRegister;
 import forestry.arboriculture.ModuleCharcoal;
 import forestry.core.config.Config;
 
@@ -55,9 +41,9 @@ public class BlockWoodPile extends Block {
 
 	public BlockWoodPile() {
 		super(Block.Properties.create(Material.WOOD)
-		.hardnessAndResistance(1.5f)
-		.sound(SoundType.WOOD));
-//		setCreativeTab(ModuleCharcoal.getTag());
+				.hardnessAndResistance(1.5f)
+				.sound(SoundType.WOOD));
+		//		setCreativeTab(ModuleCharcoal.getTag());
 		//TODO creative tab
 	}
 
@@ -72,20 +58,20 @@ public class BlockWoodPile extends Block {
 	}
 
 	//TODO voxelShape
-//	@Override
-//	public boolean isOpaqueCube(BlockState state) {
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean isNormalCube(BlockState state) {
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean isFullBlock(BlockState state) {
-//		return false;
-//	}
+	//	@Override
+	//	public boolean isOpaqueCube(BlockState state) {
+	//		return false;
+	//	}
+	//
+	//	@Override
+	//	public boolean isNormalCube(BlockState state) {
+	//		return false;
+	//	}
+	//
+	//	@Override
+	//	public boolean isFullBlock(BlockState state) {
+	//		return false;
+	//	}
 
 	@Override
 	public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState p_220082_4_, boolean p_220082_5_) {
@@ -98,7 +84,9 @@ public class BlockWoodPile extends Block {
 				}
 			}
 		}
-		world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
+		//TODO schedule update
+		world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
+		//world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
 	}
 
 	@Override
@@ -114,7 +102,9 @@ public class BlockWoodPile extends Block {
 	private void activatePile(BlockState state, World world, BlockPos pos, boolean scheduleUpdate) {
 		world.setBlockState(pos, state.with(IS_ACTIVE, true), 2);
 		if (scheduleUpdate) {
-			world.scheduleUpdate(pos, this, (this.tickRate(world) + world.rand.nextInt(RANDOM_TICK)) / 4);
+			//TODO schedule update
+			world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
+			//			world.scheduleUpdate(pos, this, (this.tickRate(world) + world.rand.nextInt(RANDOM_TICK)) / 4);
 		}
 	}
 
@@ -134,7 +124,7 @@ public class BlockWoodPile extends Block {
 					} else if (!blockState.get(IS_ACTIVE) && state.get(IS_ACTIVE)) {
 						activatePile(blockState, world, position, true);
 					}
-				} else if (world.isAirBlock(position) || !blockState.isSideSolid(world, position, facing.getOpposite()) || block.isFlammable(world, position, facing.getOpposite())) {
+				} else if (world.isAirBlock(position) || !blockState.doesSideBlockRendering(world, position, facing.getOpposite()) || block.isFlammable(blockState, world, position, facing.getOpposite())) {
 					world.setBlockState(pos, Blocks.FIRE.getDefaultState());
 					return;
 				}
@@ -147,7 +137,9 @@ public class BlockWoodPile extends Block {
 					world.setBlockState(pos, ashState, 2);
 				}
 			}
-			world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
+			//TODO schedule update
+			world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
+			//			world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
 		}
 	}
 

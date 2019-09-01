@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
@@ -123,7 +124,8 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 			}
 
 			if (individual.analyze()) {
-				IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
+				//TODO world cast
+				IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker((ServerWorld) player.world, player.getGameProfile());
 				breedingTracker.registerSpecies(individual.getGenome().getPrimary());
 				breedingTracker.registerSpecies(individual.getGenome().getSecondary());
 

@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
@@ -32,8 +33,10 @@ public class MutationsTab extends DatabaseTab {
 		ISpeciesRoot speciesRoot = genome.getSpeciesRoot();
 		IAlleleSpecies species = genome.getPrimary();
 
+		//TODO This will crash because use clientside player so have clientside world. Not sure how else to handle world saved data
+		//TODO check map code?
 		PlayerEntity player = Minecraft.getInstance().player;
-		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
+		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker((ServerWorld) player.world, player.getGameProfile());
 
 		IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 1, y, 16), 100, 0);
 		Collection<? extends IMutation> mutations = getValidMutations(speciesRoot.getCombinations(species));

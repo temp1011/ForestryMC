@@ -57,7 +57,10 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 		this.definition = definition;
 	}
 
-	private static final int VARIANTS_PER_BLOCK = 4;
+	//TODO probably can be method in superclass
+	public TreeDefinition getDefinition() {
+		return definition;
+	}
 
 	@Override
 	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {

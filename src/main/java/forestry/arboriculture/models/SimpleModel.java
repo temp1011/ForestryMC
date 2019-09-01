@@ -14,24 +14,31 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
+import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.model.Variant;
 import net.minecraft.client.renderer.model.VariantList;
 import net.minecraft.client.renderer.model.WeightedBakedModel;
+import net.minecraft.client.renderer.texture.ISprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.MultiModelState;
 import net.minecraftforge.common.model.IModelState;
@@ -41,8 +48,9 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+//TODO models
 @OnlyIn(Dist.CLIENT)
-public class SimpleModel implements IModel {
+public class SimpleModel implements IUnbakedModel {
 
 	private static final ModelResourceLocation MISSING = new ModelResourceLocation("builtin/missing", "missing");
 
@@ -61,7 +69,7 @@ public class SimpleModel implements IModel {
 
 		ImmutableSet.Builder<ResourceLocation> texturesBuilder = ImmutableSet.builder();
 		for (IModel model : models) {
-			texturesBuilder.addAll(model.getTextures());
+//			texturesBuilder.addAll(model.getTextures());
 		}
 		textures = texturesBuilder.build();
 	}
@@ -77,7 +85,7 @@ public class SimpleModel implements IModel {
 			ResourceLocation loc = variant.getModelLocation();
 			locationsBuilder.add(loc);
 
-			IModel model;
+			IUnbakedModel model;
 			if (loc.equals(MISSING)) {
 				model = ModelLoaderRegistry.getMissingModel();
 			} else {
@@ -88,7 +96,7 @@ public class SimpleModel implements IModel {
 			for (ResourceLocation location : model.getDependencies()) {
 				ModelLoaderRegistry.getModelOrMissing(location);
 			}
-			texturesBuilder.addAll(model.getTextures());
+			texturesBuilder.addAll(model.getTextures(ModelLoader.defaultModelGetter(), Sets.newHashSet()));
 
 			modelsBuilder.add(model);
 			builder.add(Pair.of(model, variant.getState()));
@@ -113,24 +121,26 @@ public class SimpleModel implements IModel {
 	}
 
 	@Override
-	public Collection<ResourceLocation> getTextures() {
+	public Collection<ResourceLocation> getTextures(Function<ResourceLocation, IUnbakedModel> modelGetter, Set<String> missingTextureErrors) {
 		return ImmutableSet.copyOf(textures);
 	}
 
+	@Nullable
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		if (variants.size() == 1) {
-			IModel model = models.get(0);
-			return model.bake(MultiModelState.getPartState(state, model, 0), format, bakedTextureGetter);
-		} else {
-			WeightedBakedModel.Builder builder = new WeightedBakedModel.Builder();
-			for (int i = 0; i < variants.size(); i++) {
-				IModel model = models.get(i);
-				builder.add(model.bake(MultiModelState.getPartState(state, model, i), format, bakedTextureGetter),
-					variants.get(i).getWeight());
-			}
-			return builder.build();
-		}
+	public IBakedModel bake(ModelBakery bakery, Function<ResourceLocation, TextureAtlasSprite> spriteGetter, ISprite sprite, VertexFormat format) {
+//		if (variants.size() == 1) {
+//			IModel model = models.get(0);
+//			return model.bake(MultiModelState.getPartState(state, model, 0), format, spriteGetter);
+//		} else {
+//			WeightedBakedModel.Builder builder = new WeightedBakedModel.Builder();
+//			for (int i = 0; i < variants.size(); i++) {
+//				IModel model = models.get(i);
+//				builder.add(model.bake(MultiModelState.getPartState(state, model, i), format, spriteGetter),
+//					variants.get(i).getWeight());
+//			}
+//			return builder.build();
+//		}
+		return null;
 	}
 
 	@Override
@@ -139,7 +149,7 @@ public class SimpleModel implements IModel {
 	}
 
 	@Override
-	public IModel retexture(ImmutableMap<String, String> textures) {
+	public SimpleModel retexture(ImmutableMap<String, String> textures) {
 		List<ResourceLocation> locations = new ArrayList<>();
 		List<IModel> models = new ArrayList<>();
 		ImmutableList.Builder<Pair<IModel, IModelState>> builder = ImmutableList.builder();
@@ -147,7 +157,7 @@ public class SimpleModel implements IModel {
 			ResourceLocation loc = variant.getModelLocation();
 			locations.add(loc);
 
-			IModel model;
+			IUnbakedModel model;
 			if (loc.equals(MISSING)) {
 				model = ModelLoaderRegistry.getMissingModel();
 			} else {

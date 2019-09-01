@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -43,7 +44,7 @@ public class WorldGenEbony extends WorldGenTree {
 					trunksGenerated++;
 				} else {
 					for (int i = 0; i < 1; i++) {
-						world.setBlockToAir(new BlockPos(x, i, z));
+						world.setBlockState(new BlockPos(x, i, z), Blocks.AIR.getDefaultState());
 					}
 				}
 			}

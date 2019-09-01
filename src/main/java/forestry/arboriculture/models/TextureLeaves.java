@@ -60,11 +60,12 @@ public class TextureLeaves {
 
 	@OnlyIn(Dist.CLIENT)
 	private void registerSprites() {
-		AtlasTexture textureMapBlocks = Minecraft.getInstance().getTextureMapBlocks();
-		textureMapBlocks.registerSprite(plain);
-		textureMapBlocks.registerSprite(fancy);
-		textureMapBlocks.registerSprite(pollinatedPlain);
-		textureMapBlocks.registerSprite(pollinatedFancy);
+		AtlasTexture textureMapBlocks = Minecraft.getInstance().getTextureMap();
+		//TODO textures
+//		textureMapBlocks.registerSprite(plain);
+//		textureMapBlocks.registerSprite(fancy);
+//		textureMapBlocks.registerSprite(pollinatedPlain);
+//		textureMapBlocks.registerSprite(pollinatedFancy);
 	}
 
 	public ResourceLocation getSprite(boolean pollinated, boolean fancy) {

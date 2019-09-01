@@ -21,6 +21,7 @@ import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 
@@ -85,7 +86,8 @@ public class EventHandlerCore {
 		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
 		Collection<ISpeciesRoot> speciesRoots = alleleRegistry.getSpeciesRoot().values();
 		for (ISpeciesRoot speciesRoot : speciesRoots) {
-			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
+			//TODO world cast
+			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker((ServerWorld) player.getEntityWorld(), player.getGameProfile());
 			breedingTracker.synchToPlayer(player);
 		}
 	}
