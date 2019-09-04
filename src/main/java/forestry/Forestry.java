@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
@@ -194,6 +195,11 @@ public class Forestry {
 		@SubscribeEvent
 		public static void registerContainerTypes(RegistryEvent.Register<ContainerType<?>> event) {
 			ModuleManager.getInternalHandler().registerContainerTypes(event.getRegistry());
+		}
+
+		@SubscribeEvent
+		public static void registerEntityTypes(RegistryEvent.Register<EntityType<?>> event) {
+			ModuleManager.getInternalHandler().registerEntityTypes(event.getRegistry());
 		}
 
 	}

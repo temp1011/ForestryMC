@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -102,6 +103,12 @@ public class InternalModuleHandler {
 	public void registerTileEntities() {
 		for(IForestryModule module : modules) {
 			module.registerTiles();
+		}
+	}
+
+	public void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
+		for(IForestryModule module : modules) {
+			module.registerEntityTypes(registry);
 		}
 	}
 
