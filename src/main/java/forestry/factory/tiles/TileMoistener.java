@@ -28,6 +28,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
@@ -180,7 +181,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 				return;
 			}
 
-			resourceTank.drain(1, true);
+			resourceTank.drain(1, IFluidHandler.FluidAction.EXECUTE);
 			burnTime -= speed;
 			productionTime -= speed;
 

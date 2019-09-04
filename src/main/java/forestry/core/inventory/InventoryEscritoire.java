@@ -19,7 +19,9 @@ import net.minecraft.world.World;
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 
+import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.IResearchHandler;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.GeneticsUtil;
@@ -44,8 +46,7 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 				return false;
 			}
 			Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(specimen);
-			return optional.filter(individual -> individual.getGenome().getPrimary(IAlleleForestrySpecies.class)
-				.getResearchSuitability(itemStack) > 0).isPresent();
+			return optional.filter(individual -> ((IResearchHandler) individual.getRoot().getComponentSafe(ForestryComponentKeys.RESEARCH).get()).getResearchSuitability(individual.getGenome().getPrimary(IAlleleForestrySpecies.class), itemStack) > 0).isPresent();
 		}
 
 		return slotIndex == SLOT_ANALYZE &&

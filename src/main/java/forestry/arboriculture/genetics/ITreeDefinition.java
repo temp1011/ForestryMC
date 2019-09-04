@@ -18,10 +18,7 @@ import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 
-public interface ITreeDefinition extends ISpeciesDefinition {
-
-	@Override
-	ITree createIndividual();
+public interface ITreeDefinition extends ISpeciesDefinition<ITree> {
 
 	@Override
 	IAlleleTreeSpecies getSpecies();

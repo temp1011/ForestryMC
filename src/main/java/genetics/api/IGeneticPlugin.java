@@ -5,6 +5,7 @@ import genetics.api.alleles.IAlleleData;
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.classification.IClassificationRegistry;
 import genetics.api.individual.IChromosomeType;
+import genetics.api.root.IGeneticListenerRegistry;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootManager;
 import genetics.api.root.components.IRootComponentRegistry;
@@ -18,6 +19,10 @@ public interface IGeneticPlugin {
 	 * Register classifications
 	 */
 	default void registerClassifications(IClassificationRegistry registry) {
+		//Default Implementation
+	}
+
+	default void registerListeners(IGeneticListenerRegistry registry) {
 		//Default Implementation
 	}
 

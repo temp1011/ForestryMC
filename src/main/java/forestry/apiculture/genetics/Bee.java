@@ -46,6 +46,7 @@ import genetics.api.individual.IChromosome;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKeys;
 
@@ -351,8 +352,7 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies primary = genome.getActiveAllele(BeeChromosomes.SPECIES);
 		IAlleleBeeSpecies secondary = genome.getInactiveAllele(BeeChromosomes.SPECIES);
 		if (!isPureBred(BeeChromosomes.SPECIES)) {
-			//TODO textcomponent
-			list.add(new StringTextComponent(TextFormatting.BLUE + Translator.translateToLocal("for.bees.hybrid").replaceAll("%PRIMARY", primary.getLocalizedName()).replaceAll("%SECONDARY", secondary.getLocalizedName())));
+			list.add(new TranslationTextComponent("for.bees.hybrid", primary.getDisplayName(), secondary.getDisplayName()).applyTextStyle(TextFormatting.BLUE));
 		}
 
 		if (generation > 0) {
@@ -367,10 +367,7 @@ public class Bee extends IndividualLiving implements IBee {
 				rarity = Rarity.COMMON;
 			}
 
-			String generationString = rarity.color + Translator.translateToLocalFormatted("for.gui.beealyzer.generations", generation);
-			list.add(new StringTextComponent(generationString));
-			//TODO textcomponent
-
+			list.add(new TranslationTextComponent("for.gui.beealyzer.generations", generation).applyTextStyle(rarity.color));
 		}
 
 		IAllele speedAllele = genome.getActiveAllele(BeeChromosomes.SPEED);
@@ -382,20 +379,20 @@ public class Bee extends IndividualLiving implements IBee {
 		if (Translator.canTranslateToLocal(unlocalizedCustomSpeed)) {
 			speed = Translator.translateToLocal(unlocalizedCustomSpeed);
 		} else {
-			speed = speedAllele.getLocalizedName() + ' ' + Translator.translateToLocal("for.gui.worker");
+			speed = speedAllele.getDisplayName().getFormattedText() + ' ' + Translator.translateToLocal("for.gui.worker");
 		}
 
-		String lifespan = genome.getActiveAllele(BeeChromosomes.LIFESPAN).getLocalizedName() + ' ' + Translator.translateToLocal("for.gui.life");
-		String tempTolerance = TextFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(primary.getTemperature()) + " / " + tempToleranceAllele.getLocalizedName();
-		String humidTolerance = TextFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(secondary.getHumidity()) + " / " + humidToleranceAllele.getLocalizedName();
-		String flowers = genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getDescription();
+		String lifespan = genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName().getFormattedText() + ' ' + Translator.translateToLocal("for.gui.life");
+		String tempTolerance = TextFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(primary.getTemperature()) + " / " + tempToleranceAllele.getDisplayName().getFormattedText();
+		String humidTolerance = TextFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(secondary.getHumidity()) + " / " + humidToleranceAllele.getDisplayName().getFormattedText();
+		ITextComponent flowers = genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getDescription();
 
 		//TODO textcomponent many times...
 		list.add(new StringTextComponent(lifespan));
 		list.add(new StringTextComponent(speed));
 		list.add(new StringTextComponent(tempTolerance));
 		list.add(new StringTextComponent(humidTolerance));
-		list.add(new StringTextComponent(flowers));
+		list.add(flowers);
 
 		if (genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS)) {
 			list.add(new StringTextComponent(TextFormatting.RED + GenericRatings.rateActivityTime(true, false)));
@@ -602,7 +599,8 @@ public class Bee extends IndividualLiving implements IBee {
 		GameProfile playerProfile = housing.getOwner();
 		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, playerProfile);
 
-		List<IMutation> combinations = BeeManager.beeRoot.getComponent(ComponentKeys.MUTATIONS).get().getCombinations(allele0, allele1, true);
+		IMutationContainer<IBee, ? extends IMutation> container = BeeManager.beeRoot.getComponent(ComponentKeys.MUTATIONS);
+		List<? extends IMutation> combinations = container.getCombinations(allele0, allele1, true);
 		for (IMutation mutation : combinations) {
 			IBeeMutation beeMutation = (IBeeMutation) mutation;
 
@@ -659,7 +657,7 @@ public class Bee extends IndividualLiving implements IBee {
 					pollen = pitcher.getPollen();
 				}
 			} else {
-				pollen = GeneticsUtil.getPollen(world, blockPos);
+				pollen = GeneticsUtil.getPollen(world, blockPos).orElse(null);
 			}
 
 			if (pollen != null) {

@@ -26,7 +26,6 @@ import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.proxy.Proxies;
 
 /**
  * Genetic leaves with no tile entity, used for worldgen trees.
@@ -50,6 +49,10 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 		} else {
 			return null;
 		}
+	}
+
+	public TreeDefinition getTreeDefinition() {
+		return definition;
 	}
 
 	@Override
@@ -80,13 +83,13 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 	}
 
 	/* RENDERING */
-	@Override
-	public final boolean isOpaqueCube(BlockState state) {
-		if (!Proxies.render.fancyGraphicsEnabled()) {
-			return !TreeDefinition.Willow.equals(definition);
-		}
-		return false;
-	}
+	//	@Override
+	//	public final boolean isOpaqueCube(BlockState state) {
+	//		if (!Proxies.render.fancyGraphicsEnabled()) {
+	//			return !TreeDefinition.Willow.equals(definition);
+	//		}
+	//		return false;
+	//	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)

@@ -28,6 +28,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IStillRecipe;
@@ -126,8 +127,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		int cycles = currentRecipe.getCyclesPerUnit();
 		FluidStack output = currentRecipe.getOutput();
 
-		FluidStack product = new FluidStack(output, output.amount * cycles);
-		productTank.fillInternal(product, true);
+		FluidStack product = new FluidStack(output, output.getAmount() * cycles);
+		productTank.fillInternal(product, IFluidHandler.FluidAction.EXECUTE);
 
 		bufferedLiquid = null;
 
@@ -156,16 +157,16 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 		if (hasRecipe) {
 			FluidStack fluidStack = currentRecipe.getOutput();
-			hasTankSpace = productTank.fillInternal(fluidStack, false) == fluidStack.amount;
+			hasTankSpace = productTank.fillInternal(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount();
 			if (bufferedLiquid == null) {
 				int cycles = currentRecipe.getCyclesPerUnit();
 				FluidStack input = currentRecipe.getInput();
-				int drainAmount = cycles * input.amount;
-				FluidStack drained = resourceTank.drain(drainAmount, false);
-				hasLiquidResource = drained != null && drained.amount == drainAmount;
+				int drainAmount = cycles * input.getAmount();
+				FluidStack drained = resourceTank.drain(drainAmount, IFluidHandler.FluidAction.SIMULATE);
+				hasLiquidResource = drained != null && drained.getAmount() == drainAmount;
 				if (hasLiquidResource) {
 					bufferedLiquid = new FluidStack(input, drainAmount);
-					resourceTank.drain(drainAmount, true);
+					resourceTank.drain(drainAmount, IFluidHandler.FluidAction.EXECUTE);
 				}
 			}
 		}

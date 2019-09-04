@@ -10,10 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,7 +32,7 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 	private ModelResourceLocation pollenModel;
 
 	public ModelProviderGermling(String uid, ILeafSpriteProvider leafSpriteProvider) {
-		String modelName = uid.substring("forestry.".length());
+		String modelName = uid;
 		this.name = StringUtil.camelCaseToUnderscores(modelName);
 		this.leafSpriteProvider = leafSpriteProvider;
 	}
@@ -44,10 +42,10 @@ public class ModelProviderGermling implements IGermlingModelProvider {
 	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
 		if (type == EnumGermlingType.SAPLING) {
 			germlingModel = manager.getModelLocation("germlings/sapling." + name);
-			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:germlings/sapling." + name));
+			//ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:germlings/sapling." + name));
 		} else if (type == EnumGermlingType.POLLEN) {
 			pollenModel = manager.getModelLocation("pollen");
-			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:pollen"));
+			//ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:pollen"));
 		}
 	}
 

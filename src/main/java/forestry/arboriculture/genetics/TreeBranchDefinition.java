@@ -14,7 +14,6 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.classification.IBranchDefinition;
 import genetics.api.classification.IClassification;
@@ -81,9 +80,7 @@ public enum TreeBranchDefinition implements IBranchDefinition {
 		return branch;
 	}
 
-	public static void registerBranches() {
-		IClassificationRegistry classRegistry = GeneticsAPI.apiInstance.getClassificationRegistry();
-
+	public static void registerBranches(IClassificationRegistry classRegistry) {
 		IClassification plantae = classRegistry.getClassification("kingdom.plantae");
 
 		plantae.addMemberGroup(

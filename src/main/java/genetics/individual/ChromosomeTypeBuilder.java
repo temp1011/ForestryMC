@@ -73,6 +73,11 @@ public class ChromosomeTypeBuilder implements IChromosomeTypeBuilder {
 		public IRootDefinition getDefinition() {
 			return list.getDefinition();
 		}
+
+		@Override
+		public String toString() {
+			return name;
+		}
 	}
 
 	private static class Allele<A extends IAllele> extends Type implements IChromosomeAllele<A> {

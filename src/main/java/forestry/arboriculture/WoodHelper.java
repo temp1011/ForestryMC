@@ -3,19 +3,12 @@ package forestry.arboriculture;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
-import forestry.api.arboriculture.IWoodItemMeshDefinition;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
@@ -34,10 +27,7 @@ public class WoodHelper {
 			if (Translator.canTranslateToLocal(customUnlocalizedName)) {
 				displayName = new TranslationTextComponent(customUnlocalizedName);
 			} else {
-				ITextComponent woodGrammar = new TranslationTextComponent("for." + blockKind + ".grammar");
-				ITextComponent woodTypeName = new TranslationTextComponent("for.trees.woodType." + woodType);
-
-				displayName = woodGrammar.replaceAll("%TYPE", woodTypeName);
+				displayName = new TranslationTextComponent("for." + blockKind + ".grammar", new TranslationTextComponent("for.trees.woodType." + woodType));
 			}
 		} else if (woodType instanceof EnumVanillaWoodType) {
 			displayName = TreeManager.woodAccess.getStack(woodType, blockKind, false).getDisplayName();
@@ -59,17 +49,17 @@ public class WoodHelper {
 	public static ResourceLocation[] getResourceLocations(IWoodTyped typed) {
 		List<ResourceLocation> resourceLocations = new ArrayList<>();
 		WoodBlockKind blockKind = typed.getBlockKind();
-		for (IWoodType woodType : typed.getWoodTypes()) {
-			if (woodType instanceof EnumVanillaWoodType) {
-				resourceLocations.add(new ResourceLocation("minecraft", woodType + "_" + blockKind));
-			} else {
-				resourceLocations.add(new ResourceLocation(Constants.MOD_ID, blockKind + "/" + woodType));
-			}
+		IWoodType woodType = typed.getWoodType();
+		if (woodType instanceof EnumVanillaWoodType) {
+			resourceLocations.add(new ResourceLocation("minecraft", woodType + "_" + blockKind));
+		} else {
+			resourceLocations.add(new ResourceLocation(Constants.MOD_ID, blockKind + "/" + woodType));
 		}
 		return resourceLocations.toArray(new ResourceLocation[0]);
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	//TODO: Wood Models
+	/*@OnlyIn(Dist.CLIENT)
 	public static class WoodMeshDefinition implements IWoodItemMeshDefinition {
 
 		public final IWoodTyped wood;
@@ -101,5 +91,5 @@ public class WoodHelper {
 			return new ResourceLocation("forestry:item/" + blockKind.toString());
 		}
 
-	}
+	}*/
 }

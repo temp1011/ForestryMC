@@ -34,7 +34,7 @@ public class MutationsTab extends DatabaseTab {
 		IGenome genome = individual.getGenome();
 		IForestrySpeciesRoot<IIndividual> speciesRoot = (IForestrySpeciesRoot<IIndividual>) individual.getRoot();
 		IAlleleSpecies species = genome.getPrimary();
-		IMutationContainer<IMutation> mutationContainer = speciesRoot.getComponent(ComponentKeys.MUTATIONS).get();
+		IMutationContainer<IIndividual, IMutation> mutationContainer = speciesRoot.getComponent(ComponentKeys.MUTATIONS);
 
 		PlayerEntity player = Minecraft.getInstance().player;
 		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());

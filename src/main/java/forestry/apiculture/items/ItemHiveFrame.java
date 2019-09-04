@@ -67,7 +67,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 		super.addInformation(stack, world, tooltip, advanced);
 		beeModifier.addInformation(stack, world, tooltip, advanced);
 		if (!stack.isDamaged()) {
-			tooltip.add(new TranslationTextComponent("item.for.durability", stack.getMaxDamage()));
+			tooltip.add(new TranslationTextComponent("item.forestry.durability", stack.getMaxDamage()));
 		}
 	}
 
@@ -91,8 +91,8 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
 		@OnlyIn(Dist.CLIENT)
 		public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-			tooltip.add(new TranslationTextComponent("item.for.bee.modifier.production", production));
-			tooltip.add(new TranslationTextComponent("item.for.bee.modifier.genetic.decay", geneticDecay));
+			tooltip.add(new TranslationTextComponent("item.forestry.bee.modifier.production", production));
+			tooltip.add(new TranslationTextComponent("item.forestry.bee.modifier.genetic.decay", geneticDecay));
 		}
 	}
 }

@@ -10,17 +10,19 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import genetics.api.alleles.AlleleCategorized;
+import net.minecraft.util.text.ITextComponent;
+
+import genetics.api.alleles.AlleleCategorizedValue;
 
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IFlowerProvider;
 
-public class AlleleFlowers extends AlleleCategorized implements IAlleleFlowers {
+public class AlleleFlowers<P extends IFlowerProvider> extends AlleleCategorizedValue<P> implements IAlleleFlowers {
 
 	private final IFlowerProvider provider;
 
-	public AlleleFlowers(String modId, String category, String name, IFlowerProvider provider, boolean isDominant) {
-		super(modId, category, name, isDominant);
+	public AlleleFlowers(String modId, String category, String name, P provider, boolean isDominant) {
+		super(modId, category, name, provider, isDominant);
 		this.provider = provider;
 	}
 
@@ -30,7 +32,7 @@ public class AlleleFlowers extends AlleleCategorized implements IAlleleFlowers {
 	}
 
 	@Override
-	public String getLocalizedName() {
+	public ITextComponent getDisplayName() {
 		return getProvider().getDescription();
 	}
 }

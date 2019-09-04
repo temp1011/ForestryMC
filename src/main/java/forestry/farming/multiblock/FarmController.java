@@ -29,6 +29,7 @@ import java.util.Stack;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
@@ -36,8 +37,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -513,7 +514,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 					continue;
 				}
 
-				if (liquid.amount > 0 && !hasLiquid(liquid)) {
+				if (liquid.getAmount() > 0 && !hasLiquid(liquid)) {
 					farmWorkStatus.hasLiquid = false;
 					continue;
 				}
@@ -573,7 +574,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		float hydrationModifier = hydrationManager.getHydrationModifier();
 		int waterConsumption = provider.getWaterConsumption(hydrationModifier);
 		FluidStack requiredLiquid = new FluidStack((Fluid) null/*TODO fluids FluidRegistry.WATER*/, waterConsumption);
-		boolean hasLiquid = requiredLiquid.amount == 0 || hasLiquid(requiredLiquid);
+		boolean hasLiquid = requiredLiquid.getAmount() == 0 || hasLiquid(requiredLiquid);
 
 		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {
 			return false;
@@ -602,13 +603,13 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public boolean hasLiquid(FluidStack liquid) {
-		FluidStack drained = resourceTank.drainInternal(liquid, false);
+		FluidStack drained = resourceTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
 		return liquid.isFluidStackIdentical(drained);
 	}
 
 	@Override
 	public void removeLiquid(FluidStack liquid) {
-		resourceTank.drain(liquid.amount, true);
+		resourceTank.drain(liquid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 	}
 
 	@Override

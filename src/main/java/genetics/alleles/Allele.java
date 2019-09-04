@@ -4,7 +4,8 @@ import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
 
-import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -28,13 +29,13 @@ public class Allele extends ForgeRegistryEntry<IAllele> implements IAllele {
 	}
 
 	@Override
-	public String getLocalizedName() {
-		return I18n.format(localisationKey);
+	public final String getLocalisationKey() {
+		return localisationKey;
 	}
 
 	@Override
-	public final String getLocalisationKey() {
-		return localisationKey;
+	public ITextComponent getDisplayName() {
+		return new TranslationTextComponent(getLocalisationKey());
 	}
 
 	@Override

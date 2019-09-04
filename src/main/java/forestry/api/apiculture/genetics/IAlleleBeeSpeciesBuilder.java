@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
+import java.util.function.Supplier;
+
 import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IBeeModelProvider;
@@ -17,18 +19,20 @@ public interface IAlleleBeeSpeciesBuilder extends IAlleleSpeciesBuilder {
 	@Override
 	IAlleleBeeSpecies build();
 
+	IAlleleBeeSpeciesBuilder addProduct(IBeeProductProvider provider);
+
 	/**
 	 * Add a product for this bee species.
 	 * Chance is between 0 and 1.
 	 */
-	IAlleleBeeSpeciesBuilder addProduct(ItemStack product, Float chance);
+	IAlleleBeeSpeciesBuilder addProduct(Supplier<ItemStack> product, Float chance);
 
 	/**
 	 * Add a specialty product for this bee species.
 	 * Bees only produce their specialty when they are Jubilant (see IJubilanceProvider)
 	 * Chance is between 0 and 1.
 	 */
-	IAlleleBeeSpeciesBuilder addSpecialty(ItemStack specialty, Float chance);
+	IAlleleBeeSpeciesBuilder addSpecialty(Supplier<ItemStack> specialty, Float chance);
 
 	/**
 	 * Set the Jubilance Provider for this bee species.

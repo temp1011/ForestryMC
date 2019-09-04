@@ -20,7 +20,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.Function;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -30,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -42,11 +42,8 @@ import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IGenomeWrapper;
 import genetics.api.individual.IIndividual;
-import genetics.api.individual.IKaryotype;
-import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootContext;
 import genetics.api.root.IndividualRoot;
-import genetics.api.root.components.ComponentKey;
-import genetics.api.root.components.IRootComponent;
 
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
@@ -84,13 +81,13 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	private static int treeSpeciesCount = -1;
 	@Nullable
 	private static ITreekeepingMode activeTreekeepingMode;
-	public static final List<ITree> treeTemplates = new ArrayList<>();
 
 	private final Map<IFruitFamily, Collection<IFruitProvider>> providersForFamilies = new HashMap<>();
 	private final List<ITreekeepingMode> treekeepingModes = new ArrayList<>();
 
-	public TreeRoot(String uid, IKaryotype karyotype, Function<IIndividualRoot<ITree>, Map<ComponentKey, IRootComponent>> components) {
-		super(uid, karyotype, components);
+	public TreeRoot(IRootContext<ITree> context) {
+		super(context);
+		BreedingTrackerManager.INSTANCE.registerTracker(UID, this);
 	}
 
 	@Override
@@ -191,7 +188,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	}
 
 	@Override
-	public boolean setFruitBlock(World world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos) {
+	public boolean setFruitBlock(IWorld world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos) {
 		BlockRegistryArboriculture blocks = ModuleArboriculture.getBlocks();
 
 		Direction facing = BlockUtil.getValidPodFacing(world, pos);
@@ -201,7 +198,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 			if (fruitPod != null) {
 
 				BlockState state = fruitPod.getDefaultState().with(HorizontalBlock.HORIZONTAL_FACING, facing);
-				boolean placed = world.setBlockState(pos, state);
+				boolean placed = world.setBlockState(pos, state, 18);
 				if (placed) {
 
 					Block block = world.getBlockState(pos).getBlock();
@@ -213,7 +210,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 							RenderUtil.markForUpdate(pos);
 							return true;
 						} else {
-							world.setBlockState(pos, Blocks.AIR.getDefaultState());
+							world.setBlockState(pos, Blocks.AIR.getDefaultState(), 18);
 							return false;
 						}
 					}
@@ -225,7 +222,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 
 	/* BREEDING TRACKER */
 	@Override
-	public IArboristTracker getBreedingTracker(World world, @Nullable GameProfile player) {
+	public IArboristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
 		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
 	}
 
@@ -257,7 +254,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	}
 
 	@Override
-	public ITreekeepingMode getTreekeepingMode(World world) {
+	public ITreekeepingMode getTreekeepingMode(IWorld world) {
 		if (activeTreekeepingMode != null) {
 			return activeTreekeepingMode;
 		}
@@ -279,7 +276,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	}
 
 	@Override
-	public void setTreekeepingMode(World world, ITreekeepingMode mode) {
+	public void setTreekeepingMode(IWorld world, ITreekeepingMode mode) {
 		activeTreekeepingMode = mode;
 		getBreedingTracker(world, null).setModeName(mode.getName());
 	}

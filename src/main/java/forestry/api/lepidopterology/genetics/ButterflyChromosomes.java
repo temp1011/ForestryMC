@@ -14,7 +14,7 @@ import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleFlowers;
 
 public class ButterflyChromosomes {
-	public static final IChromosomeList TYPES = GeneticsAPI.apiInstance.getChromosomeList("rootBees");
+	public static final IChromosomeList TYPES = GeneticsAPI.apiInstance.getChromosomeList("rootButterflies");
 	/**
 	 * Species of the bee. Alleles here must implement {@link IAlleleButterflySpecies}.
 	 */

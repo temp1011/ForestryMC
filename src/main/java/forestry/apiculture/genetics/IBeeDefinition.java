@@ -18,10 +18,7 @@ import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
 
-public interface IBeeDefinition extends ISpeciesDefinition {
-
-	@Override
-	IBee createIndividual();
+public interface IBeeDefinition extends ISpeciesDefinition<IBee> {
 
 	@Override
 	IAlleleBeeSpecies getSpecies();

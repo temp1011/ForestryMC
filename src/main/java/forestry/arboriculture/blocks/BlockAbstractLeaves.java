@@ -3,7 +3,6 @@ package forestry.arboriculture.blocks;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -32,7 +31,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
-import forestry.arboriculture.LeafDecayHelper;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.blocks.IColoredBlock;
 
@@ -53,11 +51,6 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 
 	@Nullable
 	protected abstract ITree getTree(IBlockReader world, BlockPos pos);
-
-	@Override
-	public void randomTick(BlockState state, World world, BlockPos pos, Random rand) {
-		LeafDecayHelper.leafDecay(this, world, pos);
-	}
 
 	@Override
 	public final void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {

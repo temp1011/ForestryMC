@@ -51,17 +51,20 @@ public class PluginManager {
 		ClassificationRegistry classificationRegistry = new ClassificationRegistry();
 		ApiInstance.INSTANCE.setClassificationRegistry(classificationRegistry);
 		handlePlugins(p -> p.registerClassifications(classificationRegistry));
+		//
+		RootManager rootManager = new RootManager();
+		handlePlugins(p -> p.registerListeners(rootManager));
 		//register all alleles
 		AlleleRegistry alleleRegistry = new AlleleRegistry();
 		ApiInstance.INSTANCE.setAlleleRegistry(alleleRegistry);
 		handlePlugins(p -> p.registerAlleles(alleleRegistry));
+		rootManager.getListeners().values().forEach(listener -> listener.registerAlleles(alleleRegistry));
 		//
-		RootManager rootManager = new RootManager();
 		handlePlugins(p -> p.createRoot(rootManager, GeneticFactory.INSTANCE));
 		handlePlugins(p -> p.initRoots(rootManager));
 		Map<String, IndividualRootBuilder> rootBuilders = rootManager.getRootBuilders();
 		for (IndividualRootBuilder builder : rootBuilders.values()) {
-			builder.create();
+			builder.create(rootManager.getListeners(builder.uid));
 		}
 		handlePlugins(p -> p.onFinishRegistration(rootManager, GeneticsAPI.apiInstance));
 	}

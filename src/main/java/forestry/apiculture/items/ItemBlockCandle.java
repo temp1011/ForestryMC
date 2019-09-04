@@ -28,7 +28,7 @@ public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements I
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int getColorFromItemstack(ItemStack stack, int pass) {
+	public int getColorFromItemStack(ItemStack stack, int pass) {
 		int value = 0xffffff;
 		if (pass == 1 && stack.getTag() != null) {
 			CompoundNBT tag = stack.getTag();

@@ -18,6 +18,7 @@ import genetics.api.organism.IOrganismType;
 import genetics.api.organism.IOrganismTypes;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
+import genetics.api.root.components.IRootComponentContainer;
 import genetics.api.root.translator.IIndividualTranslator;
 
 /**
@@ -153,7 +154,13 @@ public interface IIndividualRoot<I extends IIndividual> {
 	 */
 	String getUID();
 
-	<C extends IRootComponent> Optional<C> getComponent(ComponentKey<C, ?> key);
+	boolean hasComponent(ComponentKey key);
+
+	<C extends IRootComponent<I>> Optional<C> getComponentSafe(ComponentKey key);
+
+	<C extends IRootComponent<I>> C getComponent(ComponentKey key);
+
+	IRootComponentContainer<I> getComponentContainer();
 
 	IDisplayHelper getDisplayHelper();
 

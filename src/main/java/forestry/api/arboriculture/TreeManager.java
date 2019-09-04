@@ -24,7 +24,7 @@ public class TreeManager {
 	 * @implNote Only null if the "arboriculture" module is not enabled.
 	 */
 	//TODO: Move most calls to definition (more save)
-	public static ITreeRoot treeRoot = treeRootDefinition.get();
+	public static ITreeRoot treeRoot;
 
 	/**
 	 * Convenient access to wood items.

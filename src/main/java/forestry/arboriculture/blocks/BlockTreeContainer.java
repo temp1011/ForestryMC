@@ -12,11 +12,9 @@ package forestry.arboriculture.blocks;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -25,9 +23,8 @@ import forestry.core.tiles.TileUtil;
 
 public abstract class BlockTreeContainer extends ContainerBlock {
 
-	protected BlockTreeContainer(Material material) {
-		super(Block.Properties.create(material)
-		.tickRandomly());
+	protected BlockTreeContainer(Properties properties) {
+		super(properties.tickRandomly());
 	}
 
 	@Override

@@ -171,7 +171,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+	public int getColorFromItemStack(ItemStack stack, int tintIndex) {
 		if (tintIndex == 2) {
 			return isValid(stack, Minecraft.getInstance().world) ? 0x14B276 : 0xBA1F17;
 		} else if (tintIndex == 1) {

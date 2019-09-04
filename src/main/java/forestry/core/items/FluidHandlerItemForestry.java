@@ -1,8 +1,9 @@
 package forestry.core.items;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 
@@ -12,7 +13,7 @@ public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consum
 	private final EnumContainerType containerType;
 
 	public FluidHandlerItemForestry(ItemStack container, EnumContainerType containerType) {
-		super(container, Fluid.BUCKET_VOLUME);
+		super(container, FluidAttributes.BUCKET_VOLUME);
 		this.containerType = containerType;
 	}
 
@@ -24,7 +25,7 @@ public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consum
 
 		switch (containerType) {
 			case CAPSULE:
-				return fluid.getTemperature(fluidStack) < 310.15; // melting point of wax in kelvin
+				return fluid.getAttributes().getTemperature(fluidStack) < 310.15; // melting point of wax in kelvin
 			default:
 				return true;
 		}

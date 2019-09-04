@@ -10,6 +10,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.GeneticHelper;
+
+import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
 import forestry.api.genetics.DatabaseMode;
@@ -34,7 +37,7 @@ public class BeePlugin extends DatabasePlugin<IBee> {
 		NonNullList<ItemStack> beeList = NonNullList.create();
 		ModuleApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
-			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
+			IAlleleBeeSpecies species = GeneticHelper.getOrganism(beeStack).getAllele(BeeChromosomes.SPECIES, true);
 			iconStacks.put(species.getRegistryName().toString(), beeStack);
 		}
 	}

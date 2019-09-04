@@ -16,12 +16,14 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Supplier;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -47,16 +49,15 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	private final EnumPodType type;
+	private final Supplier<ItemStack> dropOnMature;
 
 	private final Map<ItemStack, Float> drops;
 
-	public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, ItemStack... dropOnMature) {
+	public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, Supplier<ItemStack> dropOnMature) {
 		super(unlocalizedDescription, family);
 		this.type = type;
 		this.drops = new HashMap<>();
-		for (ItemStack drop : dropOnMature) {
-			this.drops.put(drop, 1.0f);
-		}
+		this.dropOnMature = dropOnMature;
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(IGenome genome, World world, Random rand, BlockPos pos) {
+	public boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos) {
 		if (rand.nextFloat() > getFruitChance(genome, world, pos)) {
 			return false;
 		}
@@ -107,6 +108,9 @@ public class FruitProviderPod extends FruitProviderNone {
 
 	@Override
 	public Map<ItemStack, Float> getProducts() {
+		if (drops.isEmpty()) {
+			drops.put(dropOnMature.get(), 1.0F);
+		}
 		return Collections.unmodifiableMap(drops);
 	}
 

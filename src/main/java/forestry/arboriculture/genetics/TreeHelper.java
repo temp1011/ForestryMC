@@ -29,6 +29,7 @@ public class TreeHelper {
 
 	public static IAlleleTemplate createDefaultTemplate(IAlleleTemplateBuilder templateBuilder) {
 		return templateBuilder.set(TreeChromosomes.FRUITS, AlleleFruits.fruitNone)
+			.set(TreeChromosomes.SPECIES, TreeDefinition.Oak.getSpecies())
 			.set(TreeChromosomes.HEIGHT, EnumAllele.Height.SMALL)
 			.set(TreeChromosomes.FERTILITY, EnumAllele.Saplings.LOWER)
 			.set(TreeChromosomes.YIELD, EnumAllele.Yield.LOWEST)

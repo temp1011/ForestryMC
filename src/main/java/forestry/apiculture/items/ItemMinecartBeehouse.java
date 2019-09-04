@@ -87,7 +87,7 @@ public class ItemMinecartBeehouse extends MinecartItem implements IItemModelRegi
 //		if (stack.getItemDamage() >= definition.length || stack.getItemDamage() < 0) {
 			return "item.forestry.unknown";
 //		} else {
-//			return "item.for." + definition[stack.getItemDamage()];
+		//			return "item.forestry." + definition[stack.getItemDamage()];
 //		}
 	}
 

@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 
+import forestry.core.ItemGroupForestry;
 import forestry.core.ModuleCore;
 import forestry.core.utils.ItemStackUtil;
 
@@ -39,7 +40,8 @@ public class ItemForestryTool extends ItemForestry {
 
 	public ItemForestryTool(ItemStack remnants, Item.Properties properties) {
 		super((properties)
-		.maxDamage(200));
+			.maxDamage(200)
+			.group(ItemGroupForestry.tabForestry));
 		efficiencyOnProperMaterial = 6F;
 		this.remnants = remnants;
 		if (!remnants.isEmpty()) {

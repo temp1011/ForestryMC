@@ -62,7 +62,6 @@ public class ItemResearchNote extends ItemForestry {
 		public static final EnumNoteType[] VALUES = values();
 
 		@Nullable
-		@SuppressWarnings("unchecked")
 		private static IMutation getEncodedMutation(IIndividualRoot<IIndividual> root, CompoundNBT compound) {
 			IAllele allele0 = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(compound.getString("AL0")).orElse(null);
 			IAllele allele1 = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(compound.getString("AL1")).orElse(null);
@@ -76,7 +75,7 @@ public class ItemResearchNote extends ItemForestry {
 			}
 
 			IMutation encoded = null;
-			IMutationContainer<IMutation> container = root.getComponent(ComponentKeys.MUTATIONS).get();
+			IMutationContainer<IIndividual, IMutation> container = root.getComponent(ComponentKeys.MUTATIONS);
 			for (IMutation mutation : container.getCombinations(allele0)) {
 				if (mutation.isPartner(allele1)) {
 					if (result == null
@@ -109,14 +108,14 @@ public class ItemResearchNote extends ItemForestry {
 					return tooltips;
 				}
 
-				String species1 = encoded.getFirstParent().getLocalizedName();
-				String species2 = encoded.getSecondParent().getLocalizedName();
+				ITextComponent species1 = encoded.getFirstParent().getDisplayName();
+				ITextComponent species2 = encoded.getSecondParent().getDisplayName();
 				String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH);
 				String mutationChance = Translator.translateToLocal("for.researchNote.chance." + mutationChanceKey);
-				String speciesResult = encoded.getResultingSpecies().getLocalizedName();
+				ITextComponent speciesResult = encoded.getResultingSpecies().getDisplayName();
 
 				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.0"));
-				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.1", species1, species2));// TODO sort out format in lang file.replace("%SPEC1", species1).replace("%SPEC2", species2));
+				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.1", species1, species2));
 				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.2", mutationChance));
 				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.3", speciesResult));
 
@@ -136,7 +135,7 @@ public class ItemResearchNote extends ItemForestry {
 				}
 
 				tooltips.add(new TranslationTextComponent("researchNote.discovered.0"));
-				tooltips.add(new TranslationTextComponent("for.researchNote.discovered.1", allele0.getLocalizedName(), allele0.getBinomial()));
+				tooltips.add(new TranslationTextComponent("for.researchNote.discovered.1", allele0.getDisplayName(), allele0.getBinomial()));
 			}
 
 			return tooltips;
@@ -177,9 +176,9 @@ public class ItemResearchNote extends ItemForestry {
 				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote"));
 
 				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote2",
-					TextFormatting.GRAY + species0.getLocalizedName(),
-					TextFormatting.GRAY + species1.getLocalizedName(),
-					TextFormatting.GREEN + speciesResult.getLocalizedName()));
+					species0.getDisplayName().applyTextStyle(TextFormatting.GRAY),
+					species1.getDisplayName().applyTextStyle(TextFormatting.GRAY),
+					speciesResult.getDisplayName().applyTextStyle(TextFormatting.GREEN)));
 
 				return true;
 			}

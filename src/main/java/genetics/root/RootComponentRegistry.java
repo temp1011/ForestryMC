@@ -9,7 +9,7 @@ import genetics.api.root.components.ComponentKeys;
 import genetics.api.root.components.IRootComponentFactory;
 import genetics.api.root.components.IRootComponentRegistry;
 
-import genetics.organism.OrganismTypesBuilder;
+import genetics.organism.OrganismTypes;
 
 public enum RootComponentRegistry implements IRootComponentRegistry {
 	INSTANCE;
@@ -17,10 +17,10 @@ public enum RootComponentRegistry implements IRootComponentRegistry {
 	private final Map<ComponentKey, IRootComponentFactory> factoryByKey = new HashMap<>();
 
 	RootComponentRegistry() {
-		registerFactory(ComponentKeys.TEMPLATES, TemplateRegistry::new);
-		registerFactory(ComponentKeys.TYPES, OrganismTypesBuilder::new);
-		registerFactory(ComponentKeys.TRANSLATORS, IndividualTranslatorBuilder::new);
-		registerFactory(ComponentKeys.MUTATIONS, MutationRegistry::new);
+		registerFactory(ComponentKeys.TEMPLATES, TemplateContainer::new);
+		registerFactory(ComponentKeys.TYPES, OrganismTypes::new);
+		registerFactory(ComponentKeys.TRANSLATORS, IndividualTranslator::new);
+		registerFactory(ComponentKeys.MUTATIONS, MutationContainer::new);
 	}
 
 	@Override

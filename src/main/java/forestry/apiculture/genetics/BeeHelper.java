@@ -29,6 +29,7 @@ public class BeeHelper {
 
 	public static IAlleleTemplate createDefaultTemplate(IAlleleTemplateBuilder templateBuilder) {
 		return templateBuilder.set(BeeChromosomes.SPEED, EnumAllele.Speed.SLOWEST)
+			.set(BeeChromosomes.SPECIES, BeeDefinition.FOREST.getSpecies())
 			.set(BeeChromosomes.LIFESPAN, EnumAllele.Lifespan.SHORTER)
 			.set(BeeChromosomes.FERTILITY, EnumAllele.Fertility.NORMAL)
 			.set(BeeChromosomes.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE)

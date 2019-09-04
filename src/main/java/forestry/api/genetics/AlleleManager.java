@@ -12,7 +12,7 @@ public class AlleleManager {
 	/**
 	 * Main access point for all things related to genetics. See {@link IGeneticRegistry} for details.
 	 */
-	public static IGeneticRegistry alleleRegistry;
+	public static IGeneticRegistry geneticRegistry;
 
 	/**
 	 * Queryable instance of an {@link IClimateHelper} for easier implementation.

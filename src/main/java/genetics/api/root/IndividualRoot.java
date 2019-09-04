@@ -1,13 +1,10 @@
 package genetics.api.root;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
 
@@ -22,7 +19,11 @@ import genetics.api.organism.IOrganismTypes;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
 import genetics.api.root.components.IRootComponent;
+import genetics.api.root.components.IRootComponentContainer;
 import genetics.api.root.translator.IIndividualTranslator;
+
+import genetics.individual.RootDefinition;
+import genetics.root.RootComponentContainer;
 
 /**
  * Abstract implementation of the {@link IIndividualRoot} interface.
@@ -32,22 +33,25 @@ import genetics.api.root.translator.IIndividualTranslator;
 public abstract class IndividualRoot<I extends IIndividual> implements IIndividualRoot<I> {
 	protected final IRootDefinition<? extends IIndividualRoot<I>> definition;
 	protected final IOrganismTypes<I> types;
-	protected final ITemplateContainer templates;
+	protected final ITemplateContainer<I> templates;
 	protected final IKaryotype karyotype;
 	protected final String uid;
 	private ImmutableList<I> individualTemplates;
 	private I defaultMember;
-	private final Map<ComponentKey, IRootComponent> componentByKey;
+	private final IRootComponentContainer<I> components;
 	@Nullable
 	private IDisplayHelper<I> displayHelper;
 
-	public IndividualRoot(String uid, IKaryotype karyotype, Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent>> components) {
-		this.uid = uid;
-		this.definition = GeneticsAPI.apiInstance.getRoot(uid);
-		this.karyotype = karyotype;
-		this.componentByKey = ImmutableMap.copyOf(components.apply(this));
-		this.types = getComponent(ComponentKeys.TYPES).get();
-		this.templates = getComponent(ComponentKeys.TEMPLATES).get();
+	public IndividualRoot(IRootContext<I> context) {
+		this.uid = context.getKaryotype().getUID();
+		this.definition = (IRootDefinition<? extends IIndividualRoot<I>>) context.getDefinition();
+		//noinspection unchecked
+		((RootDefinition<IIndividualRoot<I>>) this.definition).setRoot(this);
+		this.karyotype = context.getKaryotype();
+		this.components = new RootComponentContainer<>(context.createComponents(this), context.getComponentListeners(), context.getListeners());
+		this.types = components.get(ComponentKeys.TYPES);
+		this.templates = components.get(ComponentKeys.TEMPLATES);
+		createDefault();
 	}
 
 	protected void createDefault() {
@@ -113,7 +117,7 @@ public abstract class IndividualRoot<I extends IIndividual> implements IIndividu
 	@Override
 	@SuppressWarnings("unchecked")
 	public IIndividualTranslator<I> getTranslator() {
-		Optional<IIndividualTranslator> translator = getComponent(ComponentKeys.TRANSLATORS);
+		Optional<IIndividualTranslator> translator = getComponentSafe(ComponentKeys.TRANSLATORS);
 		if (!translator.isPresent()) {
 			throw new IllegalStateException(String.format("No translator component was added to the root with the uid '%s'.", getUID()));
 		}
@@ -131,13 +135,23 @@ public abstract class IndividualRoot<I extends IIndividual> implements IIndividu
 	}
 
 	@Override
-	public <C extends IRootComponent> Optional<C> getComponent(ComponentKey<C, ?> key) {
-		Class<C> componentClass = key.getComponentClass();
-		IRootComponent component = componentByKey.get(key);
-		if (component == null || !componentClass.isInstance(component)) {
-			return Optional.empty();
-		}
-		return Optional.of(componentClass.cast(component));
+	public boolean hasComponent(ComponentKey key) {
+		return components.has(key);
+	}
+
+	@Override
+	public <C extends IRootComponent<I>> Optional<C> getComponentSafe(ComponentKey key) {
+		return components.getSafe(key);
+	}
+
+	@Override
+	public <C extends IRootComponent<I>> C getComponent(ComponentKey key) {
+		return components.get(key);
+	}
+
+	@Override
+	public IRootComponentContainer<I> getComponentContainer() {
+		return components;
 	}
 
 	@Override

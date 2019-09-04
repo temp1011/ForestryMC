@@ -69,7 +69,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
+	public int getColorFromItemStack(ItemStack itemstack, int tintIndex) {
 		EnumCircuitBoardType type = EnumCircuitBoardType.values()[0];//TODO flatten itemstack.getItemDamage()];
 		if (tintIndex == 0) {
 			return type.getPrimaryColor();
@@ -81,7 +81,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	@Override
 	public String getTranslationKey(ItemStack stack) {
 		EnumCircuitBoardType type = EnumCircuitBoardType.values()[0];//TODO flatten stack.getItemDamage()];
-		return "item.for.circuitboard." + type.toString().toLowerCase(Locale.ENGLISH);
+		return "item.forestry.circuitboard." + type.toString().toLowerCase(Locale.ENGLISH);
 	}
 
 	@Override

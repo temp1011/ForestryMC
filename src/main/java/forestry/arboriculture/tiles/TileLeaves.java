@@ -93,6 +93,10 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	private IEffectData[] effectData = new IEffectData[2];
 
+	public TileLeaves() {
+		super(ModuleArboriculture.getTiles().leaves);
+	}
+
 	/**
 	 * Worldgen trees used to create TileLeaves, but now they use BlockDefaultLeaves instead.
 	 * We add a check to convert the TileLeaves into the new format.
@@ -277,7 +281,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private int determineFruitColour() {
 		ITree tree = getTree();
 		if (tree == null) {
-			tree = TreeDefinition.Cherry.getIndividual();
+			tree = TreeDefinition.Cherry.createIndividual();
 		}
 		IGenome genome = tree.getGenome();
 		IFruitProvider fruit = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
@@ -295,7 +299,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (species != null) {
 			return species.getLeafSpriteProvider();
 		} else {
-			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.getIndividual().getGenome().getPrimary(IAlleleTreeSpecies.class);
+			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getPrimary(IAlleleTreeSpecies.class);
 			return oakSpecies.getLeafSpriteProvider();
 		}
 	}

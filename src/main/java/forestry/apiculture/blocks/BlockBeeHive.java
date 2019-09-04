@@ -97,7 +97,7 @@ public class BlockBeeHive extends ContainerBlock {
 						bee.setIsNatural(false);
 					}
 
-					ItemStack princess = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.PRINCESS);
+					ItemStack princess = BeeManager.beeRoot.getTypes().createStack(bee, EnumBeeType.PRINCESS);
 					drops.add(princess);
 					hasPrincess = true;
 					break;
@@ -109,7 +109,7 @@ public class BlockBeeHive extends ContainerBlock {
 		for (IHiveDrop drop : hiveDrops) {
 			if (random.nextDouble() < drop.getChance(world, pos, fortune)) {
 				IBee bee = drop.getBeeType(world, pos);
-				ItemStack drone = BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.DRONE);
+				ItemStack drone = BeeManager.beeRoot.getTypes().createStack(bee, EnumBeeType.DRONE);
 				drops.add(drone);
 				break;
 			}

@@ -49,7 +49,7 @@ public class BeeManager {
 	 * @implNote Only null if the "apiculture" module is not enabled.
 	 */
 	//TODO: Move most calls to definition (more save)
-	public static IBeeRoot beeRoot = beeRootDefinition.get();
+	public static IBeeRoot beeRoot;
 
 	/**
 	 * Used to create new bees.

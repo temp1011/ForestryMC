@@ -5,10 +5,13 @@ import java.util.Locale;
 import net.minecraft.util.math.Vec3i;
 
 import genetics.api.alleles.IAlleleData;
+import genetics.api.alleles.IAlleleValue;
 
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.flowers.FlowerProvider;
+import forestry.apiculture.genetics.alleles.AlleleFlowers;
+import forestry.core.config.Constants;
 
 public class EnumAllele {
 	public enum Fertility implements IAlleleData<Integer> {
@@ -172,6 +175,11 @@ public class EnumAllele {
 		@Override
 		public String getName() {
 			return name().toLowerCase(Locale.ENGLISH);
+		}
+
+		@Override
+		public IAlleleValue<FlowerProvider> createAllele() {
+			return new AlleleFlowers<>(Constants.MOD_ID, getCategory(), getName(), getValue(), isDominant());
 		}
 	}
 

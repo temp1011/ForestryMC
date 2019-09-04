@@ -7,8 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
@@ -17,10 +16,8 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.DistExecutor;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IBreedingTrackerHandler;
@@ -28,6 +25,10 @@ import forestry.api.genetics.IBreedingTrackerManager;
 
 public enum BreedingTrackerManager implements IBreedingTrackerManager {
 	INSTANCE;
+
+	BreedingTrackerManager() {
+		sidedHandler = DistExecutor.runForDist(() -> () -> new ClientHandler(), () -> () -> new ServerHandler());
+	}
 
 	private static final Map<String, IBreedingTrackerHandler> factories = new LinkedHashMap<>();
 
@@ -40,18 +41,8 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
 	}
 
 	@Override
-	public <T extends IBreedingTracker> T getTracker(String rootUID, @Nullable World world, @Nullable GameProfile profile) {
+	public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile profile) {
 		return getSidedHandler().getTracker(rootUID, world, profile);
-	}
-
-	@SubscribeEvent
-	public void serverStarted(FMLServerStartedEvent event) {
-		sidedHandler = new ServerHandler(event.getServer());
-	}
-
-	@SubscribeEvent
-	public void clientSetup(FMLClientSetupEvent event) {
-		sidedHandler = new ClientHandler();
 	}
 
 	private SidedHandler getSidedHandler() {
@@ -60,21 +51,16 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
 	}
 
 	private interface SidedHandler {
-		<T extends IBreedingTracker> T getTracker(String rootUID, @Nullable World world, @Nullable GameProfile player);
+		<T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player);
 	}
 
 	private static class ServerHandler implements SidedHandler {
-		private final MinecraftServer server;
-
-		private ServerHandler(MinecraftServer server) {
-			this.server = server;
-		}
 
 		@SuppressWarnings("unchecked")
-		public <T extends IBreedingTracker> T getTracker(String rootUID, @Nullable World world, @Nullable GameProfile player) {
+		public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player) {
 			IBreedingTrackerHandler handler = factories.get(rootUID);
 			String filename = handler.getFileName(player);
-			ServerWorld overworld = server.getWorld(DimensionType.field_223227_a_);
+			ServerWorld overworld = ((ServerWorld) world).getServer().getWorld(DimensionType.OVERWORLD);
 			T tracker = (T) overworld.getSavedData().getOrCreate(() -> (WorldSavedData) handler.createTracker(filename), filename);
 			handler.populateTracker(tracker, overworld, player);
 			return tracker;
@@ -82,11 +68,15 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	private static class ClientHandler implements SidedHandler {
+	private static class ClientHandler extends ServerHandler {
 		private final Map<String, IBreedingTracker> trackerByUID = new LinkedHashMap<>();
 
+		@Override
 		@SuppressWarnings("unchecked")
-		public <T extends IBreedingTracker> T getTracker(String rootUID, @Nullable World world, @Nullable GameProfile profile) {
+		public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile profile) {
+			if (world instanceof ServerWorld) {
+				return super.getTracker(rootUID, world, profile);
+			}
 			IBreedingTrackerHandler handler = factories.get(rootUID);
 			String filename = handler.getFileName(profile);
 			T tracker = (T) trackerByUID.computeIfAbsent(rootUID, (key) -> handler.createTracker(filename));

@@ -43,7 +43,6 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	public ItemGrafter(int maxDamage) {
 		super(ItemStack.EMPTY, (new Item.Properties())
 				.maxDamage(maxDamage)
-				.maxStackSize(1)
 				.group(ItemGroups.tabArboriculture)
 				.addToolType(GRAFTER, 3));
 		setEfficiencyOnProperMaterial(4.0f);
@@ -54,7 +53,7 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 		if (!stack.isDamaged()) {
-			tooltip.add(new TranslationTextComponent("item.for.uses", stack.getMaxDamage() + 1));
+			tooltip.add(new TranslationTextComponent("item.forestry.uses", stack.getMaxDamage() + 1));
 		}
 	}
 

@@ -23,7 +23,7 @@ public enum EnumFruitFamily implements IFruitFamily {
 	EnumFruitFamily(String uid, String scientific) {
 		this.uid = uid;
 		this.scientific = scientific;
-		AlleleManager.alleleRegistry.registerFruitFamily(this);
+		AlleleManager.geneticRegistry.registerFruitFamily(this);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package genetics.api.alleles;
 import javax.annotation.Nonnull;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -27,7 +28,7 @@ public interface IAllele extends IForgeRegistryEntry<IAllele> {
 	/**
 	 * @return Localized short, human-readable identifier used in tooltips and beealyzer.
 	 */
-	String getLocalizedName();
+	ITextComponent getDisplayName();
 
 	/**
 	 * @return The localisation identifier for this allele.

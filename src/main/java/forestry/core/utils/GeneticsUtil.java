@@ -43,7 +43,6 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.core.IArmorNaturalist;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.ISpeciesRootPollinatable;
@@ -210,7 +209,7 @@ public class GeneticsUtil {
 		int highest = 0;
 		exclude.add(species);
 
-		IMutationContainer<IMutation> container = species.getRoot().getComponent(ComponentKeys.MUTATIONS).get();
+		IMutationContainer<IIndividual, ? extends IMutation> container = ((IIndividualRoot<IIndividual>) species.getRoot()).getComponent(ComponentKeys.MUTATIONS);
 		for (IMutation mutation : container.getPaths(species, speciesChromosome)) {
 			highest = getHighestAdvancement(mutation.getFirstParent(), highest, exclude, speciesChromosome);
 			highest = getHighestAdvancement(mutation.getSecondParent(), highest, exclude, speciesChromosome);
@@ -220,7 +219,7 @@ public class GeneticsUtil {
 	}
 
 	private static int getHighestAdvancement(IAlleleSpecies mutationSpecies, int highest, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
-		if (exclude.contains(mutationSpecies) || AlleleManager.alleleRegistry.isBlacklisted(mutationSpecies.getRegistryName().toString())) {
+		if (exclude.contains(mutationSpecies) || GeneticsAPI.apiInstance.getAlleleRegistry().isBlacklisted(mutationSpecies.getRegistryName().toString())) {
 			return highest;
 		}
 

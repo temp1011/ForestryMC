@@ -104,7 +104,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 
 	@Override
 	public String getName(IAlleleSpecies selectable) {
-		return selectable.getLocalizedName();
+		return selectable.getDisplayName().getFormattedText();
 	}
 
 	@Nullable

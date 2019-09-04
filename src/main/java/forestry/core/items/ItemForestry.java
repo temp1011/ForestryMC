@@ -31,7 +31,7 @@ import forestry.core.utils.ItemTooltipUtil;
 public class ItemForestry extends Item implements IItemModelRegister {
 	public ItemForestry(Item.Properties properties) {
 		//TODO - do the below at registration
-		super(properties.group(ItemGroupForestry.tabForestry));
+		super(properties);
 	}
 
 	public ItemForestry(ItemGroup group) {
@@ -40,7 +40,7 @@ public class ItemForestry extends Item implements IItemModelRegister {
 
 	//TODO may be worth removing this
 	public ItemForestry() {
-		this(new Item.Properties());
+		this(new Item.Properties().group(ItemGroupForestry.tabForestry));
 	}
 
 	public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {

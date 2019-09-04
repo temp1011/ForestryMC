@@ -10,8 +10,8 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -22,7 +22,7 @@ public interface IButterflyRoot extends IForestrySpeciesRoot<IButterfly> {
 
 	/* BUTTERFLY SPECIFIC */
 	@Override
-	ILepidopteristTracker getBreedingTracker(ServerWorld world, @Nullable GameProfile player);
+	ILepidopteristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
 
 	/**
 	 * Spawns the given butterfly in the world.
@@ -31,7 +31,7 @@ public interface IButterflyRoot extends IForestrySpeciesRoot<IButterfly> {
 	 */
 	MobEntity spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z);
 
-	BlockPos plantCocoon(World world, BlockPos pos, IButterfly caterpillar, GameProfile owner, int age, boolean createNursery);
+	BlockPos plantCocoon(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile owner, int age, boolean createNursery);
 
 	/**
 	 * @return true if passed item is mated.

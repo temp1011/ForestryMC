@@ -85,7 +85,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 	@Override
 	public <V> IAlleleValue<V> registerAllele(IAlleleData<V> value, IChromosomeType... types) {
-		IAlleleValue<V> alleleValue = registerAllele(value.getCategory(), value.getName(), value.getValue(), value.isDominant(), types);
+		IAlleleValue<V> alleleValue = registerAllele(value.createAllele(), types);
 		handlers.forEach(handler -> handler.onRegisterData(alleleValue, value));
 		return alleleValue;
 	}
@@ -131,6 +131,16 @@ public class AlleleRegistry implements IAlleleRegistry {
 	@Override
 	public Collection<IAllele> getRegisteredAlleles(IChromosomeType type) {
 		return allelesByType.get(type);
+	}
+
+	@Override
+	public Collection<IAllele> getRegisteredAlleles() {
+		return registry.getValues();
+	}
+
+	@Override
+	public Collection<ResourceLocation> getRegisteredNames() {
+		return registry.getKeys();
 	}
 
 	@Override

@@ -16,12 +16,11 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -34,12 +33,9 @@ import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IGenomeWrapper;
 import genetics.api.individual.IIndividual;
-import genetics.api.individual.IKaryotype;
 import genetics.api.organism.IOrganismType;
-import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootContext;
 import genetics.api.root.IndividualRoot;
-import genetics.api.root.components.ComponentKey;
-import genetics.api.root.components.IRootComponent;
 
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.IBeeHousing;
@@ -51,7 +47,6 @@ import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
-import forestry.api.apiculture.genetics.IBeeMutation;
 import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
@@ -66,11 +61,6 @@ import forestry.core.utils.Log;
 public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreedingTrackerHandler {
 
 	private static int beeSpeciesCount = -1;
-	private static final List<IBee> beeTemplates = new ArrayList<>();
-	/**
-	 * List of possible mutations on species alleles.
-	 */
-	private static final List<IBeeMutation> beeMutations = new ArrayList<>();
 	public static final String UID = "rootBees";
 
 	private final List<IBeekeepingMode> beekeepingModes = new ArrayList<>();
@@ -78,10 +68,10 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	@Nullable
 	private static IBeekeepingMode activeBeekeepingMode;
 
-	public BeeRoot(String uid, IKaryotype karyotype, Function<IIndividualRoot<IBee>, Map<ComponentKey, IRootComponent>> components) {
-		super(uid, karyotype, components);
+	public BeeRoot(IRootContext<IBee> context) {
+		super(context);
+		BreedingTrackerManager.INSTANCE.registerTracker(UID, this);
 	}
-
 	@Override
 	public Class<? extends IBee> getMemberClass() {
 		return IBee.class;
@@ -220,7 +210,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	}
 
 	@Override
-	public IApiaristTracker getBreedingTracker(World world, @Nullable GameProfile player) {
+	public IApiaristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
 		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
 	}
 

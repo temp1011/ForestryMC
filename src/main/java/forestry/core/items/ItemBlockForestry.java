@@ -38,7 +38,7 @@ import forestry.core.utils.ItemTooltipUtil;
 public class ItemBlockForestry<B extends Block> extends BlockItem {
 
 	public ItemBlockForestry(B block) {
-		super(block, (new Item.Properties()).maxStackSize(64));	//TODO need to reduce inheritance with these classes I think.
+		super(block, (new Item.Properties()));    //TODO need to reduce inheritance with these classes I think.
 																//or introduce a builder...
 //	TODO done in item or flatten
 //		setHasSubtypes(true);

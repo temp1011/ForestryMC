@@ -8,10 +8,12 @@ import java.util.Optional;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.GeneticHelper;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.individual.IGenome;
 import genetics.api.organism.IOrganismType;
@@ -36,14 +38,14 @@ import forestry.core.utils.Translator;
 public class BeeAlyzerPlugin implements IAlyzerPlugin {
 	public static final BeeAlyzerPlugin INSTANCE = new BeeAlyzerPlugin();
 
-	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
+	protected final Map<ResourceLocation, ItemStack> iconStacks = new HashMap<>();
 
 	private BeeAlyzerPlugin() {
 		NonNullList<ItemStack> beeList = NonNullList.create();
 		ModuleApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
-			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
-			iconStacks.put(species.getRegistryName().toString(), beeStack);
+			IAlleleBeeSpecies species = GeneticHelper.getOrganism(beeStack).getAllele(BeeChromosomes.SPECIES, true);
+			iconStacks.put(species.getRegistryName(), beeStack);
 		}
 	}
 
@@ -281,7 +283,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 	}
 
 	@Override
-	public Map<String, ItemStack> getIconStacks() {
+	public Map<ResourceLocation, ItemStack> getIconStacks() {
 		return iconStacks;
 	}
 

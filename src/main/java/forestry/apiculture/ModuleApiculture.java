@@ -74,7 +74,6 @@ import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeFactory;
 import forestry.apiculture.genetics.BeeMutationFactory;
-import forestry.apiculture.genetics.BeekeepingMode;
 import forestry.apiculture.genetics.HiveDrop;
 import forestry.apiculture.genetics.JubilanceFactory;
 import forestry.apiculture.gui.ApicultureContainerTypes;
@@ -188,7 +187,6 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	@Override
 	public void setupAPI() {
-
 		HiveManager.hiveRegistry = hiveRegistry = new HiveRegistry();
 		HiveManager.genHelper = new HiveGenHelper();
 
@@ -201,13 +199,6 @@ public class ModuleApiculture extends BlankForestryModule {
 		BeeManager.beeMutationFactory = new BeeMutationFactory();
 		BeeManager.jubilanceFactory = new JubilanceFactory();
 		BeeManager.armorApiaristHelper = new ArmorApiaristHelper();
-
-		// Modes
-		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.easy);
-		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.normal);
-		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hard);
-		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hardcore);
-		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.insane);
 	}
 
 	@Override
@@ -749,7 +740,7 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
 			boolean hasVillageGenerated) {
-		if (!world.getDimension().getType().equals(DimensionType.field_223229_c_)) {
+		if (!world.getDimension().getType().equals(DimensionType.OVERWORLD)) {
 			return;
 		}
 		if (Config.getBeehivesAmount() > 0.0) {

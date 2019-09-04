@@ -27,6 +27,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
@@ -41,7 +42,7 @@ public abstract class BlockUtil {
 
 	private static final int slabWoodId = -Integer.MAX_VALUE;//TODO - tagsOreDictionary.getOreID("slabWood");
 
-	public static List<ItemStack> getBlockDrops(World world, BlockPos posBlock) {
+	public static List<ItemStack> getBlockDrops(IWorld world, BlockPos posBlock) {
 		BlockState blockState = world.getBlockState(posBlock);
 
 		//TODO - this call needs sorting
@@ -49,20 +50,19 @@ public abstract class BlockUtil {
 
 	}
 
-	public static boolean tryPlantCocoaPod(World world, BlockPos pos) {
-
+	public static boolean tryPlantCocoaPod(IWorld world, BlockPos pos) {
 		Direction facing = getValidPodFacing(world, pos);
 		if (facing == null) {
 			return false;
 		}
 
 		BlockState state = Blocks.COCOA.getDefaultState().with(HorizontalBlock.HORIZONTAL_FACING, facing);
-		world.setBlockState(pos, state);
+		world.setBlockState(pos, state, 18);
 		return true;
 	}
 
 	@Nullable
-	public static Direction getValidPodFacing(World world, BlockPos pos) {
+	public static Direction getValidPodFacing(IWorld world, BlockPos pos) {
 		for (Direction facing : Direction.Plane.HORIZONTAL) {
 			if (isValidPodLocation(world, pos, facing)) {
 				return facing;

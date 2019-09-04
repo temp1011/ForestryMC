@@ -33,6 +33,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -218,9 +219,9 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		BackpackMode mode = getMode(itemstack);
 		String infoKey = mode.getUnlocalizedInfo();
 		if (infoKey != null) {
-			list.add(new TranslationTextComponent(infoKey));
+			list.add(new TranslationTextComponent(infoKey).applyTextStyle(TextFormatting.GRAY));
 		}
-		list.add(new TranslationTextComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())));    //TODO will this formatting work?
+		list.add(new TranslationTextComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).applyTextStyle(TextFormatting.GRAY));    //TODO will this formatting work?
 	}
 
 	@Override
@@ -229,7 +230,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	}
 
 	@Override
-	public int getColorFromItemstack(ItemStack itemstack, int j) {
+	public int getColorFromItemStack(ItemStack itemstack, int j) {
 
 		if (j == 0) {
 			return definition.getPrimaryColour();

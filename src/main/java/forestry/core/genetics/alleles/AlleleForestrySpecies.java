@@ -14,9 +14,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.util.ResourceLocation;
 
+import genetics.api.alleles.Allele;
 import genetics.api.classification.IClassification;
-
-import genetics.alleles.Allele;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -47,18 +46,18 @@ public abstract class AlleleForestrySpecies extends Allele implements IAlleleSpe
 		boolean isDominant,
 		IClassification branch,
 		String binomial) {
-		super(isDominant, unlocalizedName);
+		super(unlocalizedName, isDominant);
 		setRegistryName(new ResourceLocation(modId, uid));
 
 		this.branch = branch;
 		this.binomial = binomial;
-		this.description = Translator.translateToLocal(unlocalizedDescription);	//TODO translation maybe on server side
+		this.description = unlocalizedDescription;
 		this.authority = authority;
 	}
 
 	@Override
 	public String getDescription() {
-		return description;
+		return Translator.translateToLocal(description);
 	}
 
 	@Override

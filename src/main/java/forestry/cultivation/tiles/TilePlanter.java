@@ -13,6 +13,7 @@ import java.util.Stack;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -25,9 +26,9 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -271,7 +272,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		float hydrationModifier = hydrationManager.getHydrationModifier();
 		int waterConsumption = logic.getWaterConsumption(hydrationModifier);
 		FluidStack requiredLiquid = new FluidStack((Fluid)null/*FluidRegistry.WATER TODO fluids*/, waterConsumption);
-		boolean hasLiquid = requiredLiquid.amount == 0 || hasLiquid(requiredLiquid);
+		boolean hasLiquid = requiredLiquid.getAmount() == 0 || hasLiquid(requiredLiquid);
 
 		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {
 			return false;
@@ -325,7 +326,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 					continue;
 				}
 
-				if (liquid.amount > 0 && !hasLiquid(liquid)) {
+				if (liquid.getAmount() > 0 && !hasLiquid(liquid)) {
 					farmWorkStatus.hasLiquid = false;
 					continue;
 				}
@@ -376,13 +377,13 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 	@Override
 	public boolean hasLiquid(FluidStack liquid) {
-		FluidStack drained = resourceTank.drainInternal(liquid, false);
+		FluidStack drained = resourceTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
 		return liquid.isFluidStackIdentical(drained);
 	}
 
 	@Override
 	public void removeLiquid(FluidStack liquid) {
-		resourceTank.drain(liquid.amount, true);
+		resourceTank.drain(liquid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 	}
 
 	@Override

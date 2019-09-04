@@ -6,8 +6,11 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.genetics.ITreeGenome;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -21,26 +24,24 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 
 	@Override
 	public ITextComponent getDisplayName(ItemStack itemStack) {
-		int meta = itemStack.getMetadata();
 		BlockDecorativeLeaves block = getBlock();
-		TreeDefinition treeDefinition = block.getTreeType(meta);
+		TreeDefinition treeDefinition = block.getDefinition();
 		String unlocalizedSpeciesName = treeDefinition.getUnlocalizedName();
 		return ItemBlockLeaves.getDisplayName(unlocalizedSpeciesName);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
-		int meta = itemStack.getMetadata();
+	public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
 		BlockDecorativeLeaves block = getBlock();
-		TreeDefinition treeDefinition = block.getTreeType(meta);
+		TreeDefinition treeDefinition = block.getDefinition();
 
-		ITreeGenome genome = treeDefinition.getGenome();
+		IGenome genome = treeDefinition.getGenome();
 
 		if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
-			IFruitProvider fruitProvider = genome.getFruitProvider();
+			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			return fruitProvider.getDecorativeColor();
 		}
-		return genome.getPrimary().getLeafSpriteProvider().getColor(false);
+		return genome.getPrimary(IAlleleTreeSpecies.class).getLeafSpriteProvider().getColor(false);
 	}
 }

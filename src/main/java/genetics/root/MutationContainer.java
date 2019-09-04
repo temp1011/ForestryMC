@@ -1,15 +1,16 @@
 package genetics.root;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
 
+import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
@@ -17,21 +18,43 @@ import genetics.api.individual.IKaryotype;
 import genetics.api.mutation.IMutation;
 import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.IIndividualRoot;
+import genetics.api.root.components.ComponentKey;
+import genetics.api.root.components.ComponentKeys;
 
-public class MutationContainer<I extends IIndividual, M extends IMutation> implements IMutationContainer<M> {
+public class MutationContainer<I extends IIndividual, M extends IMutation> implements IMutationContainer<I, M> {
 
-	private final ImmutableList<M> mutations;
+	private final List<M> mutations = new LinkedList<>();
 	private final IIndividualRoot<I> root;
 
-	public MutationContainer(IIndividualRoot<I> root, ImmutableList<M> mutations) {
+	public MutationContainer(IIndividualRoot<I> root) {
 		this.root = root;
-		this.mutations = mutations;
+	}
+
+	@Override
+	public IIndividualRoot<I> getRoot() {
+		return root;
+	}
+
+	@Override
+	public boolean registerMutation(M mutation) {
+		IChromosomeType speciesType = root.getKaryotype().getSpeciesType();
+		IAlleleRegistry alleleRegistry = GeneticsAPI.apiInstance.getAlleleRegistry();
+		IAllele firstParent = mutation.getFirstParent();
+		IAllele secondParent = mutation.getSecondParent();
+		IAllele resultSpecies = mutation.getTemplate()[speciesType.getIndex()];
+		if (alleleRegistry.isBlacklisted(resultSpecies)
+			|| alleleRegistry.isBlacklisted(firstParent)
+			|| alleleRegistry.isBlacklisted(secondParent)) {
+			return false;
+		}
+		mutations.add(mutation);
+		return true;
 	}
 
 	@Override
 	public List<M> getMutations(boolean shuffle) {
 		if (shuffle) {
-			Collections.shuffle(mutations);//ToDO: immutable?
+			Collections.shuffle(mutations);
 		}
 		return mutations;
 	}
@@ -96,5 +119,10 @@ public class MutationContainer<I extends IIndividual, M extends IMutation> imple
 		}
 
 		return paths;
+	}
+
+	@Override
+	public ComponentKey<IMutationContainer> getKey() {
+		return ComponentKeys.MUTATIONS;
 	}
 }

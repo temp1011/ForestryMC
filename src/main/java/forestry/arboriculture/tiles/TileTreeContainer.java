@@ -20,6 +20,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -49,6 +50,10 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	@Nullable
 	private ITree containedTree;
 	private final OwnerHandler ownerHandler = new OwnerHandler();
+
+	public TileTreeContainer(TileEntityType<?> p_i48289_1_) {
+		super(p_i48289_1_);
+	}
 
 	/* SAVING & LOADING */
 	@Override

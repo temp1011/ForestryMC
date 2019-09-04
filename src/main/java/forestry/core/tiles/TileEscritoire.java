@@ -28,8 +28,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.components.ComponentKeys;
 
+import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.IResearchHandler;
 import forestry.core.ModuleCore;
 import forestry.core.gui.ContainerEscritoire;
 import forestry.core.inventory.InventoryAnalyzer;
@@ -88,7 +94,10 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 		IIndividual individual = optional.get();
 
 		IAlleleForestrySpecies species = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
-		for (ItemStack itemstack : species.getResearchBounty(world, gameProfile, individual, game.getBountyLevel())) {
+		IIndividualRoot<IIndividual> root = (IIndividualRoot<IIndividual>) species.getRoot();
+		IMutationContainer<IIndividual, ? extends IMutation> container = root.getComponent(ComponentKeys.MUTATIONS);
+		IResearchHandler<IIndividual> handler = root.getComponent(ForestryComponentKeys.RESEARCH);
+		for (ItemStack itemstack : handler.getResearchBounty(species, world, gameProfile, individual, game.getBountyLevel())) {
 			InventoryUtil.addStack(getInternalInventory(), itemstack, InventoryEscritoire.SLOT_RESULTS_1, InventoryEscritoire.SLOTS_RESULTS_COUNT, true);
 		}
 	}

@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
+import net.minecraftforge.fml.ModLoadingContext;
+
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IChromosomeType;
 
@@ -40,6 +42,10 @@ public interface IAlleleData<V> extends IAlleleProvider {
 
 	default Optional<IAlleleValue<V>> getAlleleValue() {
 		return GeneticsAPI.apiInstance.getAlleleHelper().getAllele(this);
+	}
+
+	default IAlleleValue<V> createAllele() {
+		return new AlleleCategorizedValue<>(ModLoadingContext.get().getActiveContainer().getModId(), getCategory(), getName(), getValue(), isDominant());
 	}
 
 	@Override

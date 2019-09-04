@@ -12,10 +12,11 @@ import net.minecraftforge.eventbus.api.IGenericEvent;
 
 import genetics.api.individual.IIndividual;
 import genetics.api.individual.ISpeciesDefinition;
+import genetics.api.root.IGeneticListener;
 import genetics.api.root.IIndividualRootBuilder;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKey;
-import genetics.api.root.components.IRootComponentBuilder;
+import genetics.api.root.components.IRootComponent;
 
 /**
  * A collection of events that are fired by the {@link IIndividualRootBuilder}.
@@ -52,53 +53,62 @@ public class RootBuilderEvents<I extends IIndividual> extends Event {
 
 	/**
 	 * This event gets fired before the build phase of the {@link IIndividualRootBuilder}. For every {@link ISpeciesDefinition}
-	 * that gets added with {@link #add(ISpeciesDefinition)} the {@link ISpeciesDefinition#onComponent(ComponentKey, IRootComponentBuilder)}
-	 * method gets called later for every {@link IRootComponentBuilder} that was added to the {@link IIndividualRootBuilder}.
+	 * that gets added with {@link #add(IGeneticListener)} the {@link ISpeciesDefinition#onComponentSetup(IRootComponent)}
+	 * method gets called later for every {@link IRootComponent} that was added to the {@link IIndividualRootBuilder}.
 	 *
 	 * @param <I> The type of the individual that the root builder represents.
 	 */
-	public static class GatherDefinitions<I extends IIndividual> extends RootBuilderEvents<I> {
-		private final List<ISpeciesDefinition> definitions = new LinkedList<>();
+	public static class GatherListeners<I extends IIndividual> extends Event {
+		private final List<IGeneticListener<I>> listeners = new LinkedList<>();
+		private final IRootDefinition definition;
+		private final String uid;
 
-		public GatherDefinitions(IIndividualRootBuilder<I> root) {
-			super(root);
+		public GatherListeners(IRootDefinition definition, String uid) {
+			this.definition = definition;
+			this.uid = uid;
 		}
 
-		public void add(ISpeciesDefinition definition) {
-			this.definitions.add(definition);
+		public IRootDefinition getDefinition() {
+			return definition;
 		}
 
-		public void add(ISpeciesDefinition... definitions) {
-			add(Arrays.asList(definitions));
+		public String getUID() {
+			return uid;
 		}
 
-		public void add(Collection<ISpeciesDefinition> definitions) {
-			this.definitions.addAll(definitions);
+		public void add(IGeneticListener<I> listener) {
+			this.listeners.add(listener);
 		}
 
-		public List<ISpeciesDefinition> getDefinitions() {
-			return Collections.unmodifiableList(definitions);
+		@SafeVarargs
+		public final void add(IGeneticListener<I>... listeners) {
+			add(Arrays.asList(listeners));
+		}
+
+		public void add(Collection<IGeneticListener<I>> listeners) {
+			this.listeners.addAll(listeners);
+		}
+
+		public List<IGeneticListener<I>> getListeners() {
+			return Collections.unmodifiableList(listeners);
 		}
 	}
 
-
 	/**
-	 * This event gets fired before {@link ISpeciesDefinition#onComponent(ComponentKey, IRootComponentBuilder)} was
-	 * called for every {@link ISpeciesDefinition} that was added with {@link GatherDefinitions#add(ISpeciesDefinition)}
-	 * and before the {@link IRootComponentBuilder} is build.
+	 * This event gets fired after the creation of an {@link IRootComponent}.
 	 *
 	 * @param <I> The type of the individual that the root builder represents.
-	 * @param <B> The type of the component builder.
+	 * @param <C> The type of the component.
 	 */
-	public static class BuildComponent<I extends IIndividual, B extends IRootComponentBuilder> extends RootBuilderEvents<I> implements IGenericEvent<B> {
+	public static class CreateComponent<I extends IIndividual, C extends IRootComponent> extends RootBuilderEvents<I> implements IGenericEvent<C> {
 
-		private final ComponentKey<?, B> key;
-		private final B builder;
+		private final ComponentKey<?> key;
+		private final C component;
 
-		public BuildComponent(IIndividualRootBuilder<I> root, ComponentKey<?, B> key, B builder) {
+		public CreateComponent(IIndividualRootBuilder<I> root, ComponentKey<?> key, C component) {
 			super(root);
 			this.key = key;
-			this.builder = builder;
+			this.component = component;
 		}
 
 		/**
@@ -106,8 +116,8 @@ public class RootBuilderEvents<I extends IIndividual> extends Event {
 		 *
 		 * @return The component builder this was event for fired for.
 		 */
-		public B getBuilder() {
-			return builder;
+		public C getComponent() {
+			return component;
 		}
 
 		/**
@@ -115,13 +125,13 @@ public class RootBuilderEvents<I extends IIndividual> extends Event {
 		 *
 		 * @return The component key of the component builder.
 		 */
-		public ComponentKey<?, B> getKey() {
+		public ComponentKey getKey() {
 			return key;
 		}
 
 		@Override
 		public Type getGenericType() {
-			return key.getBuilderClass();
+			return key.getComponentClass();
 		}
 	}
 }

@@ -112,6 +112,10 @@ public interface IAlleleRegistry {
 	 */
 	Collection<IAllele> getRegisteredAlleles(IChromosomeType type);
 
+	Collection<IAllele> getRegisteredAlleles();
+
+	Collection<ResourceLocation> getRegisteredNames();
+
 	/**
 	 * Returns true if the given allele is a valid allele for the given chromosome type.
 	 *

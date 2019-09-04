@@ -24,6 +24,7 @@ import net.minecraft.util.text.StringTextComponent;
 
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import forestry.core.ItemGroupForestry;
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.inventory.ItemInventorySolderingIron;
@@ -31,7 +32,7 @@ import forestry.core.inventory.ItemInventorySolderingIron;
 public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
 
 	public ItemSolderingIron(Properties properties) {
-		super(properties);
+		super(properties.group(ItemGroupForestry.tabForestry));
 	}
 
 	@Override

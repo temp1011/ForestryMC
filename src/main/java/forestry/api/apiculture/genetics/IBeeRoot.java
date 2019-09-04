@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -37,7 +38,7 @@ public interface IBeeRoot extends IForestrySpeciesRoot<IBee> {
 	 * @return {@link IApiaristTracker} associated with the passed world.
 	 */
 	@Override
-	IApiaristTracker getBreedingTracker(World world, @Nullable GameProfile player);
+	IApiaristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
 
 	/* BEE SPECIFIC */
 

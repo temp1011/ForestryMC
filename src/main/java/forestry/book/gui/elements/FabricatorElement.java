@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
@@ -14,8 +15,6 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
@@ -50,7 +49,7 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 
 	@Override
 	protected void onIndexUpdate(int index, IFabricatorRecipe recipe) {
-		selectedElement.add(new TankElement(1, 33, null, () -> new FluidTankInfo(recipe.getLiquid(), 2000), FABRICATOR_TANK_OVERLAY, 16, 16));
+		selectedElement.add(new TankElement(1, 33, null, recipe.getLiquid(), 2000, FABRICATOR_TANK_OVERLAY, 16, 16));
 		NonNullList<NonNullList<ItemStack>> ingredients = recipe.getIngredients();
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {

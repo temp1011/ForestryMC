@@ -13,6 +13,7 @@ package forestry.arboriculture.blocks;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -31,9 +32,9 @@ import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemBlockWoodDoor;
+import forestry.arboriculture.items.ItemBlockWoodSlab;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.utils.OreDictUtil;
 
 public class BlockRegistryArboriculture extends BlockRegistry {
 	//TODO mega table with WoodBlockKind and IWoodType?
@@ -77,7 +78,6 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public BlockRegistryArboriculture() {
 		// Wood blocks
 
-		//TODO tags
 		for(EnumForestryWoodType woodType : EnumForestryWoodType.VALUES) {
 			//logs
 			BlockForestryLog log = new BlockForestryLog(false, woodType);
@@ -106,17 +106,15 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 			//fences fireproof
 			BlockForestryFence fireproofFence = new BlockForestryFence(true, woodType);
-			registerBlock(fireproofFence, new ItemBlockWood<>(fence), woodType.toString() + "_fireproof_fence");
+			registerBlock(fireproofFence, new ItemBlockWood<>(fireproofFence), woodType.toString() + "_fireproof_fence");
 			fencesFireproof.put(woodType, fireproofFence);
 
 			//doors
 			BlockForestryDoor door = new BlockForestryDoor(woodType);
 			registerBlock(door, new ItemBlockWoodDoor(door), woodType.toString() + "_door");
-			registerOreDictWildcard(OreDictUtil.DOOR_WOOD, door);	//TODO tag
 			doors.put(woodType, door);
 		}
 
-		//TODO tags
 		for(EnumVanillaWoodType woodType : EnumVanillaWoodType.VALUES) {
 			//planks
 			BlockForestryPlank fireproofPlank = new BlockForestryPlank(true, woodType);
@@ -134,19 +132,18 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			fencesVanillaFireproof.put(woodType, fireproofFence);
 		}
 
-		//TODO tags
 		for(Map.Entry<EnumForestryWoodType, BlockForestryPlank> entry : planks.entrySet()) {
 			EnumForestryWoodType woodType = entry.getKey();
 			BlockForestryPlank plank = entry.getValue();
 
 			//slabs
 			BlockForestrySlab slab = new BlockForestrySlab(plank);
-			registerBlock(slab, woodType.toString() + "_slab");
+			registerBlock(slab, new ItemBlockWoodSlab(slab), woodType.toString() + "_slab");
 			slabs.put(woodType, slab);
 
 			//stairs
 			BlockForestryStairs stair = new BlockForestryStairs(plank);
-			registerBlock(stair, woodType.toString() + "_stairs");
+			registerBlock(stair, new ItemBlockWood<>(stair), woodType.toString() + "_stairs");
 			stairs.put(woodType, stair);
 		}
 
@@ -156,12 +153,12 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 			//slabs
 			BlockForestrySlab slab = new BlockForestrySlab(plank);
-			registerBlock(slab, woodType.toString() + "_fireproof_slab");
+			registerBlock(slab, new ItemBlockWoodSlab(slab), woodType.toString() + "_fireproof_slab");
 			slabsFireproof.put(woodType, slab);
 
 			//stairs
 			BlockForestryStairs stair = new BlockForestryStairs(plank);
-			registerBlock(stair, woodType.toString() + "_fireproof_stairs");
+			registerBlock(stair, new ItemBlockWood<>(stair), woodType.toString() + "_fireproof_stairs");
 			stairsFireproof.put(woodType, stair);
 		}
 
@@ -171,50 +168,43 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 			//slabs
 			BlockForestrySlab slab = new BlockForestrySlab(plank);
-			registerBlock(slab, woodType.toString() + "_fireproof_slab");
+			registerBlock(slab, new ItemBlockWoodSlab(slab), woodType.toString() + "_fireproof_slab");
 			slabsVanillaFireproof.put(woodType, slab);
 
 			//stairs
 			BlockForestryStairs stair = new BlockForestryStairs(plank);
-			registerBlock(stair, woodType.toString() + "_fireproof_stairs");
+			registerBlock(stair, new ItemBlockWood<>(stair), woodType.toString() + "_fireproof_stairs");
 			stairsVanillaFireproof.put(woodType, stair);
 		}
 
 		for (EnumForestryWoodType woodType : EnumForestryWoodType.VALUES) {
 			BlockForestryFenceGate fenceGate = new BlockForestryFenceGate(false, woodType);
 			registerBlock(fenceGate, new ItemBlockWood<>(fenceGate), woodType.toString() + "_fence_gate");
-			registerOreDictWildcard(OreDictUtil.FENCE_GATE_WOOD, fenceGate);	//TODO tags
 			fenceGates.put(woodType, fenceGate);
 
 			BlockForestryFenceGate fenceGateFireproof = new BlockForestryFenceGate(true, woodType);
 			registerBlock(fenceGateFireproof, new ItemBlockWood<>(fenceGateFireproof), woodType.toString() + "_fence_gate_fireproof");
-			registerOreDictWildcard(OreDictUtil.FENCE_GATE_WOOD, fenceGateFireproof);	//TODO tags
 			fenceGatesFireproof.put(woodType, fenceGateFireproof);
 		}
 
 		for (EnumVanillaWoodType woodType : EnumVanillaWoodType.VALUES) {
 			BlockForestryFenceGate fenceGateFireproof = new BlockForestryFenceGate(true, woodType);
 			registerBlock(fenceGateFireproof, new ItemBlockWood<>(fenceGateFireproof), woodType.toString() + "_fence_gate_fireproof");
-			registerOreDictWildcard(OreDictUtil.FENCE_GATE_WOOD, fenceGateFireproof);	//TODO tags
 			fenceGatesVanillaFireproof.put(woodType, fenceGateFireproof);
 		}
 
 		// Saplings
-		TreeDefinition.preInit();
 		saplingGE = new BlockSapling();
 		registerBlock(saplingGE, new ItemBlockForestry<>(saplingGE), "sapling_ge");
-		registerOreDictWildcard(OreDictUtil.TREE_SAPLING, saplingGE);
 
 		// Leaves
 		leaves = new BlockForestryLeaves();
 		registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves");
-		registerOreDictWildcard(OreDictUtil.TREE_LEAVES, leaves);
 
 		leavesDefaultFruit = BlockDefaultLeavesFruit.create();
 		speciesToLeavesDefaultFruit = new HashMap<>();
 		for (BlockDefaultLeavesFruit leaves : leavesDefaultFruit) {
 			registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves.default.fruit." + leaves.getBlockNumber());
-			registerOreDictWildcard(OreDictUtil.TREE_LEAVES, leaves);
 
 			PropertyTreeTypeFruit treeType = leaves.getVariant();
 			for (PropertyTreeTypeFruit.LeafVariant variant : treeType.getAllowedValues()) {
@@ -278,5 +268,9 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	@Nullable
 	public BlockFruitPod getFruitPod(IAlleleFruit fruit) {
 		return podsMap.get(fruit.getRegistryName().toString());
+	}
+
+	public Collection<BlockFruitPod> getPods() {
+		return podsMap.values();
 	}
 }

@@ -14,12 +14,11 @@ import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.core.config.Constants;
@@ -38,9 +37,9 @@ public class TextureLeaves {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static void registerAllSprites() {
+	public static void registerAllSprites(TextureStitchEvent.Pre event) {
 		for (TextureLeaves leafTexture : leafTextures.values()) {
-			leafTexture.registerSprites();
+			leafTexture.registerSprites(event);
 		}
 	}
 
@@ -58,12 +57,11 @@ public class TextureLeaves {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	private void registerSprites() {
-		AtlasTexture textureMapBlocks = Minecraft.getInstance().getTextureMapBlocks();
-		textureMapBlocks.registerSprite(plain);
-		textureMapBlocks.registerSprite(fancy);
-		textureMapBlocks.registerSprite(pollinatedPlain);
-		textureMapBlocks.registerSprite(pollinatedFancy);
+	private void registerSprites(TextureStitchEvent.Pre event) {
+		event.addSprite(plain);
+		event.addSprite(fancy);
+		event.addSprite(pollinatedPlain);
+		event.addSprite(pollinatedFancy);
 	}
 
 	public ResourceLocation getSprite(boolean pollinated, boolean fancy) {

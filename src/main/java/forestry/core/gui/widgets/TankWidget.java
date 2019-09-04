@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,7 +30,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
@@ -84,11 +84,11 @@ public class TankWidget extends Widget {
 		FluidStack contents = tank.getFluid();
 		Minecraft minecraft = Minecraft.getInstance();
 		TextureManager textureManager = minecraft.getTextureManager();
-		if (contents != null && contents.amount > 0 && contents.getFluid() != null) {
+		if (!contents.isEmpty() && contents.getAmount() > 0 && contents.getFluid() != null) {
 			Fluid fluid = contents.getFluid();
 			if (fluid != null) {
 				AtlasTexture textureMapBlocks = minecraft.getTextureMap();
-				ResourceLocation fluidStill = fluid.getStill();
+				ResourceLocation fluidStill = fluid.getAttributes().getStill(contents);
 				TextureAtlasSprite fluidStillSprite = null;
 				if (fluidStill != null) {
 					fluidStillSprite = textureMapBlocks.getSprite(fluidStill);
@@ -97,10 +97,10 @@ public class TankWidget extends Widget {
 					fluidStillSprite = textureMapBlocks.missingImage; //TODO AT;
 				}
 
-				int fluidColor = fluid.getColor(contents);
+				int fluidColor = fluid.getAttributes().getColor(contents);
 
-				int scaledAmount = contents.amount * height / tank.getCapacity();
-				if (contents.amount > 0 && scaledAmount < 1) {
+				int scaledAmount = contents.getAmount() * height / tank.getCapacity();
+				if (contents.getAmount() > 0 && scaledAmount < 1) {
 					scaledAmount = 1;
 				}
 				if (scaledAmount > height) {

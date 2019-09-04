@@ -27,6 +27,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.climate.ClimateCapabilities;
 import forestry.api.climate.ClimateType;
@@ -123,15 +124,15 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (manipulator.canAdd()) {
 			errorLogic.setCondition(false, EnumErrorCode.WRONG_RESOURCE);
 			int currentCost = getFluidCost(changedState);
-			if (resourceTank.drain(currentCost, false) != null) {
+			if (!resourceTank.drain(currentCost, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
 				IClimateState simulatedState = /*changedState.add(ClimateType.HUMIDITY, climateChange)*/
 						changedState.toImmutable().add(manipulator.addChange(true));
 				int fluidCost = getFluidCost(simulatedState);
-				if (resourceTank.drain(fluidCost, false) != null) {
-					cachedStack = resourceTank.drain(fluidCost, true);
+				if (!resourceTank.drain(fluidCost, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
+					cachedStack = resourceTank.drain(fluidCost, IFluidHandler.FluidAction.EXECUTE);
 					manipulator.addChange(false);
 				} else {
-					cachedStack = resourceTank.drain(currentCost, true);
+					cachedStack = resourceTank.drain(currentCost, IFluidHandler.FluidAction.EXECUTE);
 				}
 				errorLogic.setCondition(false, EnumErrorCode.NO_RESOURCE_LIQUID);
 			} else {
@@ -180,7 +181,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (recipe == null) {
 			return 0;
 		}
-		return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * transformer.getCostModifier() * recipe.getResource().amount);
+		return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * transformer.getCostModifier() * recipe.getResource().getAmount());
 	}
 
 	private int getEnergyCost(IClimateState state) {

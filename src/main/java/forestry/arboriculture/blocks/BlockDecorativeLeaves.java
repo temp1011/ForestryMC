@@ -13,15 +13,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -50,6 +52,10 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 		this.definition = definition;
 	}
 
+	public TreeDefinition getDefinition() {
+		return definition;
+	}
+
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		if (TreeDefinition.Willow.equals(definition)) {
@@ -59,39 +65,39 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 	}
 
 	@Override
-	public void onEntityCollision(World worldIn, BlockPos pos, BlockState state, Entity entityIn) {
-		entityIn.motionX *= 0.4D;
-		entityIn.motionZ *= 0.4D;
+	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+		super.onEntityCollision(state, worldIn, pos, entityIn);
+		Vec3d motion = entityIn.getMotion();
+		entityIn.setMotion(motion.mul(0.4D, 1.0D, 0.4D));
 	}
 
+	//	@Override
+	//	public boolean isOpaqueCube(BlockState state) {
+	//		if (!Proxies.render.fancyGraphicsEnabled()) {
+	//			return !TreeDefinition.Willow.equals(definition);
+	//		}
+	//		return false;
+	//	}
+
+
 	@Override
-	public boolean isOpaqueCube(BlockState state) {
-		if (!Proxies.render.fancyGraphicsEnabled()) {
-			return !TreeDefinition.Willow.equals(definition);
-		}
+	public boolean causesSuffocation(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return false;
 	}
 
 	@Override
-	public boolean causesSuffocation(BlockState state) {
-		return false;
+	public boolean doesSideBlockRendering(BlockState state, IEnviromentBlockReader world, BlockPos pos, Direction face) {
+		return (Proxies.render.fancyGraphicsEnabled() || world.getBlockState(pos.offset(face)).getBlock() != this) && Block.shouldSideBeRendered(state, world, pos, face);
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public boolean shouldSideBeRendered(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return (Proxies.render.fancyGraphicsEnabled() || blockAccess.getBlockState(pos.offset(side)).getBlock() != this) && Block.shouldSideBeRendered(blockState, blockAccess, pos, side);
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED; // fruit overlays require CUTOUT_MIPPED, even in Fast graphics
 	}
 
 	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
-
+	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+		return Collections.emptyList();
 	}
 
 	/* PROPERTIES */
@@ -123,8 +129,8 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 
 	@Override
 	public List<ItemStack> onSheared(@Nonnull ItemStack item, IWorld world, BlockPos pos, int fortune) {
-		BlockState state = world.getBlockState(pos);
-		return Collections.singletonList(new ItemStack(this));
+		return Collections.emptyList();
+
 	}
 
 	@Override

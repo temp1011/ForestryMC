@@ -13,7 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -56,15 +58,16 @@ public interface IFruitProvider {
 	 * @param pos    The position of the pod / leaves block.
 	 * @return True if this provider provides a fruit leaf for the given genome at the given position.
 	 */
-	boolean isFruitLeaf(IGenome genome, World world, BlockPos pos);
+	boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos);
 
 	/**
 	 * The chance that this leaves contains fruits or the chance that a pod block spawns.
 	 *
 	 * @param genome The genome of the tree of the pod / leaves block.
+	 * @param world
 	 * @return The chance that this leaves contains fruits or the chance that a pod block spawns.
 	 */
-	default float getFruitChance(IGenome genome, World world, BlockPos pos) {
+	default float getFruitChance(IGenome genome, IWorld world, BlockPos pos) {
 		ITreeRoot treeRoot = TreeManager.treeRoot;
 		if (treeRoot == null) {
 			return 0.0F;
@@ -103,7 +106,7 @@ public interface IFruitProvider {
 	/**
 	 * @return Short, human-readable identifier used in the treealyzer.
 	 */
-	String getDescription();
+	ITextComponent getDescription();
 
 	/**
 	 * @return The location of the pod model in the "modid:pods/" folder.
@@ -142,7 +145,7 @@ public interface IFruitProvider {
 	 *
 	 * @return true if a fruit block was spawned, false otherwise.
 	 */
-	boolean trySpawnFruitBlock(IGenome genome, World world, Random rand, BlockPos pos);
+	boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos);
 
 	/**
 	 * Can be used to register the sprite/s that can be returned with

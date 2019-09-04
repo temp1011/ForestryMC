@@ -68,7 +68,7 @@ public class ItemGroupForestry extends ItemGroup {
 				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "ffarm"));
 				break;
 			case 2:
-				return BeeManager.beeRoot.getMemberStack(new Bee(BeeDefinition.FOREST.getGenome()), EnumBeeType.DRONE);
+				return BeeManager.beeRoot.getTypes().createStack(new Bee(BeeDefinition.FOREST.getGenome()), EnumBeeType.DRONE);
 			case 3:
 				return ItemStack.EMPTY;//TreeManager.treeRoot.getMemberStack(new Tree(TreeDefinition.Oak.getGenome()), EnumGermlingType.SAPLING);
 			case 4:

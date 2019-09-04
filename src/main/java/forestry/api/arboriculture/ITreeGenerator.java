@@ -10,8 +10,9 @@ import java.util.Random;
 
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import com.mojang.authlib.GameProfile;
 
@@ -23,9 +24,9 @@ import forestry.api.world.ITreeGenData;
  * Implements the tree generation for a tree species.
  */
 public interface ITreeGenerator {
-	Feature getWorldGenerator(ITreeGenData tree);
+	Feature<NoFeatureConfig> getTreeFeature(ITreeGenData tree);
 
-	boolean setLogBlock(IGenome genome, World world, BlockPos pos, Direction facing);
+	boolean setLogBlock(IGenome genome, IWorld world, BlockPos pos, Direction facing);
 
-	boolean setLeaves(IGenome genome, World world, @Nullable GameProfile owner, BlockPos pos, Random rand);
+	boolean setLeaves(IGenome genome, IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand);
 }

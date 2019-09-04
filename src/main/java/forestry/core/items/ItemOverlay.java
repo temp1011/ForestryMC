@@ -15,6 +15,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
+import forestry.core.ItemGroupForestry;
 import forestry.core.config.Config;
 
 public class ItemOverlay extends ItemForestry implements IColoredItem {
@@ -34,7 +35,8 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 	public ItemOverlay(ItemGroup tab, IOverlayInfo overlay) {
 		super((new Item.Properties()).maxDamage(0)
 		.group(tab)
-		.setNoRepair());
+			.setNoRepair()
+			.group(ItemGroupForestry.tabForestry));
 
 		this.overlay = overlay;
 	}
@@ -73,7 +75,7 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 //	}
 
 	@Override
-	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+	public int getColorFromItemStack(ItemStack stack, int tintIndex) {
 //		int meta = -1;//TODO flatten stack.getMetadata();
 //		if (meta < 0 || meta >= overlays.length) {
 //			return 0xffffff;

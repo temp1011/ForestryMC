@@ -6,6 +6,8 @@ import java.util.List;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
 
 /**
@@ -15,7 +17,12 @@ import genetics.api.root.components.IRootComponent;
  *
  * @param <M> The type of the mutation.
  */
-public interface IMutationContainer<M extends IMutation> extends IRootComponent {
+public interface IMutationContainer<I extends IIndividual, M extends IMutation> extends IRootComponent<I> {
+
+	/**
+	 * Registers the given mutation to the component.
+	 */
+	boolean registerMutation(M mutation);
 
 	/**
 	 * @return All registered mutations.
@@ -40,4 +47,7 @@ public interface IMutationContainer<M extends IMutation> extends IRootComponent 
 	List<? extends M> getCombinations(IAlleleSpecies parentFirst, IAlleleSpecies parentSecond, boolean shuffle);
 
 	Collection<? extends M> getPaths(IAllele result, IChromosomeType geneType);
+
+	@Override
+	ComponentKey<IMutationContainer> getKey();
 }

@@ -53,11 +53,9 @@ public class ItemTooltipUtil {
 			//TODO - can tis be simplified (and is it correct?)
 			ITextComponent component = tooltip.get(i);
 			if (i == 0) {
-				component.getStyle().setColor(stack.getRarity().color);
-				tooltip.set(i, component);
+				tooltip.set(i, component.applyTextStyle(stack.getRarity().color));
 			} else {
-				component.getStyle().setColor(TextFormatting.GRAY);
-				tooltip.set(i, component);
+				tooltip.set(i, component.applyTextStyle(TextFormatting.GRAY));
 			}
 		}
 		return tooltip;

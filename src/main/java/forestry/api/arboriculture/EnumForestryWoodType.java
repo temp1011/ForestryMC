@@ -11,7 +11,7 @@ import java.util.Random;
 public enum EnumForestryWoodType implements IWoodType {
 	LARCH,
 	TEAK,
-	ACACIA,
+	ACACIA_FORESTRY,
 	LIME,
 	CHESTNUT,
 	WENGE,

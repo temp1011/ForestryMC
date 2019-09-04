@@ -42,6 +42,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.ITreeRoot;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
@@ -345,9 +346,9 @@ public class ModuleFarming extends BlankForestryModule {
 			ITreeRoot treeRoot = TreeManager.treeRoot;
 			if (treeRoot != null) {
 				for (ITree tree : treeRoot.getIndividualTemplates()) {
-					IFruitProvider fruitProvider = tree.getGenome().getFruitProvider();
+					IFruitProvider fruitProvider = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 					if (false){//fruitProvider != AlleleFruits.fruitNone.getProvider()) {
-						orchardFarm.addGermlings(treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING));
+						orchardFarm.addGermlings(treeRoot.getTypes().createStack(tree, EnumGermlingType.SAPLING));
 						orchardFarm.addProducts(fruitProvider.getProducts().keySet());
 						orchardFarm.addProducts(fruitProvider.getSpecialty().keySet());
 					}

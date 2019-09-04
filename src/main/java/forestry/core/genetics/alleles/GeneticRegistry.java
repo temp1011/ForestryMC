@@ -89,8 +89,7 @@ public class GeneticRegistry implements IGeneticRegistry {
 			);
 			registry.registerAlleles(EnumAllele.Flowers.values(),
 				BeeChromosomes.FLOWER_PROVIDER,
-				ButterflyChromosomes.FLOWER_PROVIDER
-			);
+				ButterflyChromosomes.FLOWER_PROVIDER);
 		}
 
 		//TODO: Move to LEPIDOPTEROLOGY module

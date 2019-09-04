@@ -75,7 +75,7 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	@Override
 	public ITextComponent getDisplayName(ItemStack itemstack) {
 		if (contained.isEmpty()) {
-			return new TranslationTextComponent("item.for.crate.name");
+			return new TranslationTextComponent("item.forestry.crate.name");
 		} else {
 			ITextComponent containedName = contained.getDisplayName();
 			return new TranslationTextComponent("for.item.crated.grammar", containedName);
@@ -99,7 +99,7 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int getColorFromItemstack(ItemStack stack, int renderPass) {
+	public int getColorFromItemStack(ItemStack stack, int renderPass) {
 		ItemColors colors = Minecraft.getInstance().getItemColors();
 		if (contained.isEmpty() || renderPass == 100) {
 			return -1;

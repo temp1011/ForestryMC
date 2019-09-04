@@ -2,23 +2,18 @@ package genetics.api.root;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
-import java.util.function.Function;
 
 import net.minecraft.nbt.CompoundNBT;
 
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IGenomeWrapper;
 import genetics.api.individual.IIndividual;
-import genetics.api.individual.IKaryotype;
-import genetics.api.root.components.ComponentKey;
-import genetics.api.root.components.IRootComponent;
 
 public class SimpleIndividualRoot<I extends IIndividual> extends IndividualRoot<I> {
 	protected final Class<? extends I> individualClass;
 
-	public SimpleIndividualRoot(String uid, IKaryotype karyotype, Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent>> components, Class<? extends I> individualClass) {
-		super(uid, karyotype, components);
+	public SimpleIndividualRoot(IRootContext<I> context, Class<? extends I> individualClass) {
+		super(context);
 		this.individualClass = individualClass;
 		createDefault();
 	}

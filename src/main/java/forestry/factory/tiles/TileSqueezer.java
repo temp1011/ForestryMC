@@ -28,6 +28,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -131,7 +132,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 		if (updateOnInterval(20)) {
 			FluidStack fluid = productTank.getFluid();
-			if (fluid != null) {
+			if (!fluid.isEmpty()) {
 				inventory.fillContainers(fluid, tankManager);
 			}
 		}
@@ -147,7 +148,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		}
 
 		FluidStack resultFluid = currentRecipe.getFluidOutput();
-		productTank.fillInternal(resultFluid, true);
+		productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.EXECUTE);
 
 		if (!currentRecipe.getRemnants().isEmpty() && world.rand.nextFloat() < currentRecipe.getRemnantsChance()) {
 			ItemStack remnant = currentRecipe.getRemnants().copy();
@@ -195,7 +196,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 			hasRecipe = currentRecipe != null;
 			if (hasRecipe) {
 				FluidStack resultFluid = currentRecipe.getFluidOutput();
-				canFill = productTank.fillInternal(resultFluid, false) == resultFluid.amount;
+				canFill = productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.SIMULATE) == resultFluid.getAmount();
 
 				if (!currentRecipe.getRemnants().isEmpty()) {
 					canAdd = inventory.addRemnant(currentRecipe.getRemnants(), false);

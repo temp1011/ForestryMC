@@ -10,7 +10,7 @@ import java.util.Random;
 
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -27,15 +27,15 @@ public interface ITreeGenData {
 	 * Returns null if a sapling at the given position can not grow into a tree.
 	 */
 	@Nullable
-	BlockPos canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight);
+	BlockPos canGrow(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight);
 
-	boolean setLeaves(World world, @Nullable GameProfile owner, BlockPos pos, Random random);
+	boolean setLeaves(IWorld world, @Nullable GameProfile owner, BlockPos pos, Random random);
 
-	boolean setLogBlock(World world, BlockPos pos, Direction facing);
+	boolean setLogBlock(IWorld world, BlockPos pos, Direction facing);
 
 	boolean allowsFruitBlocks();
 
-	boolean trySpawnFruitBlock(World world, Random rand, BlockPos pos);
+	boolean trySpawnFruitBlock(IWorld world, Random rand, BlockPos pos);
 
 	IGenome getGenome();
 }

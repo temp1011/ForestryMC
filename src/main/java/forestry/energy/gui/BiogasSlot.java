@@ -32,7 +32,7 @@ public class BiogasSlot extends ReservoirWidget {
 			if (fluid == null) {
 				toolTip.add(Translator.translateToLocal("for.gui.empty"));
 			} else {
-				toolTip.add(fluid.getLocalizedName());
+				toolTip.add(fluid.getDisplayName());
 			}
 		}
 		return toolTip;

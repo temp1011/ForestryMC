@@ -45,7 +45,7 @@ public class AlleleEffects {
 			effectCreeper = new AlleleEffectCreeper(),
 			effectIgnition = new AlleleEffectIgnition(),
 			effectExploration = new AlleleEffectExploration(),
-			effectFestiveEaster = new AlleleEffectNone("festiveEaster", true),
+			effectFestiveEaster = new AlleleEffectNone("festive_easter", true),
 			effectSnowing = new AlleleEffectSnowing(),
 			effectDrunkard = new AlleleEffectPotion("drunkard", false, Effects.NAUSEA, 100),
 			effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList()),

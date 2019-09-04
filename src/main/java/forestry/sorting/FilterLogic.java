@@ -170,7 +170,7 @@ public class FilterLogic implements IFilterLogic {
 
 	@Override
 	public boolean isValid(ItemStack itemStack, Direction facing) {
-		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack, IIndividualRoot.class);
+		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
 		IIndividual individual = null;
 		IOrganismType type = null;
 		if (definition.isRootPresent()) {

@@ -2,40 +2,65 @@ package forestry.arboriculture;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.Function;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
+import net.minecraft.item.Items;
 
 import genetics.api.GeneticPlugin;
 import genetics.api.GeneticsAPI;
+import genetics.api.IGeneticApiInstance;
 import genetics.api.IGeneticFactory;
 import genetics.api.IGeneticPlugin;
 import genetics.api.alleles.IAlleleRegistry;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IIndividual;
+import genetics.api.classification.IClassificationRegistry;
+import genetics.api.organism.IOrganismTypes;
+import genetics.api.root.IGeneticListenerRegistry;
+import genetics.api.root.IIndividualRootBuilder;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.IRootManager;
+import genetics.api.root.components.ComponentKeys;
+import genetics.api.root.translator.IBlockTranslator;
+import genetics.api.root.translator.IIndividualTranslator;
+import genetics.api.root.translator.IItemTranslator;
 
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.IResearchHandler;
+import forestry.arboriculture.blocks.BlockDefaultLeaves;
+import forestry.arboriculture.genetics.TreeBranchDefinition;
+import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.genetics.TreeRoot;
+import forestry.arboriculture.genetics.TreekeepingMode;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
+import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
+import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.EnumAllele;
-import forestry.core.genetics.root.IResearchPlugin;
-import forestry.core.genetics.root.ResearchBuilder;
+import forestry.core.genetics.root.ResearchHandler;
 
-@GeneticPlugin
+@GeneticPlugin(modId = Constants.MOD_ID)
 public class TreePlugin implements IGeneticPlugin {
 	public static final IRootDefinition<TreeRoot> ROOT = GeneticsAPI.apiInstance.getRoot(TreeRoot.UID);
+
+	@Override
+	public void registerClassifications(IClassificationRegistry registry) {
+		TreeBranchDefinition.registerBranches(registry);
+	}
+
+	@Override
+	public void registerListeners(IGeneticListenerRegistry registry) {
+		registry.add(TreeRoot.UID, TreeDefinition.VALUES);
+	}
 
 	@Override
 	public void registerAlleles(IAlleleRegistry registry) {
@@ -46,51 +71,102 @@ public class TreePlugin implements IGeneticPlugin {
 		registry.registerAlleles(EnumAllele.Maturation.values(), TreeChromosomes.MATURATION);
 		registry.registerAlleles(EnumAllele.Sappiness.values(), TreeChromosomes.SAPPINESS);
 		AlleleFruits.registerAlleles(registry);
+		AlleleLeafEffects.registerAlleles(registry);
 	}
 
 	@Override
 	public void createRoot(IRootManager rootManager, IGeneticFactory geneticFactory) {
 		//TODO tags?
-		rootManager.createRoot(TreeRoot.UID)
+		IIndividualRootBuilder<ITree> rootBuilder = rootManager.createRoot(TreeRoot.UID);
+		rootBuilder
+			.setRootFactory(TreeRoot::new)
 			.setSpeciesType(TreeChromosomes.SPECIES)
-			.addComponent(ForestryComponentKeys.RESEARCH, ResearchBuilder::new)
-			.addListener(ForestryComponentKeys.RESEARCH, builder -> {
+			.addListener(ComponentKeys.TYPES, (IOrganismTypes<ITree> builder) -> {
+				builder.registerType(EnumGermlingType.SAPLING, () -> new ItemStack(ModuleArboriculture.getItems().sapling));
+				builder.registerType(EnumGermlingType.POLLEN, () -> new ItemStack(ModuleArboriculture.getItems().pollenFertile));
+			})
+			.addComponent(ComponentKeys.TRANSLATORS)
+			.addComponent(ComponentKeys.MUTATIONS)
+			.addComponent(ForestryComponentKeys.RESEARCH, ResearchHandler::new)
+			.addListener(ForestryComponentKeys.RESEARCH, (IResearchHandler<ITree> builder) -> {
 				builder.setResearchSuitability(new ItemStack(Blocks.OAK_SAPLING), 1.0f);
-				builder.addPlugin(new IResearchPlugin() {
-					@Override
-					public float getResearchSuitability(IAlleleSpecies species, ItemStack itemstack) {
-						if (itemstack.isEmpty() || !(species instanceof IAlleleTreeSpecies)) {
-							return -1F;
-						}
-						IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) species;
+				builder.addPlugin((species, itemstack) -> {
+					if (itemstack.isEmpty() || !(species instanceof IAlleleTreeSpecies)) {
+						return -1F;
+					}
+					IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) species;
 
-						Collection<IFruitFamily> suitableFruit = treeSpecies.getSuitableFruit();
-						for (IFruitFamily fruitFamily : suitableFruit) {
-							Collection<IFruitProvider> fruitProviders = TreeManager.treeRoot.getFruitProvidersForFruitFamily(fruitFamily);
-							for (IFruitProvider fruitProvider : fruitProviders) {
-								Map<ItemStack, Float> products = fruitProvider.getProducts();
-								for (ItemStack stack : products.keySet()) {
-									if (stack.isItemEqual(itemstack)) {
-										return 1.0f;
-									}
+					Collection<IFruitFamily> suitableFruit = treeSpecies.getSuitableFruit();
+					for (IFruitFamily fruitFamily : suitableFruit) {
+						Collection<IFruitProvider> fruitProviders = TreeManager.treeRoot.getFruitProvidersForFruitFamily(fruitFamily);
+						for (IFruitProvider fruitProvider : fruitProviders) {
+							Map<ItemStack, Float> products = fruitProvider.getProducts();
+							for (ItemStack stack : products.keySet()) {
+								if (stack.isItemEqual(itemstack)) {
+									return 1.0f;
 								}
-								Map<ItemStack, Float> specialtyChances = fruitProvider.getSpecialty();
-								for (ItemStack stack : specialtyChances.keySet()) {
-									if (stack.isItemEqual(itemstack)) {
-										return 1.0f;
-									}
+							}
+							Map<ItemStack, Float> specialtyChances = fruitProvider.getSpecialty();
+							for (ItemStack stack : specialtyChances.keySet()) {
+								if (stack.isItemEqual(itemstack)) {
+									return 1.0f;
 								}
 							}
 						}
-						return -1F;
 					}
-
-					@Override
-					public NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-						return NonNullList.create();
-					}
+					return -1F;
 				});
 			})
+			.addListener(ComponentKeys.TRANSLATORS, (IIndividualTranslator<ITree> builder) -> {
+					Function<TreeDefinition, IBlockTranslator<ITree>> leavesFactory = (definition) ->
+						(BlockState blockState) -> {
+							if (blockState.get(LeavesBlock.PERSISTENT)) {
+								return null;
+							}
+							return definition.createIndividual();
+						};
+					Function<TreeDefinition, IItemTranslator<ITree>> saplingFactory = definition -> new IItemTranslator<ITree>() {
+					@Override
+					public ITree getIndividualFromObject(ItemStack itemStack) {
+						return definition.createIndividual();
+					}
+
+						@Override
+						public ItemStack getGeneticEquivalent(ItemStack itemStack) {
+							return definition.getMemberStack(EnumGermlingType.SAPLING);
+					}
+					};
+					builder.registerTranslator(leavesFactory.apply(TreeDefinition.Oak), Blocks.OAK_LEAVES);
+					builder.registerTranslator(leavesFactory.apply(TreeDefinition.Birch), Blocks.BIRCH_LEAVES);
+					builder.registerTranslator(leavesFactory.apply(TreeDefinition.Spruce), Blocks.SPRUCE_LEAVES);
+					builder.registerTranslator(leavesFactory.apply(TreeDefinition.Jungle), Blocks.JUNGLE_LEAVES);
+					builder.registerTranslator(leavesFactory.apply(TreeDefinition.Acacia), Blocks.ACACIA_LEAVES);
+					builder.registerTranslator(leavesFactory.apply(TreeDefinition.DarkOak), Blocks.DARK_OAK_LEAVES);
+
+					builder.registerTranslator(saplingFactory.apply(TreeDefinition.Oak), Items.OAK_SAPLING);
+					builder.registerTranslator(saplingFactory.apply(TreeDefinition.Birch), Items.BIRCH_LEAVES);
+					builder.registerTranslator(saplingFactory.apply(TreeDefinition.Spruce), Items.SPRUCE_LEAVES);
+					builder.registerTranslator(saplingFactory.apply(TreeDefinition.Jungle), Items.JUNGLE_LEAVES);
+					builder.registerTranslator(saplingFactory.apply(TreeDefinition.Acacia), Items.ACACIA_LEAVES);
+					builder.registerTranslator(saplingFactory.apply(TreeDefinition.DarkOak), Items.DARK_OAK_LEAVES);
+
+					for (Map.Entry<TreeDefinition, BlockDefaultLeaves> leaves : ModuleArboriculture.getBlocks().leavesDefault.entrySet()) {
+						builder.registerTranslator(blockState -> leaves.getKey().createIndividual(), leaves.getValue());
+					}
+				}
+			)
 			.setDefaultTemplate(TreeHelper::createDefaultTemplate);
+	}
+
+	@Override
+	public void onFinishRegistration(IRootManager manager, IGeneticApiInstance instance) {
+		TreeManager.treeRoot = TreeManager.treeRootDefinition.get();
+
+		// Modes
+		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.easy);
+		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.normal);
+		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.hard);
+		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.hardcore);
+		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.insane);
 	}
 }

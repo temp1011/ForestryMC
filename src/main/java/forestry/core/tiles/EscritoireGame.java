@@ -24,7 +24,9 @@ import genetics.api.individual.IIndividual;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
+import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.IResearchHandler;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 
@@ -124,13 +126,14 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 		}
 
 		IAlleleForestrySpecies species = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
+		IResearchHandler handler = species.getRoot().getComponent(ForestryComponentKeys.RESEARCH);
 		gameBoard.hideProbedTokens();
 
 		int revealCount = getSampleSize(slotCount);
 		for (int i = 0; i < revealCount; i++) {
 			ItemStack sample = inventory.decrStackSize(startSlot + i, 1);
 			if (!sample.isEmpty()) {
-				if (rand.nextFloat() < species.getResearchSuitability(sample)) {
+				if (rand.nextFloat() < handler.getResearchSuitability(species, sample)) {
 					gameBoard.probe();
 				}
 			}

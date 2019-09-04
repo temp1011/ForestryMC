@@ -2,6 +2,7 @@ package genetics.plugins;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -44,7 +45,11 @@ public class PluginUtil {
 			}
 		}
 		Map<IGeneticPlugin, ModContainer> instances = new HashMap<>();
+		Set<String> loadedClasses = new HashSet<>();
 		for (String className : pluginClassNames) {
+			if (loadedClasses.contains(className)) {
+				continue;
+			}
 			try {
 				Class<?> asmClass = Class.forName(className);
 				Class<? extends IGeneticPlugin> asmInstanceClass = asmClass.asSubclass(IGeneticPlugin.class);
@@ -53,6 +58,7 @@ public class PluginUtil {
 				if (plugin != null) {
 					Optional<? extends ModContainer> modContainer = getContainer.apply(plugin.modId());
 					modContainer.ifPresent(container -> instances.put(instance, container));
+					loadedClasses.add(className);
 				}
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | LinkageError e) {
 				LOGGER.error("Failed to load: {}", className, e);

@@ -91,6 +91,4 @@ public interface IBee extends IIndividualLiving {
 
 	boolean pollinateRandom(IBeeHousing housing, IIndividual pollen);
 
-	boolean isSecret();
-
 }

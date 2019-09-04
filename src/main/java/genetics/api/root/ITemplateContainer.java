@@ -5,14 +5,27 @@ import java.util.Map;
 import java.util.Random;
 
 import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleTemplate;
+import genetics.api.individual.IIndividual;
 import genetics.api.individual.IKaryotype;
+import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
 
 /**
  * The ITemplateContainer contains all templates of the {@link IIndividualRoot} that were added with the
  * {@link IIndividualRootBuilder}.
  */
-public interface ITemplateContainer extends IRootComponent {
+public interface ITemplateContainer<I extends IIndividual> extends IRootComponent<I> {
+
+	/**
+	 * Registers a allele template using the UID of the first allele as identifier.
+	 */
+	ITemplateContainer registerTemplate(IAllele[] template);
+
+	/**
+	 * Registers a allele template using the UID of the first allele as identifier.
+	 */
+	ITemplateContainer registerTemplate(IAlleleTemplate template);
 
 	/**
 	 * Retrieves a registered template using the passed species unique identifier.
@@ -40,5 +53,10 @@ public interface ITemplateContainer extends IRootComponent {
 	/**
 	 * @return The karyotype that defines the size of the allele array and which alleles it can contain.
 	 */
-	IKaryotype getKaryotype();
+	default IKaryotype getKaryotype() {
+		return getRoot().getKaryotype();
+	}
+
+	@Override
+	ComponentKey<ITemplateContainer> getKey();
 }

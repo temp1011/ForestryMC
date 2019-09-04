@@ -15,5 +15,7 @@ public interface IBlockTranslator<I extends IIndividual> {
 	@Nullable
 	I getIndividualFromObject(BlockState blockState);
 
-	ItemStack getGeneticEquivalent(BlockState blockState);
+	default ItemStack getGeneticEquivalent(BlockState blockState) {
+		return ItemStack.EMPTY;
+	}
 }

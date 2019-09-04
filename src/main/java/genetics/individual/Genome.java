@@ -128,7 +128,7 @@ public final class Genome implements IGenome {
 	@Override
 	public <A extends IAllele> A getActiveAllele(IChromosomeAllele<A> chromosomeType) {
 		Class<? extends A> alleleClass = chromosomeType.getAlleleClass();
-		IAllele allele = getActiveAllele(chromosomeType);
+		IAllele allele = getActiveAllele((IChromosomeType) chromosomeType);
 		if (!alleleClass.isInstance(allele)) {
 			throw new IllegalArgumentException(String.format("The allele '%s' at the active position of the chromosome type '%s' is not an instance of the class '%s'.", allele, chromosomeType, alleleClass));
 		}

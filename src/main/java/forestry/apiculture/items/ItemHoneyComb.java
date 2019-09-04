@@ -59,7 +59,7 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
+	public int getColorFromItemStack(ItemStack itemstack, int tintIndex) {
 		EnumHoneyComb honeyComb = this.type;
 		if (tintIndex == 1) {
 			return honeyComb.primaryColor;

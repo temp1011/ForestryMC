@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -29,7 +30,7 @@ public interface ITreeRoot extends ISpeciesRootPollinatable<ITree> {
 	 * @return {@link IArboristTracker} associated with the passed world.
 	 */
 	@Override
-	IArboristTracker getBreedingTracker(World world, @Nullable GameProfile player);
+	IArboristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
 
 	/* TREE SPECIFIC */
 
@@ -49,19 +50,19 @@ public interface ITreeRoot extends ISpeciesRootPollinatable<ITree> {
 
 	boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos);
 
-	boolean setFruitBlock(World world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos);
+	boolean setFruitBlock(IWorld world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos);
 
 	/* GAME MODE */
 	List<ITreekeepingMode> getTreekeepingModes();
 
-	ITreekeepingMode getTreekeepingMode(World world);
+	ITreekeepingMode getTreekeepingMode(IWorld world);
 
 	@Nullable
 	ITreekeepingMode getTreekeepingMode(String name);
 
 	void registerTreekeepingMode(ITreekeepingMode mode);
 
-	void setTreekeepingMode(World world, ITreekeepingMode mode);
+	void setTreekeepingMode(IWorld world, ITreekeepingMode mode);
 
 	Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily);
 }

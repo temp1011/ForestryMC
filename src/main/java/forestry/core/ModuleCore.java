@@ -57,7 +57,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AlleleFactory;
-import forestry.core.genetics.alleles.GeneticRegistry;
 import forestry.core.gui.CoreContainerTypes;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.GuiAnalyzer;
@@ -139,11 +138,8 @@ public class ModuleCore extends BlankForestryModule {
 
 		ChipsetManager.circuitRegistry = new CircuitRegistry();
 
-		GeneticRegistry alleleRegistry = new GeneticRegistry();
-		AlleleManager.alleleRegistry = alleleRegistry;
 		AlleleManager.climateHelper = new ClimateUtil();
 		AlleleManager.alleleFactory = new AlleleFactory();
-		alleleRegistry.initialize();
 
 		LootFunctionManager.registerFunction(new SetSpeciesNBT.Serializer());
 

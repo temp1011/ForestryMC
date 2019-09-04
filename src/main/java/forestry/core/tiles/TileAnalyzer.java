@@ -30,6 +30,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
@@ -116,11 +117,11 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		if (!specimenToAnalyze.isAnalyzed()) {
-			FluidStack drained = resourceTank.drain(HONEY_REQUIRED, false);
-			if (drained == null || drained.amount != HONEY_REQUIRED) {
+			FluidStack drained = resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.SIMULATE);
+			if (drained.isEmpty() || drained.getAmount() != HONEY_REQUIRED) {
 				return false;
 			}
-			resourceTank.drain(HONEY_REQUIRED, true);
+			resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.EXECUTE);
 
 			specimenToAnalyze.analyze();
 
@@ -195,8 +196,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			hasSpace = InventoryUtil.tryAddStack(invOutput, specimen, true, false);
 
 			if (specimenToAnalyze != null && !specimenToAnalyze.isAnalyzed()) {
-				FluidStack drained = resourceTank.drain(HONEY_REQUIRED, false);
-				hasResource = drained != null && drained.amount == HONEY_REQUIRED;
+				FluidStack drained = resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.SIMULATE);
+				hasResource = !drained.isEmpty() && drained.getAmount() == HONEY_REQUIRED;
 			}
 		}
 

@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -45,7 +46,6 @@ import genetics.api.root.components.ComponentKeys;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IBeeRoot;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
@@ -106,7 +106,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	public final void drawChromosomeRow(String chromosomeName, IIndividual individual, IChromosomeType chromosome) {
 		IAllele active = individual.getGenome().getActiveAllele(chromosome);
 		IAllele inactive = individual.getGenome().getInactiveAllele(chromosome);
-		textLayout.drawRow(chromosomeName, active.getLocalizedName(), inactive.getLocalizedName(),
+		textLayout.drawRow(chromosomeName, active.getDisplayName().getFormattedText(), inactive.getDisplayName().getFormattedText(),
 			ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(active.isDominant()),
 			getColorCoding(inactive.isDominant()));
 	}
@@ -118,13 +118,13 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		textLayout.drawLine(text0, textLayout.column0);
 		int columnwidth = textLayout.column2 - textLayout.column1 - 2;
 
-		Map<String, ItemStack> iconStacks = ((IBeeRoot) chromosome.getRoot()).getAlyzerPlugin().getIconStacks();
+		Map<ResourceLocation, ItemStack> iconStacks = ((IBeeRoot) chromosome.getRoot()).getAlyzerPlugin().getIconStacks();
 
-		GuiUtil.drawItemStack(this, iconStacks.get(primary.getRegistryName().toString()), guiLeft + textLayout.column1 + columnwidth - 20, guiTop + 10);
-		GuiUtil.drawItemStack(this, iconStacks.get(secondary.getRegistryName().toString()), guiLeft + textLayout.column2 + columnwidth - 20, guiTop + 10);
+		GuiUtil.drawItemStack(this, iconStacks.get(primary.getRegistryName()), guiLeft + textLayout.column1 + columnwidth - 20, guiTop + 10);
+		GuiUtil.drawItemStack(this, iconStacks.get(secondary.getRegistryName()), guiLeft + textLayout.column2 + columnwidth - 20, guiTop + 10);
 
-		String primaryName = customPrimaryName == null ? primary.getLocalizedName() : customPrimaryName;
-		String secondaryName = customSecondaryName == null ? secondary.getLocalizedName() : customSecondaryName;
+		String primaryName = customPrimaryName == null ? primary.getDisplayName().getFormattedText() : customPrimaryName;
+		String secondaryName = customSecondaryName == null ? secondary.getDisplayName().getFormattedText() : customSecondaryName;
 
 		drawSplitLine(primaryName, textLayout.column1, columnwidth, individual, chromosome, false);
 		drawSplitLine(secondaryName, textLayout.column2, columnwidth, individual, chromosome, true);
@@ -153,7 +153,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		}
 
 		ItemStack stackInSlot = itemInventory.getStackInSlot(specimenSlot);
-		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stackInSlot, IForestrySpeciesRoot.class);
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stackInSlot);
 		if (definition.isRootPresent()) {
 			return;
 		}
@@ -281,7 +281,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 		textLayout.newLine();
 		textLayout.drawLine(Translator.translateToLocal("for.gui.alyzer.authority") + ": " + individual.getGenome().getPrimary().getAuthority(), 12);
-		if (AlleleManager.alleleRegistry.isBlacklisted(individual.getIdentifier())) {
+		if (GeneticsAPI.apiInstance.getAlleleRegistry().isBlacklisted(individual.getIdentifier())) {
 			String extinct = ">> " + Translator.translateToLocal("for.gui.alyzer.extinct").toUpperCase(Locale.ENGLISH) + " <<";
 			getFontRenderer().drawStringWithShadow(extinct, guiLeft + 200 - getFontRenderer().getStringWidth(extinct),
 				guiTop + textLayout.getLineY(), ColourProperties.INSTANCE.get("gui.beealyzer.dominant"));
@@ -321,7 +321,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		PlayerEntity player = Minecraft.getInstance().player;
 		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
 
-		IMutationContainer<IMutation> container = speciesRoot.getComponent(ComponentKeys.MUTATIONS).get();
+		IMutationContainer<IIndividual, ? extends IMutation> container = speciesRoot.getComponent(ComponentKeys.MUTATIONS);
 		for (IMutation mutation : container.getCombinations(species)) {
 			if (breedingTracker.isDiscovered(mutation)) {
 				drawMutationInfo(mutation, species, COLUMN_0 + x, breedingTracker);
@@ -345,15 +345,15 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	}
 
 	public void drawMutationInfo(IMutation combination, IAllele species, int x, IBreedingTracker breedingTracker) {
-		Map<String, ItemStack> iconStacks = ((IForestrySpeciesRoot) combination.getRoot()).getAlyzerPlugin().getIconStacks();
+		Map<ResourceLocation, ItemStack> iconStacks = ((IForestrySpeciesRoot) combination.getRoot()).getAlyzerPlugin().getIconStacks();
 
-		ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getRegistryName().toString());
+		ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getRegistryName());
 		widgetManager.add(new ItemStackWidget(widgetManager, x, textLayout.getLineY(), partnerBee));
 
 		drawProbabilityArrow(combination, guiLeft + x + 18, guiTop + textLayout.getLineY() + 4, breedingTracker);
 
 		IAllele result = combination.getTemplate()[BeeChromosomes.SPECIES.ordinal()];
-		ItemStack resultBee = iconStacks.get(result.getRegistryName().toString());
+		ItemStack resultBee = iconStacks.get(result.getRegistryName());
 		widgetManager.add(new ItemStackWidget(widgetManager, x + 33, textLayout.getLineY(), resultBee));
 	}
 
@@ -411,7 +411,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	public void drawToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, int x) {
 		int textColor = getColorCoding(toleranceAllele.isDominant());
 		EnumTolerance tolerance = toleranceAllele.getValue();
-		String text = "(" + toleranceAllele.getLocalizedName() + ")";
+		String text = "(" + toleranceAllele.getDisplayName().getFormattedText() + ")";
 
 		// Enable correct lighting.
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);

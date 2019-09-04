@@ -20,7 +20,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,7 +35,6 @@ import genetics.api.individual.IGenome;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.config.Constants;
-import forestry.core.utils.Translator;
 
 public class FruitProviderNone implements IFruitProvider {
 
@@ -90,7 +92,7 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(IGenome genome, World world, Random rand, BlockPos pos) {
+	public boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos) {
 		return false;
 	}
 
@@ -105,7 +107,7 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public boolean isFruitLeaf(IGenome genome, World world, BlockPos pos) {
+	public boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos) {
 		return false;
 	}
 
@@ -125,8 +127,8 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public String getDescription() {
-		return Translator.translateToLocal(unlocalizedDescription);
+	public ITextComponent getDescription() {
+		return new TranslationTextComponent(unlocalizedDescription);
 	}
 
 	@Override

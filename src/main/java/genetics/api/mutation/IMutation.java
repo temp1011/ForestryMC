@@ -6,7 +6,6 @@ import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKey;
-import genetics.api.root.components.IRootComponentBuilder;
 
 /**
  * A mutation provides a type of progression to the genetic system under the right conditions an offspring of the

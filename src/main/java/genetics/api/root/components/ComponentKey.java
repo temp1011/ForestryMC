@@ -9,25 +9,28 @@ import genetics.api.root.IIndividualRootBuilder;
  * It can be used to add a component with {@link IIndividualRootBuilder#addComponent(ComponentKey)} or
  * {@link IIndividualRootBuilder#addComponent(ComponentKey, IRootComponentFactory)}.
  * <p>
- * Also it can be used to get a component with {@link IIndividualRoot#getComponent(ComponentKey)}.
+ * Also it can be used to get a component with {@link IIndividualRoot#getComponentSafe(ComponentKey)}.
  *
  * @param <C> The type of the component.
- * @param <B> The type of the component builder.
  */
-public class ComponentKey<C extends IRootComponent, B extends IRootComponentBuilder> {
+public class ComponentKey<C extends IRootComponent> {
 
-	public static <C extends IRootComponent, B extends IRootComponentBuilder> ComponentKey<C, B> create(String name, Class<C> componentClass, Class<B> builderClass) {
-		return new ComponentKey<>(name, componentClass, builderClass);
+	public static <C extends IRootComponent> ComponentKey<C> create(String name, Class<C> componentClass) {
+		return create(name, componentClass, DefaultStage.CREATION);
+	}
+
+	public static <C extends IRootComponent> ComponentKey<C> create(String name, Class<C> componentClass, IStage stage) {
+		return new ComponentKey<>(name, componentClass, stage);
 	}
 
 	private final String name;
 	private final Class<C> componentClass;
-	private final Class<B> builderClass;
+	private final IStage stage;
 
-	private ComponentKey(String name, Class<C> componentClass, Class<B> builderClass) {
+	private ComponentKey(String name, Class<C> componentClass, IStage stage) {
 		this.name = name;
 		this.componentClass = componentClass;
-		this.builderClass = builderClass;
+		this.stage = stage;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -39,17 +42,22 @@ public class ComponentKey<C extends IRootComponent, B extends IRootComponentBuil
 		return componentClass;
 	}
 
-	public Class<B> getBuilderClass() {
-		return builderClass;
-	}
-
 	public String getName() {
 		return name;
+	}
+
+	public IStage getStage() {
+		return stage;
 	}
 
 	@Override
 	public int hashCode() {
 		return name.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 
 	@Override

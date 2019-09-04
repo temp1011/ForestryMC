@@ -17,7 +17,7 @@ public class ItemBlockHoneyComb extends ItemBlockForestry<BlockHoneyComb> implem
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+	public int getColorFromItemStack(ItemStack stack, int tintIndex) {
 		EnumHoneyComb honeyComb = getBlock().getType();
 		if (tintIndex == 1) {
 			return honeyComb.primaryColor;

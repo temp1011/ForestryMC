@@ -18,6 +18,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 
+import genetics.api.GeneticHelper;
+
+import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
@@ -46,7 +49,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 		NonNullList<ItemStack> beeList = NonNullList.create();
 		ModuleApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
-			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
+			IAlleleBeeSpecies species = GeneticHelper.getOrganism(beeStack).getAllele(BeeChromosomes.SPECIES, true);
 			if (species != null) {
 				iconStacks.put(species.getRegistryName().toString(), beeStack);
 			}
@@ -62,11 +65,11 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 
 		IAlleleBeeSpecies primary = itemInventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
-		getFontRenderer().drawString(primary.getLocalizedName(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawString(primary.getDisplayName().getFormattedText(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
 
 		IAlleleBeeSpecies secondary = itemInventory.getSecondary();
 		drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
-		getFontRenderer().drawString(secondary.getLocalizedName(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawString(secondary.getDisplayName().getFormattedText(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
 
 		String youCheater = Translator.translateToLocal("for.gui.imprinter.cheater");
 		offset = (138 - getFontRenderer().getStringWidth(youCheater)) / 2;

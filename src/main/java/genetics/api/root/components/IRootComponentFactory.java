@@ -16,7 +16,7 @@ import genetics.api.root.IIndividualRootBuilder;
  * @see IRootComponentRegistry
  * @see IIndividualRootBuilder
  */
-public interface IRootComponentFactory<I extends IIndividual, B extends IRootComponentBuilder> {
+public interface IRootComponentFactory<I extends IIndividual, C extends IRootComponent<I>> {
 
-	B create(IIndividualRoot<I> root);
+	C create(IIndividualRoot<I> root);
 }

@@ -2,12 +2,12 @@ package genetics.root;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,15 +27,15 @@ import genetics.api.events.RootEvent;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
 import genetics.api.individual.IKaryotype;
-import genetics.api.individual.ISpeciesDefinition;
+import genetics.api.root.IGeneticListener;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IIndividualRootBuilder;
 import genetics.api.root.IIndividualRootFactory;
+import genetics.api.root.IRootContext;
 import genetics.api.root.SimpleIndividualRoot;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
 import genetics.api.root.components.IRootComponent;
-import genetics.api.root.components.IRootComponentBuilder;
 import genetics.api.root.components.IRootComponentFactory;
 
 import genetics.ApiInstance;
@@ -44,7 +44,7 @@ import genetics.individual.Karyotype;
 import genetics.individual.RootDefinition;
 
 public class IndividualRootBuilder<I extends IIndividual> implements IIndividualRootBuilder<I> {
-	private final String uid;
+	public final String uid;
 	private final List<IChromosomeType> chromosomeTypes = new ArrayList<>();
 	@Nullable
 	private IChromosomeType speciesType;
@@ -99,7 +99,7 @@ public class IndividualRootBuilder<I extends IIndividual> implements IIndividual
 
 	@Override
 	public IIndividualRootBuilder<I> setRootFactory(Class<? extends I> individualClass) {
-		return setRootFactory((IKaryotype karyotype, Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent>> components) -> new SimpleIndividualRoot<>(uid, karyotype, components, individualClass));
+		return setRootFactory((IRootContext<I> context) -> new SimpleIndividualRoot<>(context, individualClass));
 	}
 
 	@Override
@@ -115,27 +115,21 @@ public class IndividualRootBuilder<I extends IIndividual> implements IIndividual
 	}
 
 	@SuppressWarnings("unchecked")
-	public void create() {
+	public void create(Collection<IGeneticListener<I>> listeners) {
 		Preconditions.checkNotNull(speciesType);
 		Preconditions.checkNotNull(templateFactory);
 		Preconditions.checkNotNull(defaultTemplate);
 		Preconditions.checkNotNull(rootFactory);
 		IKaryotype karyotype = new Karyotype(uid, chromosomeTypes, speciesType, templateFactory, defaultTemplate);
-		definition.setRoot(rootFactory.createRoot(karyotype, root -> {
-			Map<ComponentKey, IRootComponentBuilder> builders = new HashMap<>();
-			componentFactories.forEach((componentKey, factory) -> builders.put(componentKey, factory.create(root)));
-			componentListeners.forEach((componentKey, consumer) -> consumer.accept(builders.get(componentKey)));
-			ImmutableMap.Builder<ComponentKey, IRootComponent> components = new ImmutableMap.Builder<>();
-			RootBuilderEvents.GatherDefinitions<I> gatherDefinitions = new RootBuilderEvents.GatherDefinitions<>(this);
-			FMLJavaModLoadingContext.get().getModEventBus().post(gatherDefinitions);
-			List<ISpeciesDefinition> definitions = gatherDefinitions.getDefinitions();
-			builders.forEach((componentKey, builder) -> {
-				FMLJavaModLoadingContext.get().getModEventBus().post(new RootBuilderEvents.BuildComponent<>(this, componentKey, builder));
-				definitions.forEach(speciesDefinition -> speciesDefinition.onComponent(componentKey, builder));
-				components.put(componentKey, builder.create());
+		definition.setRoot(rootFactory.createRoot(new RootContext<>(karyotype, listeners, componentListeners, root -> {
+			Map<ComponentKey, IRootComponent<I>> components = new HashMap<>();
+			componentFactories.forEach((componentKey, factory) -> components.put(componentKey, factory.create(root)));
+			components.forEach((componentKey, builder) -> {
+				FMLJavaModLoadingContext.get().getModEventBus().post(new RootBuilderEvents.CreateComponent<>(this, componentKey, builder));
+				components.put(componentKey, builder);
 			});
-			return components.build();
-		}));
+			return components;
+		})));
 		MinecraftForge.EVENT_BUS.register(new RootEvent.CreationEvent<>(definition));
 	}
 
@@ -145,7 +139,7 @@ public class IndividualRootBuilder<I extends IIndividual> implements IIndividual
 	}
 
 	@Override
-	public <C extends IRootComponent, B extends IRootComponentBuilder> IIndividualRootBuilder<I> addComponent(ComponentKey<C, B> key) {
+	public IIndividualRootBuilder<I> addComponent(ComponentKey key) {
 		IRootComponentFactory factory = RootComponentRegistry.INSTANCE.getFactory(key);
 		if (factory == null) {
 			throw new IllegalArgumentException(String.format("No component factory was registered for the component key '%s'.", key));
@@ -155,13 +149,13 @@ public class IndividualRootBuilder<I extends IIndividual> implements IIndividual
 	}
 
 	@Override
-	public <C extends IRootComponent, B extends IRootComponentBuilder> IIndividualRootBuilder<I> addComponent(ComponentKey<C, B> key, IRootComponentFactory<I, B> factory) {
+	public <C extends IRootComponent<I>> IIndividualRootBuilder<I> addComponent(ComponentKey key, IRootComponentFactory<I, C> factory) {
 		componentFactories.put(key, factory);
 		return this;
 	}
 
 	@Override
-	public <C extends IRootComponent, B extends IRootComponentBuilder> IIndividualRootBuilder<I> addListener(ComponentKey<C, B> key, Consumer<B> consumer) {
+	public <C extends IRootComponent<I>> IIndividualRootBuilder<I> addListener(ComponentKey key, Consumer<C> consumer) {
 		if (!componentFactories.containsKey(key)) {
 			throw new IllegalArgumentException(String.format("No component factory was added for the component key '%s'. Please call 'addComponent' before 'addListener'.", key));
 		}

@@ -51,7 +51,7 @@ public class FarmableGE implements IFarmable {
 	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
 		ITreeRoot treeRoot = TreeManager.treeRoot;
 
-		ITree tree = treeRoot.getMember(germling);
+		ITree tree = treeRoot.create(germling).orElse(null);
 		return tree != null && treeRoot.plantSapling(world, tree, player.getGameProfile(), pos);
 	}
 

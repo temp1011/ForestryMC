@@ -9,6 +9,8 @@ import net.minecraft.world.World;
 
 import genetics.api.individual.IIndividual;
 
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+
 public interface IIndividualLiving extends IIndividual {
 
 	/**
@@ -35,5 +37,13 @@ public interface IIndividualLiving extends IIndividual {
 	 * @return true if the individual is among the living.
 	 */
 	boolean isAlive();
+
+	default boolean hasEffect() {
+		return getGenome().getPrimary(IAlleleBeeSpecies.class).hasEffect();
+	}
+
+	default boolean isSecret() {
+		return getGenome().getPrimary(IAlleleBeeSpecies.class).isSecret();
+	}
 
 }

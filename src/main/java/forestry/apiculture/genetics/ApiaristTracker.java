@@ -14,12 +14,16 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
 import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.genetics.BreedingTracker;
 
@@ -60,7 +64,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	@Override
 	public void registerPickup(IIndividual individual) {
-		IForestrySpeciesRoot speciesRoot = individual.getGenome().getPrimary().getRoot();
+		IBeeRoot speciesRoot = (IBeeRoot) individual.getRoot();
 		if (!speciesRoot.getUID().equals(speciesRootUID())) {
 			return;
 		}
@@ -69,7 +73,8 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 			return;
 		}
 
-		if (!speciesRoot.getCombinations(individual.getGenome().getPrimary()).isEmpty()) {
+		IMutationContainer<IBee, ? extends IMutation> container = speciesRoot.getComponent(ComponentKeys.MUTATIONS);
+		if (!container.getCombinations(individual.getGenome().getPrimary()).isEmpty()) {
 			return;
 		}
 

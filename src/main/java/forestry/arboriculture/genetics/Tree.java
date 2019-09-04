@@ -29,8 +29,10 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import com.mojang.authlib.GameProfile;
 
@@ -46,6 +48,7 @@ import genetics.api.individual.IGenome;
 import genetics.api.individual.IGenomeMatcher;
 import genetics.api.individual.Individual;
 import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.components.ComponentKeys;
 
 import genetics.individual.Genome;
@@ -129,8 +132,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	/* GROWTH */
 	@Override
-	public Feature getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed) {
-		return genome.getPrimary(IAlleleTreeSpecies.class).getGenerator().getWorldGenerator(this);
+	public Feature<NoFeatureConfig> getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed) {
+		return genome.getPrimary(IAlleleTreeSpecies.class).getGenerator().getTreeFeature(this);
 	}
 
 	@Override
@@ -154,7 +157,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	@Nullable
-	public BlockPos canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight) {
+	public BlockPos canGrow(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight) {
 		return TreeGrowthHelper.canGrow(world, genome, pos, expectedGirth, expectedHeight);
 	}
 
@@ -180,12 +183,12 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public boolean setLeaves(World world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
+	public boolean setLeaves(IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
 		return genome.getPrimary(IAlleleTreeSpecies.class).getGenerator().setLeaves(genome, world, owner, pos, rand);
 	}
 
 	@Override
-	public boolean setLogBlock(World world, BlockPos pos, Direction facing) {
+	public boolean setLogBlock(IWorld world, BlockPos pos, Direction facing) {
 		return genome.getPrimary(IAlleleTreeSpecies.class).getGenerator().setLogBlock(genome, world, pos, facing);
 	}
 
@@ -201,7 +204,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(World world, Random rand, BlockPos pos) {
+	public boolean trySpawnFruitBlock(IWorld world, Random rand, BlockPos pos) {
 		IFruitProvider provider = getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 		Collection<IFruitFamily> suitable = genome.getPrimary(IAlleleTreeSpecies.class).getSuitableFruit();
 		return suitable.contains(provider.getFamily()) &&
@@ -239,18 +242,18 @@ public class Tree extends Individual implements ITree, IPlantable {
 		IAlleleTreeSpecies primary = genome.getPrimary(IAlleleTreeSpecies.class);
 		IAlleleTreeSpecies secondary = genome.getSecondary(IAlleleTreeSpecies.class);
 		if (!isPureBred(TreeChromosomes.SPECIES)) {
-			list.add(new TranslationTextComponent("for.trees.hybrid", primary.getLocalizedName(), secondary.getLocalizedName()).applyTextStyle(TextFormatting.BLUE));    //TODO formatting
+			list.add(new TranslationTextComponent("for.trees.hybrid", primary.getDisplayName(), secondary.getDisplayName()).applyTextStyle(TextFormatting.BLUE));
 		}
 
-		String sappiness = TextFormatting.GOLD + "S: " + genome.getActiveAllele(TreeChromosomes.SAPPINESS).getLocalizedName();
-		String maturation = TextFormatting.RED + "M: " + genome.getActiveAllele(TreeChromosomes.MATURATION).getLocalizedName();
-		String height = TextFormatting.LIGHT_PURPLE + "H: " + genome.getActiveAllele(TreeChromosomes.HEIGHT).getLocalizedName();
-		String girth = TextFormatting.AQUA + "G: " + String.format("%sx%s", genome.getActiveAllele(TreeChromosomes.GIRTH), genome.getActiveAllele(TreeChromosomes.GIRTH));
-		String saplings = TextFormatting.YELLOW + "S: " + genome.getActiveAllele(TreeChromosomes.FERTILITY).getLocalizedName();
-		String yield = TextFormatting.WHITE + "Y: " + genome.getActiveAllele(TreeChromosomes.YIELD).getLocalizedName();
-		list.add(new StringTextComponent(String.format("%s, %s", saplings, maturation)));
-		list.add(new StringTextComponent(String.format("%s, %s", height, girth)));
-		list.add(new StringTextComponent(String.format("%s, %s", yield, sappiness)));
+		ITextComponent sappiness = new TranslationTextComponent("S: %1$s" + genome.getActiveAllele(TreeChromosomes.SAPPINESS)).applyTextStyle(TextFormatting.GOLD);
+		ITextComponent maturation = new TranslationTextComponent("M: %1$s" + genome.getActiveAllele(TreeChromosomes.MATURATION)).applyTextStyle(TextFormatting.RED);
+		ITextComponent height = new TranslationTextComponent("H: %1$s" + genome.getActiveAllele(TreeChromosomes.HEIGHT)).applyTextStyle(TextFormatting.LIGHT_PURPLE);
+		ITextComponent girth = new TranslationTextComponent("G: %1$sx%2$s", genome.getActiveAllele(TreeChromosomes.GIRTH).getDisplayName(), genome.getActiveAllele(TreeChromosomes.GIRTH).getDisplayName()).applyTextStyle(TextFormatting.AQUA);
+		ITextComponent saplings = new TranslationTextComponent("S: %1$s" + genome.getActiveAllele(TreeChromosomes.FERTILITY)).applyTextStyle(TextFormatting.YELLOW);
+		ITextComponent yield = new TranslationTextComponent("Y: %1$s" + genome.getActiveAllele(TreeChromosomes.YIELD)).applyTextStyle(TextFormatting.WHITE);
+		list.add(new TranslationTextComponent("%1$s %2$s", saplings, maturation));
+		list.add(new TranslationTextComponent("%1$s %2$s", height, girth));
+		list.add(new TranslationTextComponent("%1$s %2$s", yield, sappiness));
 
 		boolean primaryFireproof = genome.getActiveValue(TreeChromosomes.FIREPROOF);
 		if (primaryFireproof) {
@@ -339,8 +342,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 			breedingTracker = TreeManager.treeRoot.getBreedingTracker(world, playerProfile);
 		}
 
-
-		List<IMutation> combinations = TreeManager.treeRoot.getComponent(ComponentKeys.MUTATIONS).get().getCombinations(allele0, allele1, true);
+		IMutationContainer<ITree, ? extends IMutation> container = TreeManager.treeRoot.getComponent(ComponentKeys.MUTATIONS);
+		List<? extends IMutation> combinations = container.getCombinations(allele0, allele1, true);
 		for (IMutation mutation : combinations) {
 			ITreeMutation treeMutation = (ITreeMutation) mutation;
 			// Stop blacklisted species.

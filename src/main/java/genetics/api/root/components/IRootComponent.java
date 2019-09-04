@@ -2,10 +2,7 @@ package genetics.api.root.components;
 
 import java.util.function.Consumer;
 
-import genetics.api.mutation.IMutation;
-import genetics.api.organism.IOrganismType;
-import genetics.api.organism.IOrganismTypes;
-import genetics.api.organism.IOrganismTypesBuilder;
+import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IIndividualRootBuilder;
 
@@ -19,19 +16,17 @@ import genetics.api.root.IIndividualRootBuilder;
  * {@link IRootComponentFactory} that creates the builder of the component from the
  * {@link IRootComponentRegistry}. A registry where default component factories can be registered.
  * <p>
- * Every component needs a {@link IRootComponentBuilder} that gets created by a {@link IRootComponentFactory}. The builder
- * can be used to register all kind of things like {@link IOrganismType}s or {@link IMutation}s.
- * As a example the {@link IOrganismTypes} component uses its builder {@link IOrganismTypesBuilder} to register the
- * {@link IOrganismType}s.
  * <p>
  * The {@link IIndividualRootBuilder} can also be used to add listeners to it with
  * {@link IIndividualRootBuilder#addListener(ComponentKey, Consumer)}. These listeners are getting called before the
  * components are getting created. You can use these listeners to register things to the component builders.
  *
- * @see IRootComponentBuilder
  * @see IRootComponentFactory
  * @see IRootComponentRegistry
  * @see IIndividualRootBuilder
  */
-public interface IRootComponent {
+public interface IRootComponent<I extends IIndividual> {
+	IIndividualRoot<I> getRoot();
+
+	ComponentKey getKey();
 }

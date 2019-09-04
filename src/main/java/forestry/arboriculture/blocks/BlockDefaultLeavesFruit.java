@@ -4,25 +4,26 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.BlockStateContainer;
 
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import genetics.api.individual.IGenome;
@@ -34,11 +35,9 @@ import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.api.core.IModelManager;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.NetworkUtil;
 
 /**
@@ -67,21 +66,25 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	protected final int blockNumber;
 
 	public BlockDefaultLeavesFruit(int blockNumber) {
+		super(Block.Properties.create(Material.LEAVES)
+			.hardnessAndResistance(0.2f)
+			.sound(SoundType.PLANT)
+			.tickRandomly());
 		this.blockNumber = blockNumber;
 		PropertyTreeTypeFruit variant = getVariant();
-		setDefaultState(this.blockState.getBaseState()
+		setDefaultState(getStateContainer().getBaseState()
 			.with(variant, variant.getFirstType())
-			.with(CHECK_DECAY, false)
-			.with(DECAYABLE, true));
+			.with(DISTANCE, 7).with(PERSISTENT, false));
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, getVariant(), CHECK_DECAY, DECAYABLE);
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> p_206840_1_) {
+		super.fillStateContainer(p_206840_1_);
+		p_206840_1_.add(getVariant());
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult traceResult) {
 		ItemStack mainHand = player.getHeldItem(Hand.MAIN_HAND);
 		ItemStack offHand = player.getHeldItem(Hand.OFF_HAND);
 		if (mainHand.isEmpty() && offHand.isEmpty()) {
@@ -136,42 +139,10 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	@Nullable
 	public PropertyTreeTypeFruit.LeafVariant getLeafVariant(BlockState blockState) {
 		if (blockState.getBlock() == this) {
-			return blockState.getValue(getVariant());
+			return blockState.get(getVariant());
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public int damageDropped(BlockState state) {
-		PropertyTreeTypeFruit.LeafVariant treeDefinition = getLeafVariant(state);
-		if (treeDefinition == null) {
-			return 0;
-		}
-		return treeDefinition.metadata - blockNumber * VARIANTS_PER_BLOCK;
-	}
-
-	@Override
-	public BlockState getStateFromMeta(int meta) {
-		return this.getDefaultState()
-			.with(getVariant(), getTreeType(meta))
-			.with(DECAYABLE, (meta & DECAYABLE_FLAG) == 0)
-			.with(CHECK_DECAY, (meta & CHECK_DECAY_FLAG) > 0);
-	}
-
-	@Override
-	public int getMetaFromState(BlockState state) {
-		int i = damageDropped(state);
-
-		if (!state.getValue(DECAYABLE)) {
-			i |= DECAYABLE_FLAG;
-		}
-
-		if (state.getValue(CHECK_DECAY)) {
-			i |= CHECK_DECAY_FLAG;
-		}
-
-		return i;
 	}
 
 	public PropertyTreeTypeFruit.LeafVariant getTreeType(int meta) {
@@ -181,8 +152,8 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	}
 
 	@Override
-	public BlockState getStateForPlacement(World world, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer, Hand hand) {
-		PropertyTreeTypeFruit.LeafVariant type = getTreeType(meta);
+	public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world, BlockPos pos1, BlockPos pos2, Hand hand) {
+		PropertyTreeTypeFruit.LeafVariant type = getTreeType(0);
 		return getDefaultState().with(getVariant(), type);
 	}
 
@@ -198,23 +169,23 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	}
 
 	/* RENDERING */
-	@Override
-	public final boolean isOpaqueCube(BlockState state) {
-		if (!Proxies.render.fancyGraphicsEnabled()) {
-			PropertyTreeTypeFruit.LeafVariant treeDefinition = state.getValue(getVariant());
-			return !TreeDefinition.Willow.equals(treeDefinition.definition);
-		}
-		return false;
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerModel(Item item, IModelManager manager) {
-		for (BlockState state : blockState.getValidStates()) {
-			int meta = getMetaFromState(state);
-			ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation("forestry:leaves.default." + blockNumber, "inventory"));
-		}
-	}
+	//	@Override
+	//	public final boolean isOpaqueCube(BlockState state) {
+	//		if (!Proxies.render.fancyGraphicsEnabled()) {
+	//			PropertyTreeTypeFruit.LeafVariant treeDefinition = state.getValue(getVariant());
+	//			return !TreeDefinition.Willow.equals(treeDefinition.definition);
+	//		}
+	//		return false;
+	//	}
+	//
+	//	@Override
+	//	@OnlyIn(Dist.CLIENT)
+	//	public void registerModel(Item item, IModelManager manager) {
+	//		for (BlockState state : blockState.getValidStates()) {
+	//			int meta = getMetaFromState(state);
+	//			ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation("forestry:leaves.default." + blockNumber, "inventory"));
+	//		}
+	//	}
 
 	/* RENDERING */
 

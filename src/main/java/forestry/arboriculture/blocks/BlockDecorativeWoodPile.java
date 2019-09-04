@@ -5,16 +5,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.BlockStateContainer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,32 +30,22 @@ public class BlockDecorativeWoodPile extends RotatedPillarBlock implements IItem
 	}
 
 	@Override
-	public boolean isOpaqueCube(BlockState state) {
+	public boolean isNormalCube(BlockState p_220081_1_, IBlockReader p_220081_2_, BlockPos p_220081_3_) {
 		return false;
 	}
 
 	@Override
-	public boolean isNormalCube(BlockState state) {
-		return false;
-	}
-
-	@Override
-	public boolean isFullBlock(BlockState state) {
-		return false;
-	}
-
-	@Override
-	public int getFireSpreadSpeed(IBlockReader world, BlockPos pos, Direction face) {
+	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		return 12;
 	}
 
 	@Override
-	public boolean isFlammable(IBlockReader world, BlockPos pos, Direction face) {
+	public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		return true;
 	}
 
 	@Override
-	public int getFlammability(IBlockReader world, BlockPos pos, Direction face) {
+	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		return 25;
 	}
 
@@ -71,47 +57,9 @@ public class BlockDecorativeWoodPile extends RotatedPillarBlock implements IItem
 		}
 	}
 
-	@Override
-	public boolean rotateBlock(net.minecraft.world.World world, BlockPos pos, Direction axis) {
-		net.minecraft.block.BlockState state = world.getBlockState(pos);
-		for (net.minecraft.block.properties.IProperty<?> prop : state.getProperties().keySet()) {
-			if (prop.getName().equals("axis")) {
-				world.setBlockState(pos, state.cycleProperty(prop));
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public BlockState withRotation(BlockState state, Rotation rot) {
-		switch (rot) {
-			case COUNTERCLOCKWISE_90:
-			case CLOCKWISE_90:
-
-				switch (state.get(AXIS)) {
-					case X:
-						return state.with(AXIS, Direction.Axis.Z);
-					case Z:
-						return state.with(AXIS, Direction.Axis.X);
-					default:
-						return state;
-				}
-
-			default:
-				return state;
-		}
-	}
-
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, AXIS);
-	}
 
 	protected ItemStack getSilkTouchDrop(BlockState state) {
 		return new ItemStack(Item.getItemFromBlock(this));
-	}
-
-	public BlockState getStateForPlacement(World worldIn, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
-		return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).with(AXIS, facing.getAxis());
 	}
 
 }

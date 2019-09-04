@@ -10,6 +10,7 @@ import java.util.Map;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,5 +30,5 @@ public interface IAlyzerPlugin {
 	 */
 	List<String> getHints();
 
-	Map<String, ItemStack> getIconStacks();
+	Map<ResourceLocation, ItemStack> getIconStacks();
 }

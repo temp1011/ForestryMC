@@ -104,7 +104,7 @@ public class CircuitBoard implements ICircuitBoard {
 			}
 		} else {
 			int socketCount = type.getSockets();
-			String localizationKey = "item.for.circuitboard.tooltip." + (socketCount == 1 ? "singular" : "plural");
+			String localizationKey = "item.forestry.circuitboard.tooltip." + (socketCount == 1 ? "singular" : "plural");
 			list.add(new TranslationTextComponent(localizationKey, type.getSockets()));
 		}
 	}

@@ -25,7 +25,7 @@ public class LeafProvider implements ILeafProvider {
 	public ItemStack getDecorativeLeaves() {
 		IAllele allele = treeSpecies;
 		if (allele == null) {
-			allele = TreeDefinition.Oak.getTemplate()[TreeChromosomes.SPECIES.ordinal()];
+			allele = TreeDefinition.Oak.getTemplate().get(TreeChromosomes.SPECIES);
 		}
 		return ModuleArboriculture.getBlocks().getDecorativeLeaves(allele.getRegistryName().toString());
 	}

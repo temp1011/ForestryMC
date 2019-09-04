@@ -17,10 +17,12 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.commands.IStatsSaveHelper;
@@ -39,7 +41,7 @@ public class TreeStatsSaveHelper implements IStatsSaveHelper {
 	@Override
 	public Collection<IAlleleForestrySpecies> getSpecies() {
 		Collection<IAlleleForestrySpecies> species = new ArrayList<>();
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES)) {
 			if (allele instanceof IAlleleTreeSpecies) {
 				species.add((IAlleleTreeSpecies) allele);
 			}

@@ -147,7 +147,7 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 
 	@Override
 	public final void addLine(String chromosomeName, IChromosomeType chromosome) {
-		addLine(chromosomeName, (allele, b) -> allele.getLocalizedName(), chromosome);
+		addLine(chromosomeName, (allele, b) -> allele.getDisplayName().getFormattedText(), chromosome);
 	}
 
 	@Override

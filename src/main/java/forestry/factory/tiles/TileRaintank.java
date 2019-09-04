@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
@@ -28,7 +29,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -50,9 +51,8 @@ import forestry.factory.gui.ContainerRaintank;
 import forestry.factory.inventory.InventoryRaintank;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
-	//TODO - fluids
-	private static final FluidStack STACK_WATER = new FluidStack((Fluid) null, Fluid.BUCKET_VOLUME);
-	private static final FluidStack WATER_PER_UPDATE = new FluidStack((Fluid) null, Constants.RAINTANK_AMOUNT_PER_UPDATE);
+	private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
+	private static final FluidStack WATER_PER_UPDATE = new FluidStack(Fluids.WATER, Constants.RAINTANK_AMOUNT_PER_UPDATE);
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
@@ -119,7 +119,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 			errorLogic.setCondition(!world.isRainingAt(posAbove), EnumErrorCode.NOT_RAINING);
 
 			if (!errorLogic.hasErrors()) {
-				resourceTank.fillInternal(WATER_PER_UPDATE, true);
+				resourceTank.fillInternal(WATER_PER_UPDATE, IFluidHandler.FluidAction.EXECUTE);
 			}
 
 			containerFiller.updateServerSide();
@@ -140,7 +140,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		if (!resourceTank.isEmpty()) {
 			LazyOptional<IFluidHandler> fluidCap = FluidUtil.getFluidHandler(world, pos.down(), Direction.UP);
 			if (fluidCap.isPresent()) {
-				return FluidUtil.tryFluidTransfer(fluidCap.orElse(null), tankManager, Fluid.BUCKET_VOLUME / 20, true) != null;
+				return !FluidUtil.tryFluidTransfer(fluidCap.orElse(null), tankManager, FluidAttributes.BUCKET_VOLUME / 20, true).isEmpty();
 			}
 		}
 		return false;

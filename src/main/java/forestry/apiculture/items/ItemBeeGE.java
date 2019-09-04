@@ -41,8 +41,6 @@ import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.core.IModelManager;
 import forestry.api.core.ItemGroups;
-import forestry.api.genetics.IAlleleForestrySpecies;
-import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.genetics.BeeHelper;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
@@ -69,8 +67,8 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	}
 
 	@Override
-	protected IAlleleForestrySpecies getSpecies(ItemStack itemStack) {
-		return BeeGenome.getSpecies(itemStack);
+	protected IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
+		return GeneticHelper.getOrganism(itemStack).getAllele(BeeChromosomes.SPECIES, true);
 	}
 
 	//TODO - pretty sure this is still translating on the server atm
@@ -89,10 +87,10 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		if (Translator.canTranslateToLocal(customBeeKey)) {
 			return new TranslationTextComponent(customBeeKey);
 		}
-		String beeGrammar = Translator.translateToLocal("for.bees.grammar." + type.getName());
-		String beeSpecies = individual.getGenome().getPrimary().getLocalizedName();
-		String beeType = Translator.translateToLocal("for.bees.grammar." + type.getName() + ".type");
-		return new TranslationTextComponent(beeGrammar.replaceAll("%SPECIES", beeSpecies).replaceAll("%TYPE", beeType));
+		ITextComponent beeGrammar = new TranslationTextComponent("for.bees.grammar." + type.getName());
+		ITextComponent beeSpecies = individual.getGenome().getPrimary().getDisplayName();
+		ITextComponent beeType = new TranslationTextComponent("for.bees.grammar." + type.getName() + ".type");
+		return new TranslationTextComponent("for.bees.grammar." + type.getName(), beeSpecies, beeType);
 	}
 
 	@Override
@@ -142,7 +140,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	}
 
 	@Override
-	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
+	public int getColorFromItemStack(ItemStack itemstack, int tintIndex) {
 		if (itemstack.getTag() == null) {
 			if (tintIndex == 1) {
 				return 0xffdc16;
@@ -151,7 +149,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 			}
 		}
 
-		IAlleleBeeSpecies species = BeeGenome.getSpecies(itemstack);
+		IAlleleBeeSpecies species = getSpecies(itemstack);
 		return species.getSpriteColour(tintIndex);
 	}
 

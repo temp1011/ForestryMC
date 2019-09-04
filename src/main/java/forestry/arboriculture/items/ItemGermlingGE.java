@@ -10,19 +10,23 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import javax.annotation.Nullable;
+import java.util.Optional;
+
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -31,24 +35,22 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-import genetics.api.individual.IIndividual;
+import genetics.api.GeneticHelper;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.api.core.IModelManager;
 import forestry.api.core.ItemGroups;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.recipes.IVariableFermentable;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.genetics.TreeGenome;
+import forestry.apiculture.genetics.BeeHelper;
+import forestry.arboriculture.genetics.TreeHelper;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
@@ -68,7 +70,13 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 
 	@Override
 	protected IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
-		return TreeGenome.getSpecies(itemStack);
+		return GeneticHelper.getOrganism(itemStack).getAllele(TreeChromosomes.SPECIES, true);
+	}
+
+	@Nullable
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+		return GeneticHelper.createOrganism(stack, type, BeeHelper.getRoot().getDefinition());
 	}
 
 	@Override
@@ -82,8 +90,8 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		if (Translator.canTranslateToLocal(customTreeKey)) {
 			return new TranslationTextComponent(customTreeKey);
 		}
-		String typeString = Translator.translateToLocal("for.trees.grammar." + type.getName() + ".type");
-		return Translator.translateToLocal("for.trees.grammar." + type.getName()).replaceAll("%SPECIES", species.getLocalizedName()).replaceAll("%TYPE", typeString);
+		ITextComponent typeComponent = new TranslationTextComponent("for.trees.grammar." + type.getName() + ".type");
+		return new TranslationTextComponent("for.trees.grammar." + type.getName(), species.getDisplayName(), typeComponent);
 	}
 
 	@Override
@@ -94,24 +102,25 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 	public void addCreativeItems(NonNullList<ItemStack> subItems, boolean hideSecrets) {
-		for (IIndividual individual : TreeManager.treeRoot.getIndividualTemplates()) {
+		for (ITree individual : TreeHelper.getRoot().getIndividualTemplates()) {
 			// Don't show secrets unless ordered to.
 			if (hideSecrets && individual.isSecret() && !Config.isDebug) {
 				continue;
 			}
 
-			subItems.add(TreeManager.treeRoot.getMemberStack(individual, type));
+			subItems.add(TreeManager.treeRoot.getTypes().createStack(individual, type));
 		}
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int getColorFromItemstack(ItemStack itemstack, int renderPass) {
-		return TreeGenome.getSpecies(itemstack).getGermlingColour(type, renderPass);
+	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
+		return getSpecies(itemstack).getGermlingColour(type, renderPass);
 	}
 
 	/* MODELS */
-	@OnlyIn(Dist.CLIENT)
+	//TODO: Wood Models
+	/*@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		manager.registerItemModel(item, new GermlingMeshDefinition());
@@ -134,25 +143,28 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			}
 			return treeSpecies.getGermlingModel(type);
 		}
-	}
+	}*/
+
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		RayTraceResult raytraceresult = rayTrace(worldIn, playerIn, true);
+		BlockRayTraceResult traceResult = (BlockRayTraceResult) rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.ANY);
+		BlockItemUseContext context = new BlockItemUseContext(new ItemUseContext(playerIn, handIn, traceResult));
 
 		ItemStack itemStack = playerIn.getHeldItem(handIn);
+		if (traceResult.getType() == RayTraceResult.Type.BLOCK) {
+			BlockPos pos = traceResult.getPos();
 
-		if (raytraceresult != null && raytraceresult.getType() == RayTraceResult.Type.BLOCK) {
-			BlockPos pos = ((BlockRayTraceResult) raytraceresult).getPos();
-
-			ITree tree = TreeManager.treeRoot.getMember(itemStack);
-			if (tree != null) {
+			Optional<ITree> treeOptional = TreeManager.treeRoot.create(itemStack);
+			if (treeOptional.isPresent()) {
+				ITree tree = treeOptional.get();
 				if (type == EnumGermlingType.SAPLING) {
-					return onItemRightClickSapling(itemStack, worldIn, playerIn, pos, tree);
+					return onItemRightClickSapling(itemStack, worldIn, playerIn, pos, tree, context);
 				} else if (type == EnumGermlingType.POLLEN) {
 					return onItemRightClickPollen(itemStack, worldIn, playerIn, pos, tree);
 				}
 			}
+
 		}
 		return new ActionResult<>(ActionResultType.PASS, itemStack);
 	}
@@ -186,10 +198,10 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 
-	private static ActionResult<ItemStack> onItemRightClickSapling(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree) {
+	private static ActionResult<ItemStack> onItemRightClickSapling(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree, BlockItemUseContext context) {
 		// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
 		BlockState hitBlock = worldIn.getBlockState(pos);
-		if (!hitBlock.getBlock().isReplaceable(worldIn, pos)) {
+		if (!hitBlock.isReplaceable(context)) {
 			if (!worldIn.isAirBlock(pos.up())) {
 				return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
 			}
@@ -210,10 +222,11 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	@Override
 	public float getFermentationModifier(ItemStack itemstack) {
 		itemstack = GeneticsUtil.convertToGeneticEquivalent(itemstack);
-		ITree tree = TreeManager.treeRoot.getMember(itemstack);
-		if (tree == null) {
+		Optional<ITree> treeOptional = TreeManager.treeRoot.create(itemstack);
+		if (!treeOptional.isPresent()) {
 			return 1.0f;
 		}
+		ITree tree = treeOptional.get();
 		return tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * 10;
 	}
 

@@ -27,6 +27,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -95,7 +96,7 @@ public class ItemLetter extends ItemWithGui {
 
 		CompoundNBT compoundNBT = itemstack.getTag();
 		if (compoundNBT == null) {
-			list.add(new StringTextComponent("<").appendSibling(new TranslationTextComponent("for.gui.blank").appendText(">")));
+			list.add(new StringTextComponent("<").appendSibling(new TranslationTextComponent("for.gui.blank").appendText(">").applyTextStyle(TextFormatting.GRAY)));
 			return;
 		}
 

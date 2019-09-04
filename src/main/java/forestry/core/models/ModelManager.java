@@ -237,7 +237,7 @@ public class ModelManager implements IModelManager {
 		public int getColor(ItemStack stack, int tintIndex) {
 			Item item = stack.getItem();
 			if (item instanceof IColoredItem) {
-				return ((IColoredItem) item).getColorFromItemstack(stack, tintIndex);
+				return ((IColoredItem) item).getColorFromItemStack(stack, tintIndex);
 			}
 			return 0xffffff;
 		}

@@ -44,16 +44,11 @@ public class FakeTankManager extends EmptyFluidHandler implements ITankManager {
 
 	@Override
 	public IFluidTank getTank(int tankIndex) {
-		return EmptyFluidHandler.INSTANCE;
+		return null;
 	}
 
 	@Override
 	public boolean canFillFluidType(FluidStack fluidStack) {
-		return false;
-	}
-
-	@Override
-	public boolean canDrainFluidType(FluidStack fluidStack) {
 		return false;
 	}
 

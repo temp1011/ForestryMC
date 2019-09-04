@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -25,57 +26,47 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.ModelLoader;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.render.SaplingStateMapper;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.models.IStateMapperRegister;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable, IStateMapperRegister, IItemModelRegister {
-	protected static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
+	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	/* PROPERTYS */
 	public static final PropertyTree TREE = new PropertyTree("tree");
 
 	public BlockSapling() {
-		super(Material.PLANTS);
-		setSoundType(SoundType.PLANT);
+		super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.0F).sound(SoundType.PLANT));
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(BlockState state, IBlockReader source, BlockPos pos) {
-		return SAPLING_AABB;
+	public VoxelShape getShape(BlockState blockState, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
+		return SHAPE;
 	}
 
+	@Nullable
 	@Override
-	public TileEntity createTileEntity(World var1, int meta) {
+	public TileEntity createNewTileEntity(IBlockReader worldIn) {
 		return new TileSapling();
-	}
-
-	/* COLLISION BOX */
-
-	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return VoxelShapes.empty();
 	}
 
 	/* RENDERING */
@@ -90,13 +81,24 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	/* STATES */
+	//	@Override
+	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
+	//		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
+	//		if (sapling != null && sapling.getTree() != null) {
+	//			state = state.with(TREE, sapling.getTree().getGenome().getPrimary());
+	//		} else {
+	//			state = state.with(TREE, TreeDefinition.Oak.getGenome().getPrimary());
+	//		}
+	//		return state;
+	//	}
+
 	@Override
-	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
+	public BlockState getStateAtViewpoint(BlockState state, IBlockReader world, BlockPos pos, Vec3d viewpoint) {
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling != null && sapling.getTree() != null) {
-			state = state.with(TREE, sapling.getTree().getGenome().getPrimary());
+			state = state.with(TREE, sapling.getTree().getGenome().getPrimary(IAlleleTreeSpecies.class));
 		} else {
-			state = state.with(TREE, TreeDefinition.Oak.getGenome().getPrimary());
+			state = state.with(TREE, TreeDefinition.Oak.getGenome().getPrimary(IAlleleTreeSpecies.class));
 		}
 		return state;
 	}
@@ -109,7 +111,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerStateMapper() {
-		ModelLoader.setCustomStateMapper(this, new SaplingStateMapper());
+		//	ModelLoader.setCustomStateMapper(this, new SaplingStateMapper());
 	}
 
 	/* MODELS */
@@ -141,13 +143,13 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	/* REMOVING */
-	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
-		ItemStack drop = getDrop(world, pos);
-		if (!drop.isEmpty()) {
-			drops.add(drop);
-		}
-	}
+	//	@Override
+	//	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
+	//		ItemStack drop = getDrop(world, pos);
+	//		if (!drop.isEmpty()) {
+	//			drops.add(drop);
+	//		}
+	//	}
 
 	@Override
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
@@ -155,7 +157,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 		if (sapling == null || sapling.getTree() == null) {
 			return ItemStack.EMPTY;
 		}
-		return TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING);
+		return TreeManager.treeRoot.getTypes().createStack(sapling.getTree(), EnumGermlingType.SAPLING);
 	}
 
 	@Override
@@ -184,7 +186,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 		if (sapling != null) {
 			ITree tree = sapling.getTree();
 			if (tree != null) {
-				return TreeManager.treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING);
+				return TreeManager.treeRoot.getTypes().createStack(tree, EnumGermlingType.SAPLING);
 			}
 		}
 		return ItemStack.EMPTY;

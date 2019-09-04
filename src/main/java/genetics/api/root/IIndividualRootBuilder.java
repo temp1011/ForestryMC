@@ -12,13 +12,10 @@ import genetics.api.alleles.IAlleleTemplateBuilder;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
 import genetics.api.individual.IKaryotype;
-import genetics.api.organism.IOrganismType;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
-import genetics.api.root.components.IRootComponentBuilder;
 import genetics.api.root.components.IRootComponentFactory;
 import genetics.api.root.components.IRootComponentRegistry;
-import genetics.api.root.translator.IIndividualTranslator;
 
 /**
  * The IIndividualRootBuilder offers several functions to register templates, types or something similar that can be
@@ -75,46 +72,32 @@ public interface IIndividualRootBuilder<I extends IIndividual> {
 	 * <p>
 	 * {@link IRootComponentFactory#create(IIndividualRoot)} gets called later after all components were added and the
 	 * builder starts to build the root.
-	 * After all {@link IRootComponentBuilder}s were created all registered listeners get called and then the
-	 * {@link IRootComponentBuilder} gets finally build with {@link IRootComponentBuilder#create()} and added to the
 	 * root object.
 	 *
 	 * @param key The key associated with the component and the builder of this component.
-	 * @param <C> The type of the component of the key.
-	 * @param <B> the type of the component builder that the is associated with the key and created by the factory.
 	 */
-	<C extends IRootComponent, B extends IRootComponentBuilder> IIndividualRootBuilder<I> addComponent(ComponentKey<C, B> key);
+	IIndividualRootBuilder<I> addComponent(ComponentKey key);
 
 
 	/**
 	 * Adds the given component factory to this root.
 	 * <p>
-	 * {@link IRootComponentFactory#create(IIndividualRoot)} gets called later after all components were added and the
-	 * builder starts to build the root.
-	 * After all {@link IRootComponentBuilder}s were created all registered listeners get called and then the
-	 * {@link IRootComponentBuilder} gets finally build with {@link IRootComponentBuilder#create()} and added to the
-	 * root object.
 	 *
 	 * @param key     The key associated with the component and the builder of this component.
 	 * @param factory The factory that creates the instance of the component builder.
 	 * @param <C>     The type of the component of the key.
 	 * @param <B>     the type of the component builder that the is associated with the key and created by the factory.
 	 */
-	<C extends IRootComponent, B extends IRootComponentBuilder> IIndividualRootBuilder<I> addComponent(ComponentKey<C, B> key, IRootComponentFactory<I, B> factory);
+	<C extends IRootComponent<I>> IIndividualRootBuilder<I> addComponent(ComponentKey key, IRootComponentFactory<I, C> factory);
 
 	/**
 	 * Adds a component listener.
 	 * <p>
-	 * This method can be used to register {@link IOrganismType}s, {@link IIndividualTranslator}s and other things
-	 * at their {@link IRootComponentBuilder}.
-	 * <p>
-	 * {@link Consumer#accept(Object)} will get called between the creation of the {@link IRootComponentBuilder} and the
-	 * creation of the {@link IRootComponent} with {@link IRootComponentBuilder#create()}.
 	 *
 	 * @param key      The key associated with the component and the builder of this component.
 	 * @param consumer A consumer that receives the instance of the component builder before the component gets created.
 	 * @param <C>      The type of the component of the key.
 	 * @param <B>      the type of the component builder that the is associated with the key and created by the factory.
 	 */
-	<C extends IRootComponent, B extends IRootComponentBuilder> IIndividualRootBuilder<I> addListener(ComponentKey<C, B> key, Consumer<B> consumer);
+	<C extends IRootComponent<I>> IIndividualRootBuilder<I> addListener(ComponentKey key, Consumer<C> consumer);
 }

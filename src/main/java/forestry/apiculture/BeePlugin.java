@@ -18,26 +18,37 @@ import genetics.api.classification.IClassification;
 import genetics.api.classification.IClassification.EnumClassLevel;
 import genetics.api.classification.IClassificationRegistry;
 import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismTypes;
+import genetics.api.root.IGeneticListenerRegistry;
+import genetics.api.root.IIndividualRootBuilder;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.IRootManager;
+import genetics.api.root.components.ComponentKeys;
 import genetics.api.root.components.IRootComponentRegistry;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.genetics.ForestryComponentKeys;
+import forestry.api.genetics.IResearchHandler;
 import forestry.apiculture.genetics.BeeBranchDefinition;
+import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeHelper;
 import forestry.apiculture.genetics.BeeRoot;
+import forestry.apiculture.genetics.BeekeepingMode;
 import forestry.apiculture.genetics.alleles.AlleleEffects;
 import forestry.apiculture.items.ItemHoneyComb;
 import forestry.apiculture.items.ItemRegistryApiculture;
+import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.genetics.root.IResearchPlugin;
-import forestry.core.genetics.root.ResearchBuilder;
+import forestry.core.genetics.root.ResearchHandler;
 import forestry.core.items.ItemOverlay;
 import forestry.core.utils.ItemStackUtil;
 
-@GeneticPlugin
+@GeneticPlugin(modId = Constants.MOD_ID)
 public class BeePlugin implements IGeneticPlugin {
 	public static final IRootDefinition<BeeRoot> ROOT = GeneticsAPI.apiInstance.getRoot(BeeRoot.UID);
 
@@ -55,6 +66,11 @@ public class BeePlugin implements IGeneticPlugin {
 	}
 
 	@Override
+	public void registerListeners(IGeneticListenerRegistry registry) {
+		registry.add(BeeRoot.UID, BeeDefinition.values());
+	}
+
+	@Override
 	public void registerAlleles(IAlleleRegistry registry) {
 		registry.registerAlleles(EnumAllele.Fertility.values(), BeeChromosomes.FERTILITY);
 		registry.registerAlleles(EnumAllele.Flowering.values(), BeeChromosomes.FLOWERING);
@@ -68,10 +84,20 @@ public class BeePlugin implements IGeneticPlugin {
 
 	@Override
 	public void createRoot(IRootManager rootManager, IGeneticFactory geneticFactory) {
-		rootManager.createRoot(BeeRoot.UID)
+		IIndividualRootBuilder<IBee> rootBuilder = rootManager.createRoot(BeeRoot.UID);
+		rootBuilder
+			.setRootFactory(BeeRoot::new)
 			.setSpeciesType(BeeChromosomes.SPECIES)
-			.addComponent(ForestryComponentKeys.RESEARCH, ResearchBuilder::new)
-			.addListener(ForestryComponentKeys.RESEARCH, builder -> builder.addPlugin(new IResearchPlugin() {
+			.addListener(ComponentKeys.TYPES, (IOrganismTypes<IBee> builder) -> {
+				builder.registerType(EnumBeeType.DRONE, () -> new ItemStack(ModuleApiculture.getItems().beeDroneGE));
+				builder.registerType(EnumBeeType.PRINCESS, () -> new ItemStack(ModuleApiculture.getItems().beePrincessGE));
+				builder.registerType(EnumBeeType.QUEEN, () -> new ItemStack(ModuleApiculture.getItems().beeQueenGE));
+				builder.registerType(EnumBeeType.LARVAE, () -> new ItemStack(ModuleApiculture.getItems().beeLarvaeGE));
+			})
+			.addComponent(ComponentKeys.TRANSLATORS)
+			.addComponent(ComponentKeys.MUTATIONS)
+			.addComponent(ForestryComponentKeys.RESEARCH, ResearchHandler::new)
+			.addListener(ForestryComponentKeys.RESEARCH, (IResearchHandler<IBee> builder) -> builder.addPlugin(new IResearchPlugin() {
 				@Override
 				public float getResearchSuitability(IAlleleSpecies species, ItemStack itemStack) {
 					ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
@@ -125,6 +151,13 @@ public class BeePlugin implements IGeneticPlugin {
 
 	@Override
 	public void onFinishRegistration(IRootManager manager, IGeneticApiInstance instance) {
+		BeeManager.beeRoot = BeeManager.beeRootDefinition.get();
 
+		// Modes
+		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.easy);
+		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.normal);
+		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hard);
+		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hardcore);
+		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.insane);
 	}
 }

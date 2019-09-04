@@ -11,18 +11,21 @@
 package forestry.core.tiles;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IIndividualRoot;
+
 import forestry.api.core.INbtWritable;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.IIndividual;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.ColourUtil;
@@ -69,13 +72,17 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	}
 
 	private void setTokenSpecies(String speciesUid) {
-		IAllele allele = AlleleManager.alleleRegistry.getAllele(speciesUid);
+		Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(speciesUid);
+		if (!optionalAllele.isPresent()) {
+			return;
+		}
+		IAllele allele = optionalAllele.get();
 		if (allele instanceof IAlleleForestrySpecies) {
 			IAlleleForestrySpecies species = (IAlleleForestrySpecies) allele;
-			IForestrySpeciesRoot root = species.getRoot();
-			IAllele[] template = root.getTemplate(species);
+			IIndividualRoot<IIndividual> root = (IIndividualRoot<IIndividual>) species.getRoot();
+			IAllele[] template = root.getTemplates().getTemplate(species.getRegistryName().toString());
 			this.tokenIndividual = root.templateAsIndividual(template);
-			this.tokenStack = root.getMemberStack(this.tokenIndividual, root.getIconType());
+			this.tokenStack = root.getTypes().createStack(this.tokenIndividual, ((IForestrySpeciesRoot<IIndividual>) root).getIconType());
 		}
 	}
 
@@ -124,7 +131,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 			return 0xffffff;
 		}
 
-		int iconColor = tokenIndividual.getGenome().getPrimary().getSpriteColour(0);
+		int iconColor = tokenIndividual.getGenome().getPrimary(IAlleleForestrySpecies.class).getSpriteColour(0);
 
 		if (state == State.MATCHED) {
 			return ColourUtil.multiplyRGBComponents(iconColor, 0.7f);
@@ -158,7 +165,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 		CompoundNBT.putInt("state", state.ordinal());
 
 		if (tokenIndividual != null) {
-			CompoundNBT.putString("tokenSpecies", tokenIndividual.getGenome().getPrimary().getUID());
+			CompoundNBT.putString("tokenSpecies", tokenIndividual.getGenome().getPrimary().getRegistryName().toString());
 		}
 		return CompoundNBT;
 	}
@@ -169,7 +176,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 		data.writeEnum(state, State.VALUES);
 		if (tokenIndividual != null) {
 			data.writeBoolean(true);
-			data.writeString(tokenIndividual.getGenome().getPrimary().getUID());
+			data.writeString(tokenIndividual.getGenome().getPrimary().getRegistryName().toString());
 		} else {
 			data.writeBoolean(false);
 		}

@@ -13,8 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import com.mojang.authlib.GameProfile;
 
@@ -63,7 +65,7 @@ public interface ITree extends IIndividual, ITreeGenData {
 	 */
 	@Override
 	@Nullable
-	BlockPos canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight);
+	BlockPos canGrow(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight);
 
 	/**
 	 * @return Integer denoting the maturity (block ticks) required for a sapling to attempt to grow into a tree.
@@ -81,7 +83,7 @@ public interface ITree extends IIndividual, ITreeGenData {
 	@Override
 	int getGirth();
 
-	Feature getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed);
+	Feature<NoFeatureConfig> getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed);
 
 	@Override
 	ITree copy();
@@ -89,4 +91,12 @@ public interface ITree extends IIndividual, ITreeGenData {
 	boolean isPureBred(IChromosomeType chromosome);
 
 	boolean canBearFruit();
+
+	default boolean hasEffect() {
+		return getGenome().getPrimary(IAlleleTreeSpecies.class).hasEffect();
+	}
+
+	default boolean isSecret() {
+		return getGenome().getPrimary(IAlleleTreeSpecies.class).isSecret();
+	}
 }

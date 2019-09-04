@@ -33,9 +33,7 @@ import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpeciesBuilder;
 import forestry.api.arboriculture.genetics.ITreeRoot;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.IModelManager;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.ClimateGrowthProvider;
 import forestry.arboriculture.genetics.LeafProvider;
@@ -78,7 +76,8 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 
 	@Override
 	public IAlleleTreeSpecies build() {
-		AlleleManager.alleleRegistry.registerAllele(this, TreeChromosomes.SPECIES);
+		//AlleleManager.geneticRegistry.registerAllele(this, TreeChromosomes.SPECIES);
+		//TODO: Mutation and Allele Registration
 		leafProvider.init(this);
 		return this;
 	}

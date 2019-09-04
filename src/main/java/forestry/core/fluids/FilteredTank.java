@@ -16,6 +16,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.Rarity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -23,8 +26,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.core.gui.tooltips.ToolTip;
 
@@ -33,10 +37,11 @@ import forestry.core.gui.tooltips.ToolTip;
  */
 public class FilteredTank extends StandardTank {
 
-	private final Set<String> filters = new HashSet<>(); // FluidNames
+	private final Set<ResourceLocation> filters = new HashSet<>(); // FluidNames
 
 	public FilteredTank(int capacity) {
 		super(capacity);
+		setValidator(this::fluidMatchesFilter);
 	}
 
 	public FilteredTank(int capacity, boolean canFill, boolean canDrain) {
@@ -50,24 +55,13 @@ public class FilteredTank extends StandardTank {
 	public FilteredTank setFilters(Collection<Fluid> filters) {
 		this.filters.clear();
 		for (Fluid fluid : filters) {
-			this.filters.add(fluid.getName());
+			this.filters.add(fluid.getRegistryName());
 		}
 		return this;
 	}
 
-	@Override
-	public boolean canFillFluidType(FluidStack fluid) {
-		return fluidMatchesFilter(fluid);
-	}
-
-	@Override
-	public boolean canDrainFluidType(FluidStack fluid) {
-		return fluidMatchesFilter(fluid);
-	}
-
 	private boolean fluidMatchesFilter(FluidStack resource) {
-		return resource != null && resource.getFluid() != null &&
-			filters.contains(resource.getFluid().getName());
+		return resource.getFluid() != null && filters.contains(resource.getFluid().getRegistryName());
 	}
 
 	@Override
@@ -81,15 +75,15 @@ public class FilteredTank extends StandardTank {
 		ToolTip toolTip = getToolTip();
 		toolTip.clear();
 		if (Screen.hasShiftDown() || filters.size() < 5) {
-			for (String filterName : filters) {
-				//TODO fluids
-//				Fluid fluidFilter = FluidRegistry.getFluid(filterName);
-//				Rarity rarity = fluidFilter.getRarity();
-//				if (rarity == null) {
-//					rarity = Rarity.COMMON;
-//				}
-//				FluidStack filterFluidStack = FluidRegistry.getFluidStack(fluidFilter.getName(), 0);
-//				toolTip.add(fluidFilter.getLocalizedName(filterFluidStack), rarity.color);
+			for (ResourceLocation filterName : filters) {
+				Fluid fluidFilter = ForgeRegistries.FLUIDS.getValue(filterName);
+				FluidAttributes attributes = fluidFilter.getAttributes();
+				Rarity rarity = attributes.getRarity();
+				if (rarity == null) {
+					rarity = Rarity.COMMON;
+				}
+				FluidStack filterFluidStack = new FluidStack(fluidFilter, 0);
+				toolTip.add(filterFluidStack.getDisplayName(), rarity.color);
 			}
 		} else {
 			//TODO can this be simplified

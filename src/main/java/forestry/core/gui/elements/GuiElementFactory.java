@@ -114,7 +114,7 @@ public class GuiElementFactory implements IGuiElementFactory {
 	public IElementLayout createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele) {
 		ITextStyle textStyle = getStateStyle(toleranceAllele.isDominant());
 		EnumTolerance tolerance = toleranceAllele.getValue();
-		String text = "(" + toleranceAllele.getLocalizedName() + ")";
+		String text = "(" + toleranceAllele.getDisplayName().getFormattedText() + ")";
 
 		IElementLayout layout = createHorizontal(0, 0, 0).setDistance(2);
 
@@ -156,10 +156,10 @@ public class GuiElementFactory implements IGuiElementFactory {
 		if (breedingTracker.isDiscovered(mutation)) {
 			IElementGroup element = new PaneLayout(x, y, width, height);
 			IAlyzerPlugin plugin = ((IForestrySpeciesRoot) mutation.getRoot()).getAlyzerPlugin();
-			Map<String, ItemStack> iconStacks = plugin.getIconStacks();
+			Map<ResourceLocation, ItemStack> iconStacks = plugin.getIconStacks();
 
-			ItemStack firstPartner = iconStacks.get(mutation.getFirstParent().getRegistryName().toString());
-			ItemStack secondPartner = iconStacks.get(mutation.getSecondParent().getRegistryName().toString());
+			ItemStack firstPartner = iconStacks.get(mutation.getFirstParent().getRegistryName());
+			ItemStack secondPartner = iconStacks.get(mutation.getSecondParent().getRegistryName());
 			element.add(new ItemElement(0, 0, firstPartner), createProbabilityAdd(mutation, 21, 4), new ItemElement(33, 0, secondPartner));
 			return element;
 		}

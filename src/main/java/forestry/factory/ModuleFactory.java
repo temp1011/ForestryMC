@@ -21,12 +21,13 @@ import java.util.Set;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -395,8 +396,8 @@ public class ModuleFactory extends BlankForestryModule {
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
 			"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 
-		FluidStack liquidGlassBucket = Fluids.GLASS.getFluid(Fluid.BUCKET_VOLUME);
-		FluidStack liquidGlassX4 = Fluids.GLASS.getFluid(Fluid.BUCKET_VOLUME * 4);
+		FluidStack liquidGlassBucket = Fluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME);
+		FluidStack liquidGlassX4 = Fluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME * 4);
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();

@@ -10,8 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -28,21 +33,23 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.apiculture.IBeeSpriteColourProvider;
 import forestry.api.apiculture.IJubilanceProvider;
-import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IAlleleBeeSpeciesBuilder;
+import forestry.api.apiculture.genetics.IBeeProductProvider;
 import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.core.IModelManager;
-import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.genetics.DefaultBeeModelProvider;
 import forestry.apiculture.genetics.DefaultBeeSpriteColourProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
 
 public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBeeSpecies, IAlleleBeeSpeciesBuilder {
-	private final Map<ItemStack, Float> productChances = new HashMap<>();
-	private final Map<ItemStack, Float> specialtyChances = new HashMap<>();
+	@Nullable
+	private Map<ItemStack, Float> productChances;
+	@Nullable
+	private Map<ItemStack, Float> specialtyChances;
+	private final List<IBeeProductProvider> providers = new LinkedList<>();
 
 	private IBeeModelProvider beeModelProvider;
 	private IBeeSpriteColourProvider beeSpriteColourProvider;
@@ -59,7 +66,7 @@ public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBe
 
 	@Override
 	public IAlleleBeeSpecies build() {
-		AlleleManager.alleleRegistry.registerAllele(this, BeeChromosomes.SPECIES);
+		//AlleleManager.geneticRegistry.registerAllele(this, BeeChromosomes.SPECIES);
 		return this;
 	}
 
@@ -69,26 +76,30 @@ public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBe
 	}
 
 	@Override
-	public IAlleleBeeSpeciesBuilder addProduct(ItemStack product, Float chance) {
-		if (product.isEmpty()) {
-			throw new IllegalArgumentException("Tried to add empty product");
-		}
-		if (chance <= 0.0f || chance > 1.0f) {
-			throw new IllegalArgumentException("chance must be in the range (0, 1]");
-		}
-		this.productChances.put(product, chance);
+	public IAlleleBeeSpeciesBuilder addProduct(IBeeProductProvider provider) {
+		this.providers.add(provider);
 		return this;
 	}
 
 	@Override
-	public IAlleleBeeSpeciesBuilder addSpecialty(ItemStack specialty, Float chance) {
-		if (specialty.isEmpty()) {
-			throw new IllegalArgumentException("Tried to add empty specialty");
-		}
-		if (chance <= 0.0f || chance > 1.0f) {
-			throw new IllegalArgumentException("chance must be in the range (0, 1]");
-		}
-		this.specialtyChances.put(specialty, chance);
+	public IAlleleBeeSpeciesBuilder addProduct(Supplier<ItemStack> product, Float chance) {
+		addProduct(new IBeeProductProvider() {
+			@Override
+			public void addProducts(BiConsumer<ItemStack, Float> registry) {
+				registry.accept(product.get(), chance);
+			}
+		});
+		return this;
+	}
+
+	@Override
+	public IAlleleBeeSpeciesBuilder addSpecialty(Supplier<ItemStack> specialty, Float chance) {
+		addProduct(new IBeeProductProvider() {
+			@Override
+			public void addSpecialties(BiConsumer<ItemStack, Float> registry) {
+				registry.accept(specialty.get(), chance);
+			}
+		});
 		return this;
 	}
 
@@ -124,11 +135,36 @@ public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBe
 
 	@Override
 	public Map<ItemStack, Float> getProductChances() {
+		if (productChances == null) {
+			this.productChances = new HashMap<>();
+			BiConsumer<ItemStack, Float> addProduct = (product, chance) -> {
+				if (product.isEmpty()) {
+					throw new IllegalArgumentException("Tried to add empty product");
+				}
+				if (chance <= 0.0f || chance > 1.0f) {
+					throw new IllegalArgumentException("chance must be in the range (0, 1]");
+				}
+				productChances.put(product, chance);
+			};
+			providers.forEach(provider -> provider.addProducts(addProduct));
+		}
 		return productChances;
 	}
 
 	@Override
 	public Map<ItemStack, Float> getSpecialtyChances() {
+		if (specialtyChances == null) {
+			BiConsumer<ItemStack, Float> addProduct = (product, chance) -> {
+				if (product.isEmpty()) {
+					throw new IllegalArgumentException("Tried to add empty specialty");
+				}
+				if (chance <= 0.0f || chance > 1.0f) {
+					throw new IllegalArgumentException("chance must be in the range (0, 1]");
+				}
+				specialtyChances.put(product, chance);
+			};
+			providers.forEach(provider -> provider.addSpecialties(addProduct));
+		}
 		return specialtyChances;
 	}
 
