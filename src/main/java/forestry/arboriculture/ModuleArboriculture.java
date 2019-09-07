@@ -23,17 +23,8 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -42,7 +33,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import net.minecraftforge.fml.DistExecutor;
@@ -53,11 +44,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.Forestry;
 import forestry.api.arboriculture.EnumForestryWoodType;
-import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
@@ -66,14 +54,11 @@ import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBlockTranslator;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IItemTranslator;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
-import forestry.arboriculture.blocks.BlockForestryLeaves;
-import forestry.arboriculture.blocks.BlockForestryLog;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
@@ -90,30 +75,21 @@ import forestry.arboriculture.models.WoodTextureManager;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
-import forestry.arboriculture.tiles.TileFruitPod;
-import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileRegistryArboriculture;
-import forestry.arboriculture.tiles.TileSapling;
 import forestry.arboriculture.worldgen.TreeDecorator;
 import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManagerForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.IMCUtil;
-import forestry.core.utils.VillagerTradeLists;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
-
-import afu.org.checkerframework.checker.oigj.qual.O;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.arboriculture.description", lootTable = "arboriculture")
 public class ModuleArboriculture extends BlankForestryModule {
@@ -337,7 +313,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 			if (ModuleHelper.allEnabled(ForestryModuleUids.FACTORY, ForestryModuleUids.APICULTURE)) {
 				logs.setCount(1);
 				fireproofLogs.setCount(1);
-				FluidStack liquidGlass = Fluids.GLASS.getFluid(500);
+				FluidStack liquidGlass = ForestryFluids.GLASS.getFluid(500);
 				if (liquidGlass != null) {
 					RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, fireproofLogs.copy(), new Object[]{
 						" # ",
@@ -365,13 +341,13 @@ public class ModuleArboriculture extends BlankForestryModule {
 			int juiceMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
 			int mulchMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
 			ItemStack mulch = new ItemStack(coreItems.mulch);
-			Fluid seedOil = Fluids.SEED_OIL.getFluid();
+			Fluid seedOil = ForestryFluids.SEED_OIL.getFluid();
 			if (seedOil != null) {
 				RecipeManagers.squeezerManager.addRecipe(20, coreItems.getFruit(EnumFruit.CHERRY, 1), new FluidStack(seedOil, 5 * seedOilMultiplier), mulch, 5);
 				RecipeManagers.squeezerManager.addRecipe(60, coreItems.getFruit(EnumFruit.WALNUT, 1), new FluidStack(seedOil, 18 * seedOilMultiplier), mulch, 5);
 				RecipeManagers.squeezerManager.addRecipe(70, coreItems.getFruit(EnumFruit.CHESTNUT, 1), new FluidStack(seedOil, 22 * seedOilMultiplier), mulch, 2);
 			}
-			Fluid juice = Fluids.JUICE.getFluid();
+			Fluid juice = ForestryFluids.JUICE.getFluid();
 			if (juice != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, coreItems.getFruit(EnumFruit.LEMON, 1), new FluidStack(juice, juiceMultiplier * 2), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
 				RecipeManagers.squeezerManager.addRecipe(10, coreItems.getFruit(EnumFruit.PLUM, 1), new FluidStack(juice, (int) Math.floor(juiceMultiplier * 0.5f)), mulch, mulchMultiplier * 3);

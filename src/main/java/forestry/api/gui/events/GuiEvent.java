@@ -110,7 +110,7 @@ public class GuiEvent extends GuiElementEvent {
 
 		public WheelEvent(IGuiElement origin, double dWheel) {
 			super(origin);
-			this.dWheel = 0;
+			this.dWheel = 0;	//TODO why is this line needed?
 			this.dWheel = dWheel / 28;
 		}
 

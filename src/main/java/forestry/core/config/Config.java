@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 
 import javax.annotation.Nullable;
@@ -36,7 +37,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import forestry.Forestry;
 import forestry.apiculture.HiveConfig;
 import forestry.core.config.forge_old.Property;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.factory.ModuleFactory;
@@ -56,8 +57,8 @@ public class Config {
 	public static String gameMode;
 
 	private static final Set<String> disabledStructures = new HashSet<>();
-	private static final Set<String> disabledFluids = new HashSet<>();
-	private static final Set<String> disabledBlocks = new HashSet<>();
+	private static final Set<ResourceLocation> disabledFluids = new HashSet<>();
+	private static final Set<ResourceLocation> disabledBlocks = new HashSet<>();
 
 	public static boolean isDebug = false;
 
@@ -150,11 +151,11 @@ public class Config {
 		return !Config.disabledStructures.contains(uid);
 	}
 
-	public static boolean isFluidEnabled(Fluids fluidDefinition) {
+	public static boolean isFluidEnabled(ForestryFluids fluidDefinition) {
 		return !Config.disabledFluids.contains(fluidDefinition.getTag());
 	}
 
-	public static boolean isBlockEnabled(String tag) {
+	public static boolean isBlockEnabled(ResourceLocation tag) {
 		return !Config.disabledBlocks.contains(tag);
 	}
 
@@ -329,8 +330,8 @@ public class Config {
 		disabledStructureArray = configCommon.getStringListLocalized("structures", "disabled", disabledStructureArray, availableStructures);
 
 		disabledStructures.addAll(Arrays.asList(disabledStructureArray));
-		for (String str : disabledStructures) {
-			Log.debug("Disabled structure '{}'.", str);
+		for (String s : disabledStructures) {
+			Log.debug("Disabled structure '{}'.", s);
 		}
 
 		isDebug = configCommon.getBooleanLocalized("debug", "enabled", isDebug);
@@ -349,19 +350,20 @@ public class Config {
 	}
 
 	private static void loadConfigFluids() {
-		for (Fluids fluid : Fluids.values()) {
+		Preconditions.checkNotNull(configFluid);
+		for (ForestryFluids fluid : ForestryFluids.values()) {
 			String fluidName = Translator.translateToLocal("fluid." + fluid.getTag());
 
 			boolean enabledFluid = !Config.disabledFluids.contains(fluid.getTag());
 			String enableFluidComment = Translator.translateToLocalFormatted("for.config.fluids.enable.format", fluidName);
-			enabledFluid = configFluid.getBoolean("enableFluid", fluid.getTag(), enabledFluid, enableFluidComment);
+			enabledFluid = configFluid.getBoolean("enableFluid", fluid.getTag().toString(), enabledFluid, enableFluidComment);
 			if (!enabledFluid) {
 				Config.disabledFluids.add(fluid.getTag());
 			}
 
 			boolean enabledFluidBlock = !Config.disabledBlocks.contains(fluid.getTag());
 			String enableFluidBlockComment = Translator.translateToLocalFormatted("for.config.fluid.blocks.enable.format", fluidName);
-			enabledFluidBlock = configFluid.getBoolean("enableFluidBlock", fluid.getTag(), enabledFluidBlock, enableFluidBlockComment);
+			enabledFluidBlock = configFluid.getBoolean("enableFluidBlock", fluid.getTag().toString(), enabledFluidBlock, enableFluidBlockComment);
 			if (!enabledFluidBlock) {
 				Config.disabledBlocks.add(fluid.getTag());
 			}

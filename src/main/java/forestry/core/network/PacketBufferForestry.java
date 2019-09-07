@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.climate.IClimateState;
@@ -68,8 +68,8 @@ public class PacketBufferForestry extends PacketBuffer {
 		if (fluidStack == null) {
 			writeVarInt(-1);
 		} else {
-			writeVarInt(fluidStack.amount);
-			writeString(fluidStack.getFluid().getName());
+			writeVarInt(fluidStack.getAmount());
+			writeString(fluidStack.getFluid().getRegistryName().toString());
 		}
 	}
 

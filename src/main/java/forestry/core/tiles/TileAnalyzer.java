@@ -33,6 +33,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
@@ -42,7 +44,7 @@ import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.gui.ContainerAnalyzer;
 import forestry.core.inventory.InventoryAnalyzer;
@@ -72,7 +74,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public TileAnalyzer() {
 		super(ModuleCore.getTiles().analyzer, 800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryAnalyzer(this));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(Fluids.FOR_HONEY.getFluid());
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(ForestryFluids.FOR_HONEY.getFluid());
 		tankManager = new TankManager(this, resourceTank);
 		invInput = new InventoryMapper(getInternalInventory(), InventoryAnalyzer.SLOT_INPUT_1, InventoryAnalyzer.SLOT_INPUT_COUNT);
 		invOutput = new InventoryMapper(getInternalInventory(), InventoryAnalyzer.SLOT_OUTPUT_1, InventoryAnalyzer.SLOT_OUTPUT_COUNT);
@@ -117,11 +119,11 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		if (!specimenToAnalyze.isAnalyzed()) {
-			FluidStack drained = resourceTank.drain(HONEY_REQUIRED, false);
-			if (drained == null || drained.amount != HONEY_REQUIRED) {
+			FluidStack drained = resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.SIMULATE);
+			if (drained.isEmpty() || drained.getAmount() != HONEY_REQUIRED) {
 				return false;
 			}
-			resourceTank.drain(HONEY_REQUIRED, true);
+			resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.EXECUTE);
 
 			specimenToAnalyze.analyze();
 
@@ -196,8 +198,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			hasSpace = InventoryUtil.tryAddStack(invOutput, specimen, true, false);
 
 			if (specimenToAnalyze != null && !specimenToAnalyze.isAnalyzed()) {
-				FluidStack drained = resourceTank.drain(HONEY_REQUIRED, false);
-				hasResource = drained != null && drained.amount == HONEY_REQUIRED;
+				FluidStack drained = resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.SIMULATE);
+				hasResource = !drained.isEmpty() && drained.getAmount() == HONEY_REQUIRED;
 			}
 		}
 

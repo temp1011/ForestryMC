@@ -27,7 +27,8 @@ import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.Fluid;
+
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
@@ -35,6 +36,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
@@ -74,7 +77,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		setInternalInventory(new InventoryFabricator(this));
 
-		moltenTank = new FilteredTank(8 * Fluid.BUCKET_VOLUME, false, false).setFilters(FabricatorSmeltingRecipeManager.getRecipeFluids());
+		moltenTank = new FilteredTank(8 * FluidAttributes.BUCKET_VOLUME, false, false).setFilters(FabricatorSmeltingRecipeManager.getRecipeFluids());
 
 		tankManager = new TankManager(this, moltenTank);
 	}
@@ -125,7 +128,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		if (!moltenTank.isEmpty()) {
 			// Remove smelt if we have gone below melting point
 			if (heat < getMeltingPoint() - 100) {
-				moltenTank.drain(5, true);
+				moltenTank.drain(5, IFluidHandler.FluidAction.EXECUTE);
 			}
 		}
 
@@ -150,9 +153,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 
 		FluidStack smeltFluid = smelt.getProduct();
-		if (moltenTank.fillInternal(smeltFluid, false) == smeltFluid.amount) {
+		if (moltenTank.fill(smeltFluid, IFluidHandler.FluidAction.SIMULATE) == smeltFluid.getAmount()) {
 			this.decrStackSize(InventoryFabricator.SLOT_METAL, 1);
-			moltenTank.fillInternal(smeltFluid, true);
+			moltenTank.fill(smeltFluid, IFluidHandler.FluidAction.EXECUTE);
 			meltingPoint = smelt.getMeltingPoint();
 		}
 	}
@@ -208,10 +211,10 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			// Remove resources
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 			if (removeFromInventory(crafting, myRecipePair, false)) {
-				FluidStack drained = moltenTank.drainInternal(liquid, false);
-				if (drained != null && drained.isFluidStackIdentical(liquid)) {
+				FluidStack drained = moltenTank.drain(liquid, IFluidHandler.FluidAction.SIMULATE);
+				if (!drained.isEmpty() && drained.isFluidStackIdentical(liquid)) {
 					removeFromInventory(crafting, myRecipePair, true);
-					moltenTank.drain(liquid.amount, true);
+					moltenTank.drain(liquid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 
 					// Damage plan
 					if (!getStackInSlot(InventoryFabricator.SLOT_PLAN).isEmpty()) {
@@ -249,7 +252,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 			hasResources = removeFromInventory(crafting, recipePair, false);
 			FluidStack toDrain = recipe.getLiquid();
-			FluidStack drained = moltenTank.drainInternal(toDrain, false);
+			FluidStack drained = moltenTank.drain(toDrain, IFluidHandler.FluidAction.SIMULATE);
 			hasLiquidResources = drained != null && drained.isFluidStackIdentical(toDrain);
 		} else {
 			hasRecipe = false;

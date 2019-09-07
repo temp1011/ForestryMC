@@ -23,6 +23,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 
 import forestry.api.climate.IClimateControlled;
@@ -73,11 +74,11 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	public void changeClimate(int tickCount, IClimateControlled climateControlled) {
 		if (transferTime <= 0) {
 			FluidStack fluid = liquidTank.getFluid();
-			if (fluid != null) {
+			if (!fluid.isEmpty()) {
 				currentRecipe = HygroregulatorManager.findMatchingRecipe(fluid);
 
 				if (currentRecipe != null) {
-					liquidTank.drainInternal(currentRecipe.getResource().amount, true);
+					liquidTank.drain(currentRecipe.getResource().getAmount(), IFluidHandler.FluidAction.EXECUTE);
 					transferTime = currentRecipe.getTransferTime();
 				}
 			}

@@ -27,7 +27,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import forestry.core.blocks.BlockBase;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
 
@@ -175,7 +175,7 @@ public class RenderMachine extends TileEntityRenderer<TileBase> {
 		}
 
 		// TODO: render fluid overlay on tank
-		Fluids fluidDefinition = Fluids.getFluidDefinition(renderInfo.getFluidStack());
+		ForestryFluids fluidDefinition = ForestryFluids.getFluidDefinition(renderInfo.getFluidStack());
 		Color primaryTankColor = fluidDefinition == null ? Color.BLUE : fluidDefinition.getParticleColor();
 		float[] colors = new float[3];
 		primaryTankColor.getRGBColorComponents(colors);

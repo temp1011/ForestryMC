@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
+import net.minecraft.util.text.TranslationTextComponent;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
@@ -29,10 +31,10 @@ public class BiogasSlot extends ReservoirWidget {
 		IFluidTank tank = getTank();
 		if (tank != null) {
 			FluidStack fluid = tank.getFluid();
-			if (fluid == null) {
-				toolTip.add(Translator.translateToLocal("for.gui.empty"));
+			if (fluid.isEmpty()) {
+				toolTip.add(new TranslationTextComponent("for.gui.empty"));
 			} else {
-				toolTip.add(fluid.getLocalizedName());
+				toolTip.add(new TranslationTextComponent(fluid.getTranslationKey()));
 			}
 		}
 		return toolTip;

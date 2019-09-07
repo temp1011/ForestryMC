@@ -33,6 +33,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.core.config.Constants;
@@ -172,12 +174,12 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 		FluidStack fluid = currentRecipe.getFluidResource();
 		if (fluid != null) {
-			FluidStack drained = resourceTank.drainInternal(fluid, false);
+			FluidStack drained = resourceTank.drain(fluid, IFluidHandler.FluidAction.SIMULATE);
 			if (!fluid.isFluidStackIdentical(drained)) {
 				return false;
 			}
 			if (doRemove) {
-				resourceTank.drainInternal(fluid, true);
+				resourceTank.drain(fluid, IFluidHandler.FluidAction.EXECUTE);
 			}
 		}
 

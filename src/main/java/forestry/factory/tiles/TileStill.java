@@ -31,6 +31,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IStillRecipe;
 import forestry.core.config.Constants;
@@ -116,7 +118,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 			FluidHelper.drainContainers(tankManager, this, InventoryStill.SLOT_CAN);
 
 			FluidStack fluidStack = productTank.getFluid();
-			if (fluidStack != null) {
+			if (!fluidStack.isEmpty()) {
 				FluidHelper.fillContainers(tankManager, this, InventoryStill.SLOT_RESOURCE, InventoryStill.SLOT_PRODUCT, fluidStack.getFluid(), true);
 			}
 		}
@@ -128,8 +130,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		int cycles = currentRecipe.getCyclesPerUnit();
 		FluidStack output = currentRecipe.getOutput();
 
-		FluidStack product = new FluidStack(output, output.amount * cycles);
-		productTank.fillInternal(product, true);
+		FluidStack product = new FluidStack(output, output.getAmount() * cycles);
+		productTank.fill(product, IFluidHandler.FluidAction.EXECUTE);
 
 		bufferedLiquid = null;
 
@@ -158,16 +160,16 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 		if (hasRecipe) {
 			FluidStack fluidStack = currentRecipe.getOutput();
-			hasTankSpace = productTank.fillInternal(fluidStack, false) == fluidStack.amount;
+			hasTankSpace = productTank.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount();
 			if (bufferedLiquid == null) {
 				int cycles = currentRecipe.getCyclesPerUnit();
 				FluidStack input = currentRecipe.getInput();
-				int drainAmount = cycles * input.amount;
-				FluidStack drained = resourceTank.drain(drainAmount, false);
-				hasLiquidResource = drained != null && drained.amount == drainAmount;
+				int drainAmount = cycles * input.getAmount();
+				FluidStack drained = resourceTank.drain(drainAmount, IFluidHandler.FluidAction.SIMULATE);
+				hasLiquidResource = !drained.isEmpty() && drained.getAmount() == drainAmount;
 				if (hasLiquidResource) {
 					bufferedLiquid = new FluidStack(input, drainAmount);
-					resourceTank.drain(drainAmount, true);
+					resourceTank.drain(drainAmount, IFluidHandler.FluidAction.EXECUTE);
 				}
 			}
 		}

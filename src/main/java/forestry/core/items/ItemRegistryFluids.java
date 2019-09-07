@@ -16,12 +16,13 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 
 public class ItemRegistryFluids extends ItemRegistry {
 	public final ItemFluidContainerForestry canEmpty;
@@ -30,7 +31,7 @@ public class ItemRegistryFluids extends ItemRegistry {
 
 	private final Map<EnumContainerType, ItemFluidContainerForestry> containers = new EnumMap<>(EnumContainerType.class);
 
-	public ItemStack getContainer(EnumContainerType type, Fluids fluid) {
+	public ItemStack getContainer(EnumContainerType type, ForestryFluids fluid) {
 		return getContainer(type, fluid.getFluid());
 	}
 
@@ -38,7 +39,7 @@ public class ItemRegistryFluids extends ItemRegistry {
 		ItemStack container = new ItemStack(containers.get(type));
 		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
 		if (fluidHandlerCap.isPresent()) {
-			fluidHandlerCap.orElse(null).fill(new FluidStack(fluid, Integer.MAX_VALUE), true);
+			fluidHandlerCap.orElse(null).fill(new FluidStack(fluid, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
 			return container;
 		} else {
 			return ItemStack.EMPTY;

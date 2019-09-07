@@ -22,7 +22,7 @@ displayName="Forestry" #mandatory
 #updateJSONURL="http://myurl.me/" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
 #also TODO - is this the best website to choose?
-displayURL="http://forestry.sengir.net/" #optional
+displayURL="https://forestryforminecraft.info/" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="/assets/forestry/logo.png" #optional
 # A text field displayed in the mod UI

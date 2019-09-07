@@ -36,8 +36,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -51,7 +52,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IModelManager;
 import forestry.core.ItemGroupForestry;
 import forestry.core.config.Config;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.utils.Translator;
 
 public class ItemFluidContainerForestry extends ItemForestry {
@@ -83,7 +84,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 			for (Fluid fluid : new Fluid[0]){//FluidRegistry.getRegisteredFluids().values()) {
 				ItemStack itemStack = new ItemStack(this);
 				IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
-				if (fluidHandler.fill(new FluidStack(fluid, Fluid.BUCKET_VOLUME), true) == Fluid.BUCKET_VOLUME) {
+				if (fluidHandler.fill(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE) == FluidAttributes.BUCKET_VOLUME) {
 					ItemStack filled = fluidHandler.getContainer();
 					subItems.add(filled);
 				}
@@ -102,7 +103,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 			itemStack.setCount(1);
 		}
 		IFluidHandler fluidHandler = new FluidHandlerItemForestry(itemStack, type);
-		return fluidHandler.drain(Integer.MAX_VALUE, false);
+		return fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
 	}
 
 	@Override
@@ -111,12 +112,12 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		if (item instanceof ItemFluidContainerForestry) {
 			FluidStack fluid = getContained(stack);
 			if (fluid != null) {
-				String exactTranslationKey = "item.for." + type.getName() + '.' + fluid.getFluid().getName() + ".name";
+				String exactTranslationKey = "item.for." + type.getName() + '.' + fluid.getFluid().getRegistryName() + ".name";
 				if (Translator.canTranslateToLocal(exactTranslationKey)) {	//TODO - can't call this on the server!! Maybe make custom textcomponent to handle this?
 					return new TranslationTextComponent(exactTranslationKey);
 				} else {
 					String grammarKey = "item.for." + type.getName() + ".grammar";
-					return new TranslationTextComponent(grammarKey, fluid.getLocalizedName());
+					return new TranslationTextComponent(grammarKey, fluid.getTranslationKey());
 				}
 			} else {
 				String unlocalizedname = "item.for." + type.getName() + ".empty.name";
@@ -155,7 +156,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	protected DrinkProperties getDrinkProperties(ItemStack itemStack) {
 		FluidStack contained = getContained(itemStack);
 		if (contained != null) {
-			Fluids definition = Fluids.getFluidDefinition(contained);
+			ForestryFluids definition = ForestryFluids.getFluidDefinition(contained);
 			if (definition != null) {
 				return definition.getDrinkProperties();
 			}

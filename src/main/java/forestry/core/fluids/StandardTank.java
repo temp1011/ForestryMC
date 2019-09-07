@@ -12,17 +12,15 @@ package forestry.core.fluids;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
+
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
@@ -35,6 +33,9 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	private ITankUpdateHandler tankUpdateHandler = FakeTankUpdateHandler.instance;
 	private int tankIndex;
+	//TODO I think this is the best way to handle this
+	private boolean canFill = true;
+	private boolean canDrain = true;
 
 	@OnlyIn(Dist.CLIENT)
 	@Nullable
@@ -42,8 +43,8 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	public StandardTank(int capacity, boolean canFill, boolean canDrain) {
 		super(capacity);
-		setCanFill(canFill);
-		setCanDrain(canDrain);
+		this.canFill = canFill;
+		this.canDrain = canDrain;
 	}
 
 	public StandardTank(int capacity) {
@@ -67,15 +68,18 @@ public class StandardTank extends FluidTank implements IStreamable {
 		if (f == null) {
 			return DEFAULT_COLOR;
 		}
-		return f.getColor(getFluid());
+		return f.getAttributes().getColor(getFluid());
 	}
 
-	public boolean isEmpty() {
-		return getFluid() == null || getFluid().amount <= 0;
-	}
+//	@Override
+//	public boolean isEmpty() {
+//		//TODO fluids simpler now?
+////		return getFluid() == null || getFluid().getAmount() <= 0;
+//		return getFluid().isEmpty();
+//	}
 
 	public boolean isFull() {
-		return getFluid() != null && getFluid().amount == getCapacity();
+		return !getFluid().isEmpty() && getFluid().getAmount() == getCapacity();
 	}
 
 	public int getRemainingSpace() {
@@ -84,23 +88,30 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	@Nullable
 	public Fluid getFluidType() {
-		return getFluid() != null ? getFluid().getFluid() : null;
+		return !getFluid().isEmpty() ? getFluid().getFluid() : null;
 	}
 
 	@Override
-	public int fillInternal(FluidStack resource, boolean doFill) {
-		int filled = super.fillInternal(resource, doFill);
-		if (doFill && filled > 0) {
+	public int fill(FluidStack resource, FluidAction doFill) {
+//		return canFill ? 0 : super.fill(resource, doFill);
+		//TODO - unsure about tankUpdateHandler so for now keep longer method.
+		if(!canFill) {
+			return 0;
+		}
+		int filled = super.fill(resource, doFill);
+		if (doFill.execute() && filled > 0) {
 			tankUpdateHandler.updateTankLevels(this);
 		}
 		return filled;
 	}
 
 	@Override
-	@Nullable
-	public FluidStack drainInternal(int maxDrain, boolean doDrain) {
-		FluidStack drained = super.drainInternal(maxDrain, doDrain);
-		if (doDrain && drained != null && drained.amount > 0) {
+	public FluidStack drain(int maxDrain, FluidAction action) {
+		if(!canDrain) {
+			return FluidStack.EMPTY;
+		}
+		FluidStack drained = super.drain(maxDrain, action);
+		if (action.execute() && !drained.isEmpty() && drained.getAmount() > 0) {
 			tankUpdateHandler.updateTankLevels(this);
 		}
 		return drained;
@@ -108,12 +119,18 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	@Override
 	public String toString() {
-		return String.format("Tank: %s, %d/%d", fluid != null && fluid.getFluid() != null ? fluid.getFluid().getName() : "Empty", getFluidAmount(), getCapacity());
+		return String.format("Tank: %s, %d/%d", !fluid.isEmpty() && fluid.getFluid() != null ? fluid.getFluid().getRegistryName() : "Empty", getFluidAmount(), getCapacity());
 	}
 
 	protected boolean hasFluid() {
 		FluidStack fluid = getFluid();
-		return fluid != null && fluid.amount > 0 && fluid.getFluid() != null;
+		return !fluid.isEmpty() && fluid.getAmount() > 0 && fluid.getFluid() != null;
+	}
+
+	@Override
+	protected void onContentsChanged()
+	{
+		tankUpdateHandler.updateTankLevels(this);
 	}
 
 	@Override
@@ -140,14 +157,14 @@ public class StandardTank extends FluidTank implements IStreamable {
 		toolTip.clear();
 		int amount = 0;
 		FluidStack fluidStack = getFluid();
-		if (fluidStack != null) {
+		if (!fluidStack.isEmpty()) {
 			Fluid fluidType = fluidStack.getFluid();
-			Rarity rarity = fluidType.getRarity();
+			Rarity rarity = fluidType.getAttributes().getRarity();
 			if (rarity == null) {
 				rarity = Rarity.COMMON;
 			}
-			toolTip.add(new TranslationTextComponent(fluidType.getUnlocalizedName(fluidStack)), rarity.color);
-			amount = getFluid().amount;
+			toolTip.add(new TranslationTextComponent(fluidType.getAttributes().getTranslationKey(fluidStack)), rarity.color);
+			amount = getFluid().getAmount();
 		}
 		TranslationTextComponent liquidAmount = new TranslationTextComponent("for.gui.tooltip.liquid.amount", amount, getCapacity());
 		toolTip.add(liquidAmount);

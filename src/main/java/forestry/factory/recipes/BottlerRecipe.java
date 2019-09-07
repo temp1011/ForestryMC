@@ -15,9 +15,10 @@ import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class BottlerRecipe {
@@ -32,8 +33,8 @@ public class BottlerRecipe {
 
 		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
-		FluidStack drained = fluidHandler.drain(Integer.MAX_VALUE, true);
-		if (drained != null && drained.amount > 0) {
+		FluidStack drained = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE);
+		if (drained != null && drained.getAmount() > 0) {
 			return new BottlerRecipe(fluidHandler.getContainer(), drained, filled, false);
 		}
 
@@ -52,7 +53,7 @@ public class BottlerRecipe {
 
 		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
-		int fillAmount = fluidHandler.fill(new FluidStack(res, Integer.MAX_VALUE), true);
+		int fillAmount = fluidHandler.fill(new FluidStack(res, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
 		if (fillAmount > 0) {
 			return new BottlerRecipe(empty, new FluidStack(res, fillAmount), fluidHandler.getContainer(), true);
 		}

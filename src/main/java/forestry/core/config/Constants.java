@@ -12,7 +12,7 @@ package forestry.core.config;
 
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
 
 import forestry.api.core.IForestryConstants;
 

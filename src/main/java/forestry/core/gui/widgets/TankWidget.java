@@ -26,7 +26,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
@@ -86,23 +86,23 @@ public class TankWidget extends Widget {
 		FluidStack contents = tank.getFluid();
 		Minecraft minecraft = Minecraft.getInstance();
 		TextureManager textureManager = minecraft.getTextureManager();
-		if (contents != null && contents.amount > 0 && contents.getFluid() != null) {
+		if (!contents.isEmpty() && contents.getAmount() > 0 && contents.getFluid() != null) {
 			Fluid fluid = contents.getFluid();
 			if (fluid != null) {
 				AtlasTexture textureMapBlocks = minecraft.getTextureMap();
-				ResourceLocation fluidStill = fluid.getStill();
+				ResourceLocation fluidStill = fluid.getAttributes().getStill(contents);
 				TextureAtlasSprite fluidStillSprite = null;
 				if (fluidStill != null) {
 					fluidStillSprite = textureMapBlocks.getSprite(fluidStill);
 				}
 				if (fluidStillSprite == null) {
-					fluidStillSprite = textureMapBlocks.missingImage; //TODO AT;
+					fluidStillSprite = textureMapBlocks.missingImage;
 				}
 
-				int fluidColor = fluid.getColor(contents);
+				int fluidColor = fluid.getAttributes().getColor(contents);
 
-				int scaledAmount = contents.amount * height / tank.getCapacity();
-				if (contents.amount > 0 && scaledAmount < 1) {
+				int scaledAmount = contents.getAmount() * height / tank.getCapacity();
+				if (contents.getAmount() > 0 && scaledAmount < 1) {
 					scaledAmount = 1;
 				}
 				if (scaledAmount > height) {

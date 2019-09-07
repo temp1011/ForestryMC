@@ -27,7 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.utils.ItemStackUtil;
 import forestry.worktable.inventory.CraftingInventoryForestry;
 //import forestry.worktable.inventory.CraftingInventoryForestry;
@@ -36,7 +36,7 @@ public abstract class RecipeUtil {
 
 	// TODO use json recipes
 
-	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
+	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, ForestryFluids output) {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
 		}
@@ -56,7 +56,7 @@ public abstract class RecipeUtil {
 //		}
 	}
 
-	public static void addFermenterRecipes(String resource, int fermentationValue, Fluids output) {
+	public static void addFermenterRecipes(String resource, int fermentationValue, ForestryFluids output) {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
 		}

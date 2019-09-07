@@ -8,21 +8,23 @@ import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraftforge.fluids.Fluid;
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.core.gui.Drawable;
 
@@ -32,17 +34,17 @@ public class TankElement extends GuiElement {
 	private final Drawable background;
 	@Nullable
 	private final Drawable overlay;
-	private final Supplier<FluidTankInfo> tank;
+	private final Supplier<IFluidTank> tank;
 
-	public TankElement(int xPos, int yPos, @Nullable Drawable background, Supplier<FluidTankInfo> tank) {
+	public TankElement(int xPos, int yPos, @Nullable Drawable background, Supplier<IFluidTank> tank) {
 		this(xPos, yPos, background, tank, null);
 	}
 
-	public TankElement(int xPos, int yPos, @Nullable Drawable background, Supplier<FluidTankInfo> tank, @Nullable Drawable overlay) {
+	public TankElement(int xPos, int yPos, @Nullable Drawable background, Supplier<IFluidTank> tank, @Nullable Drawable overlay) {
 		this(xPos, yPos, background, tank, overlay, 16, 58);
 	}
 
-	public TankElement(int xPos, int yPos, @Nullable Drawable background, Supplier<FluidTankInfo> tank, @Nullable Drawable overlay, int width, int height) {
+	public TankElement(int xPos, int yPos, @Nullable Drawable background, Supplier<IFluidTank> tank, @Nullable Drawable overlay, int width, int height) {
 		super(xPos, yPos, width, height);
 		this.background = background;
 		this.tank = tank;
@@ -50,7 +52,7 @@ public class TankElement extends GuiElement {
 	}
 
 	@Nullable
-	private FluidTankInfo getTank() {
+	private IFluidTank getTank() {
 		return tank.get();
 	}
 
@@ -62,19 +64,19 @@ public class TankElement extends GuiElement {
 			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			background.draw(0, 0);
 		}
-		FluidTankInfo tankInfo = getTank();
-		if (tankInfo == null || tankInfo.capacity <= 0) {
+		IFluidTank tank = getTank();
+		if (tank == null || tank.getCapacity() <= 0) {
 			return;
 		}
 
-		FluidStack contents = tankInfo.fluid;
+		FluidStack contents = tank.getFluid();
 		Minecraft minecraft = Minecraft.getInstance();
 		TextureManager textureManager = minecraft.getTextureManager();
-		if (contents != null && contents.amount > 0 && contents.getFluid() != null) {
+		if (!contents.isEmpty() && contents.getAmount() > 0 && contents.getFluid() != Fluids.EMPTY) {
 			Fluid fluid = contents.getFluid();
 			if (fluid != null) {
 				AtlasTexture textureMapBlocks = minecraft.getTextureMap();
-				ResourceLocation fluidStill = fluid.getStill();
+				ResourceLocation fluidStill = fluid.getAttributes().getStill(contents);
 				TextureAtlasSprite fluidStillSprite = null;
 				if (fluidStill != null) {
 					fluidStillSprite = textureMapBlocks.getSprite(fluidStill);
@@ -83,10 +85,10 @@ public class TankElement extends GuiElement {
 					fluidStillSprite = textureMapBlocks.missingImage;
 				}
 
-				int fluidColor = fluid.getColor(contents);
+				int fluidColor = fluid.getAttributes().getColor(contents);
 
-				int scaledAmount = contents.amount * height / tankInfo.capacity;
-				if (contents.amount > 0 && scaledAmount < 1) {
+				int scaledAmount = contents.getAmount() * height / tank.getCapacity();
+				if (contents.getAmount() > 0 && scaledAmount < 1) {
 					scaledAmount = 1;
 				}
 				if (scaledAmount > height) {
@@ -132,23 +134,23 @@ public class TankElement extends GuiElement {
 
 	@Override
 	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
-		FluidTankInfo tankInfo = getTank();
+		IFluidTank tankInfo = getTank();
 		if (tankInfo == null) {
 			return Collections.emptyList();
 		}
 		List<ITextComponent> toolTip = new ArrayList<>();
 		int amount = 0;
-		FluidStack fluidStack = tankInfo.fluid;
-		if (fluidStack != null) {
+		FluidStack fluidStack = tankInfo.getFluid();
+		if (!fluidStack.isEmpty()) {
 			Fluid fluidType = fluidStack.getFluid();
-			Rarity rarity = fluidType.getRarity();
+			Rarity rarity = fluidType.getAttributes().getRarity();
 			if (rarity == null) {
 				rarity = Rarity.COMMON;
 			}
-			toolTip.add(new TranslationTextComponent(fluidType.getUnlocalizedName(fluidStack)).setStyle((new Style()).setColor(rarity.color)));
-			amount = fluidStack.amount;
+			toolTip.add(new TranslationTextComponent(fluidType.getAttributes().getTranslationKey(fluidStack)).setStyle((new Style()).setColor(rarity.color)));
+			amount = fluidStack.getAmount();
 		}
-		toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", amount, tankInfo.capacity));
+		toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", amount, tankInfo.getCapacity()));
 		return toolTip;
 	}
 

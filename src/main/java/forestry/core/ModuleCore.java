@@ -58,7 +58,7 @@ import forestry.core.circuits.SolderManager;
 //import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.gui.CoreContainerTypes;
@@ -305,7 +305,7 @@ public class ModuleCore extends BlankForestryModule {
 			//				'R', OreDictUtil.DUST_REDSTONE,
 			//				'D', OreDictUtil.GEM_DIAMOND);
 			// Camouflaged Paneling
-			FluidStack biomass = Fluids.BIOMASS.getFluid(150);
+			FluidStack biomass = ForestryFluids.BIOMASS.getFluid(150);
 			if (biomass != null) {
 				RecipeManagers.squeezerManager.addRecipe(8, items.getCraftingMaterial(EnumCraftingMaterial.CAMOUFLAGED_PANELING, 1), biomass);
 			}
@@ -321,8 +321,8 @@ public class ModuleCore extends BlankForestryModule {
 		if (hygroManager != null) {
 			//			hygroManager.addRecipe(new FluidStack(FluidRegistry.WATER, 1), 1, -0.005f, 0.01f);
 			//			hygroManager.addRecipe(new FluidStack(FluidRegistry.LAVA, 1), 10, 0.005f, -0.01f);
-			if (Fluids.ICE.getFluid() != null) {
-				hygroManager.addRecipe(Fluids.ICE.getFluid(1), 10, -0.01f, 0.02f);
+			if (ForestryFluids.ICE.getFluid() != null) {
+				hygroManager.addRecipe(ForestryFluids.ICE.getFluid(1), 10, -0.01f, 0.02f);
 			}
 		}
 	}

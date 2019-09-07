@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.core.utils.datastructures;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class FluidMap<T> extends StackMap<Fluid, T> {
 	private static final long serialVersionUID = 15891293315299994L;
@@ -25,7 +28,10 @@ public class FluidMap<T> extends StackMap<Fluid, T> {
 			return b == a;
 		}
 		if (b instanceof String) {
-			return b.equals(a.getName());
+			return b.equals(a.getRegistryName().toString());
+		}
+		if(b instanceof ResourceLocation) {
+			return a.getRegistryName().equals(b);
 		}
 		return false;
 	}
@@ -44,7 +50,7 @@ public class FluidMap<T> extends StackMap<Fluid, T> {
 			return (Fluid) key;
 		}
 		if (key instanceof String) {
-			return null;//TODO fluids FluidRegistry.getFluid((String) key);
+			return ForgeRegistries.FLUIDS.getValue(new ResourceLocation((String) key));
 		}
 		return null;
 	}

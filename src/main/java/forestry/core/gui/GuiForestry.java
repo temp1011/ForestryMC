@@ -331,12 +331,6 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		return minecraft;
 	}
 
-	//TODO - not needed but I think this is fillGradient(...)
-//	@Override
-//	public void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6) {
-//		super.drawGradientRect(par1, par2, par3, par4, par5, par6);
-//	}
-
 	public List<Rectangle> getExtraGuiAreas() {
 		return ledgerManager.getLedgerAreas();
 	}

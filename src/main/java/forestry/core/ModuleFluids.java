@@ -23,7 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 
@@ -39,7 +39,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.proxy.Proxies;
@@ -52,22 +52,25 @@ public class ModuleFluids extends BlankForestryModule {
 	@Nullable
 	private static ItemRegistryFluids items;
 
-	private static void createFluid(Fluids fluidDefinition) {
+	private static void createFluid(ForestryFluids fluidDefinition) {
 		if (fluidDefinition.getFluid() == null && Config.isFluidEnabled(fluidDefinition)) {
-			String fluidName = fluidDefinition.getTag();
-			if (false){//!FluidRegistry.isFluidRegistered(fluidName)) { TODO fluids
+			ResourceLocation fluidName = fluidDefinition.getTag();
+			if (!ForgeRegistries.FLUIDS.containsKey(fluidName)){
 				ResourceLocation[] resources = fluidDefinition.getResources();
+//				Fluid fluid2 =
+				//TODO needs to use FluidAttributes and registry events and stuff...
 				Fluid fluid = new Fluid(fluidName, resources[0], fluidDefinition.flowTextureExists() ? resources[1] : resources[0]);
 				fluid.setDensity(fluidDefinition.getDensity());
 				fluid.setViscosity(fluidDefinition.getViscosity());
 				fluid.setTemperature(fluidDefinition.getTemperature());
-//				FluidRegistry.registerFluid(fluid);
+				fluid.setRegistryName(fluidName);
+				ForgeRegistries.FLUIDS.register(fluid);
 				createBlock(fluidDefinition);
 			}
 		}
 	}
 
-	private static void createBlock(Fluids forestryFluid) {
+	private static void createBlock(ForestryFluids forestryFluid) {
 		Fluid fluid = forestryFluid.getFluid();
 		Preconditions.checkNotNull(fluid);
 		Block fluidBlock = fluid.getBlock();
@@ -111,7 +114,7 @@ public class ModuleFluids extends BlankForestryModule {
 
 	@Override
 	public void registerBlocks() {
-		for (Fluids fluidType : Fluids.values()) {
+		for (ForestryFluids fluidType : ForestryFluids.values()) {
 			createFluid(fluidType);
 		}
 	}
@@ -135,14 +138,14 @@ public class ModuleFluids extends BlankForestryModule {
 			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().refractoryEmpty.getItemStack(), itemRegistryCore.refractoryWax.getItemStack(), 0.10f);
 		}
 
-		FluidStack ethanol = Fluids.BIO_ETHANOL.getFluid(1);
-		if (ethanol != null) {
+		FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(1);
+		if (!ethanol.isEmpty()) {
 			GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
 			FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
 		}
 
-		FluidStack biomass = Fluids.BIOMASS.getFluid(1);
-		if (biomass != null) {
+		FluidStack biomass = ForestryFluids.BIOMASS.getFluid(1);
+		if (!biomass.isEmpty()) {
 			GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
 			FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
 		}
@@ -153,7 +156,7 @@ public class ModuleFluids extends BlankForestryModule {
 	@OnlyIn(Dist.CLIENT)
 	public void registerTextures(TextureStitchEvent.Pre event) {
 		AtlasTexture map = event.getMap();
-		for (Fluids fluids : Fluids.values()) {
+		for (ForestryFluids fluids : ForestryFluids.values()) {
 			Fluid fluid = fluids.getFluid();
 			if (fluid != null) {
 				//TODO fluid textures

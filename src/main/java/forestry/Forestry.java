@@ -31,7 +31,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -61,7 +60,7 @@ import forestry.core.proxy.ProxyClient;
 import forestry.core.proxy.ProxyCommon;
 import forestry.core.proxy.ProxyRender;
 import forestry.core.proxy.ProxyRenderClient;
-import forestry.core.recipes.DisableRecipe;
+import forestry.core.recipes.ModuleCondition;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
 //import forestry.plugins.ForestryCompatPlugins;
@@ -112,7 +111,8 @@ public class Forestry {
 		ClimateManager.climateFactory = ClimateFactory.INSTANCE;
 		ClimateManager.stateHelper = ClimateStateHelper.INSTANCE;
 		EnumErrorCode.init();
-		FluidRegistry.enableUniversalBucket();
+		//TODO not sure where this is enabled any more
+//		FluidRegistry.enableUniversalBucket();
 		ModuleManager moduleManager = ModuleManager.getInstance();
 		ForestryAPI.moduleManager = moduleManager;
 		moduleManager.registerContainers(new ForestryModules());//TODO compat, new ForestryCompatPlugins());
@@ -159,7 +159,7 @@ public class Forestry {
 		configFolder = new File("."); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - config
 		Config.load(Dist.DEDICATED_SERVER);
-		CraftingHelper.register(new ResourceLocation(Constants.MOD_ID, "module"), new DisableRecipe());
+		CraftingHelper.register(new ModuleCondition.Serializer());
 
 		String gameMode = Config.gameMode;
 		Preconditions.checkNotNull(gameMode);

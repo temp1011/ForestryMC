@@ -28,12 +28,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
+
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import forestry.api.core.IErrorLogic;
 import forestry.core.config.Constants;
@@ -168,7 +170,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 					LazyOptional<IFluidHandler> fluidDestination = FluidUtil.getFluidHandler(world, pos.offset(facing), facing.getOpposite());
 
 					if (fluidDestination.isPresent()) {
-						fluidDestination.ifPresent(f -> FluidUtil.tryFluidTransfer(f, tankManager, Fluid.BUCKET_VOLUME / 20, true));
+						fluidDestination.ifPresent(f -> FluidUtil.tryFluidTransfer(f, tankManager, FluidAttributes.BUCKET_VOLUME / 20, true));
 						return true;
 					}
 				}
@@ -208,18 +210,18 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		ItemStack emptyCan = getStackInSlot(InventoryBottler.SLOT_FILLING_PROCESSING);
 		if (!emptyCan.isEmpty()) {
 			FluidStack resource = resourceTank.getFluid();
-			if (resource == null) {
+			if (resource.isEmpty()) {
 				return;
 			}
 			//Fill Container
 			if (currentRecipe == null || !currentRecipe.matchEmpty(emptyCan, resource)) {
 				currentRecipe = BottlerRecipe.createFillingRecipe(resource.getFluid(), emptyCan);
 				if (currentRecipe != null) {
-					float viscosityMultiplier = resource.getFluid().getViscosity(resource) / 1000.0f;
+					float viscosityMultiplier = resource.getFluid().getAttributes().getViscosity(resource) / 1000.0f;
 					viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
-					int fillAmount = Math.min(currentRecipe.fluid.amount, resource.amount);
-					float fillTime = fillAmount / (float) Fluid.BUCKET_VOLUME;
+					int fillAmount = Math.min(currentRecipe.fluid.getAmount(), resource.getAmount());
+					float fillTime = fillAmount / (float) FluidAttributes.BUCKET_VOLUME;
 					fillTime *= viscosityMultiplier;
 
 					setTicksPerWorkCycle(Math.round(fillTime * TICKS_PER_RECIPE_TIME));
@@ -229,6 +231,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		}
 	}
 
+	//TODO code dupe with above method
 	private void checkEmptyRecipe() {
 		ItemStack filledCan = getStackInSlot(InventoryBottler.SLOT_EMPTYING_PROCESSING);
 		if (!filledCan.isEmpty()) {
@@ -237,11 +240,11 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 				currentRecipe = BottlerRecipe.createEmptyingRecipe(filledCan);
 				if (currentRecipe != null) {
 					FluidStack resource = currentRecipe.fluid;
-					float viscosityMultiplier = resource.getFluid().getViscosity(resource) / 1000.0f;
+					float viscosityMultiplier = resource.getFluid().getAttributes().getViscosity(resource) / 1000.0f;
 					viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
-					int fillAmount = Math.min(currentRecipe.fluid.amount, resource.amount);
-					float fillTime = fillAmount / (float) Fluid.BUCKET_VOLUME;
+					int fillAmount = Math.min(currentRecipe.fluid.getAmount(), resource.getAmount());
+					float fillTime = fillAmount / (float) FluidAttributes.BUCKET_VOLUME;
 					fillTime *= viscosityMultiplier;
 
 					setTicksPerWorkCycle(Math.round(fillTime * TICKS_PER_RECIPE_TIME));
@@ -303,8 +306,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 		checkEmptyRecipe();
 		if (currentRecipe != null) {
-			IFluidTankProperties properties = tankManager.getTankProperties()[0];
-			if (properties != null) {
+			if (tankManager.getTanks() > 0) {	//TODO I think this is the check we want
 				emptyStatus = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_EMPTYING_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, false);
 			} else {
 				emptyStatus = FillStatus.SUCCESS;

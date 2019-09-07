@@ -16,9 +16,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
+
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFermenterManager;
@@ -39,7 +42,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 
 	@Override
 	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
-		addRecipe(resource, fermentationValue, modifier, output, new FluidStack((Fluid) null/*TODO fluids  FluidRegistry.WATER*/, Fluid.BUCKET_VOLUME));
+		addRecipe(resource, fermentationValue, modifier, output, new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME));
 	}
 
 	@Override
@@ -50,7 +53,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 
 	@Override
 	public void addRecipe(String resourceOreName, int fermentationValue, float modifier, FluidStack output) {
-		addRecipe(resourceOreName, fermentationValue, modifier, output, new FluidStack((Fluid) null/*TODO fluids  FluidRegistry.WATER*/, Fluid.BUCKET_VOLUME));
+		addRecipe(resourceOreName, fermentationValue, modifier, output, new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME));
 	}
 
 	@Nullable

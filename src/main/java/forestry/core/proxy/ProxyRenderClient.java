@@ -12,7 +12,6 @@ package forestry.core.proxy;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -22,7 +21,7 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.models.ModelManager;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.RenderEscritoire;
@@ -97,8 +96,8 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void registerFluidStateMapper(Block block, Fluids fluid) {
-		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid", fluid.getTag());
+	public void registerFluidStateMapper(Block block, ForestryFluids fluid) {
+//		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid", fluid.getTag());
 		//TODO - fluids
 		// StateMapperBase ignoreState = new FluidStateMapper(fluidLocation);
 //		ModelLoader.setCustomStateMapper(block, ignoreState);
