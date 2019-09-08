@@ -77,7 +77,7 @@ public abstract class NBTUtilForestry {
 		if (!(nbt instanceof LongArrayNBT)) {
 			return new long[0];
 		}
-		return ObfuscationReflectionHelper.getPrivateValue(LongArrayNBT.class, (LongArrayNBT) nbt, 0);
+		return ((LongArrayNBT) nbt).getAsLongArray();
 	}
 
 	public static class NBTList<T extends INBT> extends ForwardingList<T> {
@@ -85,6 +85,7 @@ public abstract class NBTUtilForestry {
 		private final ArrayList<T> backingList;
 
 		public NBTList(ListNBT nbtList) {
+			//TODO shouldn't need this here
 			backingList = ObfuscationReflectionHelper.getPrivateValue(ListNBT.class, nbtList, 1);
 		}
 

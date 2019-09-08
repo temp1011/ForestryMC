@@ -12,6 +12,8 @@ package forestry.apiculture.items;
 
 import javax.annotation.Nullable;
 
+import java.util.Optional;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;

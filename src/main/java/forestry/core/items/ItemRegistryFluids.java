@@ -38,12 +38,10 @@ public class ItemRegistryFluids extends ItemRegistry {
 	public ItemStack getContainer(EnumContainerType type, Fluid fluid) {
 		ItemStack container = new ItemStack(containers.get(type));
 		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
-		if (fluidHandlerCap.isPresent()) {
-			fluidHandlerCap.orElse(null).fill(new FluidStack(fluid, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
+		return fluidHandlerCap.map(handler -> {
+			handler.fill(new FluidStack(fluid, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
 			return container;
-		} else {
-			return ItemStack.EMPTY;
-		}
+		}).orElse(ItemStack.EMPTY);
 	}
 
 	public ItemRegistryFluids() {

@@ -48,7 +48,6 @@ import forestry.factory.gui.ContainerCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
 
-//TODO - buildcraft
 //import forestry.factory.triggers.FactoryTriggers;
 //
 //import buildcraft.api.statements.ITriggerExternal;
@@ -74,35 +73,35 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT write(CompoundNBT compound) {
+		compound = super.write(compound);
 
-		sockets.write(compoundNBT);
+		sockets.write(compound);
 
 		ListNBT nbttaglist = new ListNBT();
 		ItemStack[] offspring = pendingProducts.toArray(new ItemStack[0]);
 		for (int i = 0; i < offspring.length; i++) {
 			if (offspring[i] != null) {
-				CompoundNBT CompoundNBT1 = new CompoundNBT();
-				CompoundNBT1.putByte("Slot", (byte) i);
-				offspring[i].write(CompoundNBT1);
-				nbttaglist.add(CompoundNBT1);
+				CompoundNBT products = new CompoundNBT();
+				products.putByte("Slot", (byte) i);
+				offspring[i].write(products);
+				nbttaglist.add(products);
 			}
 		}
-		compoundNBT.put("PendingProducts", nbttaglist);
-		return compoundNBT;
+		compound.put("PendingProducts", nbttaglist);
+		return compound;
 	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(CompoundNBT compound) {
+		super.read(compound);
 
-		ListNBT nbttaglist = compoundNBT.getList("PendingProducts", 10);
+		ListNBT nbttaglist = compound.getList("PendingProducts", 10);
 		for (int i = 0; i < nbttaglist.size(); i++) {
 			CompoundNBT CompoundNBT1 = nbttaglist.getCompound(i);
 			pendingProducts.add(ItemStack.read(CompoundNBT1));
 		}
-		sockets.read(compoundNBT);
+		sockets.read(compound);
 
 		ItemStack chip = sockets.getStackInSlot(0);
 		if (!chip.isEmpty()) {

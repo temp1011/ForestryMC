@@ -44,8 +44,7 @@ public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consum
 	@Override
 	protected void setFluid(FluidStack fluid) {
 		super.setFluid(fluid);
-//		container.setItemDamage(1); // show the filled container model
-		//TODO - no more meta stuff
+		container.setDamage(1); // show the filled container model
 	}
 
 	@Override

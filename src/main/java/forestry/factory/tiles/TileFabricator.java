@@ -81,22 +81,22 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	/* SAVING & LOADING */
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT write(CompoundNBT compound) {
+		compound = super.write(compound);
 
-		compoundNBT.putInt("Heat", heat);
-		tankManager.write(compoundNBT);
-		craftingInventory.write(compoundNBT);
-		return compoundNBT;
+		compound.putInt("Heat", heat);
+		tankManager.write(compound);
+		craftingInventory.write(compound);
+		return compound;
 	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(CompoundNBT compound) {
+		super.read(compound);
 
-		heat = compoundNBT.getInt("Heat");
-		tankManager.read(compoundNBT);
-		craftingInventory.read(compoundNBT);
+		heat = compound.getInt("Heat");
+		tankManager.read(compound);
+		craftingInventory.read(compound);
 	}
 
 	@Override

@@ -55,6 +55,7 @@ import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
+import forestry.core.utils.RenderUtil;
 
 public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised {
 	private final String unlocalizedTitle;
@@ -72,9 +73,7 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		// Re-render this block on the client
 		if (world.isRemote) {
-			ClientWorld cworld = (ClientWorld) this.world;	//TODO safe?
-//			cworld.renderer.markForRerender(getPos());	TODO AT on worldRenderer?
-			Minecraft.getInstance().worldRenderer.markForRerender(getPos().getX(), getPos().getY(), getPos().getZ());
+			RenderUtil.markForUpdate(getPos());
 		}
 		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO check third bool, false);
 	}

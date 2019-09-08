@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -24,13 +25,14 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.utils.ItemStackUtil;
 import forestry.worktable.inventory.CraftingInventoryForestry;
-//import forestry.worktable.inventory.CraftingInventoryForestry;
+import forestry.worktable.inventory.CraftingInventoryForestry;
 
 public abstract class RecipeUtil {
 
@@ -41,19 +43,19 @@ public abstract class RecipeUtil {
 			return;
 		}
 		FluidStack outputStack = output.getFluid(1);
-		if (outputStack == null) {
+		if (outputStack.isEmpty()) {
 			return;
 		}
 
-//		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(FluidRegistry.WATER, 1));
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(Fluids.WATER, 1));
 
-//		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
-//			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.JUICE.getFluid(1));
-//		}
-//
-//		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
-//			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.FOR_HONEY.getFluid(1));
-//		}
+		if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.JUICE.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.JUICE.getFluid(1));
+		}
+
+		if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.HONEY.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.HONEY.getFluid(1));
+		}
 	}
 
 	public static void addFermenterRecipes(String resource, int fermentationValue, ForestryFluids output) {
@@ -61,19 +63,19 @@ public abstract class RecipeUtil {
 			return;
 		}
 		FluidStack outputStack = output.getFluid(1);
-		if (outputStack == null) {
+		if (outputStack.isEmpty()) {
 			return;
 		}
 
-//		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(FluidRegistry.WATER, 1));
-//
-//		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
-//			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.JUICE.getFluid(1));
-//		}
-//
-//		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
-//			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.FOR_HONEY.getFluid(1));
-//		}
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(Fluids.WATER, 1));
+
+		if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.JUICE.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.JUICE.getFluid(1));
+		}
+
+		if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.HONEY.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.HONEY.getFluid(1));
+		}
 	}
 
 	@Nullable

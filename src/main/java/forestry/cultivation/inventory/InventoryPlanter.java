@@ -70,7 +70,7 @@ public class InventoryPlanter extends InventoryAdapterRestricted implements IFar
 			return acceptsAsResource(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
 			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
-			return fluid.isPresent() && housing.getTankManager().canFillFluidType(fluid.orElseGet(null));
+			return fluid.map(f -> housing.getTankManager().canFillFluidType(f)).orElse(false);
 		}
 		return false;
 	}

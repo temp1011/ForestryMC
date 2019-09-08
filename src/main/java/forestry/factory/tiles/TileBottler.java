@@ -84,16 +84,16 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	/* SAVING & LOADING */
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
-		tankManager.write(compoundNBT);
-		return compoundNBT;
+	public CompoundNBT write(CompoundNBT compound) {
+		compound = super.write(compound);
+		tankManager.write(compound);
+		return compound;
 	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
-		tankManager.read(compoundNBT);
+	public void read(CompoundNBT compound) {
+		super.read(compound);
+		tankManager.read(compound);
 		checkEmptyRecipe();
 		checkFillRecipe();
 	}
@@ -208,7 +208,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		ItemStack emptyCan = getStackInSlot(InventoryBottler.SLOT_FILLING_PROCESSING);
 		if (!emptyCan.isEmpty()) {
 			FluidStack resource = resourceTank.getFluid();
-			if (resource == null) {
+			if (resource.isEmpty()) {
 				return;
 			}
 			//Fill Container

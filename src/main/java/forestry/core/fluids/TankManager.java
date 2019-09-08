@@ -77,6 +77,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	public boolean add(StandardTank tank) {
+		//TODO added is always true, and things are always appended to the end of the list?
 		boolean added = tanks.add(tank);
 		int index = tanks.indexOf(tank);
 		tank.setTankUpdateHandler(this);

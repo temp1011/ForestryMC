@@ -48,7 +48,7 @@ public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
 
 		if (slotIndex == SLOT_PRODUCT) {
 			LazyOptional<FluidStack> fluidCap = FluidUtil.getFluidContained(itemStack);
-			return fluidCap.isPresent() && tile.getTankManager().canFillFluidType(fluidCap.orElse(null));
+			return fluidCap.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);	//TODO very common pattern. Create Helper?
 		}
 
 		return false;

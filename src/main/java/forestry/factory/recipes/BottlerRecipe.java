@@ -27,6 +27,7 @@ public class BottlerRecipe {
 		ItemStack empty = filled.copy();
 		empty.setCount(1);
 		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(empty);
+
 		if (!fluidHandlerCap.isPresent()) {
 			return null;
 		}

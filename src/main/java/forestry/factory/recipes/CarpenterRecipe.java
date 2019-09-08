@@ -25,12 +25,11 @@ import forestry.core.recipes.ShapedRecipeCustom;
 public class CarpenterRecipe implements ICarpenterRecipe {
 
 	private final int packagingTime;
-	@Nullable
 	private final FluidStack liquid;
 	private final ItemStack box;
 	private final ShapedRecipeCustom internal;
 
-	public CarpenterRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ShapedRecipeCustom internal) {
+	public CarpenterRecipe(int packagingTime, FluidStack liquid, ItemStack box, ShapedRecipeCustom internal) {
 		Preconditions.checkNotNull(box);
 		Preconditions.checkNotNull(internal);
 		this.packagingTime = packagingTime;
@@ -50,7 +49,6 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	}
 
 	@Override
-	@Nullable
 	public FluidStack getFluidResource() {
 		return liquid;
 	}

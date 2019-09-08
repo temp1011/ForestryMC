@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 
@@ -191,7 +192,7 @@ public class ModuleFluids extends BlankForestryModule {
 		AtlasTexture map = event.getMap();
 		for (ForestryFluids fluids : ForestryFluids.values()) {
 			Fluid fluid = fluids.getFluid();
-			if (fluid != null) {
+			if (fluid == Fluids.EMPTY) {
 				//TODO fluid textures
 //				map.registerSprite(fluid.getStill());
 //				map.registerSprite(fluid.getFlowing());

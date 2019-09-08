@@ -78,10 +78,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 			return acceptsAsResource(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
 			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
-			if(!fluid.isPresent()) {
-				return false;
-			}
-			return farmController.getTankManager().canFillFluidType(fluid.orElse(null));
+			return fluid.map(f -> farmController.getTankManager().canFillFluidType(f)).orElse(false);
 		}
 		return false;
 	}

@@ -12,7 +12,9 @@ package forestry.climatology.inventory;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -27,8 +29,8 @@ public class InventoryHabitatFormer extends InventoryAdapterTile<TileHabitatForm
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_INPUT) {
-			FluidStack fluid = null;// TODO fluids FluidUtil.getFluidContained(itemStack);
-			return fluid != null && tile.getTankManager().canFillFluidType(fluid);
+			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
 		}
 		return false;
 	}

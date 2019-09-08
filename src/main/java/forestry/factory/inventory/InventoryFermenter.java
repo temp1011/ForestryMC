@@ -40,7 +40,7 @@ public class InventoryFermenter extends InventoryAdapterTile<TileFermenter> {
 			return FermenterRecipeManager.isResource(itemStack);
 		} else if (slotIndex == SLOT_INPUT) {
 			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
-			return fluid.isPresent() && tile.getTankManager().canFillFluidType(fluid.orElse(null));
+			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
 		} else if (slotIndex == SLOT_CAN_INPUT) {
 			return FluidHelper.isFillableContainerWithRoom(itemStack);
 		} else if (slotIndex == SLOT_FUEL) {

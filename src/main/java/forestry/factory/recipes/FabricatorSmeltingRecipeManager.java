@@ -68,7 +68,7 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 		if (recipeFluids.isEmpty()) {
 			for (IFabricatorSmeltingRecipe recipe : recipes) {
 				FluidStack fluidStack = recipe.getProduct();
-				if (fluidStack != null) {
+				if (!fluidStack.isEmpty()) {
 					recipeFluids.add(fluidStack.getFluid());
 				}
 			}

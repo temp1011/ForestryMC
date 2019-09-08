@@ -82,7 +82,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 
 	@Override
 	public Item getFilledBucket() {
-		return null;
+		return null;	//TODO fluids
 	}
 
 	//Checks if the fluid can flow in this direction

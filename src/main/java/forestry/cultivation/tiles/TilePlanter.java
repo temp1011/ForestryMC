@@ -14,6 +14,7 @@ import java.util.Stack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -271,7 +272,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		// Check water
 		float hydrationModifier = hydrationManager.getHydrationModifier();
 		int waterConsumption = logic.getWaterConsumption(hydrationModifier);
-		FluidStack requiredLiquid = new FluidStack((Fluid)null/*FluidRegistry.WATER TODO fluids*/, waterConsumption);
+		FluidStack requiredLiquid = new FluidStack(Fluids.WATER, waterConsumption);
 		boolean hasLiquid = requiredLiquid.getAmount() == 0 || hasLiquid(requiredLiquid);
 
 		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {
@@ -317,7 +318,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
 			final int fertilizerConsumption = Math.round(logic.getFertilizerConsumption() * Config.fertilizerModifier * 2);
 			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
-			final FluidStack liquid = new FluidStack((Fluid)null/*FluidRegistry.WATER TODO fluids*/, liquidConsumption);
+			final FluidStack liquid = new FluidStack(Fluids.WATER, liquidConsumption);
 
 			for (FarmTarget target : farmTargets) {
 				// Check fertilizer and water

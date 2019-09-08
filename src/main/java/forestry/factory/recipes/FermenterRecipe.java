@@ -24,6 +24,7 @@ import forestry.api.recipes.IFermenterRecipe;
 public class FermenterRecipe implements IFermenterRecipe {
 
 	private final ItemStack resource;
+	@Nullable
 	private final String resourceOreName;
 	private final int fermentationValue;
 	private final float modifier;

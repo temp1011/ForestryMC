@@ -121,6 +121,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			return;
 		}
 
+		//TODO optional could work quite well here
 		if (CarpenterRecipeManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory) == null) {
 			RecipePair<ICarpenterRecipe> recipePair = CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory);
 			currentRecipe = recipePair.getRecipe();
@@ -170,7 +171,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		FluidStack fluid = currentRecipe.getFluidResource();
-		if (fluid != null) {
+		if (!fluid.isEmpty()) {
 			FluidStack drained = resourceTank.drainInternal(fluid, IFluidHandler.FluidAction.SIMULATE);
 			if (!fluid.isFluidStackIdentical(drained)) {
 				return false;

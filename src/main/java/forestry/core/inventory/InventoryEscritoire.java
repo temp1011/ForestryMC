@@ -46,11 +46,11 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 				return false;
 			}
 			Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(specimen);
-			return optional.filter(individual -> ((IResearchHandler) individual.getRoot().getComponentSafe(ForestryComponentKeys.RESEARCH).get()).getResearchSuitability(individual.getGenome().getPrimary(IAlleleForestrySpecies.class), itemStack) > 0).isPresent();
+			return optional.filter(individual -> ((IResearchHandler) individual.getRoot().getComponent(ForestryComponentKeys.RESEARCH)).getResearchSuitability(individual.getGenome().getPrimary(IAlleleForestrySpecies.class), itemStack) > 0).isPresent();
 		}
 
 		return slotIndex == SLOT_ANALYZE &&
-			(GeneticsAPI.apiInstance.getRootHelper().isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null);
+			(GeneticsAPI.apiInstance.getRootHelper().isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack).isPresent());
 
 	}
 

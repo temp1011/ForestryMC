@@ -30,10 +30,7 @@ public class InventoryGenerator extends InventoryAdapterTile<TileEuGenerator> {
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_CAN) {
 			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
-			if(!fluid.isPresent()) {
-				return false;
-			}
-			return tile.getTankManager().canFillFluidType(fluid.orElse(null));
+			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
 		}
 
 		return false;

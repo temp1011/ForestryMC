@@ -52,7 +52,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		//TODO json
 	}
 
-	public static RecipePair<ICarpenterRecipe> findMatchingRecipe(@Nullable FluidStack liquid, ItemStack item, IInventory CraftingInventory) {
+	public static RecipePair<ICarpenterRecipe> findMatchingRecipe(FluidStack liquid, ItemStack item, IInventory CraftingInventory) {
 		for (ICarpenterRecipe recipe : recipes) {
 			String[][] resourceDicts = matches(recipe, liquid, item, CraftingInventory);
 			if (resourceDicts != null) {
@@ -63,14 +63,14 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 	}
 
 	@Nullable
-	public static String[][] matches(@Nullable ICarpenterRecipe recipe, @Nullable FluidStack resource, ItemStack item, IInventory CraftingInventory) {
+	public static String[][] matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory CraftingInventory) {
 		if (recipe == null) {
 			return null;
 		}
 
 		FluidStack liquid = recipe.getFluidResource();
-		if (liquid != null) {
-			if (resource == null || !resource.containsFluid(liquid)) {
+		if (!liquid.isEmpty()) {
+			if (resource.isEmpty() || !resource.containsFluid(liquid)) {
 				return null;
 			}
 		}
@@ -128,7 +128,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		if (recipeFluids.isEmpty()) {
 			for (ICarpenterRecipe recipe : recipes) {
 				FluidStack fluidStack = recipe.getFluidResource();
-				if (fluidStack != null) {
+				if (!fluidStack.isEmpty()) {
 					recipeFluids.add(fluidStack.getFluid());
 				}
 			}

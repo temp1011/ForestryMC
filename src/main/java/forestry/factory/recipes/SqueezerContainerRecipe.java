@@ -62,6 +62,7 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 		return remnantsChance;
 	}
 
+	//TODO optional might be nice here
 	@Override
 	@Nullable
 	public ISqueezerRecipe getSqueezerRecipe(ItemStack filledContainer) {
@@ -69,13 +70,13 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 			return null;
 		}
 		LazyOptional<FluidStack> fluidOutput = FluidUtil.getFluidContained(filledContainer);
-		if (!fluidOutput.isPresent()) {
-			return null;
-		}
-		ItemStack filledContainerCopy = ItemStackUtil.createCopyWithCount(filledContainer, 1);
-		NonNullList<ItemStack> input = NonNullList.create();
-		input.add(filledContainerCopy);
-		return new SqueezerRecipe(processingTime, input, fluidOutput.orElse(null), remnants, remnantsChance);
+
+		return fluidOutput.map(f -> {
+			ItemStack filledContainerCopy = ItemStackUtil.createCopyWithCount(filledContainer, 1);
+			NonNullList<ItemStack> input = NonNullList.create();
+			input.add(filledContainerCopy);
+			return new SqueezerRecipe(processingTime, input, f, remnants, remnantsChance);
+		}).orElse(null);
 	}
 
 }

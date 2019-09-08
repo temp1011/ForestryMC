@@ -21,6 +21,7 @@ import java.util.Set;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -307,15 +308,15 @@ public class ModuleCore extends BlankForestryModule {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / CARPENTER
 			// Portable ANALYZER
-			//			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), ItemStack.EMPTY, items.portableAlyzer.getItemStack(),
-			//				"X#X", "X#X", "RDR",
-			//				'#', OreDictUtil.PANE_GLASS,
-			//				'X', OreDictUtil.INGOT_TIN,
-			//				'R', OreDictUtil.DUST_REDSTONE,
-			//				'D', OreDictUtil.GEM_DIAMOND);
+						RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(Fluids.WATER, 2000), ItemStack.EMPTY, items.portableAlyzer.getItemStack(),
+							"X#X", "X#X", "RDR",
+							'#', OreDictUtil.PANE_GLASS,
+							'X', OreDictUtil.INGOT_TIN,
+							'R', OreDictUtil.DUST_REDSTONE,
+							'D', OreDictUtil.GEM_DIAMOND);
 			// Camouflaged Paneling
 			FluidStack biomass = ForestryFluids.BIOMASS.getFluid(150);
-			if (biomass != null) {
+			if (!biomass.isEmpty()) {
 				RecipeManagers.squeezerManager.addRecipe(8, items.getCraftingMaterial(EnumCraftingMaterial.CAMOUFLAGED_PANELING, 1), biomass);
 			}
 		}
@@ -328,10 +329,11 @@ public class ModuleCore extends BlankForestryModule {
 
 		IHygroregulatorManager hygroManager = RecipeManagers.hygroregulatorManager;
 		if (hygroManager != null) {
-			//			hygroManager.addRecipe(new FluidStack(FluidRegistry.WATER, 1), 1, -0.005f, 0.01f);
-			//			hygroManager.addRecipe(new FluidStack(FluidRegistry.LAVA, 1), 10, 0.005f, -0.01f);
-			if (ForestryFluids.ICE.getFluid() != null) {
-				hygroManager.addRecipe(ForestryFluids.ICE.getFluid(1), 10, -0.01f, 0.02f);
+						hygroManager.addRecipe(new FluidStack(Fluids.WATER, 1), 1, -0.005f, 0.01f);
+						hygroManager.addRecipe(new FluidStack(Fluids.LAVA, 1), 10, 0.005f, -0.01f);
+			FluidStack ice = ForestryFluids.ICE.getFluid(1);
+			if (!ice.isEmpty()) {
+				hygroManager.addRecipe(ice, 10, -0.01f, 0.02f);
 			}
 		}
 	}

@@ -44,7 +44,7 @@ public class FakeTankManager extends EmptyFluidHandler implements ITankManager {
 
 	@Override
 	public IFluidTank getTank(int tankIndex) {
-		return null;
+		return null;	//TODO return dummy tank instead?
 	}
 
 	@Override

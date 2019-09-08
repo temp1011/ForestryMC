@@ -41,10 +41,10 @@ public class InventoryAnalyzer extends InventoryAdapterTile<TileAnalyzer> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (SlotUtil.isSlotInRange(slotIndex, SLOT_INPUT_1, SLOT_INPUT_COUNT)) {
-			return GeneticsAPI.apiInstance.getRootHelper().isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null;
+			return GeneticsAPI.apiInstance.getRootHelper().isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack).isPresent();
 		} else if (slotIndex == SLOT_CAN) {
 			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
-			return fluid.isPresent() && tile.getTankManager().canFillFluidType(fluid.orElse(null));
+			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
 		}
 
 		return false;

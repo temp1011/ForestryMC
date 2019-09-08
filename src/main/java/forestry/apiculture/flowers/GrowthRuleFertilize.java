@@ -45,7 +45,7 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 		int groundMeta;
 		for (Block b : this.allowedItems) {
 			if (b == ground) {
-				groundMeta = 0;//TODO flatten ground.getMetaFromState(state);
+				groundMeta = 0;//TODO flatten ground.getMetaFromState(state); Want the maturity property instead?
 				if (groundMeta > 6) {
 					return false;
 				}

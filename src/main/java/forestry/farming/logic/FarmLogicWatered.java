@@ -12,10 +12,14 @@ package forestry.farming.logic;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
@@ -24,8 +28,7 @@ import forestry.api.farming.ISoil;
 import forestry.core.utils.BlockUtil;
 
 public abstract class FarmLogicWatered extends FarmLogicSoil {
-	//TODO fluids
-//	private static final FluidStack STACK_WATER = new FluidStack((Fluid) null /*FluidRegistry.WATER*/, Fluid.BUCKET_VOLUME);
+	private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
 
 	protected NonNullList<ItemStack> produce = NonNullList.create();
 
@@ -152,13 +155,13 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 			return false;
 		}
 
-		if (false) {//!farmHousing.hasLiquid(STACK_WATER)) { TODO fluids
+		if (!farmHousing.hasLiquid(STACK_WATER)) {
 			return false;
 		}
 
 		produce.addAll(BlockUtil.getBlockDrops(world, position));
 		BlockUtil.setBlockWithPlaceSound(world, position, Blocks.WATER.getDefaultState());
-//		farmHousing.removeLiquid(STACK_WATER); TODO fluids
+		farmHousing.removeLiquid(STACK_WATER);
 		return true;
 	}
 

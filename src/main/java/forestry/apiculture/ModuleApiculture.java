@@ -27,6 +27,7 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -500,7 +501,7 @@ public class ModuleApiculture extends BlankForestryModule {
 			ItemStack honeyDrop = items.getHoneyDrop(EnumHoneyDrop.HONEY, 1);
 			// / SQUEEZER
 			FluidStack honeyDropFluid = ForestryFluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
-			if (honeyDropFluid != null) {
+			if (!honeyDropFluid.isEmpty()) {
 				RecipeManagers.squeezerManager.addRecipe(10, honeyDrop, honeyDropFluid, items.getPropolis(EnumPropolis.NORMAL, 1), 5);
 				RecipeManagers.squeezerManager.addRecipe(10, items.honeydew.getItemStack(), honeyDropFluid);
 			}
@@ -509,18 +510,18 @@ public class ModuleApiculture extends BlankForestryModule {
 			NonNullList<ItemStack> lavaIngredients = NonNullList.create();
 			lavaIngredients.add(phosphor);
 			lavaIngredients.add(new ItemStack(Blocks.SAND));
-			//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 2000));
+			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 2000));
 
 			lavaIngredients = NonNullList.create();
 			lavaIngredients.add(phosphor);
 			//TODO - sand or red sand?
-			//			lavaIngredients.add(new ItemStack(Blocks.SAND, 1, 1));
-			//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 2000));
+			lavaIngredients.add(new ItemStack(Blocks.SAND, 1));
+			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 2000));
 
 			lavaIngredients = NonNullList.create();
 			lavaIngredients.add(phosphor);
 			lavaIngredients.add(new ItemStack(Blocks.DIRT));
-			//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 1600));
+			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 1600));
 
 			// / CARPENTER
 			RecipeManagers.carpenterManager.addRecipe(50, ForestryFluids.HONEY.getFluid(500), ItemStack.EMPTY, coreItems.getCraftingMaterial(EnumCraftingMaterial.SCENTED_PANELING, 1),
@@ -530,16 +531,16 @@ public class ModuleApiculture extends BlankForestryModule {
 					'W', coreItems.beeswax,
 					'P', items.getPollen(EnumPollenCluster.NORMAL, 1));
 
-			//			RecipeManagers.carpenterManager.addRecipe(30, new FluidStack(FluidRegistry.WATER, 600), ItemStack.EMPTY, blocks.candle.getUnlitCandle(24),
-			//					" X ",
-			//					"###",
-			//					"###",
-			//					'#', coreItems.beeswax,
-			//					'X', Items.STRING);
-			//			RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 200), ItemStack.EMPTY, blocks.candle.getUnlitCandle(6),
-			//					"#X#",
-			//					'#', coreItems.beeswax,
-			//					'X', coreItems.craftingMaterial.getSilkWisp());
+						RecipeManagers.carpenterManager.addRecipe(30, new FluidStack(Fluids.WATER, 600), ItemStack.EMPTY, blocks.candle.getUnlitCandle(24),
+								" X ",
+								"###",
+								"###",
+								'#', coreItems.beeswax,
+								'X', Items.STRING);
+						RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(Fluids.WATER, 200), ItemStack.EMPTY, blocks.candle.getUnlitCandle(6),
+								"#X#",
+								'#', coreItems.beeswax,
+								'X', coreItems.getCraftingMaterial(EnumCraftingMaterial.SILK_WISP, 1));
 
 			// / CENTRIFUGE
 			// Honey combs
@@ -638,7 +639,7 @@ public class ModuleApiculture extends BlankForestryModule {
 			// / FERMENTER
 			FluidStack shortMead = ForestryFluids.SHORT_MEAD.getFluid(1);
 			FluidStack honey = ForestryFluids.HONEY.getFluid(1);
-			if (shortMead != null && honey != null) {
+			if (!shortMead.isEmpty() && !honey.isEmpty()) {
 				RecipeManagers.fermenterManager.addRecipe(items.honeydew.getItemStack(), 500, 1.0f, shortMead, honey);
 			}
 		}
@@ -746,7 +747,7 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
 			boolean hasVillageGenerated) {
-		if (!world.getDimension().getType().equals(DimensionType.OVERWORLD)) {
+		if (!world.getDimension().getType().equals(DimensionType.field_223227_a_)) {
 			return;
 		}
 		if (Config.getBeehivesAmount() > 0.0) {

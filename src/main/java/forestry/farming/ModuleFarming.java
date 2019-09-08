@@ -50,6 +50,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.modules.ForestryModule;
+import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBogEarth;
 import forestry.core.blocks.BlockRegistryCore;
@@ -347,7 +348,7 @@ public class ModuleFarming extends BlankForestryModule {
 			if (treeRoot != null) {
 				for (ITree tree : treeRoot.getIndividualTemplates()) {
 					IFruitProvider fruitProvider = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
-					if (false){//fruitProvider != AlleleFruits.fruitNone.getProvider()) {
+					if (fruitProvider != AlleleFruits.fruitNone.getProvider()) {
 						orchardFarm.addGermlings(treeRoot.getTypes().createStack(tree, EnumGermlingType.SAPLING));
 						orchardFarm.addProducts(fruitProvider.getProducts().keySet());
 						orchardFarm.addProducts(fruitProvider.getSpecialty().keySet());

@@ -55,7 +55,6 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 	@Nullable
 	private IStillRecipe currentRecipe;
-	@Nullable
 	private FluidStack bufferedLiquid;
 
 	public TileStill() {
@@ -68,6 +67,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		productTank.setFilters(StillRecipeManager.recipeFluidOutputs);
 
 		tankManager = new TankManager(this, resourceTank, productTank);
+
+		bufferedLiquid = FluidStack.EMPTY;
 	}
 
 	@Override
@@ -75,7 +76,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		compoundNBT = super.write(compoundNBT);
 		tankManager.write(compoundNBT);
 
-		if (bufferedLiquid != null) {
+		if (!bufferedLiquid.isEmpty()) {
 			CompoundNBT buffer = new CompoundNBT();
 			bufferedLiquid.writeToNBT(buffer);
 			compoundNBT.put("Buffer", buffer);
@@ -115,7 +116,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 			FluidHelper.drainContainers(tankManager, this, InventoryStill.SLOT_CAN);
 
 			FluidStack fluidStack = productTank.getFluid();
-			if (fluidStack != null) {
+			if (!fluidStack.isEmpty()) {
 				FluidHelper.fillContainers(tankManager, this, InventoryStill.SLOT_RESOURCE, InventoryStill.SLOT_PRODUCT, fluidStack.getFluid(), true);
 			}
 		}
@@ -130,13 +131,13 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		FluidStack product = new FluidStack(output, output.getAmount() * cycles);
 		productTank.fillInternal(product, IFluidHandler.FluidAction.EXECUTE);
 
-		bufferedLiquid = null;
+		bufferedLiquid = FluidStack.EMPTY;
 
 		return true;
 	}
 
 	private void checkRecipe() {
-		FluidStack recipeLiquid = bufferedLiquid != null ? bufferedLiquid : resourceTank.getFluid();
+		FluidStack recipeLiquid = !bufferedLiquid.isEmpty() ? bufferedLiquid : resourceTank.getFluid();
 
 		if (!StillRecipeManager.matches(currentRecipe, recipeLiquid)) {
 			currentRecipe = StillRecipeManager.findMatchingRecipe(recipeLiquid);
@@ -158,12 +159,12 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		if (hasRecipe) {
 			FluidStack fluidStack = currentRecipe.getOutput();
 			hasTankSpace = productTank.fillInternal(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount();
-			if (bufferedLiquid == null) {
+			if (bufferedLiquid.isEmpty()) {
 				int cycles = currentRecipe.getCyclesPerUnit();
 				FluidStack input = currentRecipe.getInput();
 				int drainAmount = cycles * input.getAmount();
 				FluidStack drained = resourceTank.drain(drainAmount, IFluidHandler.FluidAction.SIMULATE);
-				hasLiquidResource = drained != null && drained.getAmount() == drainAmount;
+				hasLiquidResource = !drained.isEmpty() && drained.getAmount() == drainAmount;
 				if (hasLiquidResource) {
 					bufferedLiquid = new FluidStack(input, drainAmount);
 					resourceTank.drain(drainAmount, IFluidHandler.FluidAction.EXECUTE);
