@@ -1,7 +1,7 @@
 {
   "parent": "builtin/entity",
   "textures": {
-    "particle": "forestry:block/engine_clockwork.0"
+    "particle": "forestry:block/engine_clock.0"
   },
   "display": {
     "gui": {

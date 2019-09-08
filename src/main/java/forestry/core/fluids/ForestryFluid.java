@@ -21,9 +21,9 @@ import net.minecraftforge.fluids.FluidAttributes;
 
 public abstract class ForestryFluid extends FlowingFluid {
 	public final boolean flowing;
-	public final Fluids definition;
+	public final ForestryFluids definition;
 
-	public ForestryFluid(Fluids definition, boolean flowing) {
+	public ForestryFluid(ForestryFluids definition, boolean flowing) {
 		this.definition = definition;
 		this.flowing = flowing;
 	}
@@ -111,7 +111,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	public static class Flowing extends ForestryFluid {
-		public Flowing(Fluids definition) {
+		public Flowing(ForestryFluids definition) {
 			super(definition, true);
 		}
 
@@ -132,7 +132,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	public static class Source extends ForestryFluid {
-		public Source(Fluids definition) {
+		public Source(ForestryFluids definition) {
 			super(definition, false);
 		}
 

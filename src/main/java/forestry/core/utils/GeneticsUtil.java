@@ -21,6 +21,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -119,7 +120,7 @@ public class GeneticsUtil {
 	}
 
 	@Nullable
-	public static IButterflyNursery getOrCreateNursery(@Nullable GameProfile gameProfile, World world, BlockPos pos, boolean convertVanilla) {
+	public static IButterflyNursery getOrCreateNursery(@Nullable GameProfile gameProfile, IWorld world, BlockPos pos, boolean convertVanilla) {
 		IButterflyNursery nursery = getNursery(world, pos);
 		if (nursery == null && convertVanilla) {
 			Optional<IIndividual> optionalPollen = GeneticsUtil.getPollen(world, pos);
@@ -127,7 +128,7 @@ public class GeneticsUtil {
 				IIndividual pollen = optionalPollen.get();
 				if (pollen instanceof ITree) {
 					ITree treeLeave = (ITree) pollen;
-					if (treeLeave.setLeaves(world, gameProfile, pos, world.rand)) {
+					if (treeLeave.setLeaves(world, gameProfile, pos, world.getRandom())) {
 						nursery = getNursery(world, pos);
 					}
 				}
@@ -136,20 +137,20 @@ public class GeneticsUtil {
 		return nursery;
 	}
 
-	public static boolean canCreateNursery(World world, BlockPos pos) {
+	public static boolean canCreateNursery(IWorld world, BlockPos pos) {
 		Optional<IIndividual> optional = GeneticsUtil.getPollen(world, pos);
 		return optional.filter(pollen -> pollen instanceof ITree).isPresent();
 	}
 
 	@Nullable
-	public static IButterflyNursery getNursery(World world, BlockPos pos) {
+	public static IButterflyNursery getNursery(IWorld world, BlockPos pos) {
 		return TileUtil.getTile(world, pos, IButterflyNursery.class);
 	}
 
 	/**
 	 * Gets pollen from a location. Does not affect the pollen source.
 	 */
-	public static Optional<IIndividual> getPollen(World world, final BlockPos pos) {
+	public static Optional<IIndividual> getPollen(IWorld world, final BlockPos pos) {
 		if (!world.isBlockLoaded(pos)) {
 			return Optional.empty();
 		}

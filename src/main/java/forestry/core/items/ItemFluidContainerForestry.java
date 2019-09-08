@@ -51,7 +51,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import forestry.api.core.IModelManager;
 import forestry.core.ItemGroupForestry;
 import forestry.core.config.Config;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.utils.Translator;
 
 public class ItemFluidContainerForestry extends ItemForestry {
@@ -154,7 +154,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	protected DrinkProperties getDrinkProperties(ItemStack itemStack) {
 		FluidStack contained = getContained(itemStack);
 		if (!contained.isEmpty()) {
-			Fluids definition = Fluids.getFluidDefinition(contained);
+			ForestryFluids definition = ForestryFluids.getFluidDefinition(contained);
 			if (definition != null) {
 				return definition.getDrinkProperties();
 			}

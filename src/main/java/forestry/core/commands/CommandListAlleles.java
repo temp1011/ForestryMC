@@ -14,7 +14,7 @@
 //import forestry.api.genetics.IChromosomeType;
 //import forestry.api.genetics.IGenome;
 //import forestry.api.genetics.IIndividual;
-//import forestry.api.lepidopterology.genetics.EnumButterflyChromosome;
+//import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 //import forestry.apiculture.genetics.BeeGenome;
 //import forestry.arboriculture.genetics.TreeGenome;
 //import forestry.lepidopterology.genetics.ButterflyGenome;
@@ -45,7 +45,7 @@
 //		} else if (genome instanceof TreeGenome) {
 //			types = EnumTreeChromosome.values();
 //		} else if (genome instanceof ButterflyGenome) {
-//			types = EnumButterflyChromosome.values();
+//			types = ButterflyChromosomes.values();
 //		}
 //
 //		if (types == null) {

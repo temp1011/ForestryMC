@@ -352,7 +352,7 @@ public class Config {
 	private static void loadConfigFluids() {
 		Preconditions.checkNotNull(configFluid);
 		for (ForestryFluids fluid : ForestryFluids.values()) {
-			String fluidName = Translator.translateToLocal("fluid." + fluid.getTag());
+			String fluidName = Translator.translateToLocal("fluid." + fluid.getTag().getPath());
 
 			boolean enabledFluid = !Config.disabledFluids.contains(fluid.getTag());
 			String enableFluidComment = Translator.translateToLocalFormatted("for.config.fluids.enable.format", fluidName);

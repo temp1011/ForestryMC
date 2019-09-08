@@ -16,9 +16,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.lepidopterology.IAlleleButterflyCocoon;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.core.blocks.properties.PropertyAllele;
 
 public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
@@ -36,7 +38,7 @@ public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 	@Override
 	public List<IAlleleButterflyCocoon> getAllowedValues() {
 		List<IAlleleButterflyCocoon> trees = new ArrayList<>();
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(ButterflyChromosomes.COCOON)) {
 			if (allele instanceof IAlleleButterflyCocoon) {
 				trees.add((IAlleleButterflyCocoon) allele);
 			}

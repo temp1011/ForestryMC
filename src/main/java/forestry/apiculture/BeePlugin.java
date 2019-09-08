@@ -24,7 +24,6 @@ import genetics.api.root.IIndividualRootBuilder;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.IRootManager;
 import genetics.api.root.components.ComponentKeys;
-import genetics.api.root.components.IRootComponentRegistry;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
@@ -76,10 +75,6 @@ public class BeePlugin implements IGeneticPlugin {
 		registry.registerAlleles(EnumAllele.Flowering.values(), BeeChromosomes.FLOWERING);
 		registry.registerAlleles(EnumAllele.Territory.values(), BeeChromosomes.TERRITORY);
 		AlleleEffects.registerAlleles(registry);
-	}
-
-	@Override
-	public void registerComponents(IRootComponentRegistry componentRegistry) {
 	}
 
 	@Override
@@ -142,11 +137,6 @@ public class BeePlugin implements IGeneticPlugin {
 				}
 			}))
 			.setDefaultTemplate(BeeHelper::createDefaultTemplate);
-	}
-
-	@Override
-	public void initRoots(IRootManager manager) {
-
 	}
 
 	@Override

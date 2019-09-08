@@ -17,40 +17,37 @@ import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Vector3f;
-import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelStateComposition;
-import net.minecraftforge.client.model.MultiLayerModel;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
+import genetics.api.GeneticHelper;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.organism.IOrganism;
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.genetics.IAlleleFloat;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.config.Constants;
-import forestry.core.genetics.Genome;
 import forestry.core.models.BlankModel;
 import forestry.core.models.DefaultTextureGetter;
 import forestry.core.models.TRSRBakedModel;
@@ -111,8 +108,9 @@ public class ModelButterflyItem extends BlankModel {
 
 		@Override
 		public IBakedModel getModelWithOverrides(IBakedModel model, ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
-			IAlleleButterflySpecies species = Genome.getAllele(stack, EnumButterflyChromosome.SPECIES, true, IAlleleButterflySpecies.class);
-			IAlleleFloat size = Genome.getAllele(stack, EnumButterflyChromosome.SIZE, true, IAlleleFloat.class);
+			IOrganism<IButterfly> organism = GeneticHelper.getOrganism(stack);
+			IAlleleButterflySpecies species = organism.getAllele(ButterflyChromosomes.SPECIES, true);
+			IAlleleValue<Float> size = organism.getAllele(ButterflyChromosomes.SIZE, true);
 			Preconditions.checkNotNull(species);
 			Preconditions.checkNotNull(size);
 			IBakedModel bakedModel = cache.getIfPresent(species);

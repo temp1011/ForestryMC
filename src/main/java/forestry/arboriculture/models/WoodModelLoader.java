@@ -13,10 +13,8 @@ package forestry.arboriculture.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.model.BlockModelDefinition;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.model.VariantList;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
@@ -25,7 +23,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.ICustomModelLoader;
 
 import forestry.core.config.Constants;
-import forestry.core.utils.ModelUtil;
 
 @OnlyIn(Dist.CLIENT)
 public enum WoodModelLoader implements ICustomModelLoader {
@@ -65,19 +62,21 @@ public enum WoodModelLoader implements ICustomModelLoader {
 		return false;
 	}
 
+	//TODO: Fix after forge fixes model loaders
 	@Override
 	public IUnbakedModel loadModel(ResourceLocation modelLocation) throws Exception {
-		ModelResourceLocation variant = (ModelResourceLocation) modelLocation;
-		BlockModelDefinition definition = ModelUtil.getModelBlockDefinition(variant);
-		try {
-			VariantList variants = definition.getVariants().get(variant.getVariant());
-			return new SimpleModel(variant, variants);
-		} catch (Exception e) {
-			if (definition.hasMultipartData()) {
-				return new MultipartModel(new ResourceLocation(variant.getNamespace(), variant.getPath()),
-						definition.getMultipartData());
-			}
-			throw e;
-		}
+		//		ModelResourceLocation variant = (ModelResourceLocation) modelLocation;
+		//		BlockModelDefinition definition = ModelUtil.getModelBlockDefinition(variant);
+		//		try {
+		//			VariantList variants = definition.getVariants().get(variant.getVariant());
+		//			return new SimpleModel(variant, variants);
+		//		} catch (Exception e) {
+		//			if (definition.hasMultipartData()) {
+		//				return new MultipartModel(new ResourceLocation(variant.getNamespace(), variant.getPath()),
+		//						definition.getMultipartData());
+		//			}
+		//			throw e;
+		//		}
+		return null;
 	}
 }

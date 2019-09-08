@@ -24,7 +24,7 @@ public class ButterflyManager {
 	 * @implNote Only null if the "lepidopterology" module is not enabled.
 	 */
 	//TODO: Move most calls to definition (more save)
-	public static IButterflyRoot butterflyRoot = butterflyRootDefinition.get();
+	public static IButterflyRoot butterflyRoot;
 
 	/**
 	 * Used to create new butterflies.

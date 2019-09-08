@@ -13,8 +13,10 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import genetics.api.alleles.Allele;
 import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
 import genetics.api.individual.IChromosomeAllele;
 import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IChromosomeValue;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.EmptyOrganismType;
 import genetics.api.organism.IOrganism;
@@ -103,6 +105,13 @@ public class GeneticHelper {
 		public <A extends IAllele> A getAllele(IChromosomeAllele<A> type, boolean active) {
 			return (A) Allele.EMPTY;
 		}
+
+		@Override
+		@SuppressWarnings("unchecked")
+		public <V> IAlleleValue<V> getAllele(IChromosomeValue<V> type, boolean active) {
+			return (IAlleleValue<V>) Allele.EMPTY;
+		}
+
 
 		@Override
 		public Optional<IAllele> getAlleleDirectly(IChromosomeType type, boolean active) {

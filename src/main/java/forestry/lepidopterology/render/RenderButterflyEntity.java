@@ -10,12 +10,9 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -33,7 +30,7 @@ public class RenderButterflyEntity extends MobRenderer<EntityButterfly, ModelBut
 			return;
 		}
 
-		field_77045_g.setScale(entity.getSize());
+		entityModel.setScale(entity.getSize());
 		super.doRender(entity, x, y, z, light, partialTickTime);
 	}
 

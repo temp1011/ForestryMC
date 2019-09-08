@@ -18,7 +18,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.server.ServerWorld;
 
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
@@ -60,8 +59,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 			iconStacks.put(individual.getIdentifier(), speciesRoot.getTypes().createStack(individual, speciesRoot.getIconType()));
 		}
 
-		//TODO world cast
-		breedingTracker = speciesRoot.getBreedingTracker((ServerWorld) playerInv.player.world, playerInv.player.getGameProfile());
+		breedingTracker = speciesRoot.getBreedingTracker(playerInv.player.world, playerInv.player.getGameProfile());
 	}
 
 	@Override

@@ -22,7 +22,9 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.resources.IResourceManager;
@@ -30,10 +32,10 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
+import forestry.core.config.Constants;
 import forestry.core.items.DrinkProperties;
 import forestry.core.render.ForestryResource;
 
@@ -76,15 +78,15 @@ public enum ForestryFluids {
 
 	};
 
-	private static final Map<ResourceLocation, Fluids> tagToFluid = new HashMap<>();
-	private static final Map<ResourceLocation, Fluids> tagToFluidFlowing = new HashMap<>();
+	private static final Map<ResourceLocation, ForestryFluids> tagToFluid = new HashMap<>();
+	private static final Map<ResourceLocation, ForestryFluids> tagToFluidFlowing = new HashMap<>();
 
 	static {
 		for (ForestryFluids fluidDefinition : ForestryFluids.values()) {
 			tagToFluid.put(fluidDefinition.getFluid().getRegistryName(), fluidDefinition);
 		}
-		for (Fluids fluidDefinition : Fluids.values()) {
-			tagToFluidFlowing.put(fluidDefinition.getFlowingFluid().getRegistryName(), fluidDefinition);
+		for (ForestryFluids fluidDefinition : ForestryFluids.values()) {
+			tagToFluidFlowing.put(fluidDefinition.getFlowing().getRegistryName(), fluidDefinition);
 		}
 	}
 
@@ -109,15 +111,15 @@ public enum ForestryFluids {
 	}
 
 	ForestryFluids(Color particleColor, int density, int viscosity, int flammability) {
-		this.tag = name().toLowerCase(Locale.ENGLISH).replace('_', '.');
+		this.tag = new ResourceLocation(Constants.MOD_ID, name().toLowerCase(Locale.ENGLISH).replace('_', '.'));
 		this.particleColor = particleColor;
 		this.density = density;
 		this.viscosity = viscosity;
 		this.flammability = flammability;
 
-		resources[0] = new ForestryResource("block/liquid/" + getTag() + "_still");
+		resources[0] = new ForestryResource("block/liquid/" + getTag().getPath() + "_still");
 		if (flowTextureExists()) {
-			resources[1] = new ForestryResource("block/liquid/" + getTag() + "_flow");
+			resources[1] = new ForestryResource("block/liquid/" + getTag().getPath() + "_flow");
 		}
 	}
 
@@ -190,12 +192,12 @@ public enum ForestryFluids {
 	}
 
 	@Nullable
-	public static Fluids getFluidDefinition(Fluid fluid) {
+	public static ForestryFluids getFluidDefinition(Fluid fluid) {
 		if (fluid instanceof ForestryFluid) {
 			if (((ForestryFluid) fluid).flowing) {
-				return tagToFluidFlowing.get(fluid.getRegistryName().getPath());
+				return tagToFluidFlowing.get(fluid.getRegistryName());
 			} else {
-				return tagToFluid.get(fluid.getRegistryName().getPath());
+				return tagToFluid.get(fluid.getRegistryName());
 			}
 		}
 
@@ -224,7 +226,7 @@ public enum ForestryFluids {
 	 */
 	@Nullable
 	public Block makeBlock(boolean flowing) {
-		return new BlockForestryFluid(this, Math.max(flammability, 0), flammability > 0);
+		return new BlockForestryFluid((FlowingFluid) (flowing ? flowingFluid : sourceFluid), Math.max(flammability, 0), flammability > 0, particleColor);
 	}
 
 	/**
@@ -240,7 +242,7 @@ public enum ForestryFluids {
 			return true;
 		}
 		try {
-			ResourceLocation resourceLocation = new ForestryResource("block/liquid/" + getTag() + "_flow");
+			ResourceLocation resourceLocation = new ForestryResource("block/liquid/" + getTag().getPath() + "_flow");
 			Minecraft minecraft = Minecraft.getInstance();
 			if (minecraft != null) {    //TODO - is it correct
 				IResourceManager resourceManager = minecraft.getResourceManager();

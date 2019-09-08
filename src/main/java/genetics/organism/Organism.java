@@ -12,8 +12,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
 import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
 import genetics.api.individual.IChromosomeAllele;
 import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IChromosomeValue;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganism;
 import genetics.api.organism.IOrganismType;
@@ -77,6 +79,16 @@ public class Organism<I extends IIndividual> implements IOrganism<I> {
 			allele = GeneticSaveHandler.INSTANCE.getAllele(container, getType(), type, active);
 		}
 		return (A) allele;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <V> IAlleleValue<V> getAllele(IChromosomeValue<V> type, boolean active) {
+		IAllele allele = GeneticSaveHandler.INSTANCE.getAlleleDirectly(container, getType(), type, active);
+		if (allele == null) {
+			allele = GeneticSaveHandler.INSTANCE.getAllele(container, getType(), type, active);
+		}
+		return (IAlleleValue<V>) allele;
 	}
 
 	@Override

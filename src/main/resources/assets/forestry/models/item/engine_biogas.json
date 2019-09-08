@@ -1,7 +1,7 @@
 {
   "parent": "builtin/entity",
   "textures": {
-    "particle": "forestry:block/engine_biogas.0"
+    "particle": "forestry:block/engine_bronze.0"
   },
   "display": {
     "gui": {

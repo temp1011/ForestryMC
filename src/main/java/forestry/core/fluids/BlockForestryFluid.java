@@ -45,15 +45,15 @@ public class BlockForestryFluid extends FlowingFluidBlock implements IItemModelR
 	private final int flammability;
 	private final Color color;
 
-	public BlockForestryFluid(Fluids forestryFluid) {
+	public BlockForestryFluid(ForestryFluids forestryFluid) {
 		this(forestryFluid, 0, false);
 	}
 
-	public BlockForestryFluid(Fluids forestryFluid, int flammability, boolean flammable) {
+	public BlockForestryFluid(ForestryFluids forestryFluid, int flammability, boolean flammable) {
 		this((FlowingFluid) forestryFluid.getFluid(), flammability, flammable, forestryFluid.getParticleColor());
 	}
 
-	private BlockForestryFluid(FlowingFluid fluid, int flammability, boolean flammable, Color color) {
+	public BlockForestryFluid(FlowingFluid fluid, int flammability, boolean flammable, Color color) {
 		super(fluid, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
 
 		this.flammability = flammability;

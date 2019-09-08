@@ -243,12 +243,12 @@ public abstract class BlockUtil {
 
 	/* CHUNKS */
 
-	public static boolean canReplace(BlockState blockState, World world, BlockPos pos) {
+	public static boolean canReplace(BlockState blockState, IWorld world, BlockPos pos) {
 		Block block = blockState.getBlock();
 		return world.getBlockState(pos).getMaterial().isReplaceable() && !blockState.getMaterial().isLiquid();
 	}
 
-	public static boolean canPlaceTree(BlockState blockState, World world, BlockPos pos) {
+	public static boolean canPlaceTree(BlockState blockState, IWorld world, BlockPos pos) {
 		BlockPos downPos = pos.down();
 		Block block = world.getBlockState(downPos).getBlock();
 		return !(world.getBlockState(pos).getMaterial().isReplaceable() &&

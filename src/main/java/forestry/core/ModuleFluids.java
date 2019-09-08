@@ -36,8 +36,8 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.fluids.ForestryFluids;
 import forestry.core.fluids.ForestryFluid;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.proxy.Proxies;
@@ -77,8 +77,8 @@ public class ModuleFluids extends BlankForestryModule {
 		Fluid flowingFluid = new ForestryFluid.Flowing(definition);
 		definition.setSourceFluid(sourceFluid);
 		definition.setFlowingFluid(flowingFluid);
-		sourceFluid.setRegistryName(Constants.MOD_ID, definition.getTag());
-		flowingFluid.setRegistryName(Constants.MOD_ID, definition.getTag() + "_flowing");
+		sourceFluid.setRegistryName(definition.getTag());
+		flowingFluid.setRegistryName(Constants.MOD_ID, definition.getTag().getPath() + "_flowing");
 		if (!Config.isBlockEnabled(definition.getTag())) {
 			return;
 		}
@@ -113,7 +113,7 @@ public class ModuleFluids extends BlankForestryModule {
 
 	private static Block createBlock(ForestryFluids definition, boolean flowing) {
 		Block fluidBlock = definition.makeBlock(flowing);
-		String name = "fluid." + definition.getTag() + (flowing ? "_flowing" : "");
+		String name = "fluid." + definition.getTag().getPath() + (flowing ? "_flowing" : "");
 		//fluidBlock.setTranslationKey("forestry." + name); TODO done by registry name?
 		fluidBlock.setRegistryName(name);
 		ForgeRegistries.BLOCKS.register(fluidBlock);

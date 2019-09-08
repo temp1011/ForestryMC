@@ -10,6 +10,7 @@ import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import forestry.api.core.IErrorState;
@@ -92,4 +93,5 @@ public interface IButterfly extends IIndividualLiving {
 	@Override
 	IButterfly copy();
 
+	ITextComponent getDisplayName();
 }

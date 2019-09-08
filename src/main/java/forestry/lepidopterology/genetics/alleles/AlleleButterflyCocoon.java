@@ -18,9 +18,10 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 
-import forestry.api.lepidopterology.IAlleleButterflyCocoon;
+import genetics.api.alleles.AlleleCategorized;
+
+import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.lepidopterology.blocks.PropertyCocoon;
 
 public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleButterflyCocoon {
