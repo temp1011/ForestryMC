@@ -6,9 +6,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.IGrowthProvider;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
@@ -46,12 +48,12 @@ public class ClimateGrowthProvider implements IGrowthProvider {
 	public boolean isBiomeValid(ITree tree, Biome biome) {
 		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome);
 		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.getDownfall());
-		ITreeGenome genome = tree.getGenome();
+		IGenome genome = tree.getGenome();
 		if (temperature == null) {
-			temperature = genome.getPrimary().getTemperature();
+			temperature = genome.getPrimary(IAlleleTreeSpecies.class).getTemperature();
 		}
 		if (humidity == null) {
-			humidity = genome.getPrimary().getHumidity();
+			humidity = genome.getPrimary(IAlleleTreeSpecies.class).getHumidity();
 		}
 		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity, temperature, temperatureTolerance, humidity, humidityTolerance);
 	}

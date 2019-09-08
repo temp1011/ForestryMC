@@ -12,10 +12,10 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -34,7 +34,7 @@ public class BottlerRecipe {
 		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
 
 		FluidStack drained = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE);
-		if (drained != null && drained.getAmount() > 0) {
+		if (!drained.isEmpty() && drained.getAmount() > 0) {
 			return new BottlerRecipe(fluidHandler.getContainer(), drained, filled, false);
 		}
 

@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import forestry.api.core.IToolPipette;
+import forestry.core.fluids.StandardTank;
 import forestry.core.network.packets.PacketPipetteClick;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.NetworkUtil;
@@ -64,14 +65,18 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 		LazyOptional<IFluidHandlerItem> fluidCap = FluidUtil.getFluidHandler(itemstack);
 		fluidCap.ifPresent(fluidHandlerItem -> {
 			if (pipette.canPipette(itemstack) && liquidAmount > 0) {
-				if (liquidAmount > 0) {    //TODO unnecessary check?
-					if (tank instanceof FluidTank) {
-						FluidStack fillAmount = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
-						int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
-						tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-						player.inventory.setItemStack(fluidHandlerItem.getContainer());
-						player.updateHeldItem();
-					}
+				if (tank instanceof StandardTank) {
+					FluidStack fillAmount = ((StandardTank) tank).drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
+					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
+					player.inventory.setItemStack(fluidHandlerItem.getContainer());
+					player.updateHeldItem();
+				} else {//TODO: Test if this works
+					FluidStack fillAmount = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
+					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
+					player.inventory.setItemStack(fluidHandlerItem.getContainer());
+					player.updateHeldItem();
 				}
 			} else {
 				FluidStack potential = fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);

@@ -21,7 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.api.apiculture.DefaultBeeListener;

@@ -22,13 +22,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.server.ServerChunkProvider;
+import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -124,7 +124,7 @@ public class TickHandlerCoreServer {
 		if (Config.doRetrogen) {
 			CompoundNBT eventData = event.getData();
 			if (eventData.contains(Constants.MOD_ID)) {
-				CompoundNBT tag = (CompoundNBT) eventData.getCompound(Constants.MOD_ID);
+				CompoundNBT tag = eventData.getCompound(Constants.MOD_ID);
 				if (!tag.contains("retrogen") || Config.forceRetrogen) {
 					ChunkCoords coords = new ChunkCoords(event.getChunk());
 					chunkRegenList.put(coords.dimension, coords);

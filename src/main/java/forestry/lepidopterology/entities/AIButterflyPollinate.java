@@ -12,6 +12,7 @@ package forestry.lepidopterology.entities;
 
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IPollinatable;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.core.utils.GeneticsUtil;
 import forestry.lepidopterology.ModuleLepidopterology;
 
@@ -39,7 +40,7 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 			return false;
 		}
 
-		if (!entity.getButterfly().getGenome().getFlowerProvider().isAcceptedPollinatable(entity.world, checkPollinatable)) {
+		if (!entity.getButterfly().getGenome().getActiveAllele(ButterflyChromosomes.FLOWER_PROVIDER).getProvider().isAcceptedPollinatable(entity.world, checkPollinatable)) {
 			return false;
 		}
 

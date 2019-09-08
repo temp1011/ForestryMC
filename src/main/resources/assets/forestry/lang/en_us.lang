@@ -1217,17 +1217,17 @@ for.gui.combustibility=Combustibility
 for.gui.carbonization=Carbonization
 
 for.trees.grammar.blossom.type=Blossom
-for.trees.grammar.blossom=%SPECIES %TYPE
+for.trees.grammar.blossom=%1$s %2$s
 for.trees.grammar.germling.type=Germling
-for.trees.grammar.germling=%SPECIES %TYPE
+for.trees.grammar.germling=%1$s %2$s
 for.trees.grammar.pollen.type=Pollen
-for.trees.grammar.pollen=%SPECIES %TYPE
+for.trees.grammar.pollen=%1$s %2$s
 for.trees.grammar.sapling.type=Sapling
-for.trees.grammar.sapling=%SPECIES %TYPE
+for.trees.grammar.sapling=%1$s %2$s
 for.trees.grammar.leaves.type=Leaves
-for.trees.grammar.leaves=%SPECIES %TYPE
+for.trees.grammar.leaves=%1$s %2$s
 for.trees.grammar.pile.type=Wood Pile
-for.trees.grammar.pile=%SPECIES %TYPE
+for.trees.grammar.pile=%1$s %2$s
 
 tile.for.wood_pile.name=Wood Pile
 tile.for.wood_pile_decorative.name=Decorative Wood Pile
@@ -1273,14 +1273,14 @@ for.trees.species.padauk=Padauk
 for.trees.species.cocobolo=Cocobolo
 for.trees.species.zebrawood=Zebrawood
 
-for.fence.grammar=%TYPE Fence
-for.fence_gate.grammar=%TYPE Fence Gate
-for.log.grammar=%TYPE Wood
-for.planks.grammar=%TYPE Wood Planks
-for.slab.grammar=%TYPE Wood Slab
-for.slab.double.grammar=%TYPE Wood Slab
-for.stairs.grammar=%TYPE Stairs
-for.door.grammar=%TYPE Door
+for.fence.grammar=%1$s Fence
+for.fence_gate.grammar=%1$s Fence Gate
+for.log.grammar=%1$s Wood
+for.planks.grammar=%1$s Wood Planks
+for.slab.grammar=%1$s Wood Slab
+for.slab.double.grammar=%1$s Wood Slab
+for.stairs.grammar=%1$s Stairs
+for.door.grammar=%1$s Door
 
 for.trees.woodType.larch=Larch
 for.trees.woodType.teak=Teak

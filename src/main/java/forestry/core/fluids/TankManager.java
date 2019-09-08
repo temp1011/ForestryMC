@@ -163,6 +163,9 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 
 		FluidStack fluidStack = tank.getFluid();
 		FluidStack prev = prevFluidStacks.get(container, tankIndex);
+		if (prev == null) {
+			prev = FluidStack.EMPTY;
+		}
 		if (FluidHelper.areFluidStacksEqual(fluidStack, prev)) {
 			return;
 		}
@@ -181,7 +184,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 				}
 			}
 
-			if (!fluid.isEmpty()) {
+			if (fluid.isEmpty()) {
 				prevFluidStacks.remove(container, tankIndex);
 			} else {
 				prevFluidStacks.put(container, tankIndex, fluid.copy());
@@ -210,51 +213,54 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 
 	@Nonnull
 	@Override
-	public FluidStack getFluidInTank(int tank) {
-		//TODO - could have this, but it will probably hide bugs
-//		if(tank < 0 || tank >= tanks.size()) {
-//			return FluidStack.EMPTY;
-//		}
-		return tanks.get(tank).getFluid();
+	public FluidStack getFluidInTank(int tankIndex) {
+		IFluidTank tank = getTank(tankIndex);
+		if (tank == null) {
+			return FluidStack.EMPTY;
+		}
+		return tank.getFluid();
 	}
 
 	@Override
-	public int getTankCapacity(int tank) {
-		//TODO - could have this, but it will probably hide bugs
-		//		if(tank < 0 || tank >= tanks.size()) {
-		//			return FluidStack.EMPTY;
-		//		}
-		return tanks.get(tank).getCapacity();
+	public int getTankCapacity(int tankIndex) {
+		IFluidTank tank = getTank(tankIndex);
+		if (tank == null) {
+			return 0;
+		}
+		return tank.getCapacity();
 	}
 
 	@Override
-	public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
-		//TODO - could have this, but it will probably hide bugs
-		//		if(tank < 0 || tank >= tanks.size()) {
-		//			return FluidStack.EMPTY;
-		//		}
-		return tanks.get(tank).isFluidValid(stack);
+	public boolean isFluidValid(int tankIndex, @Nonnull FluidStack stack) {
+		IFluidTank tank = getTank(tankIndex);
+		if (tank == null) {
+			return false;
+		}
+		return tank.isFluidValid(stack);
 	}
 
 	@Override
-	public int fill(FluidStack resource, FluidAction doFill) {
+	public int fill(FluidStack resource, FluidAction action) {
 		for (StandardTank tank : tanks) {
 			if (tankAcceptsFluid(tank, resource)) {
-				return fill(tank.getTankIndex(), resource, doFill);
+				return fill(tank.getTankIndex(), resource, action);
 			}
 		}
 
-		return EmptyFluidHandler.INSTANCE.fill(resource, doFill);
+		return EmptyFluidHandler.INSTANCE.fill(resource, action);
 	}
 
-	public int fill(int tankIndex, FluidStack resource, FluidAction doFill) {
+	public int fill(int tankIndex, FluidStack resource, FluidAction action) {
 		if (tankIndex < 0 || tankIndex >= tanks.size()) {
 			return 0;
 		}
 
 		StandardTank tank = tanks.get(tankIndex);
+		if (!tank.canFill()) {
+			return 0;
+		}
 
-		return tank.fill(resource, doFill);
+		return tank.fill(resource, action);
 	}
 
 	@Override
@@ -279,30 +285,33 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public FluidStack drain(int maxDrain, FluidAction doDrain) {
+	public FluidStack drain(int maxDrain, FluidAction action) {
 		for (StandardTank tank : tanks) {
 			if (tankCanDrain(tank)) {
-				return drain(tank.getTankIndex(), maxDrain, doDrain);
+				return drain(tank.getTankIndex(), maxDrain, action);
 			}
 		}
-		return EmptyFluidHandler.INSTANCE.drain(maxDrain, doDrain);
+		return EmptyFluidHandler.INSTANCE.drain(maxDrain, action);
 	}
 
-	public FluidStack drain(int tankIndex, int maxDrain, FluidAction doDrain) {
+	public FluidStack drain(int tankIndex, int maxDrain, FluidAction action) {
 		if (tankIndex < 0 || tankIndex >= tanks.size()) {
 			return FluidStack.EMPTY;
 		}
 
 		StandardTank tank = tanks.get(tankIndex);
+		if (!tank.canDrain()) {
+			return FluidStack.EMPTY;
+		}
 
-		return tank.drain(maxDrain, doDrain);
+		return tank.drain(maxDrain, action);
 	}
 
 	@Override
-	public FluidStack drain(FluidStack resource, FluidAction doDrain) {
+	public FluidStack drain(FluidStack resource, FluidAction action) {
 		for (StandardTank tank : tanks) {
 			if (tankCanDrainFluid(tank, resource)) {
-				return drain(tank.getTankIndex(), resource.getAmount(), doDrain);
+				return drain(tank.getTankIndex(), resource.getAmount(), action);
 			}
 		}
 		return FluidStack.EMPTY;
@@ -321,18 +330,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	@Override
 	public boolean canFillFluidType(FluidStack fluidStack) {
 		for (StandardTank tank : tanks) {
-			if(tank.fill(fluidStack, FluidAction.SIMULATE) > 0) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	@Override
-	public boolean canDrainFluidType(FluidStack fluidStack) {
-		for (StandardTank tank : tanks) {
-			if (!tank.drain(fluidStack, FluidAction.SIMULATE).isEmpty()) {
+			if (tank.isFluidValid(fluidStack)) {
 				return true;
 			}
 		}
@@ -341,10 +339,14 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	private static boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {
-		return tank.fill(fluidStack, FluidAction.SIMULATE) > 0;
+		return tank.canFill() &&
+			tank.fill(fluidStack, FluidAction.SIMULATE) > 0;
 	}
 
 	private static boolean tankCanDrain(StandardTank tank) {
+		if (!tank.canDrain()) {
+			return false;
+		}
 		FluidStack drained = tank.drain(1, FluidAction.SIMULATE);
 		return !drained.isEmpty() && drained.getAmount() > 0;
 	}

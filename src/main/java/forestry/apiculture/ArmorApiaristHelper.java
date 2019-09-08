@@ -12,6 +12,7 @@ package forestry.apiculture;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -22,7 +23,7 @@ import forestry.api.apiculture.IArmorApiaristHelper;
 public class ArmorApiaristHelper implements IArmorApiaristHelper {
 
 	@Override
-	public boolean isArmorApiarist(ItemStack stack, LivingEntity entity, String cause, boolean doProtect) {
+	public boolean isArmorApiarist(ItemStack stack, LivingEntity entity, ResourceLocation cause, boolean doProtect) {
 		if (stack.isEmpty()) {
 			return false;
 		}
@@ -39,7 +40,7 @@ public class ArmorApiaristHelper implements IArmorApiaristHelper {
 	}
 
 	@Override
-	public int wearsItems(LivingEntity entity, String cause, boolean doProtect) {
+	public int wearsItems(LivingEntity entity, ResourceLocation cause, boolean doProtect) {
 		int count = 0;
 
 		for (ItemStack armorItem : entity.getEquipmentAndArmor()) {

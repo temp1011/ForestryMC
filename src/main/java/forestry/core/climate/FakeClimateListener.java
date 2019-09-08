@@ -6,10 +6,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateState;

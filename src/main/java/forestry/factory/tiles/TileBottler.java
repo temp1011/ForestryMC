@@ -28,8 +28,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraft.fluid.Fluid;
-
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -210,7 +208,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		ItemStack emptyCan = getStackInSlot(InventoryBottler.SLOT_FILLING_PROCESSING);
 		if (!emptyCan.isEmpty()) {
 			FluidStack resource = resourceTank.getFluid();
-			if (resource.isEmpty()) {
+			if (resource == null) {
 				return;
 			}
 			//Fill Container
@@ -231,7 +229,6 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		}
 	}
 
-	//TODO code dupe with above method
 	private void checkEmptyRecipe() {
 		ItemStack filledCan = getStackInSlot(InventoryBottler.SLOT_EMPTYING_PROCESSING);
 		if (!filledCan.isEmpty()) {
@@ -306,7 +303,8 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 		checkEmptyRecipe();
 		if (currentRecipe != null) {
-			if (tankManager.getTanks() > 0) {	//TODO I think this is the check we want
+			IFluidTank tank = tankManager.getTank(0);
+			if (tank != null) {
 				emptyStatus = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_EMPTYING_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, false);
 			} else {
 				emptyStatus = FillStatus.SUCCESS;

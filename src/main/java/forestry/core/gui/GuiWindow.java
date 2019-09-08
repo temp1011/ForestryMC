@@ -2,16 +2,17 @@ package forestry.core.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.events.GuiEvent;
 import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.gui.elements.Window;
+
+import org.lwjgl.glfw.GLFW;
 
 /**
  * GuiScreen implementation of a gui that contains {@link forestry.api.gui.IGuiElement}s.

@@ -11,18 +11,18 @@
 package forestry.apiculture.genetics.alleles;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SnowBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.apiculture.IBeeGenome;
+
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
@@ -36,7 +36,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorldObj();
 
@@ -83,7 +83,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		if (housing.getWorldObj().rand.nextInt(3) == 0) {
 			Vec3i area = getModifiedArea(genome, housing);
 			Vec3i offset = VectUtil.scale(area, -0.5F);

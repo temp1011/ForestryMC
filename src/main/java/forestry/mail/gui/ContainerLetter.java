@@ -23,10 +23,9 @@ import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;

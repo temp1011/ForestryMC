@@ -18,7 +18,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.math.BlockPos;
 
-
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.api.apiculture.DefaultBeeListener;

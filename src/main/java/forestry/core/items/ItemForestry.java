@@ -14,17 +14,15 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.core.ItemGroupForestry;
@@ -33,7 +31,7 @@ import forestry.core.utils.ItemTooltipUtil;
 public class ItemForestry extends Item implements IItemModelRegister {
 	public ItemForestry(Item.Properties properties) {
 		//TODO - do the below at registration
-		super(properties.group(ItemGroupForestry.tabForestry));
+		super(properties);
 	}
 
 	public ItemForestry(ItemGroup group) {
@@ -42,7 +40,7 @@ public class ItemForestry extends Item implements IItemModelRegister {
 
 	//TODO may be worth removing this
 	public ItemForestry() {
-		this(new Item.Properties());
+		this(ItemGroupForestry.tabForestry);
 	}
 
 	public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {

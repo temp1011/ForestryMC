@@ -6,10 +6,9 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.gui.GuiConstants;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IElementGroup;

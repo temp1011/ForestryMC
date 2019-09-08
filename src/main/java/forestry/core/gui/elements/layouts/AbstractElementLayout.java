@@ -2,8 +2,8 @@ package forestry.core.gui.elements.layouts;
 
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.gui.IElementLayout;
 
 @OnlyIn(Dist.CLIENT)

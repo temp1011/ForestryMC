@@ -13,10 +13,10 @@ import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.IModelData;
+
 @OnlyIn(Dist.CLIENT)
 public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDefault<B, K> {
 	private static final Set<ModelBlockCached> CACHE_PROVIDERS = new HashSet<>();
@@ -41,12 +41,12 @@ public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDef
 	}
 
 	@Override
-	protected IBakedModel getModel(BlockState state) {
-		K key = getWorldKey(state);
+	protected IBakedModel getModel(BlockState state, IModelData extraData) {
+		K key = getWorldKey(state, extraData);
 
 		IBakedModel model = worldCache.getIfPresent(key);
 		if (model == null) {
-			model = super.getModel(state);
+			model = super.getModel(state, extraData);
 			worldCache.put(key, model);
 		}
 		return model;

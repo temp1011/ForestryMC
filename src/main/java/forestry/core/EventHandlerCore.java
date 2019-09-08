@@ -21,7 +21,6 @@ import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 
@@ -37,10 +36,12 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleRegistry;
+import genetics.api.GeneticsAPI;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.ApiaristAI;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.config.Constants;
@@ -83,11 +84,17 @@ public class EventHandlerCore {
 	}
 
 	private static void syncBreedingTrackers(PlayerEntity player) {
-		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
-		Collection<ISpeciesRoot> speciesRoots = alleleRegistry.getSpeciesRoot().values();
-		for (ISpeciesRoot speciesRoot : speciesRoots) {
-			//TODO world cast
-			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker((ServerWorld) player.getEntityWorld(), player.getGameProfile());
+		Collection<IRootDefinition> speciesRoots = GeneticsAPI.apiInstance.getRoots().values();
+		for (IRootDefinition definition : speciesRoots) {
+			if (!definition.isRootPresent()) {
+				continue;
+			}
+			IIndividualRoot root = definition.get();
+			if (!(root instanceof IForestrySpeciesRoot)) {
+				continue;
+			}
+			IForestrySpeciesRoot speciesRoot = (IForestrySpeciesRoot) root;
+			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
 			breedingTracker.synchToPlayer(player);
 		}
 	}
@@ -118,8 +125,11 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		ErrorStateRegistry.initSprites();
-		TextureManagerForestry.initDefaultSprites();
+		if (event.getMap() == TextureManagerForestry.getInstance().getTextureMap()) {
+			ErrorStateRegistry.initSprites(event);
+			TextureManagerForestry.getInstance().registerSprites(event);
+			TextureManagerForestry.initDefaultSprites(event);
+		}
 		ModelBlockCached.clear();
 		ModelBlockCustomCached.clear();
 	}

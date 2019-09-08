@@ -14,62 +14,53 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map.Entry;
+import java.util.Optional;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.DimensionSavedDataManager;
 
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IAlleleBeeSpecies;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeWrapper;
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IRootContext;
+import genetics.api.root.IndividualRoot;
+
 import forestry.api.apiculture.IApiaristTracker;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
-import forestry.api.apiculture.IBeeMutation;
-import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.apiculture.IBeekeepingMode;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.genetics.IAlyzerPlugin;
-import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IBreedingTrackerHandler;
 import forestry.api.genetics.IDatabasePlugin;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesType;
 import forestry.apiculture.BeeHousingListener;
 import forestry.apiculture.BeeHousingModifier;
 import forestry.apiculture.BeekeepingLogic;
-import forestry.apiculture.ModuleApiculture;
-import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.genetics.SpeciesRoot;
+import forestry.core.genetics.root.BreedingTrackerManager;
 import forestry.core.utils.Log;
 
-public class BeeRoot extends SpeciesRoot implements IBeeRoot {
+public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreedingTrackerHandler {
 
 	private static int beeSpeciesCount = -1;
-	private static final List<IBee> beeTemplates = new ArrayList<>();
-	/**
-	 * List of possible mutations on species alleles.
-	 */
-	private static final List<IBeeMutation> beeMutations = new ArrayList<>();
 	public static final String UID = "rootBees";
 
 	private final List<IBeekeepingMode> beekeepingModes = new ArrayList<>();
@@ -77,13 +68,12 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	@Nullable
 	private static IBeekeepingMode activeBeekeepingMode;
 
-	@Override
-	public String getUID() {
-		return UID;
+	public BeeRoot(IRootContext<IBee> context) {
+		super(context);
+		BreedingTrackerManager.INSTANCE.registerTracker(UID, this);
 	}
-
 	@Override
-	public Class<? extends IIndividual> getMemberClass() {
+	public Class<? extends IBee> getMemberClass() {
 		return IBee.class;
 	}
 
@@ -91,9 +81,9 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	public int getSpeciesCount() {
 		if (beeSpeciesCount < 0) {
 			beeSpeciesCount = 0;
-			for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
-				if (entry.getValue() instanceof IAlleleBeeSpecies) {
-					if (((IAlleleBeeSpecies) entry.getValue()).isCounted()) {
+			for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(BeeChromosomes.SPECIES)) {
+				if (allele instanceof IAlleleBeeSpecies) {
+					if (((IAlleleBeeSpecies) allele).isCounted()) {
 						beeSpeciesCount++;
 					}
 				}
@@ -103,75 +93,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 		return beeSpeciesCount;
 	}
 
-	@Override
-	public boolean isMember(ItemStack stack) {
-		return getType(stack) != null;
-	}
 
-	@Override
-	public boolean isMember(ItemStack stack, ISpeciesType type) {
-		return getType(stack) == type;
-	}
-
-	@Override
-	public boolean isMember(IIndividual individual) {
-		return individual instanceof IBee;
-	}
-
-	@Override
-	public ItemStack getMemberStack(IIndividual individual, ISpeciesType type) {
-		Preconditions.checkArgument(individual instanceof IBee, "individual is not a bee");
-		Preconditions.checkArgument(type instanceof EnumBeeType, "type is not an EnumBeeType");
-		ItemRegistryApiculture apicultureItems = ModuleApiculture.getItems();
-
-		IBee bee = (IBee) individual;
-		Item beeItem;
-		switch ((EnumBeeType) type) {
-			case QUEEN:
-				beeItem = apicultureItems.beeQueenGE;
-				// ensure a queen is always mated
-				if (bee.getMate() == null) {
-					bee.mate(bee);
-				}
-				break;
-			case PRINCESS:
-				beeItem = apicultureItems.beePrincessGE;
-				break;
-			case DRONE:
-				beeItem = apicultureItems.beeDroneGE;
-				break;
-			case LARVAE:
-				beeItem = apicultureItems.beeLarvaeGE;
-				break;
-			default:
-				throw new RuntimeException("Cannot instantiate a bee of type " + type);
-		}
-
-		CompoundNBT CompoundNBT = new CompoundNBT();
-		bee.write(CompoundNBT);
-		ItemStack beeStack = new ItemStack(beeItem);
-		beeStack.setTag(CompoundNBT);
-		return beeStack;
-	}
-
-	@Nullable
-	@Override
-	public EnumBeeType getType(ItemStack stack) {
-		Item item = stack.getItem();
-		ItemRegistryApiculture apicultureItems = ModuleApiculture.getItems();
-
-		if (apicultureItems.beeDroneGE == item) {
-			return EnumBeeType.DRONE;
-		} else if (apicultureItems.beePrincessGE == item) {
-			return EnumBeeType.PRINCESS;
-		} else if (apicultureItems.beeQueenGE == item) {
-			return EnumBeeType.QUEEN;
-		} else if (apicultureItems.beeLarvaeGE == item) {
-			return EnumBeeType.LARVAE;
-		}
-
-		return null;
-	}
 
 	@Override
 	public EnumBeeType getIconType() {
@@ -179,12 +101,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public ISpeciesType[] getTypes() {
-		return EnumBeeType.values();
-	}
-
-	@Override
-	public ISpeciesType getTypeForMutation(int position) {
+	public IOrganismType getTypeForMutation(int position) {
 		switch (position) {
 			case 0:
 				return EnumBeeType.PRINCESS;
@@ -198,12 +115,14 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public boolean isDrone(ItemStack stack) {
-		return getType(stack) == EnumBeeType.DRONE;
+		Optional<IOrganismType> optional = getTypes().getType(stack);
+		return optional.isPresent() && optional.get() == EnumBeeType.DRONE;
 	}
 
 	@Override
 	public boolean isMated(ItemStack stack) {
-		if (getType(stack) != EnumBeeType.QUEEN) {
+		Optional<IOrganismType> optionalType = types.getType(stack);
+		if (!optionalType.isPresent() || optionalType.get() != EnumBeeType.QUEEN) {
 			return false;
 		}
 
@@ -212,93 +131,28 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	@Nullable
-	public IBee getMember(ItemStack stack) {
-		if (!isMember(stack) || stack.getTag() == null) {
-			return null;
-		}
-
-		return new Bee(stack.getTag());
-	}
-
-	@Override
-	public IBee getMember(CompoundNBT compound) {
-		return new Bee(compound);
-	}
-
-	@Override
-	public IBee getBee(IBeeGenome genome) {
+	public IBee create(IGenome genome) {
 		return new Bee(genome);
 	}
 
 	@Override
-	public IBee getBee(World world, IBeeGenome genome, IBee mate) {
+	public IBee create(IGenome genome, IGenome mate) {
 		return new Bee(genome, mate);
 	}
 
-	/* GENOME CONVERSIONS */
 	@Override
-	public IBeeGenome templateAsGenome(IAllele[] template) {
-		IChromosome[] chromosomes = templateAsChromosomes(template);
-		return new BeeGenome(chromosomes);
+	public IGenomeWrapper createWrapper(IGenome genome) {
+		return () -> genome;
 	}
 
 	@Override
-	public IBeeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive) {
-		return new BeeGenome(templateAsChromosomes(templateActive, templateInactive));
+	public IBee create(CompoundNBT compound) {
+		return new Bee(compound);
 	}
 
 	@Override
-	public IBee templateAsIndividual(IAllele[] template) {
-		return new Bee(templateAsGenome(template));
-	}
-
-	@Override
-	public IBee templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive) {
-		return new Bee(templateAsGenome(templateActive, templateInactive));
-	}
-
-	/* TEMPLATES */
-	@Override
-	public List<IBee> getIndividualTemplates() {
-		return beeTemplates;
-	}
-
-	@Override
-	public void registerTemplate(String identifier, IAllele[] template) {
-		IBeeGenome beeGenome = BeeManager.beeRoot.templateAsGenome(template);
-		IBee bee = new Bee(beeGenome);
-		beeTemplates.add(bee);
-		speciesTemplates.put(identifier, template);
-	}
-
-	@Override
-	public IAllele[] getDefaultTemplate() {
-		return BeeDefinition.FOREST.getTemplate();
-	}
-
-	/* MUTATIONS */
-	@Override
-	public List<IBeeMutation> getMutations(boolean shuffle) {
-		if (shuffle) {
-			Collections.shuffle(beeMutations);
-		}
-		return beeMutations;
-	}
-
-	@Override
-	public void registerMutation(IMutation mutation) {
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID())) {
-			return;
-		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele0().getUID())) {
-			return;
-		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele1().getUID())) {
-			return;
-		}
-
-		beeMutations.add((IBeeMutation) mutation);
+	public IBee getBee(World world, IGenome genome, IBee mate) {
+		return new Bee(genome, mate);
 	}
 
 	/* BREEDING MODES */
@@ -313,7 +167,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public IBeekeepingMode getBeekeepingMode(ServerWorld world) {
+	public IBeekeepingMode getBeekeepingMode(World world) {
 		if (activeBeekeepingMode != null) {
 			return activeBeekeepingMode;
 		}
@@ -336,7 +190,7 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public void setBeekeepingMode(ServerWorld world, IBeekeepingMode mode) {
+	public void setBeekeepingMode(World world, IBeekeepingMode mode) {
 		Preconditions.checkNotNull(world);
 		Preconditions.checkNotNull(mode);
 		activeBeekeepingMode = mode;
@@ -356,18 +210,33 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public IApiaristTracker getBreedingTracker(ServerWorld world, @Nullable GameProfile player) {
-		String filename = "ApiaristTracker." + (player == null ? "common" : player.getId());
-		//TODO ServerWorld needed
-		DimensionSavedDataManager manager = world.getSavedData();
-		ApiaristTracker tracker = manager.getOrCreate(() -> new ApiaristTracker(filename), filename);
+	public IApiaristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
+		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
+	}
 
+	@Override
+	public String getFileName(@Nullable GameProfile profile) {
+		return "ApiaristTracker." + (profile == null ? "common" : profile.getId());
+	}
 
-		tracker.setUsername(player);
-		tracker.setWorld(world);
+	@Override
+	public IBreedingTracker createTracker(String fileName) {
+		return new ApiaristTracker(fileName);
+	}
 
-		return tracker;
+	@Override
+	public void populateTracker(IBreedingTracker tracker, @Nullable World world, @Nullable GameProfile profile) {
+		if (!(tracker instanceof ApiaristTracker)) {
+			return;
+		}
+		ApiaristTracker apiaristTracker = (ApiaristTracker) tracker;
+		apiaristTracker.setWorld(world);
+		apiaristTracker.setUsername(profile);
+	}
 
+	@Override
+	public boolean isMember(IIndividual individual) {
+		return individual instanceof IBee;
 	}
 
 	@Override
@@ -383,16 +252,6 @@ public class BeeRoot extends SpeciesRoot implements IBeeRoot {
 	@Override
 	public IBeeListener createBeeHousingListener(IBeeHousing housing) {
 		return new BeeHousingListener(housing);
-	}
-
-	@Override
-	public IChromosomeType[] getKaryotype() {
-		return EnumBeeChromosome.values();
-	}
-
-	@Override
-	public IChromosomeType getSpeciesChromosomeType() {
-		return EnumBeeChromosome.SPECIES;
 	}
 
 	@Override

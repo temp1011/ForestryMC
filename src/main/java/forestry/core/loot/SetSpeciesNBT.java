@@ -4,17 +4,20 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 
+import java.util.Optional;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.functions.ILootFunction;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.genetics.ISpeciesType;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
 
 //TODO - loot tables now different
 public class SetSpeciesNBT implements ILootFunction {
@@ -26,14 +29,15 @@ public class SetSpeciesNBT implements ILootFunction {
 
 	@Override
 	public ItemStack apply(ItemStack stack, LootContext context) {
-		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(stack);
-		if (speciesRoot != null) {
-			ISpeciesType speciesType = speciesRoot.getType(stack);
-			if (speciesType != null) {
-				IAllele[] template = speciesRoot.getTemplate(speciesUid);
-				if (template != null) {
+		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stack);
+		if (definition.isRootPresent()) {
+			IIndividualRoot<IIndividual> speciesRoot = definition.get();
+			Optional<IOrganismType> speciesType = speciesRoot.getTypes().getType(stack);
+			if (speciesType.isPresent()) {
+				IAllele[] template = speciesRoot.getTemplates().getTemplate(speciesUid);
+				if (template.length > 0) {
 					IIndividual individual = speciesRoot.templateAsIndividual(template);
-					return speciesRoot.getMemberStack(individual, speciesType);
+					return speciesRoot.getTypes().createStack(individual, speciesType.get());
 				}
 			}
 		}

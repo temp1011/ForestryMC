@@ -12,10 +12,9 @@ package forestry.farming.proxy;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.models.BlockModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.farming.ModuleFarming;

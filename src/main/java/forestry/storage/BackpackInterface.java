@@ -23,7 +23,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.IBackpackFilterConfigurable;
@@ -87,7 +87,7 @@ public class BackpackInterface implements IBackpackInterface {
 	}
 
 	@Override
-	public Item createNaturalistBackpack(String backpackUid, ISpeciesRoot speciesRoot, ItemGroup tab) {
+	public Item createNaturalistBackpack(String backpackUid, IForestrySpeciesRoot speciesRoot, ItemGroup tab) {
 		Preconditions.checkNotNull(backpackUid, "backpackUid must not be null");
 		Preconditions.checkNotNull(speciesRoot, "speciesRoot must not be null");
 

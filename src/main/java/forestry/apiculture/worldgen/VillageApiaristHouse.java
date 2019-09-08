@@ -39,11 +39,11 @@
 //import net.minecraftforge.fml.common.registry.VillagerRegistry;
 //
 //import forestry.api.apiculture.BeeManager;
-//import forestry.api.apiculture.EnumBeeType;
+//import forestry.api.apiculture.genetics.EnumBeeType;
 //import forestry.api.apiculture.FlowerManager;
-//import forestry.api.apiculture.IAlleleBeeSpecies;
-//import forestry.api.apiculture.IBee;
-//import forestry.api.apiculture.IBeeGenome;
+//import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+//import forestry.api.apiculture.genetics.IBee;
+//import forestry.api.apiculture.genetics.IBeeGenome;
 //import forestry.api.arboriculture.EnumForestryWoodType;
 //import forestry.api.arboriculture.EnumVanillaWoodType;
 //import forestry.api.arboriculture.IWoodAccess;

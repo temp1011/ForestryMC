@@ -14,7 +14,6 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -28,15 +27,16 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.genetics.IAllele;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyCocoon;
-import forestry.api.lepidopterology.IButterflyGenome;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketTileStream;
@@ -55,7 +55,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	private final OwnerHandler ownerHandler = new OwnerHandler();
 	private int age;
 	private int maturationTime;
-	private IButterfly caterpillar = ButterflyDefinition.CabbageWhite.getIndividual();
+	private IButterfly caterpillar = ButterflyDefinition.CabbageWhite.createIndividual();
 	private boolean isSolid;
 
 	public TileCocoon() {
@@ -103,7 +103,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	@Override
 	public void writeData(PacketBufferForestry data) {
 		IButterfly caterpillar = getCaterpillar();
-		String speciesUID = caterpillar.getIdent();
+		String speciesUID = caterpillar.getIdentifier();
 		data.writeString(speciesUID);
 		data.writeInt(age);
 	}
@@ -117,7 +117,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 
 	private static IButterfly getButterfly(String speciesUID) {
-		IAllele[] butterflyTemplate = ButterflyManager.butterflyRoot.getTemplate(speciesUID);
+		IAllele[] butterflyTemplate = ButterflyManager.butterflyRoot.getTemplates().getTemplate(speciesUID);
 		Preconditions.checkNotNull(butterflyTemplate, "Could not find butterfly template for species: %s", speciesUID);
 		return ButterflyManager.butterflyRoot.templateAsIndividual(butterflyTemplate);
 	}
@@ -169,9 +169,9 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	public void onBlockTick() {
 		maturationTime++;
 
-		IButterflyGenome caterpillarGenome = caterpillar.getGenome();
+		IGenome caterpillarGenome = caterpillar.getGenome();
 		int caterpillarMatureTime = Math
-			.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
+			.round((float) caterpillarGenome.getActiveValue(ButterflyChromosomes.LIFESPAN) / (caterpillarGenome.getActiveValue(ButterflyChromosomes.FERTILITY) * 2));
 
 		if (maturationTime >= caterpillarMatureTime) {
 			if (age < 2) {

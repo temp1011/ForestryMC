@@ -19,10 +19,12 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 
@@ -31,13 +33,15 @@ import com.mojang.brigadier.Command;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.genetics.AlleleManager;
@@ -53,14 +57,10 @@ import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.SolderManager;
-//import forestry.core.commands.CommandListAlleles;
-//import forestry.core.commands.CommandModules;
-//import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.genetics.alleles.AlleleFactory;
-import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.gui.CoreContainerTypes;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.GuiAnalyzer;
@@ -77,6 +77,7 @@ import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.render.ColourProperties;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.TileRegistryCore;
 import forestry.core.utils.ClimateUtil;
@@ -85,6 +86,10 @@ import forestry.core.utils.OreDictUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+
+//import forestry.core.commands.CommandListAlleles;
+//import forestry.core.commands.CommandModules;
+//import forestry.core.commands.RootCommand;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
@@ -100,6 +105,7 @@ public class ModuleCore extends BlankForestryModule {
 
 	public ModuleCore() {
 		MinecraftForge.EVENT_BUS.register(this);
+		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 
 	public static ItemRegistryCore getItems() {
@@ -138,11 +144,8 @@ public class ModuleCore extends BlankForestryModule {
 
 		ChipsetManager.circuitRegistry = new CircuitRegistry();
 
-		AlleleRegistry alleleRegistry = new AlleleRegistry();
-		AlleleManager.alleleRegistry = alleleRegistry;
 		AlleleManager.climateHelper = new ClimateUtil();
 		AlleleManager.alleleFactory = new AlleleFactory();
-		alleleRegistry.initialize();
 
 		LootFunctionManager.registerFunction(new SetSpeciesNBT.Serializer());
 
@@ -154,6 +157,12 @@ public class ModuleCore extends BlankForestryModule {
 	@Override
 	public void registerBlocks() {
 		blocks = new BlockRegistryCore();
+
+		//TODO: Find better place for this, has to be loaded before setup
+		if (FMLEnvironment.dist == Dist.CLIENT) {
+			((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(ColourProperties.INSTANCE);
+			((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(TextureManagerForestry.getInstance());
+		}
 	}
 
 	@Override
@@ -368,7 +377,8 @@ public class ModuleCore extends BlankForestryModule {
 
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
-	public void registerSprites(TextureStitchEvent.Pre event) {
-		TextureManagerForestry.getInstance().registerSprites();
+	public void onClientSetup(FMLClientSetupEvent event) {
+		blocks.analyzer.clientInit();
+		blocks.escritoire.clientInit();
 	}
 }

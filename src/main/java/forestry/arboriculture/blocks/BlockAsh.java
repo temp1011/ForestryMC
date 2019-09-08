@@ -8,17 +8,14 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 
+import net.minecraftforge.common.ToolType;
+
 public class BlockAsh extends Block {
 
-	public static final IntegerProperty AMOUNT = IntegerProperty.create("amount", 0, 15);
+	public static final IntegerProperty AMOUNT = IntegerProperty.create("amount", 0, 63);
 
-	private final int startAmount;
-
-	public BlockAsh(int startAmount) {
-		super(Block.Properties.create(Material.EARTH, MaterialColor.BLACK)
-				.sound(SoundType.SAND));
-		//		setHarvestLevel("shovel", 0);	//TODO harvestlevel
-		this.startAmount = startAmount;
+	public BlockAsh() {
+		super(Block.Properties.create(Material.EARTH, MaterialColor.BLACK).sound(SoundType.SAND).harvestTool(ToolType.SHOVEL).harvestLevel(0));
 	}
 
 	@Override

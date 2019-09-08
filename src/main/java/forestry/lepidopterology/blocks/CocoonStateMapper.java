@@ -1,21 +1,9 @@
 package forestry.lepidopterology.blocks;
 
-import java.util.Map;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.lepidopterology.IAlleleButterflyCocoon;
-import forestry.core.config.Constants;
+
 import forestry.core.render.ForestryStateMapper;
-import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 
 @OnlyIn(Dist.CLIENT)
 public class CocoonStateMapper extends ForestryStateMapper {

@@ -19,8 +19,6 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 
 import net.minecraftforge.common.MinecraftForge;
-//import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
-//import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 
 import net.minecraftforge.fml.common.IWorldGenerator;
 
@@ -29,6 +27,9 @@ import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.config.Config;
 import forestry.modules.ModuleManager;
+
+//import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
+//import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 
 public class WorldGenerator implements IWorldGenerator {
 	//TODO - worldgen

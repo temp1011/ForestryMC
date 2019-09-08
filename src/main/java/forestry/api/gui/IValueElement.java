@@ -2,7 +2,6 @@ package forestry.api.gui;
 
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public interface IValueElement<V> extends IGuiElement {

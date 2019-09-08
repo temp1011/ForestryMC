@@ -13,26 +13,28 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-//import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraft.fluid.Fluid;
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.core.IToolPipette;
+import forestry.core.ItemGroupForestry;
 import forestry.core.fluids.PipetteContents;
+
+//import net.minecraft.client.renderer.ItemMeshDefinition;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 	@OnlyIn(Dist.CLIENT)
@@ -40,7 +42,9 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	public ItemPipette() {
 		super((new Item.Properties())
-		.maxStackSize(1));
+			.maxStackSize(1)
+			.group(ItemGroupForestry.tabForestry));
+		addPropertyOverride(new ResourceLocation("state"), (itemStack, world, livingEntity) -> FluidUtil.getFluidContained(itemStack).isPresent() ? 1 : 0);
 //		setFull3D();
 	}
 
@@ -54,6 +58,10 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
+
+		if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) {
+			return;
+		}
 
 		PipetteContents contained = PipetteContents.create(itemstack);
 		if (contained != null) {
@@ -88,6 +96,6 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-		return new FluidHandlerItemStack(stack, Fluid.BUCKET_VOLUME);
+		return new FluidHandlerItemStack(stack, FluidAttributes.BUCKET_VOLUME);
 	}
 }

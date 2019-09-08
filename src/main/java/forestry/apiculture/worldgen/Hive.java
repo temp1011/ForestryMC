@@ -20,8 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.hives.IHiveDescription;
+import forestry.api.apiculture.hives.IHiveDrop;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.apiculture.HiveConfig;

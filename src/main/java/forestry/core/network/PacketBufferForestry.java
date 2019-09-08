@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -64,29 +63,12 @@ public class PacketBufferForestry extends PacketBuffer {
 		}
 	}
 
-	public void writeFluidStack(@Nullable FluidStack fluidStack) {
-		if (fluidStack == null) {
-			writeVarInt(-1);
-		} else {
-			writeVarInt(fluidStack.getAmount());
-			writeString(fluidStack.getFluid().getRegistryName().toString());
-		}
+	public void writeFluidStack(FluidStack fluidStack) {
+		fluidStack.writeToPacket(this);
 	}
 
-	@Nullable
 	public FluidStack readFluidStack() {
-		int amount = readVarInt();
-		if (amount > 0) {
-			String fluidName = readString();
-			//TODO - fluids
-			Fluid fluid = null; //FluidRegistry.getFluid(fluidName);
-			if (fluid == null) {
-				return null;
-			}
-
-			return new FluidStack(fluid, amount);
-		}
-		return null;
+		return FluidStack.readFromPacket(this);
 	}
 
 	public void writeEntityById(Entity entity) {

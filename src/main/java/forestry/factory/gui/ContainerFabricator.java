@@ -11,14 +11,12 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.network.PacketBuffer;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.gui.ContainerLiquidTanks;

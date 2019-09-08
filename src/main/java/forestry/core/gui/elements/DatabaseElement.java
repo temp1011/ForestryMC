@@ -9,15 +9,16 @@ import java.util.function.Function;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+
 import forestry.api.genetics.DatabaseMode;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleInteger;
-import forestry.api.genetics.IAlleleTolerance;
+import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IChromosomeType;
-import forestry.api.genetics.IGenome;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IDatabaseElement;
 import forestry.api.gui.IElementGroup;
@@ -64,27 +65,27 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 		IAllele activeAllele = genome.getActiveAllele(chromosome);
 		IAllele inactiveAllele = genome.getInactiveAllele(chromosome);
 		if (mode == DatabaseMode.BOTH) {
-			if (!(activeAllele instanceof IAlleleInteger) || !(inactiveAllele instanceof IAlleleInteger)) {
+			if (!(activeAllele instanceof IAlleleValue) || !(inactiveAllele instanceof IAlleleValue)) {
 				return;
 			}
-			addLine(chromosomeName, GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleInteger) activeAllele, texOffset), GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleInteger) inactiveAllele, texOffset));
+			addLine(chromosomeName, GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleValue<Integer>) activeAllele, texOffset), GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleValue<Integer>) inactiveAllele, texOffset));
 		} else {
 			boolean active = mode == DatabaseMode.ACTIVE;
 			IAllele allele = active ? activeAllele : inactiveAllele;
-			if (!(allele instanceof IAlleleInteger)) {
+			if (!(allele instanceof IAlleleValue)) {
 				return;
 			}
-			addLine(chromosomeName, GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleInteger) allele, texOffset));
+			addLine(chromosomeName, GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleValue<Integer>) allele, texOffset));
 		}
 	}
 
 	@Override
 	public void addToleranceLine(IChromosomeType chromosome) {
 		IAllele allele = getGenome().getActiveAllele(chromosome);
-		if (!(allele instanceof IAlleleTolerance)) {
+		if (!(allele instanceof IAlleleValue)) {
 			return;
 		}
-		addLine("  " + Translator.translateToLocal("for.gui.tolerance"), GuiElementFactory.INSTANCE.createToleranceInfo((IAlleleTolerance) allele));
+		addLine("  " + Translator.translateToLocal("for.gui.tolerance"), GuiElementFactory.INSTANCE.createToleranceInfo((IAlleleValue<EnumTolerance>) allele));
 	}
 
 	@Override
@@ -146,7 +147,7 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 
 	@Override
 	public final void addLine(String chromosomeName, IChromosomeType chromosome) {
-		addLine(chromosomeName, (allele, b) -> allele.getAlleleName(), chromosome);
+		addLine(chromosomeName, (allele, b) -> allele.getDisplayName().getFormattedText(), chromosome);
 	}
 
 	@Override

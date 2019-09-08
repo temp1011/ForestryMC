@@ -11,21 +11,19 @@
 package forestry.core.render;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.DiggingParticle;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -108,7 +106,7 @@ public class ParticleHelper {
 //						callback.addDestroyEffects(fx.setBlockPos(pos), world, pos, state);
 //					}
 					//TODO correct?
-					effectRenderer.addBlockDestroyEffects(pos, state);
+					//effectRenderer.addBlockDestroyEffects(pos, state);
 
 				}
 			}

@@ -13,10 +13,9 @@ import java.util.function.Consumer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.gui.events.GuiElementEvent;
 import forestry.api.gui.events.GuiEventDestination;
 import forestry.api.gui.events.GuiEventHandler;

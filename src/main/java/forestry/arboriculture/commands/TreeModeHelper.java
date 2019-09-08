@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
@@ -36,12 +35,12 @@ public class TreeModeHelper implements ICommandModeHelper {
 	}
 
 	@Override
-	public String getModeName(ServerWorld world) {
+	public String getModeName(World world) {
 		return TreeManager.treeRoot.getTreekeepingMode(world).getName();
 	}
 
 	@Override
-	public boolean setMode(ServerWorld world, String modeName) {
+	public boolean setMode(World world, String modeName) {
 		ITreekeepingMode mode = TreeManager.treeRoot.getTreekeepingMode(modeName);
 		if (mode != null) {
 			TreeManager.treeRoot.setTreekeepingMode(world, mode);

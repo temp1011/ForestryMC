@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.biome.Biome;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -88,7 +88,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		String str = Translator.translateToLocal("item.for.habitat_locator.name").toUpperCase(Locale.ENGLISH);
+		String str = Translator.translateToLocal("item.forestry.habitat_locator").toUpperCase(Locale.ENGLISH);
 		getFontRenderer().drawString(str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		// Set active according to valid biomes.

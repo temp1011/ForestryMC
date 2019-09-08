@@ -4,11 +4,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-//import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import net.minecraftforge.fml.LogicalSide;
 
 import forestry.api.climate.ClimateManager;
 import forestry.api.climate.IClimateState;
@@ -17,6 +16,8 @@ import forestry.core.climate.ClimateStateHelper;
 import forestry.core.network.packets.PacketClimatePlayer;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
+
+//import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ClimateHandlerServer {
 

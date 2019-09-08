@@ -103,7 +103,7 @@ public class BlockHumus extends Block implements IItemModelRegister {
 		} else {
 			world.setBlockState(pos, blockState.with(DEGRADE, degrade), Constants.FLAG_BLOCK_SYNC);
 		}
-		//TODO
+		//TODO: Is this still needed ? Should now be marked with setBlockState
 		Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
 
 		//		world.markForRerender(pos);

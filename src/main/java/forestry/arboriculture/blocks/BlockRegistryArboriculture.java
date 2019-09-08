@@ -10,35 +10,30 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import com.google.common.base.Preconditions;
-
 import javax.annotation.Nullable;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.MinecraftForge;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.genetics.AlleleRegisterEvent;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.core.ItemGroups;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
 import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemBlockWoodDoor;
+import forestry.arboriculture.items.ItemBlockWoodSlab;
 import forestry.core.blocks.BlockRegistry;
-import forestry.core.items.ItemBlockForestry;
-import forestry.core.utils.OreDictUtil;
+import forestry.core.items.ItemBlockBase;
 
 public class BlockRegistryArboriculture extends BlockRegistry {
 	//TODO mega table with WoodBlockKind and IWoodType?
@@ -70,7 +65,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public final Map<EnumForestryWoodType, BlockForestryDoor> doors = new EnumMap<>(EnumForestryWoodType.class);
 
 	public final BlockSapling saplingGE;
-	public final Map<TreeDefinition, BlockForestryLeaves> leaves = new EnumMap<>(TreeDefinition.class);
+	public final BlockForestryLeaves leaves;
 	public final Map<TreeDefinition, BlockDefaultLeaves> leavesDefault = new EnumMap<>(TreeDefinition.class);
 	public final Map<TreeDefinition, BlockDefaultLeavesFruit> leavesDefaultFruit = new EnumMap<>(TreeDefinition.class);
 	public final Map<TreeDefinition, BlockDecorativeLeaves> leavesDecorative = new EnumMap<>(TreeDefinition.class);
@@ -81,7 +76,6 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public BlockRegistryArboriculture() {
 		// Wood blocks
 
-		//TODO tags
 		for(EnumForestryWoodType woodType : EnumForestryWoodType.VALUES) {
 			//logs
 			BlockForestryLog log = new BlockForestryLog(false, woodType);
@@ -89,7 +83,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			logs.put(woodType, log);
 
 			//logs fireproof
-			BlockForestryLog fireproofLog = new BlockForestryLog(true, woodType);
+			BlockForestryLog fireproofLog = new BlockForestryLog(false, woodType);
 			registerBlock(fireproofLog, new ItemBlockWood<>(fireproofLog), woodType.toString() + "_fireproof_log");
 			logsFireproof.put(woodType, fireproofLog);
 
@@ -116,11 +110,9 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			//doors
 			BlockForestryDoor door = new BlockForestryDoor(woodType);
 			registerBlock(door, new ItemBlockWoodDoor(door), woodType.toString() + "_door");
-			registerOreDictWildcard(OreDictUtil.DOOR_WOOD, door);	//TODO tag
 			doors.put(woodType, door);
 		}
 
-		//TODO tags
 		for(EnumVanillaWoodType woodType : EnumVanillaWoodType.VALUES) {
 			//planks
 			BlockForestryPlank fireproofPlank = new BlockForestryPlank(true, woodType);
@@ -138,14 +130,13 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			fencesVanillaFireproof.put(woodType, fireproofFence);
 		}
 
-		//TODO tags
 		for(Map.Entry<EnumForestryWoodType, BlockForestryPlank> entry : planks.entrySet()) {
 			EnumForestryWoodType woodType = entry.getKey();
 			BlockForestryPlank plank = entry.getValue();
 
 			//slabs
 			BlockForestrySlab slab = new BlockForestrySlab(plank);
-			registerBlock(slab, new ItemBlockWood<>(slab), woodType.toString() + "_slab");
+			registerBlock(slab, new ItemBlockWoodSlab(slab), woodType.toString() + "_slab");
 			slabs.put(woodType, slab);
 
 			//stairs
@@ -160,7 +151,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 			//slabs
 			BlockForestrySlab slab = new BlockForestrySlab(plank);
-			registerBlock(slab, new ItemBlockWood<>(slab), woodType.toString() + "_fireproof_slab");
+			registerBlock(slab, new ItemBlockWoodSlab(slab), woodType.toString() + "_fireproof_slab");
 			slabsFireproof.put(woodType, slab);
 
 			//stairs
@@ -175,7 +166,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 			//slabs
 			BlockForestrySlab slab = new BlockForestrySlab(plank);
-			registerBlock(slab, new ItemBlockWood<>(slab), woodType.toString() + "_fireproof_slab");
+			registerBlock(slab, new ItemBlockWoodSlab(slab), woodType.toString() + "_fireproof_slab");
 			slabsVanillaFireproof.put(woodType, slab);
 
 			//stairs
@@ -187,34 +178,28 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		for (EnumForestryWoodType woodType : EnumForestryWoodType.VALUES) {
 			BlockForestryFenceGate fenceGate = new BlockForestryFenceGate(false, woodType);
 			registerBlock(fenceGate, new ItemBlockWood<>(fenceGate), woodType.toString() + "_fence_gate");
-			registerOreDictWildcard(OreDictUtil.FENCE_GATE_WOOD, fenceGate);	//TODO tags
 			fenceGates.put(woodType, fenceGate);
 
 			BlockForestryFenceGate fenceGateFireproof = new BlockForestryFenceGate(true, woodType);
 			registerBlock(fenceGateFireproof, new ItemBlockWood<>(fenceGateFireproof), woodType.toString() + "_fence_gate_fireproof");
-			registerOreDictWildcard(OreDictUtil.FENCE_GATE_WOOD, fenceGateFireproof);	//TODO tags
 			fenceGatesFireproof.put(woodType, fenceGateFireproof);
 		}
 
 		for (EnumVanillaWoodType woodType : EnumVanillaWoodType.VALUES) {
 			BlockForestryFenceGate fenceGateFireproof = new BlockForestryFenceGate(true, woodType);
 			registerBlock(fenceGateFireproof, new ItemBlockWood<>(fenceGateFireproof), woodType.toString() + "_fence_gate_fireproof");
-			registerOreDictWildcard(OreDictUtil.FENCE_GATE_WOOD, fenceGateFireproof);	//TODO tags
 			fenceGatesVanillaFireproof.put(woodType, fenceGateFireproof);
 		}
 
 		// Saplings
-		TreeDefinition.preInit();
 		saplingGE = new BlockSapling();
-		registerBlock(saplingGE, new ItemBlockForestry<>(saplingGE), "sapling_ge");
-		registerOreDictWildcard(OreDictUtil.TREE_SAPLING, saplingGE);
+		registerBlock(saplingGE, "sapling_ge");
+
+		// Leaves
+		leaves = new BlockForestryLeaves();
+		registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves");
 
 		for(TreeDefinition definition : TreeDefinition.VALUES) {
-			//leaves
-			BlockForestryLeaves forestryLeaves = new BlockForestryLeaves(definition);
-			registerBlock(forestryLeaves, new ItemBlockLeaves(forestryLeaves), definition.getName() + "_leaves");
-			leaves.put(definition, forestryLeaves);
-
 			//decorative
 			BlockDecorativeLeaves decorativeLeaves = new BlockDecorativeLeaves(definition);
 			//TODO block name might be a bit rubbish
@@ -223,7 +208,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 			//default
 			BlockDefaultLeaves defaultLeaves = new BlockDefaultLeaves(definition);
-			registerBlock(defaultLeaves, new ItemBlockLeaves(defaultLeaves), definition.getName() + "_default_leaves");
+			registerBlock(defaultLeaves, new ItemBlockLeaves(leaves), definition.getName() + "_default_leaves");
 			leavesDefault.put(definition, defaultLeaves);
 
 			//default fruit leaves
@@ -233,18 +218,16 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		}
 
 		// Pods
-		AlleleFruits.registerAlleles();
-		MinecraftForge.EVENT_BUS.post(new AlleleRegisterEvent<>(IAlleleFruit.class));
 		podsMap = new HashMap<>();
 		for (BlockFruitPod pod : BlockFruitPod.create()) {
 			IAlleleFruit fruit = pod.getFruit();
 			registerBlock(pod, "pods." + fruit.getModelName());
-			podsMap.put(fruit.getUID(), pod);
+			podsMap.put(fruit.getRegistryName().toString(), pod);
 		}
 
 		// Machines
 		treeChest = new BlockArboriculture(BlockTypeArboricultureTesr.ARB_CHEST);
-		registerBlock(treeChest, new ItemBlockForestry<>(treeChest), "tree_chest");
+		registerBlock(treeChest, new ItemBlockBase<>(treeChest, new Item.Properties().group(ItemGroups.tabArboriculture), BlockTypeArboricultureTesr.ARB_CHEST), "tree_chest");
 	}
 
 	//TODO probably slow etc
@@ -252,18 +235,17 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		Optional<BlockDecorativeLeaves> block = leavesDecorative.entrySet().stream()
 				.filter(e -> e.getKey().getUID().equals(speciesUid))
 				.findFirst()
-				.map(Map.Entry::getValue);
+				.flatMap(e -> Optional.of(e.getValue()));
 
 		return block.map(ItemStack::new).orElse(ItemStack.EMPTY);
 	}
 
-	//TODO probably slow etc
 	@Nullable
 	public BlockState getDefaultLeaves(String speciesUid) {
 		Optional<BlockDefaultLeaves> block = leavesDefault.entrySet().stream()
 				.filter(e -> e.getKey().getUID().equals(speciesUid))
 				.findFirst()
-				.map(Map.Entry::getValue);
+				.flatMap(e -> Optional.of(e.getValue()));
 
 		return block.map(Block::getDefaultState).orElse(null);
 	}
@@ -271,15 +253,19 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	@Nullable
 	public BlockState getDefaultLeavesFruit(String speciesUid) {
 		Optional<BlockDefaultLeavesFruit> block = leavesDefaultFruit.entrySet().stream()
-				.filter(e -> e.getKey().getUID().equals(speciesUid))
-				.findFirst()
-				.map(Map.Entry::getValue);
+			.filter(e -> e.getKey().getUID().equals(speciesUid))
+			.findFirst()
+			.map(Map.Entry::getValue);
 
 		return block.map(Block::getDefaultState).orElse(null);
 	}
 
 	@Nullable
 	public BlockFruitPod getFruitPod(IAlleleFruit fruit) {
-		return podsMap.get(fruit.getUID());
+		return podsMap.get(fruit.getRegistryName().toString());
+	}
+
+	public Collection<BlockFruitPod> getPods() {
+		return podsMap.values();
 	}
 }

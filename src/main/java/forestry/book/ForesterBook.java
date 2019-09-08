@@ -6,10 +6,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IForesterBook;

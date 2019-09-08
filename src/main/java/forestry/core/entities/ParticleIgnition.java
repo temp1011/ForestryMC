@@ -17,9 +17,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 //TODO particles
 @OnlyIn(Dist.CLIENT)

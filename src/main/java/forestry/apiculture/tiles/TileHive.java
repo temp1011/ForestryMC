@@ -15,6 +15,7 @@ import com.google.common.base.Predicate;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,6 +32,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityPredicates;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -43,21 +45,22 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
-import forestry.api.apiculture.IHiveTile;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.hives.IHiveRegistry;
+import forestry.api.apiculture.hives.IHiveTile;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
-import forestry.api.genetics.IAllele;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.WorldgenBeekeepingLogic;
 import forestry.apiculture.blocks.BlockBeeHive;
@@ -140,11 +143,12 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 
 	public IBee getContainedBee() {
 		if (this.containedBee == null) {
-			IBeeGenome beeGenome = null;
+			IGenome beeGenome = null;
 			ItemStack containedBee = contained.getStackInSlot(0);
 			if (!containedBee.isEmpty()) {
-				IBee bee = BeeManager.beeRoot.getMember(containedBee);
-				if (bee != null) {
+				Optional<IBee> optionalBee = BeeManager.beeRoot.create(containedBee);
+				if (optionalBee.isPresent()) {
+					IBee bee = optionalBee.get();
 					beeGenome = bee.getGenome();
 				}
 			}
@@ -154,22 +158,22 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 			if (beeGenome == null) {
 				beeGenome = BeeDefinition.FOREST.getGenome();
 			}
-			this.containedBee = BeeManager.beeRoot.getBee(beeGenome);
+			this.containedBee = BeeManager.beeRoot.create(beeGenome);
 		}
 		return this.containedBee;
 	}
 
 	@Nullable
-	private IBeeGenome getGenomeFromBlock() {
+	private IGenome getGenomeFromBlock() {
 		if (world.isBlockLoaded(pos)) {
 			BlockState blockState = world.getBlockState(pos);
 			Block block = blockState.getBlock();
 			if (block instanceof BlockBeeHive) {
 				IHiveRegistry.HiveType hiveType = ((BlockBeeHive) block).getType();
 				String speciesUid = hiveType.getSpeciesUid();
-				IAllele[] template = BeeManager.beeRoot.getTemplate(speciesUid);
+				IAllele[] template = BeeManager.beeRoot.getTemplates().getTemplate(speciesUid);
 				if (template != null) {
-					return BeeManager.beeRoot.templateAsGenome(template);
+					return BeeManager.beeRoot.getKaryotype().templateAsGenome(template);
 				}
 			}
 		}
@@ -237,7 +241,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 		int damage = (int) (attackAmount * maxDamage);
 		if (damage > 0) {
 			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(entity, damageSourceBeeHive.damageType, true);
+			int count = BeeManager.armorApiaristHelper.wearsItems(entity, new ResourceLocation(damageSourceBeeHive.damageType), true);
 			if (entity.world.rand.nextInt(4) >= count) {
 				entity.attackEntityFrom(damageSourceBeeHive, damage);
 			}

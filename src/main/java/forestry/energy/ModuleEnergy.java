@@ -17,9 +17,14 @@ import javax.annotation.Nullable;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.inventory.container.ContainerType;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
@@ -52,6 +57,7 @@ public class ModuleEnergy extends BlankForestryModule {
 	public ModuleEnergy() {
 		//set up proxies as early as possible
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyEnergyClient(), () -> () -> new ProxyEnergy());
+		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 
 	public static BlockRegistryEnergy getBlocks() {
@@ -68,6 +74,7 @@ public class ModuleEnergy extends BlankForestryModule {
 		Preconditions.checkNotNull(containerTypes);
 		return containerTypes;
 	}
+
 
 	@Override
 	public void registerBlocks() {
@@ -103,4 +110,17 @@ public class ModuleEnergy extends BlankForestryModule {
 			blocks.clockworkEngine.init();
 		}
 	}
+
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public void onClientSetup(FMLClientSetupEvent event) {
+		blocks.peatEngine.clientInit();
+		blocks.biogasEngine.clientInit();
+
+		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
+			blocks.clockworkEngine.clientInit();
+		}
+	}
+
+
 }

@@ -15,13 +15,10 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.core.config.Constants;
-import forestry.core.fluids.StandardTank;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.TankElement;
@@ -52,12 +49,7 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 
 	@Override
 	protected void onIndexUpdate(int index, IFabricatorRecipe recipe) {
-		selectedElement.add(new TankElement(1, 33, null, () ->
-		{    //TODO could probably improve constructor in TankElement for this
-			IFluidTank t = new StandardTank(2000);
-			t.fill(recipe.getLiquid(), IFluidHandler.FluidAction.EXECUTE);
-			return t;
-		}, FABRICATOR_TANK_OVERLAY, 16, 16));
+		selectedElement.add(new TankElement(1, 33, null, recipe.getLiquid(), 2000, FABRICATOR_TANK_OVERLAY, 16, 16));
 		NonNullList<NonNullList<ItemStack>> ingredients = recipe.getIngredients();
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {

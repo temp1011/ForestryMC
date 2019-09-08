@@ -17,8 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraft.fluid.Fluid;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 public class PipetteContents {
 
@@ -26,9 +27,8 @@ public class PipetteContents {
 
 	@Nullable
 	public static PipetteContents create(ItemStack itemStack) {
-		//TODO fluids, forge is broken here as far as I can tell
-		FluidStack contents = null;//FluidUtil.getFluidContained(itemStack).orElse(null);
-		if (contents == null) {
+		FluidStack contents = FluidUtil.getFluidContained(itemStack).orElse(FluidStack.EMPTY);
+		if (contents.isEmpty()) {
 			return null;
 		}
 		return new PipetteContents(contents);
@@ -43,12 +43,12 @@ public class PipetteContents {
 	}
 
 	public boolean isFull() {
-		return contents.amount >= Fluid.BUCKET_VOLUME;
+		return contents.getAmount() >= FluidAttributes.BUCKET_VOLUME;
 	}
 
 	public void addTooltip(List<ITextComponent> list) {
-		ITextComponent descr = new TranslationTextComponent(contents.getFluid().getUnlocalizedName(contents));
-		descr.appendText(" (" + contents.amount + " mb)");
+		ITextComponent descr = new TranslationTextComponent(contents.getFluid().getAttributes().getTranslationKey(contents));
+		descr.appendText(" (" + contents.getAmount() + " mb)");
 
 		list.add(descr);
 	}

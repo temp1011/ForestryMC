@@ -90,7 +90,7 @@ public abstract class MinecartEntityForestry extends MinecartEntity implements I
 	@Override
 	public String getUnlocalizedTitle() {
 		ItemStack cartItem = getCartItem();
-		return cartItem.getTranslationKey() + ".name";
+		return cartItem.getTranslationKey();
 	}
 
 	//TODO see if something actually uses this.

@@ -22,9 +22,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 public enum EnumFarmBlockTexture {
 	BRICK_STONE(new ItemStack(Blocks.STONE_BRICKS), TextFormatting.DARK_GRAY),
@@ -59,48 +57,48 @@ public enum EnumFarmBlockTexture {
 		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 		switch (texture) {
 			case BRICK:
-				return map.getAtlasSprite("minecraft:blocks/brick");
+				return map.getAtlasSprite("minecraft:block/brick");
 			case BRICK_STONE:
-				return map.getAtlasSprite("minecraft:blocks/stonebrick");
+				return map.getAtlasSprite("minecraft:block/stonebrick");
 			case BRICK_CHISELED:
-				return map.getAtlasSprite("minecraft:blocks/stonebrick_carved");
+				return map.getAtlasSprite("minecraft:block/stonebrick_carved");
 			case BRICK_CRACKED:
-				return map.getAtlasSprite("minecraft:blocks/stonebrick_cracked");
+				return map.getAtlasSprite("minecraft:block/stonebrick_cracked");
 			case BRICK_MOSSY:
-				return map.getAtlasSprite("minecraft:blocks/stonebrick_mossy");
+				return map.getAtlasSprite("minecraft:block/stonebrick_mossy");
 			case BRICK_NETHER:
-				return map.getAtlasSprite("minecraft:blocks/nether_brick");
+				return map.getAtlasSprite("minecraft:block/nether_brick");
 			case SANDSTONE_CHISELED:
 				if (side == 0) {
-					return map.getAtlasSprite("minecraft:blocks/sandstone_bottom");
+					return map.getAtlasSprite("minecraft:block/sandstone_bottom");
 				} else if (side == 1) {
-					return map.getAtlasSprite("minecraft:blocks/sandstone_top");
+					return map.getAtlasSprite("minecraft:block/sandstone_top");
 				}
-				return map.getAtlasSprite("minecraft:blocks/sandstone_carved");
+				return map.getAtlasSprite("minecraft:block/sandstone_carved");
 			case SANDSTONE_SMOOTH:
 				if (side == 0) {
-					return map.getAtlasSprite("minecraft:blocks/sandstone_bottom");
+					return map.getAtlasSprite("minecraft:block/sandstone_bottom");
 				} else if (side == 1) {
-					return map.getAtlasSprite("minecraft:blocks/sandstone_top");
+					return map.getAtlasSprite("minecraft:block/sandstone_top");
 				}
-				return map.getAtlasSprite("minecraft:blocks/sandstone_smooth");
+				return map.getAtlasSprite("minecraft:block/sandstone_smooth");
 			case QUARTZ:
 				if (side == 0) {
-					return map.getAtlasSprite("minecraft:blocks/quartz_block_bottom");
+					return map.getAtlasSprite("minecraft:block/quartz_block_bottom");
 				} else if (side == 1) {
-					return map.getAtlasSprite("minecraft:blocks/quartz_block_top");
+					return map.getAtlasSprite("minecraft:block/quartz_block_top");
 				}
-				return map.getAtlasSprite("minecraft:blocks/quartz_block_side");
+				return map.getAtlasSprite("minecraft:block/quartz_block_side");
 			case QUARTZ_CHISELED:
 				if (side == 0 || side == 1) {
-					return map.getAtlasSprite("minecraft:blocks/quartz_block_chiseled_top");
+					return map.getAtlasSprite("minecraft:block/quartz_block_chiseled_top");
 				}
-				return map.getAtlasSprite("minecraft:blocks/quartz_block_chiseled");
+				return map.getAtlasSprite("minecraft:block/quartz_block_chiseled");
 			case QUARTZ_LINES:
 				if (side == 0 || side == 1) {
-					return map.getAtlasSprite("minecraft:blocks/quartz_block_lines_top");
+					return map.getAtlasSprite("minecraft:block/quartz_block_lines_top");
 				}
-				return map.getAtlasSprite("minecraft:blocks/quartz_block_lines");
+				return map.getAtlasSprite("minecraft:block/quartz_block_lines");
 			default:
 				return null;
 		}

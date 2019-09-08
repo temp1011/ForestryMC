@@ -27,8 +27,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.tiles.TileUtil;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
@@ -123,7 +123,7 @@ public class BlockCocoon extends Block {
 		IButterfly caterpillar = tile.getCaterpillar();
 		int age = tile.getAge();
 
-		ItemStack stack = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.COCOON);
+		ItemStack stack = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.COCOON);
 		if (!stack.isEmpty() && stack.getTag() != null) {
 			stack.getTag().putInt(ItemButterflyGE.NBT_AGE, age);
 		}

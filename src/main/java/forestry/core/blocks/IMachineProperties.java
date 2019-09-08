@@ -17,12 +17,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,6 +36,8 @@ public interface IMachineProperties<T extends TileForestry> extends IStringSeria
 	 */
 	void registerTileEntity();
 
+	void clientSetup();
+
 	@OnlyIn(Dist.CLIENT)
 	void registerModel(Item item, IModelManager manager);
 
@@ -50,8 +50,5 @@ public interface IMachineProperties<T extends TileForestry> extends IStringSeria
 
 	boolean isFullCube(BlockState state);
 
-	AxisAlignedBB getBoundingBox(IBlockReader world, BlockPos pos, BlockState state);
-
-	@Nullable
-	RayTraceResult collisionRayTrace(World world, BlockPos pos, BlockState state, Vec3d startVec, Vec3d endVec);
+	VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context);
 }

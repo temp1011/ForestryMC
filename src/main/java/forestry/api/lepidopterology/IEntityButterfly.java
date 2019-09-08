@@ -9,7 +9,9 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.CreatureEntity;
 
-import forestry.api.genetics.IIndividual;
+import genetics.api.individual.IIndividual;
+
+import forestry.api.lepidopterology.genetics.IButterfly;
 
 //TODO - figure out how IAnimal works now, might want to make abstract and extend AnimalEntity
 public interface IEntityButterfly {

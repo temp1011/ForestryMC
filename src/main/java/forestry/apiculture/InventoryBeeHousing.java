@@ -10,12 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import java.util.Optional;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
+import genetics.api.organism.IOrganismType;
+
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBeeHousingInventory;
+import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.core.inventory.InventoryAdapterRestricted;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.SlotUtil;
@@ -32,7 +36,11 @@ public class InventoryBeeHousing extends InventoryAdapterRestricted implements I
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		EnumBeeType beeType = BeeManager.beeRoot.getType(itemStack);
+		Optional<IOrganismType> optionalType = BeeManager.beeRoot.getTypes().getType(itemStack);
+		if (!optionalType.isPresent()) {
+			return false;
+		}
+		IOrganismType beeType = optionalType.get();
 
 		if (slotIndex == SLOT_QUEEN) {
 			return beeType == EnumBeeType.QUEEN || beeType == EnumBeeType.PRINCESS;

@@ -22,7 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.ItemGroupForestry;
@@ -31,13 +31,13 @@ import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.storage.inventory.ItemInventoryBackpackPaged;
 
 public class ItemBackpackNaturalist extends ItemBackpack {
-	private final ISpeciesRoot speciesRoot;
+	private final IForestrySpeciesRoot speciesRoot;
 
-	public ItemBackpackNaturalist(ISpeciesRoot speciesRoot, IBackpackDefinition definition) {
+	public ItemBackpackNaturalist(IForestrySpeciesRoot speciesRoot, IBackpackDefinition definition) {
 		this(speciesRoot, definition, ItemGroupForestry.tabForestry);
 	}
 
-	public ItemBackpackNaturalist(ISpeciesRoot speciesRoot, IBackpackDefinition definition, ItemGroup tab) {
+	public ItemBackpackNaturalist(IForestrySpeciesRoot speciesRoot, IBackpackDefinition definition, ItemGroup tab) {
 		super(definition, EnumBackpackType.NATURALIST, tab);
 		this.speciesRoot = speciesRoot;
 	}

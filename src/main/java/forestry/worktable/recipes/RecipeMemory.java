@@ -19,10 +19,9 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;

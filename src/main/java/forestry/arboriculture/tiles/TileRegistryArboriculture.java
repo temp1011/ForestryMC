@@ -8,18 +8,17 @@ import forestry.core.tiles.TileRegistry;
 
 public class TileRegistryArboriculture extends TileRegistry {
 
-
-	public final TileEntityType<TileArboristChest> ARBORIST_CHEST;
-	public final TileEntityType<TileFruitPod> FRUIT_POD;
-	public final TileEntityType<TileLeaves> LEAVES;
-	public final TileEntityType<TileSapling> SAPLING;
+	public final TileEntityType<TileSapling> sapling;
+	public final TileEntityType<TileLeaves> leaves;
+	public final TileEntityType<TileFruitPod> pods;
+	public final TileEntityType<TileArboristChest> arboristChest;
 
 	public TileRegistryArboriculture() {
 		BlockRegistryArboriculture blocks = ModuleArboriculture.getBlocks();
 
-		ARBORIST_CHEST = registerTileEntityType(TileArboristChest::new, "arborist_chest", blocks.treeChest);
-		FRUIT_POD = registerTileEntityType(TileFruitPod::new, "fruit_pod", blocks.podsMap.values());
-		LEAVES = registerTileEntityType(TileLeaves::new, "leaves", blocks.leaves.values());
-		SAPLING = registerTileEntityType(TileSapling::new, "sapling", blocks.saplingGE);
+		sapling = registerTileEntityType(TileSapling::new, "sapling", blocks.saplingGE);
+		leaves = registerTileEntityType(TileLeaves::new, "leaves", blocks.leaves);
+		pods = registerTileEntityType(TileFruitPod::new, "pods", blocks.getPods());
+		arboristChest = registerTileEntityType(TileArboristChest::new, "arb_chest", blocks.treeChest);
 	}
 }

@@ -6,16 +6,15 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFilterData;
 import forestry.api.genetics.IFilterRule;
 import forestry.api.genetics.IFilterRuleType;
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
 import forestry.core.render.TextureManagerForestry;
 
 public enum LepidopterologyFilterRuleType implements IFilterRuleType {

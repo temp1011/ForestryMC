@@ -22,9 +22,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.core.tiles.TileUtil;
@@ -41,19 +43,19 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		harmEntities(genome, housing);
 
 		return destroyEnvironment(genome, storedData, housing);
 	}
 
-	private void harmEntities(IBeeGenome genome, IBeeHousing housing) {
+	private void harmEntities(IGenome genome, IBeeHousing housing) {
 		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
 		for (LivingEntity entity : entities) {
 			int damage = 8;
 
 			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getUID(), true);
+			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
 			damage -= count * 2;
 			if (damage <= 0) {
 				continue;
@@ -63,11 +65,11 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		}
 	}
 
-	private static IEffectData destroyEnvironment(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	private static IEffectData destroyEnvironment(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		World world = housing.getWorldObj();
 		Random rand = world.rand;
 
-		Vec3i area = VectUtil.scale(genome.getTerritory(), 2);
+		Vec3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), 2);
 		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
 		BlockPos posHousing = housing.getCoordinates();
 

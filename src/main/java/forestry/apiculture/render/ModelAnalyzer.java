@@ -11,18 +11,17 @@
 package forestry.apiculture.render;
 
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.render.ForestryResource;
 
 @OnlyIn(Dist.CLIENT)
@@ -38,9 +37,9 @@ public class ModelAnalyzer extends Model {
 	public ModelAnalyzer(String gfxBase) {
 
 		textures = new ResourceLocation[]{
-			new ForestryResource(gfxBase + "pedestal.png"),
-			new ForestryResource(gfxBase + "tower1.png"),
-			new ForestryResource(gfxBase + "tower2.png"),
+			new ForestryResource(gfxBase + "_pedestal.png"),
+			new ForestryResource(gfxBase + "_tower1.png"),
+			new ForestryResource(gfxBase + "_tower2.png"),
 		};
 
 		pedestal = new RendererModel(this, 0, 0);

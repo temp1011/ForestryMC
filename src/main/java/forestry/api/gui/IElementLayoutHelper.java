@@ -7,9 +7,7 @@ package forestry.api.gui;
 
 import java.util.Collection;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public interface IElementLayoutHelper {

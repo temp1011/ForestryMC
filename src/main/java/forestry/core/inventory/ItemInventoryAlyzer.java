@@ -12,18 +12,21 @@ package forestry.core.inventory;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.util.Optional;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.server.ServerWorld;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.errors.EnumErrorCode;
@@ -72,17 +75,18 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		}
 
 		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
-		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
-		if (speciesRoot == null) {
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
+		if (!definition.isRootPresent()) {
 			return false;
 		}
+		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
 
 		if (slotIndex == SLOT_SPECIMEN) {
 			return true;
 		}
 
-		IIndividual individual = speciesRoot.getMember(itemStack);
-		return individual != null && individual.isAnalyzed();
+		Optional<IIndividual> optionalIndividual = speciesRoot.create(itemStack);
+		return optionalIndividual.filter(IIndividual::isAnalyzed).isPresent();
 	}
 
 	@Override
@@ -104,38 +108,40 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 			specimen = convertedSpecimen;
 		}
 
-		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(specimen);
-
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(specimen);
 		// No individual, abort
-		if (speciesRoot == null) {
+		if (!definition.isRootPresent()) {
 			return;
 		}
+		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
 
-		IIndividual individual = speciesRoot.getMember(specimen);
+		Optional<IIndividual> optionalIndividual = speciesRoot.create(specimen);
 
 		// Analyze if necessary
-		if (individual != null && !individual.isAnalyzed()) {
-			final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
-			if (requiresEnergy) {
-				// Requires energy
-				if (!isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
-					return;
-				}
-			}
-
-			if (individual.analyze()) {
-				//TODO world cast
-				IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker((ServerWorld) player.world, player.getGameProfile());
-				breedingTracker.registerSpecies(individual.getGenome().getPrimary());
-				breedingTracker.registerSpecies(individual.getGenome().getSecondary());
-
-				CompoundNBT CompoundNBT = new CompoundNBT();
-				individual.write(CompoundNBT);
-				specimen.setTag(CompoundNBT);
-
+		if (optionalIndividual.isPresent()) {
+			IIndividual individual = optionalIndividual.get();
+			if (!individual.isAnalyzed()) {
+				final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
 				if (requiresEnergy) {
-					// Decrease energy
-					decrStackSize(SLOT_ENERGY, 1);
+					// Requires energy
+					if (!isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
+						return;
+					}
+				}
+
+				if (individual.analyze()) {
+					IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
+					breedingTracker.registerSpecies(individual.getGenome().getPrimary());
+					breedingTracker.registerSpecies(individual.getGenome().getSecondary());
+
+					CompoundNBT compound = new CompoundNBT();
+					individual.write(compound);
+					specimen.setTag(compound);
+
+					if (requiresEnergy) {
+						// Decrease energy
+						decrStackSize(SLOT_ENERGY, 1);
+					}
 				}
 			}
 		}
@@ -151,8 +157,8 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		if (!hasSpecimen()) {
 			errorStates.add(EnumErrorCode.NO_SPECIMEN);
 		} else {
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(getSpecimen());
-			if (speciesRoot != null && !isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
+			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(getSpecimen());
+			if (definition.isRootPresent() && !isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
 				errorStates.add(EnumErrorCode.NO_HONEY);
 			}
 		}

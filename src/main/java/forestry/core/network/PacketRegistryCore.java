@@ -12,8 +12,8 @@ package forestry.core.network;
 
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.climatology.network.packets.PacketSelectClimateTargeted;
 import forestry.core.network.packets.PacketActiveUpdate;
 import forestry.core.network.packets.PacketChipsetClick;

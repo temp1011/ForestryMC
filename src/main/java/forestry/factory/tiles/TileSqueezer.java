@@ -15,22 +15,19 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.circuits.ChipsetManager;
@@ -135,7 +132,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 		if (updateOnInterval(20)) {
 			FluidStack fluid = productTank.getFluid();
-			if (fluid != null) {
+			if (!fluid.isEmpty()) {
 				inventory.fillContainers(fluid, tankManager);
 			}
 		}
@@ -151,7 +148,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		}
 
 		FluidStack resultFluid = currentRecipe.getFluidOutput();
-		productTank.fill(resultFluid, IFluidHandler.FluidAction.EXECUTE);
+		productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.EXECUTE);
 
 		if (!currentRecipe.getRemnants().isEmpty() && world.rand.nextFloat() < currentRecipe.getRemnantsChance()) {
 			ItemStack remnant = currentRecipe.getRemnants().copy();
@@ -199,7 +196,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 			hasRecipe = currentRecipe != null;
 			if (hasRecipe) {
 				FluidStack resultFluid = currentRecipe.getFluidOutput();
-				canFill = productTank.fill(resultFluid, IFluidHandler.FluidAction.EXECUTE) == resultFluid.getAmount();
+				canFill = productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.SIMULATE) == resultFluid.getAmount();
 
 				if (!currentRecipe.getRemnants().isEmpty()) {
 					canAdd = inventory.addRemnant(currentRecipe.getRemnants(), false);

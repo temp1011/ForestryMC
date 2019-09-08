@@ -7,28 +7,25 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.arboriculture.EnumGermlingType;
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.proxy.Proxies;
 
 /**
  * Genetic leaves with no tile entity, used for worldgen trees.
@@ -55,7 +52,7 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 		}
 	}
 
-	public TreeDefinition getDefinition() {
+	public TreeDefinition getTreeDefinition() {
 		return definition;
 	}
 
@@ -66,15 +63,11 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 			return;
 		}
 
-		if(world.isRemote) {
-			return;
-		}
-
 		// Add saplings
-		List<ITree> saplings = tree.getSaplings((ServerWorld) world, playerProfile, pos, saplingModifier);
+		List<ITree> saplings = tree.getSaplings(world, playerProfile, pos, saplingModifier);
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
-				drops.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING));
+				drops.add(TreeManager.treeRoot.getTypes().createStack(sapling, EnumGermlingType.SAPLING));
 			}
 		}
 	}
@@ -84,7 +77,7 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 		BlockState blockState = world.getBlockState(pos);
 		TreeDefinition treeDefinition = getTreeDefinition(blockState);
 		if (treeDefinition != null) {
-			return treeDefinition.getIndividual();
+			return treeDefinition.createIndividual();
 		} else {
 			return null;
 		}
@@ -107,9 +100,9 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 		if (treeDefinition == null) {
 			treeDefinition = TreeDefinition.Oak;
 		}
-		ITreeGenome genome = treeDefinition.getGenome();
+		IGenome genome = treeDefinition.getGenome();
 
-		ILeafSpriteProvider spriteProvider = genome.getPrimary().getLeafSpriteProvider();
+		ILeafSpriteProvider spriteProvider = genome.getPrimary(IAlleleTreeSpecies.class).getLeafSpriteProvider();
 		return spriteProvider.getColor(false);
 	}
 }

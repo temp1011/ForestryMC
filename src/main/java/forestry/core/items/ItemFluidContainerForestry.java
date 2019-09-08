@@ -13,21 +13,22 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.item.UseAction;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.FoodStats;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
@@ -35,8 +36,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -44,11 +46,8 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.IModelManager;
 import forestry.core.ItemGroupForestry;
 import forestry.core.config.Config;
@@ -81,7 +80,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 			subItems.add(new ItemStack(this));
 
 			// filled
-			for (Fluid fluid : new Fluid[0]){//FluidRegistry.getRegisteredFluids().values()) {
+			for (Fluid fluid : ForgeRegistries.FLUIDS.getValues()) {
 				ItemStack itemStack = new ItemStack(this);
 				IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
 				if (fluidHandler.fill(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE) == FluidAttributes.BUCKET_VOLUME) {
@@ -96,7 +95,6 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		return type;
 	}
 
-	@Nullable
 	protected FluidStack getContained(ItemStack itemStack) {
 		if (itemStack.getCount() != 1) {
 			itemStack = itemStack.copy();
@@ -111,16 +109,16 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		Item item = stack.getItem();
 		if (item instanceof ItemFluidContainerForestry) {
 			FluidStack fluid = getContained(stack);
-			if (fluid != null) {
-				String exactTranslationKey = "item.for." + type.getName() + '.' + fluid.getFluid().getRegistryName() + ".name";
+			if (!fluid.isEmpty()) {
+				String exactTranslationKey = "item.forestry." + type.getName() + '.' + fluid.getFluid().getRegistryName();
 				if (Translator.canTranslateToLocal(exactTranslationKey)) {	//TODO - can't call this on the server!! Maybe make custom textcomponent to handle this?
 					return new TranslationTextComponent(exactTranslationKey);
 				} else {
-					String grammarKey = "item.for." + type.getName() + ".grammar";
-					return new TranslationTextComponent(grammarKey, fluid.getTranslationKey());
+					String grammarKey = "item.forestry." + type.getName() + ".grammar";
+					return new TranslationTextComponent(grammarKey, fluid.getDisplayName());
 				}
 			} else {
-				String unlocalizedname = "item.for." + type.getName() + ".empty.name";
+				String unlocalizedname = "item.forestry." + type.getName() + ".empty";
 				return new TranslationTextComponent(unlocalizedname);
 			}
 		}
@@ -155,7 +153,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	@Nullable
 	protected DrinkProperties getDrinkProperties(ItemStack itemStack) {
 		FluidStack contained = getContained(itemStack);
-		if (contained != null) {
+		if (!contained.isEmpty()) {
 			ForestryFluids definition = ForestryFluids.getFluidDefinition(contained);
 			if (definition != null) {
 				return definition.getDrinkProperties();

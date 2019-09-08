@@ -14,14 +14,14 @@ import java.awt.Rectangle;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.config.Config;
@@ -228,9 +228,7 @@ public abstract class Ledger {
 	protected void drawSprite(ResourceLocation textureMap, TextureAtlasSprite sprite, int x, int y) {
 		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 		Minecraft.getInstance().getTextureManager().bindTexture(textureMap);
-		//TODO - probably want this method, but not sure what the extra param is
-		//   public static void blit(int p_blit_0_, int p_blit_1_, int p_blit_2_, int p_blit_3_, int p_blit_4_, TextureAtlasSprite p_blit_5_) {
-//		manager.gui.blit(x, y, sprite, 16, 16);
+		AbstractGui.blit(x, y, 16, 16, manager.gui.getBlitOffset(), sprite);//TODO: Find out why this does not work
 	}
 
 	protected int drawHeader(String string, int x, int y) {

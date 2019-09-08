@@ -1,15 +1,12 @@
 package forestry.lepidopterology;
 
-import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.utils.Log;
-import forestry.lepidopterology.entities.EntityButterfly;
 
 public class ButterflyUtils {
 

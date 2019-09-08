@@ -5,10 +5,11 @@ import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.api.farming.FarmDirection;
 import forestry.core.gui.tooltips.ToolTip;

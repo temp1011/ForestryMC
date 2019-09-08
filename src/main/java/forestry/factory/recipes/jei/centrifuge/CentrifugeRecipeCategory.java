@@ -38,7 +38,7 @@
 //	private final IDrawableAnimated arrow;
 //
 //	public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
-//		super(guiHelper.createDrawable(guiTexture, 11, 18, 154, 54), "tile.for.centrifuge.name");
+//		super(guiHelper.createDrawable(guiTexture, 11, 18, 154, 54), "block.forestry.centrifuge.name");
 //
 //		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 0, 4, 17);
 //		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 80, IDrawableAnimated.StartDirection.BOTTOM, false);

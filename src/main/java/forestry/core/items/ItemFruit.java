@@ -15,7 +15,6 @@ import java.util.Locale;
 import net.minecraft.item.Item;
 import net.minecraft.util.IStringSerializable;
 
-
 import forestry.core.utils.OreDictUtil;
 
 public class ItemFruit extends ItemForestryFood {

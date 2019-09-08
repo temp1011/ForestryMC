@@ -23,12 +23,12 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-//import net.minecraftforge.fml.common.Optional;
-
 import forestry.api.multiblock.IFarmComponent;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.utils.InventoryUtil;
+
+//import net.minecraftforge.fml.common.Optional;
 
 //import buildcraft.api.statements.IStatementContainer;
 //import buildcraft.api.statements.ITriggerExternal;

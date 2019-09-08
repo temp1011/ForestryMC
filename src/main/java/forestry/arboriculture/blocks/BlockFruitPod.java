@@ -24,14 +24,13 @@ import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.core.tiles.TileUtil;

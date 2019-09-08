@@ -18,13 +18,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-//import forestry.arboriculture.ModuleArboriculture;
 import forestry.farming.logic.crops.CropDestroy;
+
+//import forestry.arboriculture.ModuleArboriculture;
 
 public class FarmableGE implements IFarmable {
 
@@ -50,7 +51,7 @@ public class FarmableGE implements IFarmable {
 	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
 		ITreeRoot treeRoot = TreeManager.treeRoot;
 
-		ITree tree = treeRoot.getMember(germling);
+		ITree tree = treeRoot.create(germling).orElse(null);
 		return tree != null && treeRoot.plantSapling(world, tree, player.getGameProfile(), pos);
 	}
 

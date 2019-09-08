@@ -7,10 +7,9 @@ package forestry.api.climate;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.core.ILocatable;
 
 /**

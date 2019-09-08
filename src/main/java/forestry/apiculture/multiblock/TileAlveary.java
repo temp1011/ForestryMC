@@ -25,16 +25,14 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -67,7 +65,7 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 
 	public TileAlveary(BlockAlvearyType type) {
 		super(new MultiblockLogicAlveary());
-		this.unlocalizedTitle = "tile.for.alveary." + type + ".name";
+		this.unlocalizedTitle = "block.forestry.alveary." + type;
 	}
 
 	@Override

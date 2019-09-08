@@ -12,7 +12,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
-
 import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.core.config.LocalizedConfiguration;
 

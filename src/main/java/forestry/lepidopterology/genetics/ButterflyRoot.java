@@ -10,49 +10,44 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import com.google.common.base.Preconditions;
-
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeWrapper;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootContext;
+import genetics.api.root.IndividualRoot;
+
 import forestry.api.genetics.IAlyzerPlugin;
-import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IBreedingTrackerHandler;
 import forestry.api.genetics.IDatabasePlugin;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesType;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.api.lepidopterology.IButterflyMutation;
 import forestry.api.lepidopterology.IButterflyNursery;
-import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.ILepidopteristTracker;
-import forestry.core.genetics.SpeciesRoot;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.api.lepidopterology.genetics.IButterflyRoot;
+import forestry.core.genetics.root.BreedingTrackerManager;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
@@ -60,25 +55,41 @@ import forestry.core.utils.GeneticsUtil;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
-import forestry.lepidopterology.items.ItemButterflyGE;
-import forestry.lepidopterology.items.ItemRegistryLepidopterology;
 import forestry.lepidopterology.tiles.TileCocoon;
 
-public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
+public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButterflyRoot, IBreedingTrackerHandler {
 
 	private static int butterflySpeciesCount = -1;
 	public static final String UID = "rootButterflies";
 	private static final List<IButterfly> butterflyTemplates = new ArrayList<>();
 
-
-	@Override
-	public String getUID() {
-		return UID;
+	public ButterflyRoot(IRootContext<IButterfly> context) {
+		super(context);
+		BreedingTrackerManager.INSTANCE.registerTracker(UID, this);
 	}
 
+	@Override
+	public IButterfly create(CompoundNBT compound) {
+		return new Butterfly(compound);
+	}
 
 	@Override
-	public Class<? extends IIndividual> getMemberClass() {
+	public IButterfly create(IGenome genome) {
+		return new Butterfly(genome);
+	}
+
+	@Override
+	public IButterfly create(IGenome genome, IGenome mate) {
+		return new Butterfly(genome, mate);
+	}
+
+	@Override
+	public IGenomeWrapper createWrapper(IGenome genome) {
+		return () -> genome;
+	}
+
+	@Override
+	public Class<? extends IButterfly> getMemberClass() {
 		return IButterfly.class;
 	}
 
@@ -86,9 +97,9 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	public int getSpeciesCount() {
 		if (butterflySpeciesCount < 0) {
 			butterflySpeciesCount = 0;
-			for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
-				if (entry.getValue() instanceof IAlleleButterflySpecies) {
-					if (((IAlleleButterflySpecies) entry.getValue()).isCounted()) {
+			for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(ButterflyChromosomes.SPECIES)) {
+				if (allele instanceof IAlleleButterflySpecies) {
+					if (((IAlleleButterflySpecies) allele).isCounted()) {
 						butterflySpeciesCount++;
 					}
 				}
@@ -99,47 +110,8 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	@Override
-	public boolean isMember(ItemStack stack) {
-		return getType(stack) != null;
-	}
-
-	@Nullable
-	@Override
-	public EnumFlutterType getType(ItemStack stack) {
-		if (stack.isEmpty()) {
-			return null;
-		}
-
-		ItemRegistryLepidopterology butterflyItems = ModuleLepidopterology.getItems();
-		Preconditions.checkNotNull(butterflyItems);
-
-		Item item = stack.getItem();
-		if (butterflyItems.butterflyGE == item) {
-			return EnumFlutterType.BUTTERFLY;
-		} else if (butterflyItems.serumGE == item) {
-			return EnumFlutterType.SERUM;
-		} else if (butterflyItems.caterpillarGE == item) {
-			return EnumFlutterType.CATERPILLAR;
-		} else if (butterflyItems.cocoonGE == item) {
-			return EnumFlutterType.COCOON;
-		} else {
-			return null;
-		}
-	}
-
-	@Override
 	public EnumFlutterType getIconType() {
 		return EnumFlutterType.BUTTERFLY;
-	}
-
-	@Override
-	public ISpeciesType[] getTypes() {
-		return EnumFlutterType.values();
-	}
-
-	@Override
-	public boolean isMember(ItemStack stack, ISpeciesType type) {
-		return getType(stack) == type;
 	}
 
 	@Override
@@ -148,60 +120,12 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	@Override
-	public IButterfly getMember(ItemStack stack) {
-		if (!isMember(stack) || stack.getTag() == null) {
-			return null;
-		}
-
-		return new Butterfly(stack.getTag());
-	}
-
-	@Override
-	public IButterfly getMember(CompoundNBT compound) {
-		return new Butterfly(compound);
-	}
-
-	@Override
-	public ItemStack getMemberStack(IIndividual butterfly, ISpeciesType type) {
-		Preconditions.checkArgument(type instanceof EnumFlutterType);
-		ItemRegistryLepidopterology items = ModuleLepidopterology.getItems();
-		Preconditions.checkNotNull(items);
-
-		Item butterflyItem;
-		switch ((EnumFlutterType) type) {
-			case SERUM:
-				butterflyItem = items.serumGE;
-				break;
-			case CATERPILLAR:
-				butterflyItem = items.caterpillarGE;
-				break;
-			case COCOON:
-				butterflyItem = items.cocoonGE;
-				break;
-			case BUTTERFLY:
-			default:
-				butterflyItem = items.butterflyGE;
-				break;
-		}
-
-		CompoundNBT compoundNBT = new CompoundNBT();
-		butterfly.write(compoundNBT);
-		ItemStack stack = new ItemStack(butterflyItem);
-		stack.setTag(compoundNBT);
-		if (type == EnumFlutterType.CATERPILLAR) {
-			ItemButterflyGE.setAge(stack, 0);
-		}
-		return stack;
-
-	}
-
-	@Override
 	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
 		return EntityUtil.spawnEntity(world, EntityButterfly.create(ModuleLepidopterology.BUTTERFLY_ENTITY_TYPE, world, butterfly, new BlockPos(x, y, z)), x, y, z);
 	}
 
 	@Override
-	public BlockPos plantCocoon(World world, BlockPos coordinates, @Nullable IButterfly caterpillar, GameProfile owner, int age, boolean createNursery) {
+	public BlockPos plantCocoon(IWorld world, BlockPos coordinates, @Nullable IButterfly caterpillar, GameProfile owner, int age, boolean createNursery) {
 		if (caterpillar == null) {
 			return BlockPos.ZERO;
 		}
@@ -213,7 +137,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 			return pos;
 		}
 		BlockState state = blocks.cocoon.getDefaultState();
-		boolean placed = world.setBlockState(pos, state);
+		boolean placed = world.setBlockState(pos, state, 18);
 		if (!placed) {
 			return BlockPos.ZERO;
 		}
@@ -225,7 +149,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (cocoon == null) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
+			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 18);
 			return BlockPos.ZERO;
 		}
 
@@ -236,13 +160,13 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		return pos;
 	}
 
-	private BlockPos getValidCocoonPos(World world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
+	private BlockPos getValidCocoonPos(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
 		if (isPositionValid(world, pos.down(), caterpillar, gameProfile, createNursery)) {
 			return pos.down();
 		}
 		for (int tries = 0; tries < 3; tries++) {
-			for (int y = 1; y < world.rand.nextInt(5); y++) {
-				BlockPos coordinate = pos.add(world.rand.nextInt(6) - 3, -y, world.rand.nextInt(6) - 3);
+			for (int y = 1; y < world.getRandom().nextInt(5); y++) {
+				BlockPos coordinate = pos.add(world.getRandom().nextInt(6) - 3, -y, world.getRandom().nextInt(6) - 3);
 				if (isPositionValid(world, coordinate, caterpillar, gameProfile, createNursery)) {
 					return coordinate;
 				}
@@ -252,7 +176,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		return BlockPos.ZERO;
 	}
 
-	public boolean isPositionValid(World world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
+	public boolean isPositionValid(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
 		BlockState blockState = world.getBlockState(pos);
 		if (BlockUtil.canReplace(blockState, world, pos)) {
 			BlockPos nurseryPos = pos.up();
@@ -273,96 +197,34 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public boolean isMated(ItemStack stack) {
-		IButterfly butterfly = getMember(stack);
-		return butterfly != null && butterfly.getMate() != null;
-	}
-
-	/* GENOME CONVERSIONS */
-	@Override
-	public IButterfly templateAsIndividual(IAllele[] template) {
-		return new Butterfly(templateAsGenome(template));
-	}
-
-	@Override
-	public IButterfly templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive) {
-		return new Butterfly(templateAsGenome(templateActive, templateInactive));
-	}
-
-	@Override
-	public IButterflyGenome templateAsGenome(IAllele[] template) {
-		return new ButterflyGenome(templateAsChromosomes(template));
-	}
-
-	@Override
-	public IButterflyGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive) {
-		return new ButterflyGenome(templateAsChromosomes(templateActive, templateInactive));
-	}
-
-	/* TEMPLATES */
-
-	@Override
-	public List<IButterfly> getIndividualTemplates() {
-		return butterflyTemplates;
-	}
-
-
-	@Override
-	public IAllele[] getDefaultTemplate() {
-		return MothDefinition.Brimstone.getTemplate();
-	}
-
-	@Override
-	public void registerTemplate(String identifier, IAllele[] template) {
-		butterflyTemplates.add(ButterflyManager.butterflyRoot.templateAsIndividual(template));
-		speciesTemplates.put(identifier, template);
-	}
-
-	/* MUTATIONS */
-	private static final List<IButterflyMutation> butterflyMutations = new ArrayList<>();
-
-	@Override
-	public void registerMutation(IMutation mutation) {
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID())) {
-			return;
-		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele0().getUID())) {
-			return;
-		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele1().getUID())) {
-			return;
-		}
-
-		butterflyMutations.add((IButterflyMutation) mutation);
-	}
-
-	@Override
-	public List<IButterflyMutation> getMutations(boolean shuffle) {
-		if (shuffle) {
-			Collections.shuffle(butterflyMutations);
-		}
-		return butterflyMutations;
+		IButterfly butterfly = getTypes().createIndividual(stack).orElse(null);
+		return butterfly != null && !butterfly.getMate().isPresent();
 	}
 
 	/* BREEDING TRACKER */
 	@Override
-	public ILepidopteristTracker getBreedingTracker(ServerWorld world, @Nullable GameProfile player) {
-		String filename = "LepidopteristTracker." + (player == null ? "common" : player.getId());
-		LepidopteristTracker tracker = world.getSavedData().getOrCreate(() -> new LepidopteristTracker(filename), filename);
-
-		tracker.setUsername(player);
-		tracker.setWorld(world);
-
-		return tracker;
+	public ILepidopteristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
+		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
 	}
 
 	@Override
-	public IChromosomeType[] getKaryotype() {
-		return EnumButterflyChromosome.values();
+	public String getFileName(@Nullable GameProfile profile) {
+		return "LepidopteristTracker." + (profile == null ? "common" : profile.getId());
 	}
 
 	@Override
-	public IChromosomeType getSpeciesChromosomeType() {
-		return EnumButterflyChromosome.SPECIES;
+	public IBreedingTracker createTracker(String fileName) {
+		return new LepidopteristTracker(fileName);
+	}
+
+	@Override
+	public void populateTracker(IBreedingTracker tracker, @Nullable World world, @Nullable GameProfile profile) {
+		if (!(tracker instanceof LepidopteristTracker)) {
+			return;
+		}
+		LepidopteristTracker arboristTracker = (LepidopteristTracker) tracker;
+		arboristTracker.setWorld(world);
+		arboristTracker.setUsername(profile);
 	}
 
 	@Override

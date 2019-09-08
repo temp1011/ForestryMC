@@ -2,13 +2,13 @@ package forestry.core.gui;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.api.genetics.IGeneticAnalyzer;
 import forestry.api.genetics.IGeneticAnalyzerProvider;

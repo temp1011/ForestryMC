@@ -26,12 +26,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.IItemHandler;
 
-//import net.minecraftforge.fml.common.Optional;
-
 import forestry.core.circuits.ISocketable;
 import forestry.core.inventory.ItemHandlerInventoryManipulator;
 import forestry.core.inventory.StandardStackFilters;
 import forestry.core.tiles.AdjacentTileCache;
+
+//import net.minecraftforge.fml.common.Optional;
 //import forestry.plugins.ForestryCompatPlugins;
 
 public abstract class InventoryUtil {

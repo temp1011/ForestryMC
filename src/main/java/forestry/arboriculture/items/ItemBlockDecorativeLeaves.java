@@ -1,14 +1,18 @@
 package forestry.arboriculture.items;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.api.core.ItemGroups;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -17,7 +21,7 @@ import forestry.core.items.ItemBlockForestry;
 
 public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorativeLeaves> implements IColoredItem {
 	public ItemBlockDecorativeLeaves(BlockDecorativeLeaves block) {
-		super(block);
+		super(block, new Item.Properties().group(ItemGroups.tabArboriculture));
 	}
 
 	@Override
@@ -30,16 +34,16 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
+	public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
 		BlockDecorativeLeaves block = getBlock();
 		TreeDefinition treeDefinition = block.getDefinition();
 
-		ITreeGenome genome = treeDefinition.getGenome();
+		IGenome genome = treeDefinition.getGenome();
 
 		if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
-			IFruitProvider fruitProvider = genome.getFruitProvider();
+			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			return fruitProvider.getDecorativeColor();
 		}
-		return genome.getPrimary().getLeafSpriteProvider().getColor(false);
+		return genome.getPrimary(IAlleleTreeSpecies.class).getLeafSpriteProvider().getColor(false);
 	}
 }

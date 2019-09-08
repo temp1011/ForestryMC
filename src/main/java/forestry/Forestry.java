@@ -19,11 +19,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.Block;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -36,6 +38,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -43,6 +46,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
+import forestry.core.ModuleFluids;
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateRoot;
@@ -50,6 +54,9 @@ import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
+import forestry.core.data.ForestryBlockTagsProvider;
+import forestry.core.data.ForestryItemTagsProvider;
+import forestry.core.data.ForestryLootTableProvider;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.multiblock.MultiblockEventHandler;
@@ -60,7 +67,7 @@ import forestry.core.proxy.ProxyClient;
 import forestry.core.proxy.ProxyCommon;
 import forestry.core.proxy.ProxyRender;
 import forestry.core.proxy.ProxyRenderClient;
-import forestry.core.recipes.ModuleCondition;
+import forestry.core.recipes.ModuleEnabledCondition;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
 //import forestry.plugins.ForestryCompatPlugins;
@@ -124,7 +131,10 @@ public class Forestry {
 		//		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMCMessages);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientStuff);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::gatherData);
 		FMLJavaModLoadingContext.get().getModEventBus().register(TickHandlerCoreServer.class);    //TODO - correct?
+		EventHandlerCore eventHandlerCore = new EventHandlerCore();
+		FMLJavaModLoadingContext.get().getModEventBus().register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(this);
 		//TODO - I think this is how it works
 		Proxies.render = DistExecutor.runForDist(() -> () -> new ProxyRenderClient(), () -> () -> new ProxyRender());
@@ -147,19 +157,16 @@ public class Forestry {
 		return packetHandler;
 	}
 
-	public void setup(FMLCommonSetupEvent event) {
+	private void setup(FMLCommonSetupEvent event) {
 		packetHandler = new PacketHandlerServer();
 
 		// Register event handler
-		EventHandlerCore eventHandlerCore = new EventHandlerCore();
-		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 		MinecraftForge.EVENT_BUS.register(Config.class);
 		Proxies.common.registerEventHandlers();
 		configFolder = new File("."); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - config
 		Config.load(Dist.DEDICATED_SERVER);
-		CraftingHelper.register(new ModuleCondition.Serializer());
 
 		String gameMode = Config.gameMode;
 		Preconditions.checkNotNull(gameMode);
@@ -173,8 +180,28 @@ public class Forestry {
 		ModuleManager.getInternalHandler().runPostInit();
 	}
 
-	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+	private void gatherData(GatherDataEvent event) {
+		DataGenerator generator = event.getGenerator();
+
+		if (event.includeServer()) {
+			generator.addProvider(new ForestryBlockTagsProvider(generator));
+			generator.addProvider(new ForestryItemTagsProvider(generator));
+			generator.addProvider(new ForestryLootTableProvider(generator));
+			try {
+				generator.run();
+			} catch (Exception ignored) {
+			}
+			//generator.run();
+		}
+	}
+
+	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
 	public static class RegistryEvents {
+		@SubscribeEvent
+		public static void registerFluids(RegistryEvent.Register<Fluid> event) {
+			ModuleFluids.registerFluids();
+		}
+
 		@SubscribeEvent
 		public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
 			ModuleManager.getInternalHandler().registerBlocks();
@@ -200,6 +227,11 @@ public class Forestry {
 		@SubscribeEvent
 		public static void registerEntityTypes(RegistryEvent.Register<EntityType<?>> event) {
 			ModuleManager.getInternalHandler().registerEntityTypes(event.getRegistry());
+		}
+
+		@SubscribeEvent
+		public static void registerRecipeSerialziers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+			CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
 		}
 
 	}

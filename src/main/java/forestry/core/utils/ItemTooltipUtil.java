@@ -16,9 +16,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
 public class ItemTooltipUtil {
 	@OnlyIn(Dist.CLIENT)
@@ -26,16 +24,16 @@ public class ItemTooltipUtil {
 		String unlocalizedName = stack.getTranslationKey();
 		String tooltipKey = unlocalizedName + ".tooltip";
 		if (Translator.canTranslateToLocal(tooltipKey)) {
-			String tooltipInfo = Translator.translateToLocal(tooltipKey);
+			TranslationTextComponent tooltipInfo = new TranslationTextComponent(tooltipKey);
 			Minecraft minecraft = Minecraft.getInstance();
-			List<String> tooltipInfoWrapped = minecraft.fontRenderer.listFormattedStringToWidth(tooltipInfo, 150);
-			tooltipInfoWrapped.forEach(s -> tooltip.add(new StringTextComponent(s)));
+			List<String> tooltipInfoWrapped = minecraft.fontRenderer.listFormattedStringToWidth(tooltipInfo.getFormattedText(), 150);
+			tooltipInfoWrapped.forEach(s -> tooltip.add(new StringTextComponent(s).applyTextStyle(TextFormatting.GRAY)));
 		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public static void addShiftInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-		tooltip.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle(new Style().setItalic(true)));
+		tooltip.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle(new Style().setItalic(true).setColor(TextFormatting.GRAY)));
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -55,11 +53,9 @@ public class ItemTooltipUtil {
 			//TODO - can tis be simplified (and is it correct?)
 			ITextComponent component = tooltip.get(i);
 			if (i == 0) {
-				component.getStyle().setColor(stack.getRarity().color);
-				tooltip.set(i, component);
+				tooltip.set(i, component.applyTextStyle(stack.getRarity().color));
 			} else {
-				component.getStyle().setColor(TextFormatting.GRAY);
-				tooltip.set(i, component);
+				tooltip.set(i, component.applyTextStyle(TextFormatting.GRAY));
 			}
 		}
 		return tooltip;

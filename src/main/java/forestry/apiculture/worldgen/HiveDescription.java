@@ -16,15 +16,18 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
 
-import forestry.api.apiculture.IBeeGenome;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveGen;
@@ -103,7 +106,7 @@ public enum HiveDescription implements IHiveDescription {
 
 	private final BlockState blockState;
 	private final float genChance;
-	private final IBeeGenome beeGenome;
+	private final IGenome beeGenome;
 	private final IHiveGen hiveGen;
 	private final IHiveRegistry.HiveType hiveType;
 
@@ -132,15 +135,15 @@ public enum HiveDescription implements IHiveDescription {
 
 	@Override
 	public boolean isGoodHumidity(EnumHumidity humidity) {
-		EnumHumidity idealHumidity = beeGenome.getPrimary().getHumidity();
-		EnumTolerance humidityTolerance = beeGenome.getToleranceHumid();
+		EnumHumidity idealHumidity = beeGenome.getPrimary(IAlleleBeeSpecies.class).getHumidity();
+		EnumTolerance humidityTolerance = beeGenome.getActiveValue(BeeChromosomes.HUMIDITY_TOLERANCE);
 		return AlleleManager.climateHelper.isWithinLimits(humidity, idealHumidity, humidityTolerance);
 	}
 
 	@Override
 	public boolean isGoodTemperature(EnumTemperature temperature) {
-		EnumTemperature idealTemperature = beeGenome.getPrimary().getTemperature();
-		EnumTolerance temperatureTolerance = beeGenome.getToleranceTemp();
+		EnumTemperature idealTemperature = beeGenome.getPrimary(IAlleleBeeSpecies.class).getTemperature();
+		EnumTolerance temperatureTolerance = beeGenome.getActiveValue(BeeChromosomes.TEMPERATURE_TOLERANCE);
 		return AlleleManager.climateHelper.isWithinLimits(temperature, idealTemperature, temperatureTolerance);
 	}
 

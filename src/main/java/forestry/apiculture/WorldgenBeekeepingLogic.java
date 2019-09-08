@@ -22,8 +22,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.tiles.TileHive;
@@ -98,8 +99,8 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 			}
 			hasFlowersCache.update(queen, housing);
 			World world = housing.getWorldObj();
-			boolean canWork = (world.isDaytime() || queen.getGenome().getNeverSleeps()) &&
-					(!housing.isRaining() || queen.getGenome().getToleratesRain());
+			boolean canWork = (world.isDaytime() || queen.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS)) &&
+				(!housing.isRaining() || queen.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN));
 			boolean flowerCacheNeedsSync = hasFlowersCache.needsSync();
 
 			if (active != canWork) {

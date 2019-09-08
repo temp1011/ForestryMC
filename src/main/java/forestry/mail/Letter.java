@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.api.mail.ILetter;
@@ -225,10 +226,10 @@ public class Letter implements ILetter {
 	@Override
 	public void addTooltip(List<ITextComponent> list) {
 		if (StringUtils.isNotBlank(this.sender.getName())) {
-			list.add(new TranslationTextComponent("for.gui.mail.from").appendText( ": " + this.sender.getName()));
+			list.add(new TranslationTextComponent("for.gui.mail.from").appendText(": " + this.sender.getName()).applyTextStyle(TextFormatting.GRAY));
 		}
 		if (this.recipient != null) {
-			list.add(new TranslationTextComponent("for.gui.mail.to").appendText( ": " + this.getRecipientString()));
+			list.add(new TranslationTextComponent("for.gui.mail.to").appendText(": " + this.getRecipientString()).applyTextStyle(TextFormatting.GRAY));
 		}
 	}
 

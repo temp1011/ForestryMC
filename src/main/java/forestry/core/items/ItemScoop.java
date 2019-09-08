@@ -13,14 +13,19 @@ package forestry.core.items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.common.ToolType;
+
 import forestry.api.core.IToolScoop;
 import forestry.api.core.ItemGroups;
 
 public class ItemScoop extends ItemForestryTool implements IToolScoop {
+	public static ToolType SCOOP = ToolType.get("scoop");
+
 	public ItemScoop() {
 		super(ItemStack.EMPTY, (new Item.Properties())
-		.maxDamage(10)	//TODO this is then set to another value further up. So probably need to reduce inheritance a bit
-		.group(ItemGroups.tabApiculture));
+			.maxDamage(10)
+			.group(ItemGroups.tabApiculture)
+			.addToolType(SCOOP, 1));
 		setEfficiencyOnProperMaterial(2.0f);
 	}
 }

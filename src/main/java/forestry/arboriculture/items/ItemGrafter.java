@@ -22,8 +22,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -54,7 +56,7 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 		if (!stack.isDamaged()) {
-			tooltip.add(new TranslationTextComponent("item.for.uses", stack.getMaxDamage() + 1));
+			tooltip.add(new TranslationTextComponent("item.forestry.uses", stack.getMaxDamage() + 1).applyTextStyle(TextFormatting.GRAY));
 		}
 	}
 
@@ -63,6 +65,7 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 		Block block = state.getBlock();
 		return block instanceof LeavesBlock ||
 				state.getMaterial() == Material.LEAVES ||
+			block.isIn(BlockTags.LEAVES) ||
 				super.canHarvestBlock(state);
 	}
 

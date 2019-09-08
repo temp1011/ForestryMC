@@ -12,20 +12,20 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Stack;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 
-
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlvearySwarmer;
@@ -92,9 +92,13 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		}
 
 		// Queue swarm spawn
-		IBee princess = BeeManager.beeRoot.getMember(princessStack);
+		Optional<IBee> optionalPrincess = BeeManager.beeRoot.create(princessStack);
+		if (!optionalPrincess.isPresent()) {
+			return;
+		}
+		IBee princess = optionalPrincess.get();
 		princess.setIsNatural(false);
-		pendingSpawns.push(BeeManager.beeRoot.getMemberStack(princess, EnumBeeType.PRINCESS));
+		pendingSpawns.push(BeeManager.beeRoot.getTypes().createStack(princess, EnumBeeType.PRINCESS));
 	}
 
 	@Override

@@ -43,8 +43,6 @@ public class BlockWoodPile extends Block {
 		super(Block.Properties.create(Material.WOOD)
 				.hardnessAndResistance(1.5f)
 				.sound(SoundType.WOOD));
-		//		setCreativeTab(ModuleCharcoal.getTag());
-		//TODO creative tab
 	}
 
 	@Override
@@ -84,9 +82,8 @@ public class BlockWoodPile extends Block {
 				}
 			}
 		}
-		//TODO schedule update
+
 		world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
-		//world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
 	}
 
 	@Override
@@ -102,9 +99,7 @@ public class BlockWoodPile extends Block {
 	private void activatePile(BlockState state, World world, BlockPos pos, boolean scheduleUpdate) {
 		world.setBlockState(pos, state.with(IS_ACTIVE, true), 2);
 		if (scheduleUpdate) {
-			//TODO schedule update
-			world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
-			//			world.scheduleUpdate(pos, this, (this.tickRate(world) + world.rand.nextInt(RANDOM_TICK)) / 4);
+			world.getPendingBlockTicks().scheduleTick(pos, this, (this.tickRate(world) + world.rand.nextInt(RANDOM_TICK)) / 4);
 		}
 	}
 
@@ -124,7 +119,7 @@ public class BlockWoodPile extends Block {
 					} else if (!blockState.get(IS_ACTIVE) && state.get(IS_ACTIVE)) {
 						activatePile(blockState, world, position, true);
 					}
-				} else if (world.isAirBlock(position) || !blockState.doesSideBlockRendering(world, position, facing.getOpposite()) || block.isFlammable(blockState, world, position, facing.getOpposite())) {
+				} else if (world.isAirBlock(position) || !Block.func_220055_a(world, position, facing.getOpposite()) || block.isFlammable(state, world, position, facing.getOpposite())) {
 					world.setBlockState(pos, Blocks.FIRE.getDefaultState());
 					return;
 				}
@@ -137,9 +132,7 @@ public class BlockWoodPile extends Block {
 					world.setBlockState(pos, ashState, 2);
 				}
 			}
-			//TODO schedule update
 			world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
-			//			world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
 		}
 	}
 

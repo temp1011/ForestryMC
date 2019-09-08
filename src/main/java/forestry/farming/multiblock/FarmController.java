@@ -29,7 +29,7 @@ import java.util.Stack;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
@@ -39,7 +39,6 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -506,7 +505,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
 			final int fertilizerConsumption = Math.round(logic.getFertilizerConsumption() * Config.fertilizerModifier);
 			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
-			final FluidStack liquid = new FluidStack(Fluids.WATER, liquidConsumption);
+			final FluidStack liquid = new FluidStack((Fluid) null/*TODO fluids FluidRegistry.WATER*/, liquidConsumption);
 
 			for (FarmTarget target : farmTargets) {
 				// Check fertilizer and water
@@ -574,7 +573,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		// Check water
 		float hydrationModifier = hydrationManager.getHydrationModifier();
 		int waterConsumption = provider.getWaterConsumption(hydrationModifier);
-		FluidStack requiredLiquid = new FluidStack(Fluids.WATER, waterConsumption);
+		FluidStack requiredLiquid = new FluidStack((Fluid) null/*TODO fluids FluidRegistry.WATER*/, waterConsumption);
 		boolean hasLiquid = requiredLiquid.getAmount() == 0 || hasLiquid(requiredLiquid);
 
 		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {
@@ -604,7 +603,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public boolean hasLiquid(FluidStack liquid) {
-		FluidStack drained = resourceTank.drain(liquid, IFluidHandler.FluidAction.SIMULATE);
+		FluidStack drained = resourceTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
 		return liquid.isFluidStackIdentical(drained);
 	}
 

@@ -15,24 +15,19 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraft.fluid.Fluid;
-
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
@@ -65,7 +60,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		setInternalInventory(new InventoryEngineBiogas(this));
 
 		fuelTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY).setFilters(FuelManager.bronzeEngineFuel.keySet());
-		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, true, false).setFilters(Fluids.LAVA);
+		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, true, false).setFilters(/*FluidRegistry.LAVA TODO fluids*/);
 		burnTank = new StandardTank(FluidAttributes.BUCKET_VOLUME, false, false);
 
 		this.tankManager = new TankManager(this, fuelTank, heatingTank, burnTank);
@@ -118,19 +113,19 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			} else if (shutdown) {
 				if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluidType() == null) {// TODO fluids FluidRegistry.LAVA) {
 					addHeat(Constants.ENGINE_HEAT_VALUE_LAVA);
-					heatingTank.drain(1, IFluidHandler.FluidAction.EXECUTE);
+					heatingTank.drainInternal(1, IFluidHandler.FluidAction.EXECUTE);
 				}
 			}
 
 			// We need a minimum temperature to generate energy
 			if (heatStage > 0.2) {
 				if (burnTank.getFluidAmount() > 0) {
-					FluidStack drained = burnTank.drain(1, IFluidHandler.FluidAction.EXECUTE);
+					FluidStack drained = burnTank.drainInternal(1, IFluidHandler.FluidAction.EXECUTE);
 					currentOutput = determineFuelValue(drained);
 					energyManager.generateEnergy(currentOutput);
 					world.updateComparatorOutputLevel(pos, getBlockState().getBlock());
 				} else {
-					FluidStack fuel = fuelTank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+					FluidStack fuel = fuelTank.drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int burnTime = determineBurnTime(fuel);
 					if (!fuel.isEmpty()) {
 						fuel.setAmount(burnTime);
@@ -168,7 +163,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		// Lose extra heat when using water as fuel.
 		if (fuelTank.getFluidAmount() > 0) {
 			FluidStack fuelFluidStack = fuelTank.getFluid();
-			if (fuelFluidStack != null) {
+			if (!fuelFluidStack.isEmpty()) {
 				EngineBronzeFuel fuel = FuelManager.bronzeEngineFuel.get(fuelFluidStack.getFluid());
 				if (fuel != null) {
 					loss = loss * fuel.getDissipationMultiplier();

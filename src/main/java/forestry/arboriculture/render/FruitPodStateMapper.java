@@ -1,24 +1,22 @@
-package forestry.arboriculture.render;
-
-import java.util.Map;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-
-
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.arboriculture.blocks.BlockFruitPod;
-import forestry.core.config.Constants;
-import forestry.core.render.ForestryStateMapper;
-
-@OnlyIn(Dist.CLIENT)
-public class FruitPodStateMapper extends ForestryStateMapper {
-
-	//TODO models
+//package forestry.arboriculture.render;
+//
+//import java.util.Map;
+//
+//import net.minecraft.block.Block;
+//import net.minecraft.block.BlockState;
+//import net.minecraft.client.renderer.model.ModelResourceLocation;
+//
+//import net.minecraftforge.api.distmarker.Dist;
+//import net.minecraftforge.api.distmarker.OnlyIn;
+//
+//import forestry.api.arboriculture.genetics.IAlleleFruit;
+//import forestry.arboriculture.blocks.BlockFruitPod;
+//import forestry.core.config.Constants;
+//import forestry.core.render.ForestryStateMapper;
+//
+//@OnlyIn(Dist.CLIENT)
+//public class FruitPodStateMapper extends ForestryStateMapper {
+//
 //	@Override
 //	public Map<BlockState, ModelResourceLocation> putStateModelLocations(Block block) {
 //		if (block instanceof BlockFruitPod) {
@@ -37,5 +35,5 @@ public class FruitPodStateMapper extends ForestryStateMapper {
 //		}
 //		return mapStateModelLocations;
 //	}
-
-}
+//
+//}

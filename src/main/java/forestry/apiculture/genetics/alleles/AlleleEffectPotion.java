@@ -23,12 +23,12 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-
 import net.minecraftforge.api.distmarker.Dist;
-
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.render.ParticleRender;
@@ -55,7 +55,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		World world = housing.getWorldObj();
 		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
 		for (LivingEntity entity : entities) {
@@ -66,7 +66,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 			int dur = this.duration;
 			if (potion.getEffectType() == EffectType.HARMFUL) {
 				// Entities are not attacked if they wear a full set of apiarist's armor.
-				int count = BeeManager.armorApiaristHelper.wearsItems(entity, getUID(), true);
+				int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
 				if (count >= 4) {
 					continue; // Full set, no damage/effect
 				} else if (count == 3) {
@@ -91,7 +91,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		World world = housing.getWorldObj();
 		if (world.rand.nextBoolean()) {
 			super.doFX(genome, storedData, housing);

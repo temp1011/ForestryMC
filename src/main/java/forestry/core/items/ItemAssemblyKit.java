@@ -19,12 +19,15 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
+import forestry.core.ItemGroupForestry;
+
 public class ItemAssemblyKit extends ItemForestry {
 	private final ItemStack assembled;
 
 	public ItemAssemblyKit(ItemStack assembled) {
 		super((new Item.Properties())
-		.maxStackSize(24));
+			.maxStackSize(24)
+			.group(ItemGroupForestry.tabForestry));
 		this.assembled = assembled;
 	}
 

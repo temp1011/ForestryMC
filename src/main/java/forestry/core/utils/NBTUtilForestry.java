@@ -18,6 +18,7 @@ import java.util.List;
 
 import net.minecraft.nbt.ByteArrayNBT;
 import net.minecraft.nbt.ByteNBT;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.DoubleNBT;
 import net.minecraft.nbt.EndNBT;
 import net.minecraft.nbt.FloatNBT;
@@ -27,15 +28,14 @@ import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.LongArrayNBT;
 import net.minecraft.nbt.LongNBT;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ShortNBT;
 import net.minecraft.nbt.StringNBT;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 

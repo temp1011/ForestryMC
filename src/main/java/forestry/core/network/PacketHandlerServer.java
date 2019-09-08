@@ -16,18 +16,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
-//import net.minecraft.util.IThreadListener;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.fml.network.NetworkEvent;
+
+import forestry.core.config.Constants;
+
+//import net.minecraft.util.IThreadListener;
 //import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 //import net.minecraftforge.fml.common.network.FMLEventChannel;
 //import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
 //import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 //import net.minecraftforge.fml.common.network.NetworkRegistry;
 //import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
-import net.minecraftforge.fml.network.NetworkEvent;
-
-import forestry.core.config.Constants;
 
 //TODO - can we get away with simple channel?
 public class PacketHandlerServer {

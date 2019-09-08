@@ -15,8 +15,6 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.function.Predicate;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -38,8 +36,7 @@ public class ColourProperties implements ISelectiveResourceReloadListener {
 	private final Properties defaultMappings = new Properties();
 	private final Properties mappings = new Properties();
 
-	private ColourProperties() {    //TODO - correct?
-		((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(this);
+	private ColourProperties() {
 	}
 
 	public synchronized int get(String key) {

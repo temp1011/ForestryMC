@@ -13,17 +13,17 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-
 import forestry.api.book.IForesterBook;
 import forestry.book.BookLoader;
 import forestry.book.gui.GuiForesterBook;
 import forestry.book.gui.GuiForestryBookCategories;
+import forestry.core.ItemGroupForestry;
 import forestry.core.items.ItemWithGui;
 
 public class ItemForesterBook extends ItemWithGui {
 
 	public ItemForesterBook() {
-		super(new Item.Properties());
+		super(new Item.Properties().group(ItemGroupForestry.tabForestry));
 
 	}
 

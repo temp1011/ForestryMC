@@ -16,9 +16,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 
-import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorSmeltingManager;

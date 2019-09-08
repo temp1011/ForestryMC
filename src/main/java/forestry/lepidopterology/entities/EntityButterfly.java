@@ -11,6 +11,7 @@
 package forestry.lepidopterology.entities;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -40,35 +41,36 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 
-import forestry.api.arboriculture.EnumGermlingType;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.core.IToolScoop;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.api.lepidopterology.ILepidopteristTracker;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.api.lepidopterology.genetics.IButterflyRoot;
 import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.genetics.Butterfly;
+import forestry.lepidopterology.genetics.ButterflyHelper;
 
 //TODO minecraft has flying entities (bat, parrot). Can some of their logic be reused here?
 //TODO getMaxSpawnedInChunk?
@@ -91,7 +93,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 	@Nullable
 	private Vec3d flightTarget;
 	private int exhaustion;
-	private IButterfly contained = ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
+	private IButterfly contained = ButterflyHelper.getKaryotype().getDefaultTemplate().toIndividual(ButterflyHelper.getRoot());
 	@Nullable
 	private IIndividual pollen;
 
@@ -163,7 +165,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 
 		if (pollen != null) {
 			CompoundNBT pln = new CompoundNBT();
-			pln.putString("Root", pollen.getGenome().getSpeciesRoot().getUID());
+			pln.putString("Root", pollen.getRoot().getUID());
 			pollen.write(pln);
 			compoundNBT.put("PLN", pln);
 		}
@@ -186,13 +188,13 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 
 		if (compoundNBT.contains("PLN")) {
 			CompoundNBT pollenNBT = compoundNBT.getCompound("PLN");
-			ISpeciesRoot root;
+			IIndividualRoot root;
 			if (pollenNBT.contains("Root")) {
-				root = AlleleManager.alleleRegistry.getSpeciesRoot(pollenNBT.getString("Root"));
+				root = GeneticsAPI.apiInstance.getRoot(pollenNBT.getString("Root")).get();
 			} else {
 				root = TreeManager.treeRoot;
 			}
-			pollen = root.getMember(pollenNBT);
+			pollen = root.create(pollenNBT);
 		}
 
 		EnumButterflyState state = EnumButterflyState.VALUES[compoundNBT.getByte("STATE")];
@@ -203,7 +205,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 	}
 
 	public float getWingFlap(float partialTicktime) {
-		int offset = species != null ? species.getUID().hashCode() : world.rand.nextInt();
+		int offset = species != null ? species.getRegistryName().toString().hashCode() : world.rand.nextInt();
 		return getState().getWingFlap(this, offset, partialTicktime);
 	}
 
@@ -226,7 +228,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 	}
 
 	public float getSpeed() {
-		return contained.getGenome().getSpeed();
+		return contained.getGenome().getActiveValue(ButterflyChromosomes.SPEED);
 	}
 
 	/* DESTINATION */
@@ -346,22 +348,22 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 
 	public void setIndividual(@Nullable IButterfly butterfly) {
 		if (butterfly == null) {
-			butterfly = ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
+			butterfly = ButterflyHelper.getKaryotype().getDefaultTemplate().toIndividual(ButterflyHelper.getRoot());
 		}
 		contained = butterfly;
 
-		IButterflyGenome genome = contained.getGenome();
+		IGenome genome = contained.getGenome();
 
 		//TODO AT methods or more entity types.
 		//		isImmuneToFire();
 		//		isImmuneToFire = genome.getFireResist();
-		size = genome.getSize();
+		size = genome.getActiveValue(ButterflyChromosomes.SIZE);
 		//		setSize(size, 0.4f);
-		species = genome.getPrimary();
+		species = genome.getPrimary(IAlleleButterflySpecies.class);
 
 		if (!world.isRemote) {
 			dataManager.set(DATAWATCHER_ID_SIZE, (int) (size * 100));
-			dataManager.set(DATAWATCHER_ID_SPECIES, species.getUID());
+			dataManager.set(DATAWATCHER_ID_SPECIES, species.getRegistryName().toString());
 		} else {
 			textureResource = new ResourceLocation(species.getEntityTexture());
 		}
@@ -385,7 +387,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 		if (species == null) {
 			return super.getName();
 		}
-		return new StringTextComponent(species.getAlleleName());    //TODO textcomponent
+		return species.getDisplayName();
 	}
 
 	@Override
@@ -437,9 +439,9 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 		ItemStack stack = player.getHeldItem(hand);
 		if ((stack.getItem() instanceof IToolScoop)) {
 			if (!world.isRemote) {
-				IButterflyRoot root = contained.getGenome().getPrimary().getRoot();
-				ILepidopteristTracker tracker = root.getBreedingTracker((ServerWorld) world, player.getGameProfile());
-				ItemStack itemStack = root.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY);
+				IButterflyRoot root = ButterflyHelper.getRoot();
+				ILepidopteristTracker tracker = root.getBreedingTracker(world, player.getGameProfile());
+				ItemStack itemStack = root.getTypes().createStack(contained.copy(), EnumFlutterType.BUTTERFLY);
 
 				tracker.registerCatch(contained);
 				ItemStackUtil.dropItemStackAsEntity(itemStack, world, posX, posY, posZ);
@@ -463,8 +465,11 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 		// Drop pollen if any
 		IIndividual pollen = getPollen();
 		if (pollen != null) {
-			ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(pollen);
-			ItemStack pollenStack = root.getMemberStack(pollen, EnumGermlingType.POLLEN);
+			IRootDefinition root = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(pollen);
+			if (!root.isRootPresent()) {
+				return;
+			}
+			ItemStack pollenStack = root.get().getTypes().createStack(pollen, EnumGermlingType.POLLEN);
 			ItemStackUtil.dropItemStackAsEntity(pollenStack, world, posX, posY, posZ);
 		}
 	}
@@ -478,11 +483,14 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 		if (world.isRemote) {
 			if (species == null) {
 				String speciesUid = dataManager.get(DATAWATCHER_ID_SPECIES);
-				IAllele allele = AlleleManager.alleleRegistry.getAllele(speciesUid);
-				if (allele instanceof IAlleleButterflySpecies) {
-					species = (IAlleleButterflySpecies) allele;
-					textureResource = new ResourceLocation(species.getEntityTexture());
-					size = dataManager.get(DATAWATCHER_ID_SIZE) / 100f;
+				Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(speciesUid);
+				if (optionalAllele.isPresent()) {
+					IAllele allele = optionalAllele.get();
+					if (allele instanceof IAlleleButterflySpecies) {
+						species = (IAlleleButterflySpecies) allele;
+						textureResource = new ResourceLocation(species.getEntityTexture());
+						size = dataManager.get(DATAWATCHER_ID_SIZE) / 100f;
+					}
 				}
 			}
 
@@ -535,7 +543,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 			float horizontal = (float) (Math.atan2(newZ, newX) * 180d / Math.PI) - 90f;
 			rotationYaw += MathHelper.wrapDegrees(horizontal - rotationYaw);
 
-			setMoveForward(contained.getGenome().getSpeed());
+			setMoveForward(contained.getGenome().getActiveValue(ButterflyChromosomes.SPEED));
 		}
 	}
 
@@ -579,9 +587,9 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 			return ItemStack.EMPTY;
 		}
 		IButterflyRoot root = species.getRoot();
-		IAllele[] template = root.getTemplate(species);
+		IAllele[] template = root.getTemplates().getTemplate(species.getRegistryName().toString());
 		IButterfly butterfly = root.templateAsIndividual(template);
-		return root.getMemberStack(butterfly, EnumFlutterType.BUTTERFLY);
+		return root.getTypes().createStack(butterfly, EnumFlutterType.BUTTERFLY);
 	}
 
 	@Override

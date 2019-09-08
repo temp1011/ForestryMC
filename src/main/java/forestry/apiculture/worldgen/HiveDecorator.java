@@ -22,16 +22,16 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 
-//import net.minecraftforge.common.util.EnumHelper;
-//import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
-//import net.minecraftforge.event.terraingen.TerrainGen;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.utils.Log;
+
+//import net.minecraftforge.common.util.EnumHelper;
+//import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
+//import net.minecraftforge.event.terraingen.TerrainGen;
 
 public abstract class HiveDecorator {
 
