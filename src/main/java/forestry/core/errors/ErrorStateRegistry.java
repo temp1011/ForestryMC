@@ -20,6 +20,7 @@ import java.util.Set;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
@@ -86,9 +87,9 @@ public class ErrorStateRegistry implements IErrorStateRegistry {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static void initSprites() {
+	public static void initSprites(TextureStitchEvent.Pre event) {
 		for (IErrorState code : states.values()) {
-			code.registerSprite();
+			code.registerSprite(event);
 		}
 	}
 }

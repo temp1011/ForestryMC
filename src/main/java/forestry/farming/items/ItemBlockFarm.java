@@ -27,27 +27,27 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.core.ItemGroups;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.farming.models.EnumFarmBlockTexture;
 
 public class ItemBlockFarm extends BlockItem {
 
 	public ItemBlockFarm(Block block) {
-		super(block, new Item.Properties());
-//		setHasSubtypes(true);
+		super(block, new Item.Properties().group(ItemGroups.tabAgriculture));
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		if (Screen.hasShiftDown()) {
-			tooltip.add(new TranslationTextComponent("tile.for.ffarm.tooltip"));
+			tooltip.add(new TranslationTextComponent("block.forestry.ffarm.tooltip"));
 			if (stack.getTag() == null) {
 				return;
 			}
 			EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTag());
 
-			tooltip.add(new TranslationTextComponent("tile.for.ffarm.material.tooltip").setStyle((new Style()).setItalic(true).setColor(texture.getFormatting())).appendText(" " + texture.getName()));
+			tooltip.add(new TranslationTextComponent("block.forestry.ffarm.material.tooltip").setStyle((new Style()).setItalic(true).setColor(texture.getFormatting())).appendText(" " + texture.getName()));
 		} else {
 			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}

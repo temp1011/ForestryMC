@@ -12,6 +12,7 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -20,7 +21,8 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,7 +37,7 @@ import forestry.core.network.PacketBufferForestry;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
 	private static final float lidAngleVariationPerTick = 0.1F;
-	public static final AxisAlignedBB chestBoundingBox = new AxisAlignedBB(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+	public static final VoxelShape CHEST_SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
 
 	private final IForestrySpeciesRoot speciesRoot;
 	public float lidAngle;
@@ -104,6 +106,14 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 		NetworkHooks.openGui(player, this, p -> {
 			p.writeBlockPos(this.pos);
 			p.writeVarInt(page);
+		});
+	}
+
+	@Override
+	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+		NetworkHooks.openGui(player, this, p -> {
+			p.writeBlockPos(this.pos);
+			p.writeVarInt(0);
 		});
 	}
 

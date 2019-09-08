@@ -39,14 +39,14 @@ public enum EnumFarmBlockType implements IStringSerializable {
 		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 		sprites = Arrays.asList(
 				//TODO - dynamic textures
-//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/plain")),
-//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/reverse")),
-//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/top")),
-//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/band")),
-//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/gears")),
-//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/hatch")),
-//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/valve")),
-//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/control"))
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/plain")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/reverse")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/top")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/band")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/gears")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/hatch")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/valve")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/control"))
 		);
 	}
 

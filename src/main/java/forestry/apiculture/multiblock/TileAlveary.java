@@ -65,7 +65,7 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 
 	public TileAlveary(BlockAlvearyType type) {
 		super(new MultiblockLogicAlveary());
-		this.unlocalizedTitle = "tile.for.alveary." + type + ".name";
+		this.unlocalizedTitle = "block.forestry.alveary." + type;
 	}
 
 	@Override

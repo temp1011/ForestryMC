@@ -114,9 +114,9 @@ public enum Fluids {
 		this.viscosity = viscosity;
 		this.flammability = flammability;
 
-		resources[0] = new ForestryResource("blocks/liquid/" + getTag() + "_still");
+		resources[0] = new ForestryResource("block/liquid/" + getTag() + "_still");
 		if (flowTextureExists()) {
-			resources[1] = new ForestryResource("blocks/liquid/" + getTag() + "_flow");
+			resources[1] = new ForestryResource("block/liquid/" + getTag() + "_flow");
 		}
 	}
 
@@ -184,19 +184,17 @@ public enum Fluids {
 		return getFluid() == fluidStack.getFluid();
 	}
 
-	public static boolean areEqual(@Nullable Fluid fluid, FluidStack fluidStack) {
+	public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
 		return fluid == fluidStack.getFluid();
 	}
 
 	@Nullable
-	public static Fluids getFluidDefinition(@Nullable Fluid fluid) {
+	public static Fluids getFluidDefinition(Fluid fluid) {
 		if (fluid instanceof ForestryFluid) {
 			if (((ForestryFluid) fluid).flowing) {
-				Fluids fluidDefinition = tagToFluidFlowing.get(fluid.getRegistryName().getPath());
-				return fluidDefinition;
+				return tagToFluidFlowing.get(fluid.getRegistryName().getPath());
 			} else {
-				Fluids fluidDefinition = tagToFluid.get(fluid.getRegistryName().getPath());
-				return fluidDefinition;
+				return tagToFluid.get(fluid.getRegistryName().getPath());
 			}
 		}
 
@@ -204,8 +202,8 @@ public enum Fluids {
 	}
 
 	@Nullable
-	public static Fluids getFluidDefinition(@Nullable FluidStack fluidStack) {
-		if (fluidStack != null) {
+	public static Fluids getFluidDefinition(FluidStack fluidStack) {
+		if (!fluidStack.isEmpty()) {
 			return getFluidDefinition(fluidStack.getFluid());
 		}
 
@@ -241,7 +239,7 @@ public enum Fluids {
 			return true;
 		}
 		try {
-			ResourceLocation resourceLocation = new ForestryResource("blocks/liquid/" + getTag() + "_flow");
+			ResourceLocation resourceLocation = new ForestryResource("block/liquid/" + getTag() + "_flow");
 			Minecraft minecraft = Minecraft.getInstance();
 			if (minecraft != null) {    //TODO - is it correct
 				IResourceManager resourceManager = minecraft.getResourceManager();

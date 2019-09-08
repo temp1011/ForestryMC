@@ -53,6 +53,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import genetics.api.GeneticsAPI;
 
@@ -183,6 +185,10 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static TextureAtlasSprite getBeeSprite() {
 		Preconditions.checkNotNull(beeSprite, "Bee sprite has not been registered");
 		return beeSprite;
+	}
+
+	public ModuleApiculture() {
+		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 
 	@Override
@@ -841,6 +847,12 @@ public class ModuleApiculture extends BlankForestryModule {
 			//			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
 		}
 		//		beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
+	}
+
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public void onClientSetup(FMLClientSetupEvent event) {
+		blocks.beeChest.clientInit();
 	}
 
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {

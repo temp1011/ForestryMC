@@ -17,17 +17,42 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.BlockModelShapes;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelRotation;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.FoliageColors;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
 
 import forestry.api.arboriculture.IWoodItemMeshDefinition;
 import forestry.api.arboriculture.IWoodStateMapper;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.blocks.BlockDecorativeLeaves;
+import forestry.arboriculture.blocks.BlockDefaultLeaves;
+import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
+import forestry.arboriculture.models.ModelDecorativeLeaves;
+import forestry.arboriculture.models.ModelDefaultLeaves;
+import forestry.arboriculture.models.ModelDefaultLeavesFruit;
+import forestry.arboriculture.models.ModelLeaves;
+import forestry.arboriculture.models.ModelSapling;
+import forestry.core.models.BlockModelEntry;
+import forestry.core.models.DefaultTextureGetter;
+import forestry.core.models.ModelManager;
 import forestry.core.models.WoodModelEntry;
 
 @OnlyIn(Dist.CLIENT)
@@ -38,42 +63,41 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 
 	@Override
 	public void initializeModels() {
-		//TODO: Models
-		//		{
-		//			ModelResourceLocation blockModelLocation = new ModelResourceLocation("forestry:leaves");
-		//			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:leaves", "inventory");
-		//			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation,
-		//				new ModelLeaves(), ModuleArboriculture.getBlocks().leaves);
-		//			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
-		//		}
-		//
-		//		for (BlockDecorativeLeaves leaves : ModuleArboriculture.getBlocks().leavesDecorative) {
-		//			String resourceName = "forestry:leaves.decorative." + leaves.getBlockNumber();
-		//			ModelResourceLocation blockModelLocation = new ModelResourceLocation(resourceName);
-		//			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
-		//			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModeLocation,
-		//				new ModelDecorativeLeaves(), leaves);
-		//			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
-		//		}
-		//
-		//		for (BlockDefaultLeaves leaves : ModuleArboriculture.getBlocks().leavesDefault) {
-		//			String resourceName = "forestry:leaves.default." + leaves.getBlockNumber();
-		//			ModelResourceLocation blockModelLocation = new ModelResourceLocation(resourceName);
-		//			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
-		//			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModeLocation,
-		//				new ModelDefaultLeaves(), leaves);
-		//			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
-		//		}
-		//
-		//		for (BlockDefaultLeavesFruit leaves : ModuleArboriculture.getBlocks().leavesDefaultFruit) {
-		//			String resourceName = "forestry:leaves.default.fruit." + leaves.getBlockNumber();
-		//			ModelResourceLocation blockModelLocation = new ModelResourceLocation(resourceName);
-		//			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
-		//			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModeLocation,
-		//				new ModelDefaultLeavesFruit(), leaves);
-		//			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
-		//		}
-		//
+		{
+			ResourceLocation blockModelLocation = new ResourceLocation("forestry:block/leaves");
+			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:item/leaves", "inventory");
+			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation,
+				new ModelLeaves(), ModuleArboriculture.getBlocks().leaves);
+			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
+		}
+
+		for (BlockDecorativeLeaves leaves : ModuleArboriculture.getBlocks().leavesDecorative.values()) {
+			String resourceName = leaves.getRegistryName().toString();
+			ModelResourceLocation blockModelLocation = new ModelResourceLocation(resourceName);
+			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
+			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModeLocation,
+				new ModelDecorativeLeaves(), leaves);
+			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
+		}
+
+		for (BlockDefaultLeaves leaves : ModuleArboriculture.getBlocks().leavesDefault.values()) {
+			String resourceName = leaves.getRegistryName().toString();
+			ModelResourceLocation blockModelLocation = new ModelResourceLocation(resourceName);
+			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
+			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModeLocation,
+				new ModelDefaultLeaves(), leaves);
+			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
+		}
+
+		for (BlockDefaultLeavesFruit leaves : ModuleArboriculture.getBlocks().leavesDefaultFruit.values()) {
+			String resourceName = leaves.getRegistryName().toString();
+			ModelResourceLocation blockModelLocation = new ModelResourceLocation(resourceName);
+			ModelResourceLocation itemModeLocation = new ModelResourceLocation(resourceName, "inventory");
+			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModeLocation,
+				new ModelDefaultLeavesFruit(), leaves);
+			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
+		}
+
 		//		ModelLoaderRegistry.registerLoader(WoodModelLoader.INSTANCE);
 		//TODO data generators?
 //		for (BlockArbSlab slab : ModuleArboriculture.getBlocks().slabsDouble) {
@@ -97,8 +121,25 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 		//		}
 	}
 
+	public void onModelRegister() {
+		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES)) {
+			if (allele instanceof IAlleleTreeSpecies) {
+				IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) allele;
+				ModelLoader.addSpecialModel(treeSpecies.getBlockModel());
+				ModelLoader.addSpecialModel(treeSpecies.getItemModel());
+			}
+		}
+		//ModelLoader.addSpecialModel();
+	}
+
 	@SubscribeEvent
 	public <T extends Block & IWoodTyped> void onModelBake(ModelBakeEvent event) {
+		//TODO: Remove if forge fixes the model loaders
+		IBakedModel model = new ModelSapling().bake(event.getModelLoader(), DefaultTextureGetter.INSTANCE, ModelRotation.X0_Y0, DefaultVertexFormats.BLOCK);
+		for (BlockState state : ModuleArboriculture.getBlocks().saplingGE.getStateContainer().getValidStates()) {
+			event.getModelRegistry().put(BlockModelShapes.getModelLocation(state), model);
+		}
+		event.getModelRegistry().put(new ModelResourceLocation("forestry:sapling", "inventory"), new ModelSapling().bake(event.getModelLoader(), DefaultTextureGetter.INSTANCE, ModelRotation.X0_Y0, DefaultVertexFormats.ITEM));
 		//		Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
 		//
 		//		for (WoodModelEntry<T> entry : woodModelEntrys) {

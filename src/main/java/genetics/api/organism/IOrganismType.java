@@ -11,4 +11,8 @@ import genetics.api.root.IIndividualRootBuilder;
  */
 public interface IOrganismType {
 	String getName();
+
+	default boolean isEmpty() {
+		return false;
+	}
 }

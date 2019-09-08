@@ -35,6 +35,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -142,6 +144,12 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		return blockType.getMachineProperties();
 	}
 
+	@Override
+	public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+		IMachineProperties definition = getDefinition();
+		return definition.getShape(state, reader, pos, context);
+	}
+
 	//TODO - I think this is done by blockstate and voxelshape now, hopefully a bit more automatically based on the model?
 //	@Nullable
 //	@Override
@@ -214,7 +222,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	//TODO think this is the correct method
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-
+		super.onBlockHarvested(world, pos, state, player);
 		if (world.isRemote) {
 			return;
 		}
@@ -230,7 +238,6 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		if (tile instanceof ISocketable) {
 			InventoryUtil.dropSockets((ISocketable) tile, tile.getWorld(), tile.getPos());
 		}
-		super.onBlockHarvested(world, pos, state, player);
 	}
 
 	@Override
@@ -251,6 +258,10 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	public void init() {
 		blockType.getMachineProperties().registerTileEntity();
+	}
+
+	public void clientInit() {
+		blockType.getMachineProperties().clientSetup();
 	}
 
 	/* ITEM MODELS */
@@ -304,10 +315,10 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public boolean addDestroyEffects(BlockState state, World world, BlockPos pos, ParticleManager effectRenderer) {
-		if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
+		/*if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
 			BlockState blockState = world.getBlockState(pos);
 			return ParticleHelper.addDestroyEffects(world, this, blockState, pos, effectRenderer, particleCallback);
-		}
+		}*/
 		return false;
 	}
 

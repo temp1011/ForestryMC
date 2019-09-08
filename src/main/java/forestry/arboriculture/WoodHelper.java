@@ -23,7 +23,7 @@ public class WoodHelper {
 		ITextComponent displayName;
 
 		if (woodType instanceof EnumForestryWoodType) {
-			String customUnlocalizedName = "tile.for." + blockKind + "." + woodType + ".name";
+			String customUnlocalizedName = "block.forestry." + blockKind + "." + woodType;
 			if (Translator.canTranslateToLocal(customUnlocalizedName)) {
 				displayName = new TranslationTextComponent(customUnlocalizedName);
 			} else {
@@ -36,7 +36,7 @@ public class WoodHelper {
 		}
 
 		if (wood.isFireproof()) {
-			displayName = new TranslationTextComponent("tile.for.fireproof", displayName);
+			displayName = new TranslationTextComponent("block.forestry.fireproof", displayName);
 		}
 
 		return displayName;

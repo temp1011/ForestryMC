@@ -24,7 +24,6 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
@@ -45,17 +44,12 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.storage.loot.LootContext;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.core.config.Constants;
 
 //import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 
 //TODO - figure out why this class exists
-public class BlockMushroom extends BushBlock implements IItemModelRegister, IGrowable {
+public class BlockMushroom extends BushBlock implements IGrowable {
 
 	public static final EnumProperty<MushroomType> VARIANT = EnumProperty.create("mushroom", MushroomType.class);
 	public static final BooleanProperty MATURE = BooleanProperty.create("mature");
@@ -171,16 +165,6 @@ public class BlockMushroom extends BushBlock implements IItemModelRegister, IGro
 
 	@Override
 	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
-		//TODO - blockstate into itemstack (or flatten?)
-		list.add(new ItemStack(this, 1));//, 0));
-		list.add(new ItemStack(this, 1));//, 1));
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "minecraft", "brown_mushroom");
-		manager.registerItemModel(item, 1, "minecraft", "red_mushroom");
 	}
 
 	@Override

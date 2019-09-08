@@ -16,7 +16,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -31,7 +30,7 @@ import forestry.core.config.Constants;
 import forestry.core.models.ModelEscritoire;
 import forestry.core.tiles.TileEscritoire;
 
-public class RenderEscritoire extends TileEntityRenderer<TileEscritoire> {
+public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
 
 	private static final ResourceLocation texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/escritoire.png");
 	private final ModelEscritoire modelEscritoire = new ModelEscritoire();
@@ -48,23 +47,19 @@ public class RenderEscritoire extends TileEntityRenderer<TileEscritoire> {
 		return dummyEntityItem;
 	}
 
-	/**
-	 * @param escritoire If it null its render the item else it render the tile entity.
-	 */
 	@Override
-	public void render(TileEscritoire escritoire, double x, double y, double z, float partialTicks, int destroyStage) {
-		if (escritoire != null) {
-			World world = escritoire.getWorldObj();
-			if (world.isBlockLoaded(escritoire.getPos())) {
-				BlockState blockState = world.getBlockState(escritoire.getPos());
-				if (blockState.getBlock() instanceof BlockBase) {
-					Direction facing = blockState.get(BlockBase.FACING);
-					render(escritoire.getIndividualOnDisplay(), world, facing, x, y, z);
-					return;
-				}
-			}
+	public void renderTile(TileEscritoire tile, double x, double y, double z, float partialTicks, int destroyStage) {
+		World world = tile.getWorldObj();
+		BlockState blockState = world.getBlockState(tile.getPos());
+		if (blockState.getBlock() instanceof BlockBase) {
+			Direction facing = blockState.get(BlockBase.FACING);
+			render(tile.getIndividualOnDisplay(), world, facing, x, y, z);
 		}
-		render(ItemStack.EMPTY, null, Direction.SOUTH, x, y, z);
+	}
+
+	@Override
+	public void renderItem(ItemStack stack) {
+		render(ItemStack.EMPTY, null, Direction.SOUTH, 0, 0, 0);
 	}
 
 	private void render(ItemStack itemstack, @Nullable World world, Direction orientation, double x, double y, double z) {

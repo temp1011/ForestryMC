@@ -1,6 +1,5 @@
 package genetics;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
@@ -11,7 +10,6 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,14 +19,12 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import genetics.api.GeneticHelper;
 import genetics.api.GeneticsAPI;
 import genetics.api.IGeneTemplate;
 import genetics.api.alleles.IAllele;
-import genetics.api.individual.IChromosomeAllele;
 import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganism;
-import genetics.api.organism.IOrganismType;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.DefaultStage;
@@ -60,53 +56,7 @@ public class Genetics {
 	//public void preInit(FMLCommonSetupEvent event) {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void registerBlocks(RegistryEvent.Register<Block> event) {
-		CapabilityManager.INSTANCE.register(IOrganism.class, new NullStorage<>(), () -> new IOrganism<IIndividual>() {
-			@Override
-			public Optional<IIndividual> getIndividual() {
-				throw new UnsupportedOperationException("Cannot use default implementation");
-			}
-
-			@Override
-			public boolean setIndividual(IIndividual individual) {
-				throw new UnsupportedOperationException("Cannot use default implementation");
-			}
-
-			@Override
-			public IIndividualRoot<IIndividual> getRoot() {
-				throw new UnsupportedOperationException("Cannot use default implementation");
-			}
-
-			@Override
-			public IOrganismType getType() {
-				throw new UnsupportedOperationException("Cannot use default implementation");
-			}
-
-			@Override
-			public boolean isEmpty() {
-				return false;
-			}
-
-			@Override
-			public IAllele getAllele(IChromosomeType type, boolean active) {
-				throw new UnsupportedOperationException("Cannot use default implementation");
-			}
-
-			@Override
-			public <A extends IAllele> A getAllele(IChromosomeAllele<A> type, boolean active) {
-				throw new UnsupportedOperationException("Cannot use default implementation");
-			}
-
-			@Override
-			public Optional<IAllele> getAlleleDirectly(IChromosomeType type, boolean active) {
-				throw new UnsupportedOperationException("Cannot use default implementation");
-			}
-
-			@Nonnull
-			@Override
-			public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
-				return LazyOptional.empty();
-			}
-		});
+		CapabilityManager.INSTANCE.register(IOrganism.class, new NullStorage<>(), () -> GeneticHelper.EMPTY);
 		CapabilityManager.INSTANCE.register(IGeneTemplate.class, new NullStorage<>(), () -> new IGeneTemplate() {
 			@Override
 			public Optional<IAllele> getAllele() {

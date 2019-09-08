@@ -32,7 +32,7 @@
 //	private final IDrawable tankOverlay;
 //
 //	public SqueezerRecipeCategory(IGuiHelper guiHelper) {
-//		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 62), "tile.for.squeezer.name");
+//		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 62), "block.forestry.squeezer.name");
 //
 //		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 60, 43, 18);
 //		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);

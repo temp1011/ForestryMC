@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 
+import forestry.arboriculture.ModuleArboriculture;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
@@ -27,6 +29,9 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		filter = this.tagToBuilder.keySet().stream().map(Tag::getId).collect(Collectors.toSet());
 		if (ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)) {
 			copy(ForestryTags.Blocks.CHARCOAL, ForestryTags.Items.CHARCOAL);
+		}
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
+			getBuilder(ItemTags.SAPLINGS).add(ModuleArboriculture.getItems().sapling);
 		}
 	}
 

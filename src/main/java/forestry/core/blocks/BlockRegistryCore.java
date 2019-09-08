@@ -16,6 +16,7 @@ import java.util.Map;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.item.ItemStack;
 
+import forestry.core.items.ItemBlockBase;
 import forestry.core.items.ItemBlockForestry;
 
 //TODO - tags, harvest levels
@@ -35,10 +36,10 @@ public class BlockRegistryCore extends BlockRegistry {
 
 	public BlockRegistryCore() {
 		analyzer = new BlockCore(BlockTypeCoreTesr.ANALYZER);
-		registerBlock(analyzer, new ItemBlockForestry<>(analyzer), "analyzer");
+		registerBlock(analyzer, new ItemBlockBase<>(analyzer, BlockTypeCoreTesr.ANALYZER), "analyzer");
 
 		escritoire = new BlockCore(BlockTypeCoreTesr.ESCRITOIRE);
-		registerBlock(escritoire, new ItemBlockForestry<>(escritoire), "escritoire");
+		registerBlock(escritoire, new ItemBlockBase<>(escritoire, BlockTypeCoreTesr.ESCRITOIRE), "escritoire");
 
 		bogEarth = new BlockBogEarth();
 		registerBlock(bogEarth, new ItemBlockForestry<>(bogEarth), "bog_earth");

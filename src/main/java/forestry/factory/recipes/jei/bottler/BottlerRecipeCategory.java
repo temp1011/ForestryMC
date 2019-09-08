@@ -30,7 +30,7 @@ package forestry.factory.recipes.jei.bottler;
 //	private final IDrawable tankOverlay;
 //
 //	public BottlerRecipeCategory(IGuiHelper guiHelper) {
-//		super(guiHelper.createBlankDrawable(62, 60), "tile.for.bottler.name");
+//		super(guiHelper.createBlankDrawable(62, 60), "block.forestry.bottler.name");
 //
 //		this.slot = guiHelper.getSlotDrawable();
 //		this.tank = guiHelper.createDrawable(guiTexture, 79, 13, 18, 60);

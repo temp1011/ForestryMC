@@ -19,6 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.ItemGroups;
+import forestry.core.ItemGroupForestry;
+import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.utils.OreDictUtil;
@@ -70,7 +72,7 @@ public class ItemRegistryCore extends ItemRegistry {
 
 	/* Soldering */
 	public final ItemSolderingIron solderingIron;
-	public final ItemCircuitBoard circuitboards;
+	public final Map<EnumCircuitBoardType, ItemCircuitBoard> circuitboards = new EnumMap<>(EnumCircuitBoardType.class);
 	public final Map<EnumElectronTube, ItemElectronTube> electronTubes = new EnumMap<>(EnumElectronTube.class);
 
 	/* Armor */
@@ -153,10 +155,13 @@ public class ItemRegistryCore extends ItemRegistry {
 		gearCopper = createItemForOreName(OreDictUtil.GEAR_COPPER, "gear_copper");
 		gearTin = createItemForOreName(OreDictUtil.GEAR_TIN, "gear_tin");
 
-		circuitboards = registerItem(new ItemCircuitBoard(), "chipsets");
+		for (EnumCircuitBoardType type : EnumCircuitBoardType.values()) {
+			ItemCircuitBoard board = new ItemCircuitBoard(type);
+			registerItem(board, "circuit_board_" + type.getName());
+			circuitboards.put(type, board);
+		}
 
 		solderingIron = new ItemSolderingIron((new Item.Properties()).maxDamage(5));
-//		solderingIron.setFull3D(); TODO
 		registerItem(solderingIron, "soldering_iron");
 
 		for (EnumElectronTube def : EnumElectronTube.VALUES) {
@@ -178,10 +183,10 @@ public class ItemRegistryCore extends ItemRegistry {
 		brokenBronzeShovel = registerItem(new ItemForestry(), "broken_bronze_shovel");
 
 		// / TOOLS
-		bronzePickaxe = new ItemForestryTool(new ItemStack(brokenBronzePickaxe), (new Item.Properties()).addToolType(ToolType.PICKAXE, 3));
+		bronzePickaxe = new ItemForestryTool(new ItemStack(brokenBronzePickaxe), (new Item.Properties()).addToolType(ToolType.PICKAXE, 3).maxDamage(200).group(ItemGroupForestry.tabForestry));
 		registerItem(bronzePickaxe, "bronze_pickaxe");
 
-		bronzeShovel = new ItemForestryTool(new ItemStack(brokenBronzeShovel), (new Item.Properties()).addToolType(ToolType.SHOVEL, 3));
+		bronzeShovel = new ItemForestryTool(new ItemStack(brokenBronzeShovel), (new Item.Properties()).addToolType(ToolType.SHOVEL, 3).maxDamage(200).group(ItemGroupForestry.tabForestry));
 		registerItem(bronzeShovel, "bronze_shovel");
 
 		// / ASSEMBLY KITS
@@ -223,6 +228,9 @@ public class ItemRegistryCore extends ItemRegistry {
 		return new ItemStack(craftingMaterials.get(type), amount);
 	}
 
+	public ItemStack getCircuitBoard(EnumCircuitBoardType type, int amount) {
+		return new ItemStack(circuitboards.get(type), amount);
+	}
 
 	public ItemStack getElectronTube(EnumElectronTube type, int amount) {
 		return new ItemStack(electronTubes.get(type), amount);

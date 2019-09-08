@@ -12,6 +12,7 @@ import genetics.api.individual.IChromosomeAllele;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
 
 /**
  * Implement this interface as a capability which should provide the genetic information of an item.
@@ -34,7 +35,7 @@ public interface IOrganism<I extends IIndividual> extends ICapabilityProvider {
 	/**
 	 * @return The root of the individual.
 	 */
-	IIndividualRoot<I> getRoot();
+	IRootDefinition<? extends IIndividualRoot<I>> getDefinition();
 
 	/**
 	 * @return The species type of the individual.

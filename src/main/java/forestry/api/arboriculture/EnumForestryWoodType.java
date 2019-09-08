@@ -76,26 +76,26 @@ public enum EnumForestryWoodType implements IWoodType {
 
 	@Override
 	public String getPlankTexture() {
-		return "forestry:blocks/wood/planks." + getName();
+		return "forestry:block/wood/planks." + getName();
 	}
 
 	@Override
 	public String getDoorLowerTexture() {
-		return "forestry:blocks/doors/" + getName() + "_lower";
+		return "forestry:block/doors/" + getName() + "_lower";
 	}
 
 	@Override
 	public String getDoorUpperTexture() {
-		return "forestry:blocks/doors/" + getName() + "_upper";
+		return "forestry:block/doors/" + getName() + "_upper";
 	}
 
 	@Override
 	public String getBarkTexture() {
-		return "forestry:blocks/wood/bark." + getName();
+		return "forestry:block/wood/bark." + getName();
 	}
 
 	@Override
 	public String getHeartTexture() {
-		return "forestry:blocks/wood/heart." + getName();
+		return "forestry:block/wood/heart." + getName();
 	}
 }

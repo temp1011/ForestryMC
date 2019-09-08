@@ -75,7 +75,7 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	@Override
 	public ITextComponent getDisplayName(ItemStack itemstack) {
 		if (contained.isEmpty()) {
-			return new TranslationTextComponent("item.forestry.crate.name");
+			return new TranslationTextComponent("item.forestry.crate");
 		} else {
 			ITextComponent containedName = contained.getDisplayName();
 			return new TranslationTextComponent("for.item.crated.grammar", containedName);

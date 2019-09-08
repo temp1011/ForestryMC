@@ -179,6 +179,9 @@ public class GeneticsUtil {
 		}
 
 		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
+			if (!definition.isRootPresent()) {
+				continue;
+			}
 			IIndividualRoot<IIndividual> root = definition.get();
 			Optional<IIndividual> individual = root.getTranslator().translateMember(itemStack);
 			if (individual.isPresent()) {

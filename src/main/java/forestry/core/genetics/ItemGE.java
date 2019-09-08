@@ -17,7 +17,6 @@ import java.util.Optional;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -34,8 +33,8 @@ import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.core.items.ItemForestry;
 
 public abstract class ItemGE extends ItemForestry {
-	protected ItemGE(ItemGroup creativeTab) {
-		super((new Item.Properties()).group(creativeTab).setNoRepair());
+	protected ItemGE(Item.Properties properties) {
+		super(properties.setNoRepair());
 		//TODO - properties
 //		setHasSubtypes(true);
 	}
@@ -46,12 +45,6 @@ public abstract class ItemGE extends ItemForestry {
 	public boolean isDamageable() {
 		return false;
 	}
-
-	//TODO - what is this now
-//	@Override
-//	public boolean getShareTag() {
-//		return true;
-//	}
 
 	@Override
 	public boolean hasEffect(ItemStack stack) {
@@ -65,7 +58,7 @@ public abstract class ItemGE extends ItemForestry {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		if (itemstack.getTag() == null) {
+		if (!itemstack.hasTag()) {
 			return;
 		}
 

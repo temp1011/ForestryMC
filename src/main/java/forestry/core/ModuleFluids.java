@@ -82,10 +82,8 @@ public class ModuleFluids extends BlankForestryModule {
 		if (!Config.isBlockEnabled(definition.getTag())) {
 			return;
 		}
-		IForgeRegistry<Block> registry = ForgeRegistries.BLOCKS;
 		Block sourceBlock = createBlock(definition, false);
 		Block flowingBlock = createBlock(definition, true);
-		registry.registerAll(sourceBlock, flowingBlock);
 		definition.setSourceBlock(sourceBlock);
 		definition.setFlowingBlock(flowingBlock);
 		/*if (fluidBlock == null) {

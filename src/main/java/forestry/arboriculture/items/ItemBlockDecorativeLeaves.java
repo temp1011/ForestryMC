@@ -1,5 +1,6 @@
 package forestry.arboriculture.items;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
@@ -11,6 +12,7 @@ import genetics.api.individual.IGenome;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.api.core.ItemGroups;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -19,7 +21,7 @@ import forestry.core.items.ItemBlockForestry;
 
 public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorativeLeaves> implements IColoredItem {
 	public ItemBlockDecorativeLeaves(BlockDecorativeLeaves block) {
-		super(block);
+		super(block, new Item.Properties().group(ItemGroups.tabArboriculture));
 	}
 
 	@Override

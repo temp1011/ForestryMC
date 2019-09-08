@@ -12,6 +12,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public interface IItemModelRegister {
 
 	@OnlyIn(Dist.CLIENT)
-	void registerModel(Item item, IModelManager manager);
+	default void registerModel(Item item, IModelManager manager) {
+
+	}
 
 }

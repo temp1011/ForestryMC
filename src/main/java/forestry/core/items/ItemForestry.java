@@ -40,7 +40,7 @@ public class ItemForestry extends Item implements IItemModelRegister {
 
 	//TODO may be worth removing this
 	public ItemForestry() {
-		this(new Item.Properties().group(ItemGroupForestry.tabForestry));
+		this(ItemGroupForestry.tabForestry);
 	}
 
 	public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {

@@ -106,7 +106,7 @@ public class ParticleHelper {
 //						callback.addDestroyEffects(fx.setBlockPos(pos), world, pos, state);
 //					}
 					//TODO correct?
-					effectRenderer.addBlockDestroyEffects(pos, state);
+					//effectRenderer.addBlockDestroyEffects(pos, state);
 
 				}
 			}

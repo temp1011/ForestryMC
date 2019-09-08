@@ -37,9 +37,9 @@ public class ModelAnalyzer extends Model {
 	public ModelAnalyzer(String gfxBase) {
 
 		textures = new ResourceLocation[]{
-			new ForestryResource(gfxBase + "pedestal.png"),
-			new ForestryResource(gfxBase + "tower1.png"),
-			new ForestryResource(gfxBase + "tower2.png"),
+			new ForestryResource(gfxBase + "_pedestal.png"),
+			new ForestryResource(gfxBase + "_tower1.png"),
+			new ForestryResource(gfxBase + "_tower2.png"),
 		};
 
 		pedestal = new RendererModel(this, 0, 0);

@@ -29,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.core.ItemGroupForestry;
 import forestry.core.blocks.IBlockRotatable;
 import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.tiles.TileForestry;
@@ -37,11 +38,12 @@ import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemBlockForestry<B extends Block> extends BlockItem {
 
+	public ItemBlockForestry(B block, Item.Properties builder) {
+		super(block, builder);
+	}
+
 	public ItemBlockForestry(B block) {
-		super(block, (new Item.Properties()));    //TODO need to reduce inheritance with these classes I think.
-																//or introduce a builder...
-//	TODO done in item or flatten
-//		setHasSubtypes(true);
+		this(block, new Item.Properties().group(ItemGroupForestry.tabForestry));
 	}
 
 	@Override

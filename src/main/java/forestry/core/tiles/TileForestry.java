@@ -216,11 +216,9 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	/**
 	 * Gets the tile's unlocalized name, based on the block at the location of this entity (client-only).
 	 */
-	//TODO - flatten
 	@Override
 	public String getUnlocalizedTitle() {
-		String blockUnlocalizedName = getBlockState().getBlock().getTranslationKey();
-		return blockUnlocalizedName + '.' + 0 + ".name";
+		return getBlockState().getBlock().getTranslationKey();
 	}
 
 	/* INVENTORY BASICS */

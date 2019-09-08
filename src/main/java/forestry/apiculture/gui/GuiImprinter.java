@@ -19,6 +19,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 
 import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganism;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
@@ -49,10 +50,12 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 		NonNullList<ItemStack> beeList = NonNullList.create();
 		ModuleApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
-			IAlleleBeeSpecies species = GeneticHelper.getOrganism(beeStack).getAllele(BeeChromosomes.SPECIES, true);
-			if (species != null) {
-				iconStacks.put(species.getRegistryName().toString(), beeStack);
+			IOrganism<?> organism = GeneticHelper.getOrganism(beeStack);
+			if (organism.isEmpty()) {
+				continue;
 			}
+			IAlleleBeeSpecies species = organism.getAllele(BeeChromosomes.SPECIES, true);
+			iconStacks.put(species.getRegistryName().toString(), beeStack);
 		}
 	}
 
@@ -60,8 +63,8 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		int offset = (138 - getFontRenderer().getStringWidth(Translator.translateToLocal("for.gui.imprinter.name"))) / 2;
-		getFontRenderer().drawString(Translator.translateToLocal("for.gui.imprinter.name"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
+		int offset = (138 - getFontRenderer().getStringWidth(Translator.translateToLocal("for.gui.imprinter"))) / 2;
+		getFontRenderer().drawString(Translator.translateToLocal("for.gui.imprinter"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		IAlleleBeeSpecies primary = itemInventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);

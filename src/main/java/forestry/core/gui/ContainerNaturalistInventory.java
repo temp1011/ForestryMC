@@ -34,12 +34,12 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 	private int page;
 	private int maxPage;
 
-	public ContainerNaturalistInventory(int windowId, PlayerInventory player, TileNaturalistChest tile, int maxPage) {
+	public ContainerNaturalistInventory(int windowId, PlayerInventory player, TileNaturalistChest tile, int page) {
 		super(windowId, ModuleCore.getContainerTypes().NATURALIST_INVENTORY, player, tile, 18, 120);
 
+		this.page = page;
+		this.maxPage = 5;
 		addInventory(this, tile, page);
-		this.page = 0;	//TODO I think this is what we want. Open container aat page 0.
-		this.maxPage = maxPage;
 	}
 
 	//TODO this is hardcoded to max page. So is the maxPage field needed??

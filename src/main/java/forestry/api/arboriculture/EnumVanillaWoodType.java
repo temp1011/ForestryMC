@@ -48,41 +48,26 @@ public enum EnumVanillaWoodType implements IWoodType {
 
 	@Override
 	public String getPlankTexture() {
-		if (this == DARK_OAK) {
-			return "blocks/planks_big_oak";
-		}
-		return "blocks/planks_" + getName();
+		return "block/" + getName() + "_planks";
 	}
 
 	@Override
 	public String getDoorLowerTexture() {
-		if (this == OAK) {
-			return "blocks/door_wood_lower";
-		}
-		return "blocks/door_wood_lower";
+		return "block/" + getName() + "_door_lower";
 	}
 
 	@Override
 	public String getDoorUpperTexture() {
-		if (this == OAK) {
-			return "blocks/door_wood_upper";
-		}
-		return "blocks/door_" + getName() + "_upper";
+		return "block/" + getName() + "_door_upper";
 	}
 
 	@Override
 	public String getBarkTexture() {
-		if (this == DARK_OAK) {
-			return "blocks/log_big_oak";
-		}
-		return "blocks/log_" + getName();
+		return "block/" + getName() + "_log";
 	}
 
 	@Override
 	public String getHeartTexture() {
-		if (this == DARK_OAK) {
-			return "blocks/log_big_oak_top";
-		}
-		return "blocks/log_" + getName() + "_top";
+		return "block/" + getName() + "_log_top";
 	}
 }

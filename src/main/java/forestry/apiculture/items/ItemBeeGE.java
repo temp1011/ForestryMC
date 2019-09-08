@@ -52,12 +52,8 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	private final EnumBeeType type;
 
 	public ItemBeeGE(EnumBeeType type) {
-		super(ItemGroups.tabApiculture);
+		super(type != EnumBeeType.DRONE ? new Item.Properties().group(ItemGroups.tabApiculture).maxDamage(1) : new Item.Properties().group(ItemGroups.tabApiculture));
 		this.type = type;
-		if (type != EnumBeeType.DRONE) {
-			//TODO - item properties
-//			setMaxStackSize(1);
-		}
 	}
 
 	@Nullable
@@ -87,7 +83,6 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		if (Translator.canTranslateToLocal(customBeeKey)) {
 			return new TranslationTextComponent(customBeeKey);
 		}
-		ITextComponent beeGrammar = new TranslationTextComponent("for.bees.grammar." + type.getName());
 		ITextComponent beeSpecies = individual.getGenome().getPrimary().getDisplayName();
 		ITextComponent beeType = new TranslationTextComponent("for.bees.grammar." + type.getName() + ".type");
 		return new TranslationTextComponent("for.bees.grammar." + type.getName(), beeSpecies, beeType);
@@ -125,7 +120,6 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	}
 
 	public void addCreativeItems(NonNullList<ItemStack> subItems, boolean hideSecrets) {
-		//TODO beeRoot only set in setupAPI but this is called earlier
 		//so need to adjust init sequence
 		IBeeRoot root = BeeHelper.getRoot();
 		for (IBee bee : root.getIndividualTemplates()) {//BeeManager.beeRoot.getIndividualTemplates()) {

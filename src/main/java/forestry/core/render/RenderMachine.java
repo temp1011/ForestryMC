@@ -19,7 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -31,7 +31,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
 
-public class RenderMachine extends TileEntityRenderer<TileBase> {
+public class RenderMachine implements IForestryRenderer<TileBase> {
 
 	private final RendererModel basefront;
 	private final RendererModel baseback;
@@ -84,24 +84,20 @@ public class RenderMachine extends TileEntityRenderer<TileBase> {
 		}
 	}
 
-	/**
-	 * @param tile If it null its render the item else it render the tile entity.
-	 */
 	@Override
-	public void render(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
-		if (tile != null) {
-			IRenderableTile generator = (IRenderableTile) tile;
-			World worldObj = tile.getWorldObj();
-			if (worldObj.isBlockLoaded(tile.getPos())) {
-				BlockState blockState = worldObj.getBlockState(tile.getPos());
-				if (blockState.getBlock() instanceof BlockBase) {
-					Direction facing = blockState.get(BlockBase.FACING);
-					render(generator.getResourceTankInfo(), generator.getProductTankInfo(), facing, x, y, z, destroyStage);
-					return;
-				}
-			}
+	public void renderTile(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
+		IRenderableTile generator = (IRenderableTile) tile;
+		World worldObj = tile.getWorldObj();
+		BlockState blockState = worldObj.getBlockState(tile.getPos());
+		if (blockState.getBlock() instanceof BlockBase) {
+			Direction facing = blockState.get(BlockBase.FACING);
+			render(generator.getResourceTankInfo(), generator.getProductTankInfo(), facing, x, y, z, destroyStage);
 		}
-		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, Direction.SOUTH, x, y, z, -1);
+	}
+
+	@Override
+	public void renderItem(ItemStack stack) {
+		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, Direction.SOUTH, 0, 0, 0, -1);
 	}
 
 	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, Direction orientation, double x, double y, double z, int destroyStage) {

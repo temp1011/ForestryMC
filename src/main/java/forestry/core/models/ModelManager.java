@@ -22,6 +22,7 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -214,7 +215,10 @@ public class ModelManager implements IModelManager {
 		//register custom models
 		Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
 		for (final BlockModelEntry entry : customBlockModels) {
-			registry.put(entry.blockModelLocation, entry.model);
+			for (BlockState state : entry.block.getStateContainer().getValidStates()) {
+				IBakedModel model = registry.get(BlockModelShapes.getModelLocation(state));
+				registry.put(BlockModelShapes.getModelLocation(state), entry.model);
+			}
 			if (entry.itemModelLocation != null) {
 				registry.put(entry.itemModelLocation, entry.model);
 			}

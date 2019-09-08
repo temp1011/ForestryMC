@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.IModelData;
 
 import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
@@ -58,7 +59,7 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 	}
 
 	@Override
-	protected Key getWorldKey(BlockState state) {
+	protected Key getWorldKey(BlockState state, IModelData extraData) {
 //		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
 //		IBlockReader world = stateExtended.getComb(UnlistedBlockAccess.BLOCKACCESS);
 //		BlockPos pos = stateExtended.getComb(UnlistedBlockPos.POS);
@@ -76,7 +77,7 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 	}
 
 	@Override
-	protected void bakeBlock(BlockFarm blockFarm, Key key, ModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockFarm blockFarm, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
 		TextureAtlasSprite[] textures = getSprites(key.texture);
 
 		// Add the plain block.

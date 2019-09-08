@@ -31,7 +31,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.world.BlockEvent;
@@ -39,6 +41,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.IWoodType;
@@ -54,6 +58,7 @@ import forestry.arboriculture.genetics.TreeFactory;
 import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
+import forestry.arboriculture.models.SaplingModelLoader;
 import forestry.arboriculture.models.TextureLeaves;
 import forestry.arboriculture.models.WoodTextureManager;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
@@ -81,7 +86,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 	public static final List<Block> validFences = new ArrayList<>();
 
-
 	@Nullable
 	private static ItemRegistryArboriculture items;
 	@Nullable
@@ -93,6 +97,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 	public ModuleArboriculture() {
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyArboricultureClient(), () -> () -> new ProxyArboriculture());
+		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 
 	public static ItemRegistryArboriculture getItems() {
@@ -126,31 +131,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 	@Override
 	public void registerBlocks() {
 		blocks = new BlockRegistryArboriculture();
-	}
-
-	@Override
-	public void registerItems() {
-		items = new ItemRegistryArboriculture();
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryArboriculture();
-	}
-
-	@Override
-	public void preInit() {
-		// Capabilities
-		CapabilityManager.INSTANCE.register(IArmorNaturalist.class, new NullStorage<>(), () -> ArmorNaturalist.INSTANCE);
-
-		MinecraftForge.EVENT_BUS.register(this);
-
-		//TODO: World Gen
-		if (TreeConfig.getSpawnRarity(null) > 0.0F) {
-			//MinecraftForge.TERRAIN_GEN_BUS.register(new TreeDecorator());
-		}
-
-		BlockRegistryArboriculture blocks = getBlocks();
 
 		WoodAccess woodAccess = WoodAccess.getInstance();
 
@@ -175,6 +155,29 @@ public class ModuleArboriculture extends BlankForestryModule {
 		woodAccess.registerFences(blocks.fencesVanillaFireproof.values());
 		woodAccess.registerFenceGates(blocks.fenceGatesVanillaFireproof.values());
 		woodAccess.registerStairs(blocks.stairsVanillaFireproof.values());
+	}
+
+	@Override
+	public void registerItems() {
+		items = new ItemRegistryArboriculture();
+	}
+
+	@Override
+	public void registerTiles() {
+		tiles = new TileRegistryArboriculture();
+	}
+
+	@Override
+	public void preInit() {
+		// Capabilities
+		CapabilityManager.INSTANCE.register(IArmorNaturalist.class, new NullStorage<>(), () -> ArmorNaturalist.INSTANCE);
+
+		MinecraftForge.EVENT_BUS.register(this);
+
+		//TODO: World Gen
+		if (TreeConfig.getSpawnRarity(null) > 0.0F) {
+			//MinecraftForge.TERRAIN_GEN_BUS.register(new TreeDecorator());
+		}
 
 		// Init rendering
 		proxy.initializeModels();
@@ -395,6 +398,19 @@ public class ModuleArboriculture extends BlankForestryModule {
 	@OnlyIn(Dist.CLIENT)
 	public void onModelBake(ModelBakeEvent event) {
 		((ProxyArboricultureClient) proxy).onModelBake(event);
+	}
+
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public void onModelRegister(ModelRegistryEvent event) {
+		((ProxyArboricultureClient) proxy).onModelRegister();
+	}
+
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public void onClientSetup(FMLClientSetupEvent event) {
+		ModelLoaderRegistry.registerLoader(SaplingModelLoader.INSTANCE);
+		blocks.treeChest.clientInit();
 	}
 
 	@Override

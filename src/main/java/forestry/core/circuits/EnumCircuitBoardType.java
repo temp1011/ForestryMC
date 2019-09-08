@@ -24,13 +24,19 @@ public enum EnumCircuitBoardType {
 	INTRICATE(4);
 
 	private final int sockets;
+	private final String name;
 
 	EnumCircuitBoardType(int sockets) {
+		this.name = toString().toLowerCase(Locale.ENGLISH);
 		this.sockets = sockets;
 	}
 
 	public int getSockets() {
 		return sockets;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	@OnlyIn(Dist.CLIENT)

@@ -56,6 +56,7 @@ import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
 import forestry.core.data.ForestryBlockTagsProvider;
 import forestry.core.data.ForestryItemTagsProvider;
+import forestry.core.data.ForestryLootTableProvider;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.multiblock.MultiblockEventHandler;
@@ -131,6 +132,8 @@ public class Forestry {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientStuff);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::gatherData);
 		FMLJavaModLoadingContext.get().getModEventBus().register(TickHandlerCoreServer.class);    //TODO - correct?
+		EventHandlerCore eventHandlerCore = new EventHandlerCore();
+		FMLJavaModLoadingContext.get().getModEventBus().register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(this);
 		//TODO - I think this is how it works
 		Proxies.render = DistExecutor.runForDist(() -> () -> new ProxyRenderClient(), () -> () -> new ProxyRender());
@@ -157,8 +160,6 @@ public class Forestry {
 		packetHandler = new PacketHandlerServer();
 
 		// Register event handler
-		EventHandlerCore eventHandlerCore = new EventHandlerCore();
-		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 		MinecraftForge.EVENT_BUS.register(Config.class);
 		Proxies.common.registerEventHandlers();
@@ -184,6 +185,13 @@ public class Forestry {
 		if (event.includeServer()) {
 			generator.addProvider(new ForestryBlockTagsProvider(generator));
 			generator.addProvider(new ForestryItemTagsProvider(generator));
+			generator.addProvider(new ForestryLootTableProvider(generator));
+			try {
+				generator.run();
+			} catch (Exception e) {
+				getConfigFolder();
+			}
+			//generator.run();
 		}
 	}
 

@@ -27,9 +27,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -117,6 +123,10 @@ public class ModuleFactory extends BlankForestryModule {
 
 	public static FactoryContainerTypes getContainerTypes() {
 		return containerTypes;
+	}
+
+	public ModuleFactory() {
+		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 
 	@Override
@@ -634,6 +644,22 @@ public class ModuleFactory extends BlankForestryModule {
 	public static boolean machineEnabled(String machineName) {
 		Boolean ret = MACHINE_ENABLED.get(machineName);
 		return ret != null && ret;
+	}
+
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public void onClientSetup(FMLClientSetupEvent event) {
+		blocks.bottler.clientInit();
+		blocks.carpenter.clientInit();
+		blocks.centrifuge.clientInit();
+		blocks.fermenter.clientInit();
+		blocks.moistener.clientInit();
+		blocks.squeezer.clientInit();
+		blocks.still.clientInit();
+		blocks.rainmaker.clientInit();
+
+		blocks.fabricator.clientInit();
+		blocks.raintank.clientInit();
 	}
 }
 

@@ -46,6 +46,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.core.IModelManager;
 import forestry.core.ItemGroupForestry;
@@ -79,7 +80,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 			subItems.add(new ItemStack(this));
 
 			// filled
-			for (Fluid fluid : new Fluid[0]){//FluidRegistry.getRegisteredFluids().values()) {
+			for (Fluid fluid : ForgeRegistries.FLUIDS.getValues()) {
 				ItemStack itemStack = new ItemStack(this);
 				IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
 				if (fluidHandler.fill(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE) == FluidAttributes.BUCKET_VOLUME) {
@@ -94,7 +95,6 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		return type;
 	}
 
-	@Nullable
 	protected FluidStack getContained(ItemStack itemStack) {
 		if (itemStack.getCount() != 1) {
 			itemStack = itemStack.copy();
@@ -109,8 +109,8 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		Item item = stack.getItem();
 		if (item instanceof ItemFluidContainerForestry) {
 			FluidStack fluid = getContained(stack);
-			if (fluid != null) {
-				String exactTranslationKey = "item.forestry." + type.getName() + '.' + fluid.getFluid().getRegistryName() + ".name";
+			if (!fluid.isEmpty()) {
+				String exactTranslationKey = "item.forestry." + type.getName() + '.' + fluid.getFluid().getRegistryName();
 				if (Translator.canTranslateToLocal(exactTranslationKey)) {	//TODO - can't call this on the server!! Maybe make custom textcomponent to handle this?
 					return new TranslationTextComponent(exactTranslationKey);
 				} else {
@@ -118,7 +118,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 					return new TranslationTextComponent(grammarKey, fluid.getDisplayName());
 				}
 			} else {
-				String unlocalizedname = "item.forestry." + type.getName() + ".empty.name";
+				String unlocalizedname = "item.forestry." + type.getName() + ".empty";
 				return new TranslationTextComponent(unlocalizedname);
 			}
 		}
@@ -153,7 +153,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	@Nullable
 	protected DrinkProperties getDrinkProperties(ItemStack itemStack) {
 		FluidStack contained = getContained(itemStack);
-		if (contained != null) {
+		if (!contained.isEmpty()) {
 			Fluids definition = Fluids.getFluidDefinition(contained);
 			if (definition != null) {
 				return definition.getDrinkProperties();

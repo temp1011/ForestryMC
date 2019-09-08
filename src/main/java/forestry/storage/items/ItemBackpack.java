@@ -30,6 +30,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -76,15 +77,13 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 		this.definition = definition;
 		this.type = type;
+		addPropertyOverride(new ResourceLocation("mode"), (itemStack, world, livingEntity) -> {
+			return getMode(itemStack).ordinal();
+		});
 	}
 
 	public IBackpackDefinition getDefinition() {
 		return definition;
-	}
-
-	@Override
-	public boolean shouldSyncTag() {
-		return true;
 	}
 
 	@Override
@@ -221,7 +220,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		if (infoKey != null) {
 			list.add(new TranslationTextComponent(infoKey).applyTextStyle(TextFormatting.GRAY));
 		}
-		list.add(new TranslationTextComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).applyTextStyle(TextFormatting.GRAY));    //TODO will this formatting work?
+		list.add(new TranslationTextComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).applyTextStyle(TextFormatting.GRAY));
 	}
 
 	@Override

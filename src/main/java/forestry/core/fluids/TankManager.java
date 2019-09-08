@@ -163,6 +163,9 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 
 		FluidStack fluidStack = tank.getFluid();
 		FluidStack prev = prevFluidStacks.get(container, tankIndex);
+		if (prev == null) {
+			prev = FluidStack.EMPTY;
+		}
 		if (FluidHelper.areFluidStacksEqual(fluidStack, prev)) {
 			return;
 		}
@@ -181,7 +184,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 				}
 			}
 
-			if (fluid == null) {
+			if (fluid.isEmpty()) {
 				prevFluidStacks.remove(container, tankIndex);
 			} else {
 				prevFluidStacks.put(container, tankIndex, fluid.copy());

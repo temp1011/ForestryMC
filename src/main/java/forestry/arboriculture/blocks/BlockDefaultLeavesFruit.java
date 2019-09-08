@@ -1,7 +1,6 @@
 package forestry.arboriculture.blocks;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -10,14 +9,11 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -44,43 +40,15 @@ import forestry.core.utils.NetworkUtil;
  * Genetic leaves with no tile entity, used for worldgen trees.
  * Similar to decorative leaves, but these will drop saplings and can be used for pollination.
  */
-public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
-	private static final int VARIANTS_PER_BLOCK = 4;
+public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
+	private final TreeDefinition definition;
 
-	public static List<BlockDefaultLeavesFruit> create() {
-		List<BlockDefaultLeavesFruit> blocks = new ArrayList<>();
-		final int blockCount = PropertyTreeTypeFruit.getBlockCount(VARIANTS_PER_BLOCK);
-		for (int blockNumber = 0; blockNumber < blockCount; blockNumber++) {
-			final PropertyTreeTypeFruit variant = PropertyTreeTypeFruit.create("variant", blockNumber, VARIANTS_PER_BLOCK);
-			BlockDefaultLeavesFruit block = new BlockDefaultLeavesFruit(blockNumber) {
-				@Override
-				public PropertyTreeTypeFruit getVariant() {
-					return variant;
-				}
-			};
-			blocks.add(block);
-		}
-		return blocks;
-	}
-
-	protected final int blockNumber;
-
-	public BlockDefaultLeavesFruit(int blockNumber) {
+	public BlockDefaultLeavesFruit(TreeDefinition definition) {
 		super(Block.Properties.create(Material.LEAVES)
 			.hardnessAndResistance(0.2f)
 			.sound(SoundType.PLANT)
 			.tickRandomly());
-		this.blockNumber = blockNumber;
-		PropertyTreeTypeFruit variant = getVariant();
-		setDefaultState(getStateContainer().getBaseState()
-			.with(variant, variant.getFirstType())
-			.with(DISTANCE, 7).with(PERSISTENT, false));
-	}
-
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> p_206840_1_) {
-		super.fillStateContainer(p_206840_1_);
-		p_206840_1_.add(getVariant());
+		this.definition = definition;
 	}
 
 	@Override
@@ -130,42 +98,13 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 		}
 	}
 
-	public int getBlockNumber() {
-		return blockNumber;
-	}
-
-	protected abstract PropertyTreeTypeFruit getVariant();
-
-	@Nullable
-	public PropertyTreeTypeFruit.LeafVariant getLeafVariant(BlockState blockState) {
-		if (blockState.getBlock() == this) {
-			return blockState.get(getVariant());
-		} else {
-			return null;
-		}
-	}
-
-	public PropertyTreeTypeFruit.LeafVariant getTreeType(int meta) {
-		int variantCount = getVariant().getAllowedValues().size();
-		int variantMeta = (meta % variantCount) + blockNumber * VARIANTS_PER_BLOCK;
-		return PropertyTreeTypeFruit.getVariant(variantMeta);
-	}
-
-	@Override
-	public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world, BlockPos pos1, BlockPos pos2, Hand hand) {
-		PropertyTreeTypeFruit.LeafVariant type = getTreeType(0);
-		return getDefaultState().with(getVariant(), type);
+	public TreeDefinition getDefinition() {
+		return definition;
 	}
 
 	@Override
 	protected ITree getTree(IBlockReader world, BlockPos pos) {
-		BlockState blockState = world.getBlockState(pos);
-		PropertyTreeTypeFruit.LeafVariant treeDefinition = getLeafVariant(blockState);
-		if (treeDefinition != null) {
-			return treeDefinition.definition.createIndividual();
-		} else {
-			return null;
-		}
+		return definition.createIndividual();
 	}
 
 	/* RENDERING */
@@ -192,14 +131,7 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
-		PropertyTreeTypeFruit.LeafVariant variant = getLeafVariant(state);
-		TreeDefinition treeDefinition;
-		if (variant != null) {
-			treeDefinition = variant.definition;
-		} else {
-			treeDefinition = TreeDefinition.Oak;
-		}
-		IGenome genome = treeDefinition.getGenome();
+		IGenome genome = definition.getGenome();
 		if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			return fruitProvider.getDecorativeColor();

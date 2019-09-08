@@ -31,7 +31,6 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 		.maxDamage(0)
 		.group(ItemGroups.tabApiculture)
 		.setNoRepair());
-//		setHasSubtypes(true); TODO - flatten?
 
 		this.type = type;
 	}

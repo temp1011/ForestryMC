@@ -50,13 +50,17 @@ public class ProxyClient extends ProxyCommon {
 	@Override
 	public void registerBlock(Block block) {
 		ModelManager.getInstance().registerBlockClient(block);
-		TextureManagerForestry.getInstance().registerBlock(block);
+		if (Minecraft.getInstance() != null) {
+			TextureManagerForestry.getInstance().registerBlock(block);
+		}
 	}
 
 	@Override
 	public void registerItem(Item item) {
 		ModelManager.getInstance().registerItemClient(item);
-		TextureManagerForestry.getInstance().registerItem(item);
+		if (Minecraft.getInstance() != null) {
+			TextureManagerForestry.getInstance().registerItem(item);
+		}
 	}
 
 	@Override

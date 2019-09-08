@@ -93,6 +93,11 @@ public class ModuleMail extends BlankForestryModule {
 	}
 
 	@Override
+	public void registerTiles() {
+		tiles = new TileRegistryMail();
+	}
+
+	@Override
 	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
 		containerTypes = new MailContainerTypes(registry);
 	}

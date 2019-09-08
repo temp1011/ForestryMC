@@ -10,23 +10,22 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import com.google.common.base.Preconditions;
-
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.core.ItemGroups;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
 import forestry.arboriculture.items.ItemBlockLeaves;
@@ -34,7 +33,7 @@ import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemBlockWoodDoor;
 import forestry.arboriculture.items.ItemBlockWoodSlab;
 import forestry.core.blocks.BlockRegistry;
-import forestry.core.items.ItemBlockForestry;
+import forestry.core.items.ItemBlockBase;
 
 public class BlockRegistryArboriculture extends BlockRegistry {
 	//TODO mega table with WoodBlockKind and IWoodType?
@@ -68,8 +67,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public final BlockSapling saplingGE;
 	public final BlockForestryLeaves leaves;
 	public final Map<TreeDefinition, BlockDefaultLeaves> leavesDefault = new EnumMap<>(TreeDefinition.class);
-	public final List<BlockDefaultLeavesFruit> leavesDefaultFruit;
-	public final Map<String, BlockState> speciesToLeavesDefaultFruit;
+	public final Map<TreeDefinition, BlockDefaultLeavesFruit> leavesDefaultFruit = new EnumMap<>(TreeDefinition.class);
 	public final Map<TreeDefinition, BlockDecorativeLeaves> leavesDecorative = new EnumMap<>(TreeDefinition.class);
 	public final Map<String, BlockFruitPod> podsMap;
 
@@ -195,25 +193,11 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 		// Saplings
 		saplingGE = new BlockSapling();
-		registerBlock(saplingGE, new ItemBlockForestry<>(saplingGE), "sapling_ge");
+		registerBlock(saplingGE, "sapling_ge");
 
 		// Leaves
 		leaves = new BlockForestryLeaves();
 		registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves");
-
-		leavesDefaultFruit = BlockDefaultLeavesFruit.create();
-		speciesToLeavesDefaultFruit = new HashMap<>();
-		for (BlockDefaultLeavesFruit leaves : leavesDefaultFruit) {
-			registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves.default.fruit." + leaves.getBlockNumber());
-
-			PropertyTreeTypeFruit treeType = leaves.getVariant();
-			for (PropertyTreeTypeFruit.LeafVariant variant : treeType.getAllowedValues()) {
-				Preconditions.checkNotNull(variant);
-				String speciesUid = variant.definition.getUID();
-				BlockState blockState = leaves.getDefaultState().with(treeType, variant);
-				speciesToLeavesDefaultFruit.put(speciesUid, blockState);
-			}
-		}
 
 		for(TreeDefinition definition : TreeDefinition.VALUES) {
 			//decorative
@@ -226,6 +210,11 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			BlockDefaultLeaves defaultLeaves = new BlockDefaultLeaves(definition);
 			registerBlock(defaultLeaves, new ItemBlockLeaves(leaves), definition.getName() + "_default_leaves");
 			leavesDefault.put(definition, defaultLeaves);
+
+			//default fruit leaves
+			BlockDefaultLeavesFruit defaultLeavesFruit = new BlockDefaultLeavesFruit(definition);
+			registerBlock(defaultLeavesFruit, new ItemBlockLeaves(defaultLeavesFruit), definition.getName() + "_default_leaves_fruit");
+			leavesDefaultFruit.put(definition, defaultLeavesFruit);
 		}
 
 		// Pods
@@ -238,7 +227,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 		// Machines
 		treeChest = new BlockArboriculture(BlockTypeArboricultureTesr.ARB_CHEST);
-		registerBlock(treeChest, new ItemBlockForestry<>(treeChest), "tree_chest");
+		registerBlock(treeChest, new ItemBlockBase<>(treeChest, new Item.Properties().group(ItemGroups.tabArboriculture), BlockTypeArboricultureTesr.ARB_CHEST), "tree_chest");
 	}
 
 	//TODO probably slow etc
@@ -261,8 +250,14 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 		return block.map(Block::getDefaultState).orElse(null);
 	}
 
+	@Nullable
 	public BlockState getDefaultLeavesFruit(String speciesUid) {
-		return speciesToLeavesDefaultFruit.get(speciesUid);
+		Optional<BlockDefaultLeavesFruit> block = leavesDefaultFruit.entrySet().stream()
+			.filter(e -> e.getKey().getUID().equals(speciesUid))
+			.findFirst()
+			.map(Map.Entry::getValue);
+
+		return block.map(Block::getDefaultState).orElse(null);
 	}
 
 	@Nullable

@@ -338,6 +338,10 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 //		super.drawGradientRect(par1, par2, par3, par4, par5, par6);
 //	}
 
+	public int getBlitOffset() {
+		return blitOffset;
+	}
+
 	public List<Rectangle> getExtraGuiAreas() {
 		return ledgerManager.getLedgerAreas();
 	}

@@ -16,6 +16,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import genetics.api.GeneticHelper;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.individual.IGenome;
+import genetics.api.organism.IOrganism;
 import genetics.api.organism.IOrganismType;
 
 import forestry.api.apiculture.BeeManager;
@@ -44,7 +45,11 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 		NonNullList<ItemStack> beeList = NonNullList.create();
 		ModuleApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
-			IAlleleBeeSpecies species = GeneticHelper.getOrganism(beeStack).getAllele(BeeChromosomes.SPECIES, true);
+			IOrganism<?> organism = GeneticHelper.getOrganism(beeStack);
+			if (organism.isEmpty()) {
+				continue;
+			}
+			IAlleleBeeSpecies species = organism.getAllele(BeeChromosomes.SPECIES, true);
 			iconStacks.put(species.getRegistryName(), beeStack);
 		}
 	}

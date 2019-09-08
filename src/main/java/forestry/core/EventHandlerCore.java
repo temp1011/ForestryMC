@@ -125,8 +125,11 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		ErrorStateRegistry.initSprites();
-		TextureManagerForestry.initDefaultSprites();
+		if (event.getMap() == TextureManagerForestry.getInstance().getTextureMap()) {
+			ErrorStateRegistry.initSprites(event);
+			TextureManagerForestry.getInstance().registerSprites(event);
+			TextureManagerForestry.initDefaultSprites(event);
+		}
 		ModelBlockCached.clear();
 		ModelBlockCustomCached.clear();
 	}

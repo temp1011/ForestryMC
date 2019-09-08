@@ -75,6 +75,11 @@ public class ChromosomeTypeBuilder implements IChromosomeTypeBuilder {
 		}
 
 		@Override
+		public boolean isEmpty() {
+			return false;
+		}
+
+		@Override
 		public String toString() {
 			return name;
 		}

@@ -12,10 +12,8 @@ package forestry.core.circuits;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Locale;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -26,51 +24,32 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.api.core.IModelManager;
 import forestry.core.ModuleCore;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 
 public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 
-	public ItemCircuitBoard() {
-//		setHasSubtypes(true); TODO - flatten?
+	private final EnumCircuitBoardType type;
+
+	public ItemCircuitBoard(EnumCircuitBoardType type) {
+		this.type = type;
 	}
 
 	@Override
 	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
 		if (this.isInGroup(tab)) {
-			subItems.add(createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{}));
-			subItems.add(createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{}));
-			subItems.add(createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
-			subItems.add(createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{}));
+			subItems.add(createCircuitboard(type, null, new ICircuit[]{}));
 		}
-	}
-
-	/* MODELS*/
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		for (int i = 0; i < 4; i++) {
-			manager.registerItemModel(item, i, "chipsets");
-		}
-	}
-
-	/**
-	 * @return true if the item's stackTagCompound needs to be synchronized over SMP.
-	 */
-	@Override
-	public boolean shouldSyncTag() {
-		return true;
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public int getColorFromItemStack(ItemStack itemstack, int tintIndex) {
-		EnumCircuitBoardType type = EnumCircuitBoardType.values()[0];//TODO flatten itemstack.getItemDamage()];
 		if (tintIndex == 0) {
 			return type.getPrimaryColor();
 		} else {
@@ -79,16 +58,10 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public String getTranslationKey(ItemStack stack) {
-		EnumCircuitBoardType type = EnumCircuitBoardType.values()[0];//TODO flatten stack.getItemDamage()];
-		return "item.forestry.circuitboard." + type.toString().toLowerCase(Locale.ENGLISH);
-	}
-
-	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
-		ICircuitBoard circuitboard = null;//TODO init order ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
+		ICircuitBoard circuitboard = ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
 		if (circuitboard != null) {
 			circuitboard.addTooltip(list);
 		}
@@ -97,10 +70,12 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	public static ItemStack createCircuitboard(EnumCircuitBoardType type, @Nullable ICircuitLayout layout, ICircuit[] circuits) {
 		CompoundNBT compoundNBT = new CompoundNBT();
 		new CircuitBoard(type, layout, circuits).write(compoundNBT);
-		return new ItemStack(ModuleCore.getItems().circuitboards, 1, compoundNBT);
+		ItemStack stack = ModuleCore.getItems().getCircuitBoard(type, 1);
+		stack.setTag(compoundNBT);
+		return stack;
 	}
 
 	public ItemStack get(EnumCircuitBoardType type) {
-		return new ItemStack(this, 1);//TODO flatten , type.ordinal());
+		return ModuleCore.getItems().getCircuitBoard(type, 1);
 	}
 }

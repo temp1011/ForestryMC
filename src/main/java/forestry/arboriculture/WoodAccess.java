@@ -115,6 +115,13 @@ public class WoodAccess implements IWoodAccess {
 		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.LOG, false, Blocks.ACACIA_LOG.getDefaultState(), new ItemStack(Blocks.ACACIA_LOG));
 		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.LOG, false, Blocks.DARK_OAK_LOG.getDefaultState(), new ItemStack(Blocks.DARK_OAK_LOG));
 
+		register(EnumVanillaWoodType.OAK, WoodBlockKind.PLANKS, false, Blocks.OAK_PLANKS.getDefaultState(), new ItemStack(Blocks.OAK_PLANKS));
+		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.PLANKS, false, Blocks.SPRUCE_PLANKS.getDefaultState(), new ItemStack(Blocks.SPRUCE_PLANKS));
+		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.PLANKS, false, Blocks.BIRCH_PLANKS.getDefaultState(), new ItemStack(Blocks.BIRCH_PLANKS));
+		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.PLANKS, false, Blocks.JUNGLE_PLANKS.getDefaultState(), new ItemStack(Blocks.JUNGLE_PLANKS));
+		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.PLANKS, false, Blocks.ACACIA_PLANKS.getDefaultState(), new ItemStack(Blocks.ACACIA_PLANKS));
+		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.PLANKS, false, Blocks.DARK_OAK_PLANKS.getDefaultState(), new ItemStack(Blocks.DARK_OAK_PLANKS));
+		
 		register(EnumVanillaWoodType.OAK, WoodBlockKind.SLAB, false, Blocks.OAK_SLAB.getDefaultState(), new ItemStack(Blocks.OAK_SLAB));
 		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.SLAB, false, Blocks.SPRUCE_SLAB.getDefaultState(), new ItemStack(Blocks.SPRUCE_SLAB));
 		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.SLAB, false, Blocks.BIRCH_SLAB.getDefaultState(), new ItemStack(Blocks.BIRCH_SLAB));

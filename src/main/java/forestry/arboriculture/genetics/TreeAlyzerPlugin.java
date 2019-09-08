@@ -30,6 +30,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import genetics.api.GeneticHelper;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
+import genetics.api.organism.IOrganism;
 import genetics.api.organism.IOrganismType;
 
 import forestry.api.arboriculture.EnumFruitFamily;
@@ -59,7 +60,11 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 		NonNullList<ItemStack> treeList = NonNullList.create();
 		ModuleArboriculture.getItems().sapling.addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
-			IAlleleTreeSpecies species = GeneticHelper.getOrganism(treeStack).getAllele(TreeChromosomes.SPECIES, true);
+			IOrganism<?> organism = GeneticHelper.getOrganism(treeStack);
+			if (organism.isEmpty()) {
+				continue;
+			}
+			IAlleleTreeSpecies species = organism.getAllele(TreeChromosomes.SPECIES, true);
 			iconStacks.put(species.getRegistryName(), treeStack);
 		}
 	}

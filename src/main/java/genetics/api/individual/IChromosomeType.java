@@ -31,5 +31,7 @@ public interface IChromosomeType {
 
 	IRootDefinition getDefinition();
 
+	boolean isEmpty();
+
 	boolean isValid(IAllele allele);
 }

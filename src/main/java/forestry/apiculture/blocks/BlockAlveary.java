@@ -20,10 +20,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
@@ -34,11 +34,18 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
-import forestry.api.core.IModelManager;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.multiblock.IAlvearyControllerInternal;
 import forestry.apiculture.multiblock.TileAlveary;
+import forestry.apiculture.multiblock.TileAlvearyFan;
+import forestry.apiculture.multiblock.TileAlvearyHeater;
+import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
+import forestry.apiculture.multiblock.TileAlvearyPlain;
+import forestry.apiculture.multiblock.TileAlvearySieve;
+import forestry.apiculture.multiblock.TileAlvearyStabiliser;
+import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.packets.PacketAlvearyChange;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.tiles.TileUtil;
@@ -72,7 +79,9 @@ public class BlockAlveary extends BlockStructure {
 	public BlockAlveary(BlockAlvearyType type) {
 		super(Block.Properties.create(MaterialBeehive.BEEHIVE_ALVEARY)
 				.hardnessAndResistance(1f)
-				.sound(SoundType.WOOD));
+			.sound(SoundType.WOOD)
+			.harvestTool(ToolType.AXE)
+			.harvestLevel(0));
 		this.type = type;
 		BlockState defaultState = this.getStateContainer().getBaseState();
 		if (type == BlockAlvearyType.PLAIN) {
@@ -81,9 +90,6 @@ public class BlockAlveary extends BlockStructure {
 			defaultState = defaultState.with(STATE, State.OFF);
 		}
 		setDefaultState(defaultState);
-
-//		setCreativeTab(ItemGroups.tabApiculture);
-//		setHarvestLevel("axe", 0);
 	}
 
 	@Override
@@ -101,10 +107,9 @@ public class BlockAlveary extends BlockStructure {
 		return true;
 	}
 
-	//TODO - idk
-	/*@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		BlockAlvearyType type = getType();
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		switch (type) {
 			case SWARMER:
 				return new TileAlvearySwarmer();
@@ -122,14 +127,6 @@ public class BlockAlveary extends BlockStructure {
 			default:
 				return new TileAlvearyPlain();
 		}
-	}*/
-
-	//TODO needed?
-	/* ITEM MODELS */
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "apiculture/alveary." + getType());
 	}
 
 	//TODO not sure how actual state works anymore, probably just means flattening
@@ -230,7 +227,7 @@ public class BlockAlveary extends BlockStructure {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		if (Screen.hasShiftDown()) {
-			tooltip.add(new TranslationTextComponent("tile.for.alveary.tooltip"));
+			tooltip.add(new TranslationTextComponent("block.forestry.alveary_tooltip"));
 		} else {
 			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}

@@ -24,16 +24,16 @@ public class ItemTooltipUtil {
 		String unlocalizedName = stack.getTranslationKey();
 		String tooltipKey = unlocalizedName + ".tooltip";
 		if (Translator.canTranslateToLocal(tooltipKey)) {
-			String tooltipInfo = Translator.translateToLocal(tooltipKey);
+			TranslationTextComponent tooltipInfo = new TranslationTextComponent(tooltipKey);
 			Minecraft minecraft = Minecraft.getInstance();
-			List<String> tooltipInfoWrapped = minecraft.fontRenderer.listFormattedStringToWidth(tooltipInfo, 150);
-			tooltipInfoWrapped.forEach(s -> tooltip.add(new StringTextComponent(s)));
+			List<String> tooltipInfoWrapped = minecraft.fontRenderer.listFormattedStringToWidth(tooltipInfo.getFormattedText(), 150);
+			tooltipInfoWrapped.forEach(s -> tooltip.add(new StringTextComponent(s).applyTextStyle(TextFormatting.GRAY)));
 		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public static void addShiftInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-		tooltip.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle(new Style().setItalic(true)));
+		tooltip.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle(new Style().setItalic(true).setColor(TextFormatting.GRAY)));
 	}
 
 	@OnlyIn(Dist.CLIENT)

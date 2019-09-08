@@ -16,6 +16,7 @@ import java.util.Optional;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -49,7 +50,6 @@ import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.recipes.IVariableFermentable;
-import forestry.apiculture.genetics.BeeHelper;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
@@ -64,7 +64,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	private final EnumGermlingType type;
 
 	public ItemGermlingGE(EnumGermlingType type) {
-		super(ItemGroups.tabArboriculture);
+		super(new Item.Properties().group(ItemGroups.tabArboriculture));
 		this.type = type;
 	}
 
@@ -76,7 +76,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	@Nullable
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-		return GeneticHelper.createOrganism(stack, type, BeeHelper.getRoot().getDefinition());
+		return GeneticHelper.createOrganism(stack, type, TreeHelper.getRoot().getDefinition());
 	}
 
 	@Override
@@ -108,7 +108,9 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 				continue;
 			}
 
-			subItems.add(TreeManager.treeRoot.getTypes().createStack(individual, type));
+			ItemStack stack = new ItemStack(this);
+			GeneticHelper.setIndividual(stack, individual);
+			subItems.add(stack);
 		}
 	}
 

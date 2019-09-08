@@ -62,7 +62,7 @@ public class ModelBakerModel implements IBakedModel {
 		modelsPost = new ArrayList<>();
 		faceQuads = new EnumMap<>(Direction.class);
 		generalQuads = new ArrayList<>();
-		particleSprite = Minecraft.getInstance().getTextureMap().missingImage;	//TODO AT
+		particleSprite = Minecraft.getInstance().getTextureMap().missingImage;
 		isGui3d = true;
 		isAmbientOcclusion = false;
 		setModelState(modelState);

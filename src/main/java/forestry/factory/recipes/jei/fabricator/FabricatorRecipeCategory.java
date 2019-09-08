@@ -39,7 +39,7 @@
 //	private final ICraftingGridHelper craftingGridHelper;
 //
 //	public FabricatorRecipeCategory(IGuiHelper guiHelper) {
-//		super(guiHelper.createDrawable(guiTexture, 20, 16, 136, 54), "tile.for.fabricator.name");
+//		super(guiHelper.createDrawable(guiTexture, 20, 16, 136, 54), "block.forestry.fabricator.name");
 //
 //		craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot, craftOutputSlot);
 //	}

@@ -32,7 +32,7 @@
 //	private final IDrawable tankOverlay;
 //
 //	public MoistenerRecipeCategory(IGuiHelper guiHelper) {
-//		super(guiHelper.createDrawable(guiTexture, 15, 15, 145, 60), "tile.for.moistener.name");
+//		super(guiHelper.createDrawable(guiTexture, 15, 15, 145, 60), "block.forestry.moistener.name");
 //
 //		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 91, 29, 55);
 //		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 80, IDrawableAnimated.StartDirection.BOTTOM, false);

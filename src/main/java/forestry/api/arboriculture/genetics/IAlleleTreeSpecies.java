@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -19,7 +19,6 @@ import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenerator;
-import forestry.api.core.IModelManager;
 import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IAlleleProperty;
 import forestry.api.genetics.IFruitFamily;
@@ -62,9 +61,9 @@ public interface IAlleleTreeSpecies extends IAlleleForestrySpecies, IAllelePrope
 	int getGermlingColour(EnumGermlingType type, int renderPass);
 
 	@OnlyIn(Dist.CLIENT)
-	ModelResourceLocation getGermlingModel(EnumGermlingType type);
+	ModelResourceLocation getItemModel();
 
 	@OnlyIn(Dist.CLIENT)
-	void registerModels(Item item, IModelManager manager, EnumGermlingType type);
+	ResourceLocation getBlockModel();
 
 }

@@ -54,7 +54,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		ITextComponent localizedName = new TranslationTextComponent(unlocalizedSpeciesName);
 
 		ITextComponent leaves = new TranslationTextComponent("for.trees.grammar.leaves.type");
-		return new TranslationTextComponent("for.trees.grammar.leaves", localizedName, "%TYPE", leaves);
+		return new TranslationTextComponent("for.trees.grammar.leaves", localizedName, leaves);
 	}
 
 	@Override

@@ -11,8 +11,8 @@
 package forestry.core.render;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.model.ChestModel;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -23,7 +23,7 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.tiles.TileNaturalistChest;
 
-public class RenderNaturalistChest extends TileEntityRenderer<TileNaturalistChest> {
+public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistChest> {
 
 	private final ChestModel chestModel = new ChestModel();
 	private final ResourceLocation texture;
@@ -32,23 +32,19 @@ public class RenderNaturalistChest extends TileEntityRenderer<TileNaturalistChes
 		texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/" + textureName + ".png");
 	}
 
-	/**
-	 * @param chest If it null its render the item else it render the tile entity.
-	 */
 	@Override
-	public void render(TileNaturalistChest chest, double x, double y, double z, float partialTicks, int destroyStage) {
-		if (chest != null) {
-			World worldObj = chest.getWorldObj();
-			if (worldObj.isBlockLoaded(chest.getPos())) {
-				BlockState blockState = worldObj.getBlockState(chest.getPos());
-				if (blockState.getBlock() instanceof BlockBase) {
-					Direction facing = blockState.get(BlockBase.FACING);
-					render(facing, chest.prevLidAngle, chest.lidAngle, x, y, z, partialTicks);
-					return;
-				}
-			}
+	public void renderTile(TileNaturalistChest tile, double x, double y, double z, float partialTicks, int destroyStage) {
+		World worldObj = tile.getWorldObj();
+		BlockState blockState = worldObj.getBlockState(tile.getPos());
+		if (blockState.getBlock() instanceof BlockBase) {
+			Direction facing = blockState.get(BlockBase.FACING);
+			render(facing, tile.prevLidAngle, tile.lidAngle, x, y, z, partialTicks);
 		}
-		render(Direction.SOUTH, 0, 0, x, y, z, 0);
+	}
+
+	@Override
+	public void renderItem(ItemStack stack) {
+		render(Direction.SOUTH, 0, 0, 0, 0, 0, 0);
 	}
 
 	public void render(Direction orientation, float prevLidAngle, float lidAngle, double x, double y, double z, float partialTick) {

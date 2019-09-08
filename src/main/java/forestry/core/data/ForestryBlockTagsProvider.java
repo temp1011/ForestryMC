@@ -1,7 +1,6 @@
 package forestry.core.data;
 
 import javax.annotation.Nullable;
-import java.nio.file.Path;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,7 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 
 	@Override
 	protected void registerTags() {
-		super.registerTags();
+		//super.registerTags();
 		filter = this.tagToBuilder.keySet().stream().map(Tag::getId).collect(Collectors.toSet());
 		if (ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)) {
 			getBuilder(ForestryTags.Blocks.CHARCOAL).add(ModuleCharcoal.getBlocks().charcoal);
@@ -74,7 +73,7 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 			getBuilder(BlockTags.WOODEN_SLABS).add(registry.slabsVanillaFireproof.values().toArray(new Block[0]));
 
 			getBuilder(BlockTags.SAPLINGS).add(registry.saplingGE);
-			getBuilder(BlockTags.LEAVES).add(registry.leaves).add(registry.leavesDefaultFruit.toArray(new Block[0])).add(registry.leavesDefault.values().toArray(new Block[0])).add(registry.leavesDecorative.values().toArray(new Block[0]));
+			getBuilder(BlockTags.LEAVES).add(registry.leaves).add(registry.leavesDefaultFruit.values().toArray(new Block[0])).add(registry.leavesDefault.values().toArray(new Block[0])).add(registry.leavesDecorative.values().toArray(new Block[0]));
 
 
 			//getBuilder(Tags.Blocks.CHESTS).add(registry.treeChest);
@@ -82,11 +81,11 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 		}
 	}
 
-	@Override
+	/*@Override
 	@Nullable
 	protected Path makePath(ResourceLocation id) {
 		return filter != null && filter.contains(id) ? null : super.makePath(id); //We don't want to save vanilla tags.
-	}
+	}*/
 
 	@Override
 	public String getName() {

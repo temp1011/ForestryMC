@@ -15,6 +15,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import genetics.api.GeneticPlugin;
 import genetics.api.GeneticsAPI;
 import genetics.api.IGeneticPlugin;
+import genetics.api.alleles.Allele;
 
 import genetics.ApiInstance;
 import genetics.GeneticFactory;
@@ -56,6 +57,7 @@ public class PluginManager {
 		handlePlugins(p -> p.registerListeners(rootManager));
 		//register all alleles
 		AlleleRegistry alleleRegistry = new AlleleRegistry();
+		alleleRegistry.registerAllele(Allele.EMPTY);
 		ApiInstance.INSTANCE.setAlleleRegistry(alleleRegistry);
 		handlePlugins(p -> p.registerAlleles(alleleRegistry));
 		rootManager.getListeners().values().forEach(listener -> listener.registerAlleles(alleleRegistry));

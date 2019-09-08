@@ -4,6 +4,7 @@ import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -13,6 +14,8 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
  * A default implementation of a simple allele.
  */
 public class Allele extends ForgeRegistryEntry<IAllele> implements IAllele {
+	public static final IAllele EMPTY = new Allele("empty", false).setRegistryName(new ResourceLocation("genetics", "empty"));
+
 	protected final boolean dominant;
 	protected final String localisationKey;
 

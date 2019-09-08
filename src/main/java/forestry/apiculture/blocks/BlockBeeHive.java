@@ -36,6 +36,7 @@ import forestry.api.apiculture.hives.IHiveTile;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileHive;
+import forestry.core.items.ItemScoop;
 import forestry.core.tiles.TileUtil;
 
 public class BlockBeeHive extends ContainerBlock {
@@ -45,9 +46,9 @@ public class BlockBeeHive extends ContainerBlock {
 	public BlockBeeHive(HiveType type) {
 		super(Properties.create(MaterialBeehive.BEEHIVE_WORLD)
 				.lightValue((int) (0.4f * 15))    //TODO - correct?
-				.hardnessAndResistance(2.5f));
-		//		setCreativeTab(ItemGroups.tabApiculture); TODO done in item
-		//		setHarvestLevel("scoop", 0); TODO harvest level, addToolType in item?
+			.hardnessAndResistance(2.5f)
+			.harvestLevel(0)
+			.harvestTool(ItemScoop.SCOOP));
 		this.type = type;
 	}
 
@@ -64,6 +65,7 @@ public class BlockBeeHive extends ContainerBlock {
 
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		super.onBlockHarvested(world, pos, state, player);
 		boolean canHarvest = canHarvestBlock(state, world, pos, player);
 		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onBroken(world, pos, player, canHarvest));
 	}

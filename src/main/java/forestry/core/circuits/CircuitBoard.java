@@ -98,14 +98,14 @@ public class CircuitBoard implements ICircuitBoard {
 			if (Screen.hasShiftDown() || extendedTooltip.size() <= 4) {
 				list.addAll(extendedTooltip);
 			} else {
-				list.add(new StringTextComponent("<").setStyle((new Style()).setUnderlined(true))
+				list.add(new StringTextComponent("<").setStyle((new Style()).setUnderlined(true).setColor(TextFormatting.GRAY))
 						.appendSibling(new TranslationTextComponent("for.gui.tooltip.tmi"))
 						.appendSibling(new StringTextComponent(">")));
 			}
 		} else {
 			int socketCount = type.getSockets();
-			String localizationKey = "item.forestry.circuitboard.tooltip." + (socketCount == 1 ? "singular" : "plural");
-			list.add(new TranslationTextComponent(localizationKey, type.getSockets()));
+			String localizationKey = "item.forestry.circuit_board.tooltip." + (socketCount == 1 ? "singular" : "plural");
+			list.add(new TranslationTextComponent(localizationKey, type.getSockets()).applyTextStyle(TextFormatting.GRAY));
 		}
 	}
 

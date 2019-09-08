@@ -37,17 +37,17 @@ public class Organism<I extends IIndividual> implements IOrganism<I> {
 
 	@Override
 	public Optional<I> getIndividual() {
-		return getRoot().getTypes().createIndividual(container);
+		return getDefinition().get().getTypes().createIndividual(container);
 	}
 
 	@Override
 	public boolean setIndividual(I individual) {
-		return getRoot().getTypes().setIndividual(container, individual);
+		return getDefinition().get().getTypes().setIndividual(container, individual);
 	}
 
 	@Override
-	public IIndividualRoot<I> getRoot() {
-		return definition.get();
+	public IRootDefinition<? extends IIndividualRoot<I>> getDefinition() {
+		return definition;
 	}
 
 	@Override

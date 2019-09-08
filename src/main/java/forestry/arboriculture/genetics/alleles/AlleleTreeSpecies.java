@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,7 +33,6 @@ import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpeciesBuilder;
 import forestry.api.arboriculture.genetics.ITreeRoot;
-import forestry.api.core.IModelManager;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.ClimateGrowthProvider;
 import forestry.arboriculture.genetics.LeafProvider;
@@ -76,8 +75,6 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 
 	@Override
 	public IAlleleTreeSpecies build() {
-		//AlleleManager.geneticRegistry.registerAllele(this, TreeChromosomes.SPECIES);
-		//TODO: Mutation and Allele Registration
 		leafProvider.init(this);
 		return this;
 	}
@@ -147,22 +144,22 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 		return leafSpriteProvider.getColor(false);
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@Override
-	public ModelResourceLocation getGermlingModel(EnumGermlingType type) {
-		return germlingModelProvider.getModel(type);
+	@OnlyIn(Dist.CLIENT)
+	public ModelResourceLocation getItemModel() {
+		return new ModelResourceLocation(germlingModelProvider.getItemModel(), "inventory");
+	}
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public ResourceLocation getBlockModel() {
+		return germlingModelProvider.getBlockModel();
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public int getGermlingColour(EnumGermlingType type, int renderPass) {
 		return germlingModelProvider.getSpriteColor(type, renderPass);
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
-		germlingModelProvider.registerModels(item, manager, type);
 	}
 
 	@Override

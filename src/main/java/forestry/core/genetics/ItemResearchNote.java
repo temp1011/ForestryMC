@@ -292,7 +292,7 @@ public class ItemResearchNote extends ItemForestry {
 		} else {
 			researcherName = note.researcher.getName();
 		}
-		return new TranslationTextComponent(getTranslationKey(itemstack) + ".name", researcherName);
+		return new TranslationTextComponent(getTranslationKey(itemstack), researcherName);
 	}
 
 	@Override
