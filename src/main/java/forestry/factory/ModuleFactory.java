@@ -232,37 +232,27 @@ public class ModuleFactory extends BlankForestryModule {
 		FuelManager.copperEngineFuel.put(bituminousPeat, new EngineCopperFuel(bituminousPeat, Constants.ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT));
 
 		Fluid biomass = ForestryFluids.BIOMASS.getFluid();
-		if (biomass != null) {
-			FuelManager.bronzeEngineFuel.put(biomass, new EngineBronzeFuel(biomass,
-				Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.biogas")), 1));
-		}
+		FuelManager.bronzeEngineFuel.put(biomass, new EngineBronzeFuel(biomass,
+			Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.biogas")), 1));
 
 //		FuelManager.bronzeEngineFuel.put(FluidRegistry.WATER, new EngineBronzeFuel(FluidRegistry.WATER,
 //			Constants.ENGINE_FUEL_VALUE_WATER, Constants.ENGINE_CYCLE_DURATION_WATER, 3));
 
 		Fluid milk = ForestryFluids.MILK.getFluid();
-		if (milk != null) {
-			FuelManager.bronzeEngineFuel.put(milk, new EngineBronzeFuel(milk,
-				Constants.ENGINE_FUEL_VALUE_MILK, Constants.ENGINE_CYCLE_DURATION_MILK, 3));
-		}
+		FuelManager.bronzeEngineFuel.put(milk, new EngineBronzeFuel(milk,
+			Constants.ENGINE_FUEL_VALUE_MILK, Constants.ENGINE_CYCLE_DURATION_MILK, 3));
 
 		Fluid seedOil = ForestryFluids.SEED_OIL.getFluid();
-		if (seedOil != null) {
-			FuelManager.bronzeEngineFuel.put(seedOil, new EngineBronzeFuel(seedOil,
-				Constants.ENGINE_FUEL_VALUE_SEED_OIL, Constants.ENGINE_CYCLE_DURATION_SEED_OIL, 1));
-		}
+		FuelManager.bronzeEngineFuel.put(seedOil, new EngineBronzeFuel(seedOil,
+			Constants.ENGINE_FUEL_VALUE_SEED_OIL, Constants.ENGINE_CYCLE_DURATION_SEED_OIL, 1));
 
-		Fluid honey = ForestryFluids.FOR_HONEY.getFluid();
-		if (honey != null) {
-			FuelManager.bronzeEngineFuel.put(honey, new EngineBronzeFuel(honey,
-				Constants.ENGINE_FUEL_VALUE_HONEY, Constants.ENGINE_CYCLE_DURATION_HONEY, 1));
-		}
+		Fluid honey = ForestryFluids.HONEY.getFluid();
+		FuelManager.bronzeEngineFuel.put(honey, new EngineBronzeFuel(honey,
+			Constants.ENGINE_FUEL_VALUE_HONEY, Constants.ENGINE_CYCLE_DURATION_HONEY, 1));
 
 		Fluid juice = ForestryFluids.JUICE.getFluid();
-		if (juice != null) {
-			FuelManager.bronzeEngineFuel.put(juice, new EngineBronzeFuel(juice,
-				Constants.ENGINE_FUEL_VALUE_JUICE, Constants.ENGINE_CYCLE_DURATION_JUICE, 1));
-		}
+		FuelManager.bronzeEngineFuel.put(juice, new EngineBronzeFuel(juice,
+			Constants.ENGINE_FUEL_VALUE_JUICE, Constants.ENGINE_CYCLE_DURATION_JUICE, 1));
 
 		// Set rain substrates
 		ItemStack iodineCharge = coreItems.iodineCharge.getItemStack();
@@ -430,7 +420,7 @@ public class ModuleFactory extends BlankForestryModule {
 		int appleMulchAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
 		int appleJuiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
 		FluidStack appleJuice = ForestryFluids.JUICE.getFluid(appleJuiceAmount);
-		if (appleJuice != null) {
+		if (!appleJuice.isEmpty()) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(Items.APPLE), appleJuice,
 				coreItems.mulch.getItemStack(), appleMulchAmount);
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(Items.CARROT), appleJuice,
@@ -438,7 +428,7 @@ public class ModuleFactory extends BlankForestryModule {
 		}
 		int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		FluidStack seedOil = ForestryFluids.SEED_OIL.getFluid(seedOilAmount);
-		if (seedOil != null) {
+		if (!seedOil.isEmpty()) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(Items.WHEAT_SEEDS), seedOil);
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(Items.PUMPKIN_SEEDS), seedOil);
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(Items.MELON_SEEDS), seedOil);
@@ -456,13 +446,13 @@ public class ModuleFactory extends BlankForestryModule {
 		iceRecipeResources.add(new ItemStack(Items.SNOWBALL));
 		iceRecipeResources.add(coreItems.getCraftingMaterial(EnumCraftingMaterial.ICE_SHARD, 4));
 		FluidStack liquidIce = ForestryFluids.ICE.getFluid(4000);
-		if (liquidIce != null) {
+		if (!liquidIce.isEmpty()) {
 			RecipeManagers.squeezerManager.addRecipe(10, iceRecipeResources, liquidIce);
 		}
 		// STILL
 		FluidStack biomass = ForestryFluids.BIOMASS.getFluid(Constants.STILL_DESTILLATION_INPUT);
 		FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(Constants.STILL_DESTILLATION_OUTPUT);
-		if (biomass != null && ethanol != null) {
+		if (!biomass.isEmpty() && !ethanol.isEmpty()) {
 			RecipeManagers.stillManager.addRecipe(Constants.STILL_DESTILLATION_DURATION, biomass, ethanol);
 		}
 		// MOISTENER
@@ -483,7 +473,7 @@ public class ModuleFactory extends BlankForestryModule {
 
 		// FABRICATOR
 		FluidStack liquidGlass375 = ForestryFluids.GLASS.getFluid(375);
-		if (liquidGlass375 != null && liquidGlassBucket != null && liquidGlassX4 != null) {
+		if (!liquidGlass375.isEmpty() && !liquidGlassBucket.isEmpty() && !liquidGlassX4.isEmpty()) {
 			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.GLASS), liquidGlassBucket, 1000);
 			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.GLASS_PANE), liquidGlass375, 1000);
 			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.SAND), liquidGlassBucket, 3000);

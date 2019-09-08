@@ -37,7 +37,7 @@ public class AlleleEffectMisanthrope extends AlleleEffectThrottled {
 			int damage = 4;
 
 			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(player, getRegistryName().toString(), true);
+			int count = BeeManager.armorApiaristHelper.wearsItems(player, getRegistryName(), true);
 			damage -= count;
 			if (damage <= 0) {
 				continue;

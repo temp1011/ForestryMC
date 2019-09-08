@@ -13,6 +13,8 @@ package forestry.core.genetics.alleles;
 import javax.annotation.Nullable;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import genetics.api.alleles.Allele;
 import genetics.api.classification.IClassification;
@@ -22,7 +24,6 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IAlleleSpeciesBuilder;
 import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.Translator;
 
 public abstract class AlleleForestrySpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleForestrySpecies {
 	private final String binomial;
@@ -56,8 +57,8 @@ public abstract class AlleleForestrySpecies extends Allele implements IAlleleSpe
 	}
 
 	@Override
-	public String getDescription() {
-		return Translator.translateToLocal(description);
+	public ITextComponent getDescription() {
+		return new TranslationTextComponent(description);
 	}
 
 	@Override

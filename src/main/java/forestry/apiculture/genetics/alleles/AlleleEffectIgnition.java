@@ -43,7 +43,7 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 			int duration = fireDuration;
 
 			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName().toString(), true);
+			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
 			if (count > 3) {
 				continue; // Full set, no damage/effect
 			} else if (count > 2) {

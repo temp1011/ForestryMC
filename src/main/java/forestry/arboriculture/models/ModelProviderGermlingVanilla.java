@@ -40,17 +40,17 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 	public ResourceLocation getItemModel() {
 		switch (woodType) {
 			case SPRUCE:
-				return new ResourceLocation("minecraft:spruce_sapling");
+				return new ResourceLocation("minecraft", "spruce_sapling");
 			case BIRCH:
-				return new ResourceLocation("minecraft:birch_sapling");
+				return new ResourceLocation("minecraft", "birch_sapling");
 			case JUNGLE:
-				return new ResourceLocation("minecraft:jungle_sapling");
+				return new ResourceLocation("minecraft", "jungle_sapling");
 			case ACACIA:
-				return new ResourceLocation("minecraft:acacia_sapling");
+				return new ResourceLocation("minecraft", "acacia_sapling");
 			case DARK_OAK:
-				return new ResourceLocation("minecraft:dark_oak_sapling");
+				return new ResourceLocation("minecraft", "dark_oak_sapling");
 			default:
-				return new ResourceLocation("minecraft:oak_sapling");
+				return new ResourceLocation("minecraft", "oak_sapling");
 		}
 	}
 
@@ -58,17 +58,17 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 	public ResourceLocation getBlockModel() {
 		switch (woodType) {
 			case SPRUCE:
-				return new ResourceLocation("minecraft:block/spruce_sapling");
+				return new ResourceLocation("minecraft", "block/spruce_sapling");
 			case BIRCH:
-				return new ResourceLocation("minecraft:block/birch_sapling");
+				return new ResourceLocation("minecraft", "block/birch_sapling");
 			case JUNGLE:
-				return new ResourceLocation("minecraft:block/jungle_sapling");
+				return new ResourceLocation("minecraft", "block/jungle_sapling");
 			case ACACIA:
-				return new ResourceLocation("minecraft:block/acacia_sapling");
+				return new ResourceLocation("minecraft", "block/acacia_sapling");
 			case DARK_OAK:
-				return new ResourceLocation("minecraft:block/dark_oak_sapling");
+				return new ResourceLocation("minecraft", "block/dark_oak_sapling");
 			default:
-				return new ResourceLocation("minecraft:block/oak_sapling");
+				return new ResourceLocation("minecraft", "block/oak_sapling");
 		}
 	}
 }

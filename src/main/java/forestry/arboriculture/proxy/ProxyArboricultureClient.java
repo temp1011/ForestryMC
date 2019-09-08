@@ -50,6 +50,7 @@ import forestry.arboriculture.models.ModelDefaultLeaves;
 import forestry.arboriculture.models.ModelDefaultLeavesFruit;
 import forestry.arboriculture.models.ModelLeaves;
 import forestry.arboriculture.models.ModelSapling;
+import forestry.core.config.Constants;
 import forestry.core.models.BlockModelEntry;
 import forestry.core.models.DefaultTextureGetter;
 import forestry.core.models.ModelManager;
@@ -64,8 +65,8 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 	@Override
 	public void initializeModels() {
 		{
-			ResourceLocation blockModelLocation = new ResourceLocation("forestry:block/leaves");
-			ModelResourceLocation itemModelLocation = new ModelResourceLocation("forestry:item/leaves", "inventory");
+			ResourceLocation blockModelLocation = new ResourceLocation(Constants.MOD_ID, "block/leaves");
+			ModelResourceLocation itemModelLocation = new ModelResourceLocation(Constants.MOD_ID + ":item/leaves", "inventory");
 			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation,
 				new ModelLeaves(), ModuleArboriculture.getBlocks().leaves);
 			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);

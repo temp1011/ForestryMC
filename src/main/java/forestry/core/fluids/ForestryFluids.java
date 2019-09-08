@@ -43,7 +43,7 @@ public enum ForestryFluids {
 	BIO_ETHANOL(new Color(255, 111, 0), 790, 1000, 300),
 	BIOMASS(new Color(100, 132, 41), 400, 6560, 100),
 	GLASS(new Color(164, 164, 164), 2400, 10000, 0),
-	FOR_HONEY(new Color(255, 196, 35), 1420, 75600) {
+	HONEY(new Color(255, 196, 35), 1420, 75600) {
 		@Override
 		public DrinkProperties getDrinkProperties() {
 			return new DrinkProperties(2, 0.2f, 64);

@@ -31,7 +31,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -292,11 +291,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			World world = housing.getWorldObj();
 			List<BlockState> flowers = hasFlowersCache.getFlowers(world);
 			if (flowers.size() < ModuleApiculture.maxFlowersSpawnedPerHive) {
-				Optional<BlockPos> optionalPos = queen.plantFlowerRandom(housing, flowers);
-				if (optionalPos.isPresent()) {
-					BlockPos blockPos = optionalPos.get();
-					hasFlowersCache.addFlowerPos(blockPos);
-				}
+				queen.plantFlowerRandom(housing, flowers).ifPresent(hasFlowersCache::addFlowerPos);
 			}
 			pollenHandler.doPollination(queen, housing, beeListener);
 
@@ -401,7 +396,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		// Register the new queen with the breeding tracker
 		//TODO world cast
-		BeeManager.beeRoot.getBreedingTracker((ServerWorld) housing.getWorldObj(), housing.getOwner()).registerQueen(princess);
+		BeeManager.beeRoot.getBreedingTracker(housing.getWorldObj(), housing.getOwner()).registerQueen(princess);
 
 		// Remove drone
 		beeInventory.getDrone().shrink(1);
@@ -446,7 +441,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		Stack<ItemStack> offspring = new Stack<>();
 		//TODO world cast
-		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker((ServerWorld) world, beeHousing.getOwner());
+		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, beeHousing.getOwner());
 
 		// Princess
 		boolean secondPrincess = world.rand.nextInt(10000) < ModuleApiculture.getSecondPrincessChance() * 100;

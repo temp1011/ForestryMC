@@ -97,13 +97,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		super(ModuleArboriculture.getTiles().leaves);
 	}
 
-	/**
-	 * Worldgen trees used to create TileLeaves, but now they use BlockDefaultLeaves instead.
-	 * We add a check to convert the TileLeaves into the new format.
-	 * This boolean keeps track of whether this leaf has checked if it should replace itself.
-	 */
-	private boolean checkedForConversionToDefaultLeaves;
-
 	/* SAVING & LOADING */
 	@Override
 	public void read(CompoundNBT compoundNBT) {
@@ -153,21 +146,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		IGenome genome = tree.getGenome();
 		IAlleleTreeSpecies primary = genome.getPrimary(IAlleleTreeSpecies.class);
 
-		if (!checkedForConversionToDefaultLeaves) {
-			if (shouldConvertToDefaultLeaves()) {
-				BlockState defaultLeaves = null;
-				if (isFruitLeaf) {
-					defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeavesFruit(primary.getRegistryName().toString());
-				}
-				if(defaultLeaves == null) {
-					defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(primary.getRegistryName().toString());
-				}
-				worldIn.setBlockState(getPos(), defaultLeaves);
-				return;
-			}
-			checkedForConversionToDefaultLeaves = true;
-		}
-
 		boolean isDestroyed = isDestroyed(tree, damage);
 		for (ILeafTickHandler tickHandler : primary.getRoot().getLeafTickHandlers()) {
 			if (tickHandler.onRandomLeafTick(tree, world, rand, getPos(), isDestroyed)) {
@@ -199,17 +177,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 
 		effectData = tree.doEffect(effectData, world, getPos());
-	}
-
-	/**
-	 * Worldgen trees with default genomes should be converted to leaves without tile entities.
-	 */
-	private boolean shouldConvertToDefaultLeaves() {
-		if (getOwnerHandler().getOwner() == null) { // null owner likely means it's a worldgen tree
-			ITree tree = getTree();
-			return tree != null && tree.matchesTemplateGenome();
-		}
-		return false;
 	}
 
 	@Override

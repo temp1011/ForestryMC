@@ -28,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
@@ -289,7 +288,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		}
 
 		textLayout.newLine();
-		String description = individual.getGenome().getPrimary().getDescription();
+		String description = individual.getGenome().getPrimary().getDescription().getFormattedText();
 		if (StringUtils.isBlank(description) || description.startsWith("for.description.")) {
 			textLayout.drawSplitLine(Translator.translateToLocal("for.gui.alyzer.nodescription"), 12, 200, 0x666666);
 		} else {
@@ -321,7 +320,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 		PlayerEntity player = Minecraft.getInstance().player;
 		//TODO world cast
-		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker((ServerWorld) player.world, player.getGameProfile());
+		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
 
 		IMutationContainer<IIndividual, ? extends IMutation> container = speciesRoot.getComponent(ComponentKeys.MUTATIONS);
 		for (IMutation mutation : container.getCombinations(species)) {

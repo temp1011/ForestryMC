@@ -499,7 +499,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 			ItemStack honeyDrop = items.getHoneyDrop(EnumHoneyDrop.HONEY, 1);
 			// / SQUEEZER
-			FluidStack honeyDropFluid = ForestryFluids.FOR_HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
+			FluidStack honeyDropFluid = ForestryFluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
 			if (honeyDropFluid != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, honeyDrop, honeyDropFluid, items.getPropolis(EnumPropolis.NORMAL, 1), 5);
 				RecipeManagers.squeezerManager.addRecipe(10, items.honeydew.getItemStack(), honeyDropFluid);
@@ -523,7 +523,7 @@ public class ModuleApiculture extends BlankForestryModule {
 			//			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(FluidRegistry.LAVA, 1600));
 
 			// / CARPENTER
-			RecipeManagers.carpenterManager.addRecipe(50, ForestryFluids.FOR_HONEY.getFluid(500), ItemStack.EMPTY, coreItems.getCraftingMaterial(EnumCraftingMaterial.SCENTED_PANELING, 1),
+			RecipeManagers.carpenterManager.addRecipe(50, ForestryFluids.HONEY.getFluid(500), ItemStack.EMPTY, coreItems.getCraftingMaterial(EnumCraftingMaterial.SCENTED_PANELING, 1),
 					" J ", "###", "WPW",
 					'#', OreDictUtil.PLANK_WOOD,
 					'J', items.royalJelly,
@@ -637,7 +637,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 			// / FERMENTER
 			FluidStack shortMead = ForestryFluids.SHORT_MEAD.getFluid(1);
-			FluidStack honey = ForestryFluids.FOR_HONEY.getFluid(1);
+			FluidStack honey = ForestryFluids.HONEY.getFluid(1);
 			if (shortMead != null && honey != null) {
 				RecipeManagers.fermenterManager.addRecipe(items.honeydew.getItemStack(), 500, 1.0f, shortMead, honey);
 			}

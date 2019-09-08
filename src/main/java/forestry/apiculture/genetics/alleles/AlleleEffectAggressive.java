@@ -36,7 +36,7 @@ public class AlleleEffectAggressive extends AlleleEffectThrottled {
 			int damage = 4;
 
 			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName().toString(), true);
+			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
 			damage -= count;
 			if (damage <= 0) {
 				continue;

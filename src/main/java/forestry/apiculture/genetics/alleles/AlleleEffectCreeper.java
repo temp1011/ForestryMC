@@ -68,7 +68,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 			storedData.setInteger(indexExplosionForce, defaultForce);
 
 			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(player, getRegistryName().toString(), true);
+			int count = BeeManager.armorApiaristHelper.wearsItems(player, getRegistryName(), true);
 			if (count > 3) {
 				continue; // Full set, no damage/effect
 			} else if (count > 2) {
