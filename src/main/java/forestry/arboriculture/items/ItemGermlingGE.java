@@ -225,11 +225,8 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	public float getFermentationModifier(ItemStack itemstack) {
 		itemstack = GeneticsUtil.convertToGeneticEquivalent(itemstack);
 		Optional<ITree> treeOptional = TreeManager.treeRoot.create(itemstack);
-		if (!treeOptional.isPresent()) {
-			return 1.0f;
-		}
-		ITree tree = treeOptional.get();
-		return tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * 10;
+		return treeOptional.map(tree -> tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * 10)
+				.orElse(1.0f);
 	}
 
 	@Override
