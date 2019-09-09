@@ -93,10 +93,10 @@ public interface ITree extends IIndividual, ITreeGenData {
 	boolean canBearFruit();
 
 	default boolean hasEffect() {
-		return getGenome().getPrimary(IAlleleTreeSpecies.class).hasEffect();
+		return getGenome().getActiveAllele(TreeChromosomes.SPECIES).hasEffect();
 	}
 
 	default boolean isSecret() {
-		return getGenome().getPrimary(IAlleleTreeSpecies.class).isSecret();
+		return getGenome().getActiveAllele(TreeChromosomes.SPECIES).isSecret();
 	}
 }

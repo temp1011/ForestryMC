@@ -25,6 +25,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.genetics.TreeDefinition;
 
 /**
@@ -102,7 +103,7 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 		}
 		IGenome genome = treeDefinition.getGenome();
 
-		ILeafSpriteProvider spriteProvider = genome.getPrimary(IAlleleTreeSpecies.class).getLeafSpriteProvider();
+		ILeafSpriteProvider spriteProvider = genome.getActiveAllele(TreeChromosomes.SPECIES).getLeafSpriteProvider();
 		return spriteProvider.getColor(false);
 	}
 }

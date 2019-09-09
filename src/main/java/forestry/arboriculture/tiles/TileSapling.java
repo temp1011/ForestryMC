@@ -29,6 +29,7 @@ import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.worldgen.FeatureArboriculture;
@@ -129,6 +130,6 @@ public class TileSapling extends TileTreeContainer {
 		if (tree == null) {
 			return EmptyModelData.INSTANCE;
 		}
-		return new ModelDataMap.Builder().withInitial(TREE_SPECIES, tree.getGenome().getPrimary(IAlleleTreeSpecies.class)).build();
+		return new ModelDataMap.Builder().withInitial(TREE_SPECIES, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES)).build();
 	}
 }

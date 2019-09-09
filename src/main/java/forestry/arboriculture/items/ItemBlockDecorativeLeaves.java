@@ -44,6 +44,6 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			return fruitProvider.getDecorativeColor();
 		}
-		return genome.getPrimary(IAlleleTreeSpecies.class).getLeafSpriteProvider().getColor(false);
+		return genome.getActiveAllele(TreeChromosomes.SPECIES).getLeafSpriteProvider().getColor(false);
 	}
 }

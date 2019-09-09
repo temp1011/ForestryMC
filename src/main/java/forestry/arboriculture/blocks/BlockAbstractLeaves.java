@@ -31,6 +31,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.blocks.IColoredBlock;
 
@@ -64,7 +65,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 			return ItemStack.EMPTY;
 		}
 
-		return tree.getGenome().getPrimary(IAlleleTreeSpecies.class).getLeafProvider().getDecorativeLeaves();
+		return tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getLeafProvider().getDecorativeLeaves();
 	}
 
 	//TODO since loot done in loot table I don't know if this works
@@ -75,7 +76,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 			tree = TreeDefinition.Oak.createIndividual();
 		}
 
-		ItemStack decorativeLeaves = tree.getGenome().getPrimary(IAlleleTreeSpecies.class).getLeafProvider().getDecorativeLeaves();
+		ItemStack decorativeLeaves = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getLeafProvider().getDecorativeLeaves();
 		if (decorativeLeaves.isEmpty()) {
 			return Collections.emptyList();
 		} else {

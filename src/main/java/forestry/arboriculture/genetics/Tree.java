@@ -133,7 +133,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	/* GROWTH */
 	@Override
 	public Feature<NoFeatureConfig> getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed) {
-		return genome.getPrimary(IAlleleTreeSpecies.class).getGenerator().getTreeFeature(this);
+		return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().getTreeFeature(this);
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public PlantType getPlantType(IBlockReader world, BlockPos pos) {
-		return genome.getPrimary(IAlleleTreeSpecies.class).getPlantType();
+		return genome.getActiveAllele(TreeChromosomes.SPECIES).getPlantType();
 	}
 
 	@Override
@@ -184,12 +184,12 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public boolean setLeaves(IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
-		return genome.getPrimary(IAlleleTreeSpecies.class).getGenerator().setLeaves(genome, world, owner, pos, rand);
+		return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().setLeaves(genome, world, owner, pos, rand);
 	}
 
 	@Override
 	public boolean setLogBlock(IWorld world, BlockPos pos, Direction facing) {
-		return genome.getPrimary(IAlleleTreeSpecies.class).getGenerator().setLogBlock(genome, world, pos, facing);
+		return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().setLogBlock(genome, world, pos, facing);
 	}
 
 	@Override
@@ -199,14 +199,14 @@ public class Tree extends Individual implements ITree, IPlantable {
 			return false;
 		}
 
-		Collection<IFruitFamily> suitable = genome.getPrimary(IAlleleTreeSpecies.class).getSuitableFruit();
+		Collection<IFruitFamily> suitable = genome.getActiveAllele(TreeChromosomes.SPECIES).getSuitableFruit();
 		return suitable.contains(provider.getFamily());
 	}
 
 	@Override
 	public boolean trySpawnFruitBlock(IWorld world, Random rand, BlockPos pos) {
 		IFruitProvider provider = getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
-		Collection<IFruitFamily> suitable = genome.getPrimary(IAlleleTreeSpecies.class).getSuitableFruit();
+		Collection<IFruitFamily> suitable = genome.getActiveAllele(TreeChromosomes.SPECIES).getSuitableFruit();
 		return suitable.contains(provider.getFamily()) &&
 			provider.trySpawnFruitBlock(getGenome(), world, rand, pos);
 	}
@@ -239,8 +239,9 @@ public class Tree extends Individual implements ITree, IPlantable {
 		}
 
 		// You analyzed it? Juicy tooltip coming up!
-		IAlleleTreeSpecies primary = genome.getPrimary(IAlleleTreeSpecies.class);
-		IAlleleTreeSpecies secondary = genome.getSecondary(IAlleleTreeSpecies.class);
+		IAlleleTreeSpecies primary = genome.getActiveAllele(TreeChromosomes.SPECIES);
+		IAlleleTreeSpecies secondary = genome.getInactiveAllele(TreeChromosomes.SPECIES);
+
 		if (!isPureBred(TreeChromosomes.SPECIES)) {
 			list.add(new TranslationTextComponent("for.trees.hybrid", primary.getDisplayName(), secondary.getDisplayName()).applyTextStyle(TextFormatting.BLUE));
 		}
@@ -374,7 +375,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	/* PRODUCTION */
 	@Override
 	public boolean canBearFruit() {
-		return genome.getPrimary(IAlleleTreeSpecies.class).getSuitableFruit().contains(genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getFamily());
+		return genome.getActiveAllele(TreeChromosomes.SPECIES).getSuitableFruit().contains(genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getFamily());
 	}
 
 	@Override

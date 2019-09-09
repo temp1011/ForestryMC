@@ -137,7 +137,7 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 			return fruitProvider.getDecorativeColor();
 		}
 
-		ILeafSpriteProvider spriteProvider = genome.getPrimary(IAlleleTreeSpecies.class).getLeafSpriteProvider();
+		ILeafSpriteProvider spriteProvider = genome.getActiveAllele(TreeChromosomes.SPECIES).getLeafSpriteProvider();
 		return spriteProvider.getColor(false);
 	}
 }

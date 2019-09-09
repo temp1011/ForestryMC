@@ -144,7 +144,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 
 		IGenome genome = tree.getGenome();
-		IAlleleTreeSpecies primary = genome.getPrimary(IAlleleTreeSpecies.class);
+		IAlleleTreeSpecies primary = genome.getActiveAllele(TreeChromosomes.SPECIES);
 
 		boolean isDestroyed = isDestroyed(tree, damage);
 		for (ILeafTickHandler tickHandler : primary.getRoot().getLeafTickHandlers()) {
@@ -185,7 +185,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		super.setTree(tree);
 
 		IGenome genome = tree.getGenome();
-		species = genome.getPrimary(IAlleleTreeSpecies.class);
+		species = genome.getActiveAllele(TreeChromosomes.SPECIES);
 
 		if (oldTree != null && !tree.equals(oldTree)) {
 			checkFruit = true;
@@ -266,7 +266,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (species != null) {
 			return species.getLeafSpriteProvider();
 		} else {
-			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getPrimary(IAlleleTreeSpecies.class);
+			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getActiveAllele(TreeChromosomes.SPECIES);
 			return oakSpecies.getLeafSpriteProvider();
 		}
 	}
@@ -288,7 +288,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			return PlantType.Plains;
 		}
 
-		return tree.getGenome().getPrimary(IAlleleTreeSpecies.class).getPlantType();
+		return tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getPlantType();
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.genetics.IBeeRoot;
@@ -71,11 +72,11 @@ public class ItemInventoryImprinter extends ItemInventory {
 	}
 
 	public IAlleleBeeSpecies getPrimary() {
-		return BeeManager.beeRoot.getIndividualTemplates().get(primaryIndex).getGenome().getPrimary(IAlleleBeeSpecies.class);
+		return BeeManager.beeRoot.getIndividualTemplates().get(primaryIndex).getGenome().getActiveAllele(BeeChromosomes.SPECIES);
 	}
 
 	public IAlleleBeeSpecies getSecondary() {
-		return BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getGenome().getPrimary(IAlleleBeeSpecies.class);
+		return BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getGenome().getActiveAllele(BeeChromosomes.SPECIES);
 	}
 
 	public IBee getSelectedBee() {

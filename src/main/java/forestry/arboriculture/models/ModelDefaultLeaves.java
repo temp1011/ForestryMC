@@ -31,6 +31,7 @@ import genetics.api.individual.IGenome;
 
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -95,7 +96,7 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 
 		IGenome genome = treeDefinition.getGenome();
-		IAlleleTreeSpecies species = genome.getPrimary(IAlleleTreeSpecies.class);
+		IAlleleTreeSpecies species = genome.getActiveAllele(TreeChromosomes.SPECIES);
 		ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
 
 		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);

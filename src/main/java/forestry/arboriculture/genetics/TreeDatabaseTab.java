@@ -44,8 +44,8 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 
 	@Override
 	public void createElements(IDatabaseElement container, ITree tree, ItemStack itemStack) {
-		IAlleleTreeSpecies primarySpecies = tree.getGenome().getPrimary(IAlleleTreeSpecies.class);
-		IAlleleTreeSpecies species = mode == DatabaseMode.ACTIVE ? primarySpecies : tree.getGenome().getSecondary(IAlleleTreeSpecies.class);
+		IAlleleTreeSpecies primarySpecies = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
+		IAlleleTreeSpecies species = mode == DatabaseMode.ACTIVE ? primarySpecies : tree.getGenome().getInactiveAllele(TreeChromosomes.SPECIES);
 		ITextStyle speciesStyle = GuiElementFactory.INSTANCE.getStateStyle(species.isDominant());
 
 		container.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.DATABASE_TITLE);

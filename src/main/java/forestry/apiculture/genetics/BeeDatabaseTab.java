@@ -51,8 +51,8 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 			return;
 		}
 		IOrganismType type = optionalType.get();
-		IAlleleBeeSpecies primarySpecies = bee.getGenome().getPrimary(IAlleleBeeSpecies.class);
-		IAlleleBeeSpecies secondarySpecies = bee.getGenome().getSecondary(IAlleleBeeSpecies.class);
+		IAlleleBeeSpecies primarySpecies = bee.getGenome().getActiveAllele(BeeChromosomes.SPECIES);
+		IAlleleBeeSpecies secondarySpecies = bee.getGenome().getInactiveAllele(BeeChromosomes.SPECIES);
 
 		container.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.DATABASE_TITLE);
 

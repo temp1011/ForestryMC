@@ -747,7 +747,7 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
 			boolean hasVillageGenerated) {
-		if (!world.getDimension().getType().equals(DimensionType.field_223227_a_)) {
+		if (!world.getDimension().getType().equals(DimensionType.OVERWORLD)) {
 			return;
 		}
 		if (Config.getBeehivesAmount() > 0.0) {

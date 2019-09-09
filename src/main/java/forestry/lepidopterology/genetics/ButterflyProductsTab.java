@@ -27,14 +27,14 @@ public class ButterflyProductsTab implements IDatabaseTab<IButterfly> {
 	@Override
 	public void createElements(IDatabaseElement container, IButterfly individual, ItemStack itemStack) {
 		IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 4, y, 18).setDistance(2), 90, 0);
-		Collection<ItemStack> butterflyLoot = individual.getGenome().getPrimary(IAlleleButterflySpecies.class).getButterflyLoot().keySet();
+		Collection<ItemStack> butterflyLoot = individual.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getButterflyLoot().keySet();
 		if (!butterflyLoot.isEmpty()) {
 			container.label(Translator.translateToLocal("for.gui.loot.butterfly"), GuiElementAlignment.TOP_CENTER);
 			butterflyLoot.forEach(stack -> groupHelper.add(new ItemElement(0, 0, stack)));
 			groupHelper.finish();
 		}
 
-		Collection<ItemStack> caterpillarLoot = individual.getGenome().getPrimary(IAlleleButterflySpecies.class).getCaterpillarLoot().keySet();
+		Collection<ItemStack> caterpillarLoot = individual.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getCaterpillarLoot().keySet();
 		if (!caterpillarLoot.isEmpty()) {
 			container.label(Translator.translateToLocal("for.gui.loot.caterpillar"), GuiElementAlignment.TOP_CENTER);
 			caterpillarLoot.forEach(stack -> groupHelper.add(new ItemElement(0, 0, stack)));

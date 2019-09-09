@@ -160,7 +160,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
 		BlockRegistryArboriculture blocks = ModuleArboriculture.getBlocks();
-		BlockState state = blocks.saplingGE.getDefaultState().with(BlockSapling.TREE, tree.getGenome().getPrimary(IAlleleTreeSpecies.class));
+		BlockState state = blocks.saplingGE.getDefaultState().with(BlockSapling.TREE, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES));
 		boolean placed = world.setBlockState(pos, state);
 		if (!placed) {
 			return false;

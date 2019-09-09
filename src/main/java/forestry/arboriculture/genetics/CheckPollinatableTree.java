@@ -16,6 +16,7 @@ import genetics.api.individual.IIndividual;
 
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.apiculture.ModuleApiculture;
 
@@ -28,7 +29,7 @@ public class CheckPollinatableTree implements ICheckPollinatable {
 
 	@Override
 	public PlantType getPlantType() {
-		return tree.getGenome().getPrimary(IAlleleTreeSpecies.class).getPlantType();
+		return tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getPlantType();
 	}
 
 	@Override

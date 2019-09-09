@@ -27,6 +27,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
 
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -118,7 +119,7 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 	}
 
 	private Key createEmptyKey(AtlasTexture map, boolean fancy) {
-		IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getPrimary(IAlleleTreeSpecies.class);
+		IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getActiveAllele(TreeChromosomes.SPECIES);
 		ResourceLocation spriteLocation = oakSpecies.getLeafSpriteProvider().getSprite(false, fancy);
 		TextureAtlasSprite sprite = map.getAtlasSprite(spriteLocation.toString());
 		return new Key(sprite, null, fancy);

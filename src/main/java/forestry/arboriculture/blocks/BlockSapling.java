@@ -41,6 +41,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -96,9 +97,9 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	public BlockState getStateAtViewpoint(BlockState state, IBlockReader world, BlockPos pos, Vec3d viewpoint) {
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling != null && sapling.getTree() != null) {
-			state = state.with(TREE, sapling.getTree().getGenome().getPrimary(IAlleleTreeSpecies.class));
+			state = state.with(TREE, sapling.getTree().getGenome().getActiveAllele(TreeChromosomes.SPECIES));
 		} else {
-			state = state.with(TREE, TreeDefinition.Oak.getGenome().getPrimary(IAlleleTreeSpecies.class));
+			state = state.with(TREE, TreeDefinition.Oak.getGenome().getActiveAllele(TreeChromosomes.SPECIES));
 		}
 		return state;
 	}

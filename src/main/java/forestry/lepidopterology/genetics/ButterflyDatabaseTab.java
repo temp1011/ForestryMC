@@ -39,8 +39,8 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
 
 	@Override
 	public void createElements(IDatabaseElement database, IButterfly butterfly, ItemStack itemStack) {
-		IAlleleButterflySpecies primarySpecies = butterfly.getGenome().getPrimary(IAlleleButterflySpecies.class);
-		IAlleleButterflySpecies secondarySpecies = butterfly.getGenome().getSecondary(IAlleleButterflySpecies.class);
+		IAlleleButterflySpecies primarySpecies = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES);
+		IAlleleButterflySpecies secondarySpecies = butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.SPECIES);
 
 		database.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.DATABASE_TITLE);
 

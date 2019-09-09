@@ -94,7 +94,7 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
 		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 
 		IGenome genome = treeDefinition.getGenome();
-		IAlleleTreeSpecies species = genome.getPrimary(IAlleleTreeSpecies.class);
+		IAlleleTreeSpecies species = genome.getActiveAllele(TreeChromosomes.SPECIES);
 		ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
 
 		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);

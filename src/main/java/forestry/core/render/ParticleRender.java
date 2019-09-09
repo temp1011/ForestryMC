@@ -22,6 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.hives.IHiveTile;
 import forestry.api.core.EnumHumidity;
@@ -77,7 +78,7 @@ public class ParticleRender {
 			return;
 		}
 
-		int color = genome.getPrimary(IAlleleBeeSpecies.class).getSpriteColour(0);
+		int color = genome.getActiveAllele(BeeChromosomes.SPECIES).getSpriteColour(0);
 
 		int randomInt = world.rand.nextInt(100);
 

@@ -196,7 +196,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			setActive(false); // not active (no bee FX) when we are breeding
 			return !errorLogic.hasErrors();
 		}
-
 		if (beeType == EnumBeeType.QUEEN) {
 			if (!isQueenAlive(queenStack)) {
 				IBee dyingQueen = BeeManager.beeRoot.create(queenStack).orElse(null);

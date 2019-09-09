@@ -11,6 +11,7 @@ import genetics.api.individual.IGenome;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
@@ -50,10 +51,10 @@ public class ClimateGrowthProvider implements IGrowthProvider {
 		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.getDownfall());
 		IGenome genome = tree.getGenome();
 		if (temperature == null) {
-			temperature = genome.getPrimary(IAlleleTreeSpecies.class).getTemperature();
+			temperature = genome.getActiveAllele(TreeChromosomes.SPECIES).getTemperature();
 		}
 		if (humidity == null) {
-			humidity = genome.getPrimary(IAlleleTreeSpecies.class).getHumidity();
+			humidity = genome.getActiveAllele(TreeChromosomes.SPECIES).getHumidity();
 		}
 		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity, temperature, temperatureTolerance, humidity, humidityTolerance);
 	}

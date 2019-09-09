@@ -74,7 +74,7 @@
 //				if (!TreeConfig.isValidDimension(treeUID, world.getDimension().getType())) {
 //					continue;
 //				}
-//				IAlleleTreeSpecies species = tree.getGenome().getPrimary(IAlleleTreeSpecies.class);
+//				IAlleleTreeSpecies species = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
 //				if (TreeConfig.getSpawnRarity(species.getRegistryName()) * globalRarity >= rand.nextFloat()) {
 //					pos = getValidPos(world, x, z, tree);
 //

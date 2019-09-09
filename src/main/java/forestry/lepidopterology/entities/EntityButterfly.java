@@ -359,7 +359,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 		//		isImmuneToFire = genome.getFireResist();
 		size = genome.getActiveValue(ButterflyChromosomes.SIZE);
 		//		setSize(size, 0.4f);
-		species = genome.getPrimary(IAlleleButterflySpecies.class);
+		species = genome.getActiveAllele(ButterflyChromosomes.SPECIES);
 
 		if (!world.isRemote) {
 			dataManager.set(DATAWATCHER_ID_SIZE, (int) (size * 100));
