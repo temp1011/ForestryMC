@@ -40,7 +40,7 @@ public class ModuleEnergy extends BlankForestryModule {
 	public static BlockRegistryEnergy blocks;
 
 	public static BlockRegistryEnergy getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
@@ -65,33 +65,33 @@ public class ModuleEnergy extends BlankForestryModule {
 		BlockRegistryEnergy blocks = getBlocks();
 
 		RecipeUtil.addRecipe("peat_engine", new ItemStack(blocks.peatEngine),
-				"###",
-				" X ",
-				"YVY",
-				'#', "ingotCopper",
-				'X', "blockGlass",
-				'Y', "gearCopper",
-				'V', Blocks.PISTON);
+			"###",
+			" X ",
+			"YVY",
+			'#', "ingotCopper",
+			'X', "blockGlass",
+			'Y', "gearCopper",
+			'V', Blocks.PISTON);
 
 		RecipeUtil.addRecipe("biogas_engine", new ItemStack(blocks.biogasEngine),
-				"###",
-				" X ",
-				"YVY",
-				'#', "ingotBronze",
-				'X', "blockGlass",
-				'Y', "gearBronze",
-				'V', Blocks.PISTON);
+			"###",
+			" X ",
+			"YVY",
+			'#', "ingotBronze",
+			'X', "blockGlass",
+			'Y', "gearBronze",
+			'V', Blocks.PISTON);
 
 		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
 			RecipeUtil.addRecipe("clockwork_engine", new ItemStack(blocks.clockworkEngine),
-					"###",
-					" X ",
-					"ZVY",
-					'#', "plankWood",
-					'X', "blockGlass",
-					'Y', Items.CLOCK,
-					'Z', "gearCopper",
-					'V', Blocks.PISTON);
+				"###",
+				" X ",
+				"ZVY",
+				'#', "plankWood",
+				'X', "blockGlass",
+				'Y', Items.CLOCK,
+				'Z', "gearCopper",
+				'V', Blocks.PISTON);
 		}
 	}
 }

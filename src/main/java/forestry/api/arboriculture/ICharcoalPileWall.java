@@ -12,12 +12,14 @@ import net.minecraft.util.NonNullList;
 public interface ICharcoalPileWall {
 
 	int getCharcoalAmount();
-	
+
 	boolean matches(IBlockState state);
 
 	@Deprecated
-	NonNullList<ItemStack> getDisplyItems();
+	default NonNullList<ItemStack> getDisplyItems() {
+		return getDisplayItems();
+	}
 
 	NonNullList<ItemStack> getDisplayItems();
-	
+
 }

@@ -8,8 +8,6 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFilterLogic;
 import forestry.api.modules.ForestryModule;
@@ -18,6 +16,7 @@ import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.modules.BlankForestryModule;
@@ -33,7 +32,7 @@ public class ModuleSorting extends BlankForestryModule {
 	private static BlockRegistrySorting blocks;
 
 	public static BlockRegistrySorting getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
@@ -46,14 +45,14 @@ public class ModuleSorting extends BlankForestryModule {
 	public void setupAPI() {
 		AlleleManager.filterRegistry = new FilterRegistry();
 
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), ()->FakeFilterLogic.INSTANCE);
+		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
 	}
 
 	@Override
 	public void disabledSetupAPI() {
 		AlleleManager.filterRegistry = new DummyFilterRegistry();
 
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), ()->FakeFilterLogic.INSTANCE);
+		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
 	}
 
 	@Override
@@ -68,7 +67,7 @@ public class ModuleSorting extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if(ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			RecipeUtil.addRecipe("genetic_filter_api", new ItemStack(getBlocks().filter, 2),
 				"WDW",
 				"PGP",
@@ -79,7 +78,7 @@ public class ModuleSorting extends BlankForestryModule {
 				'B', OreDictUtil.GEAR_BRONZE,
 				'P', ModuleApiculture.getItems().propolis);
 		}
-		if(ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			RecipeUtil.addRecipe("genetic_filter_arb", new ItemStack(getBlocks().filter, 2),
 				"WDW",
 				"FGF",
@@ -90,7 +89,7 @@ public class ModuleSorting extends BlankForestryModule {
 				'B', OreDictUtil.GEAR_BRONZE,
 				'F', OreDictUtil.FRUIT_FORESTRY);
 		}
-		if(ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			RecipeUtil.addRecipe("genetic_filter_lep", new ItemStack(getBlocks().filter, 2),
 				"WDW",
 				"FGF",
@@ -105,7 +104,7 @@ public class ModuleSorting extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-		GameRegistry.registerTileEntity(TileGeneticFilter.class, "forestry.GeneticFilter");
-		((FilterRegistry)AlleleManager.filterRegistry).init();
+		TileUtil.registerTile(TileGeneticFilter.class, "genetic_filter");
+		((FilterRegistry) AlleleManager.filterRegistry).init();
 	}
 }

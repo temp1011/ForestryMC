@@ -1,7 +1,5 @@
 package forestry.database.network.packets;
 
-import java.io.IOException;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
@@ -33,36 +31,36 @@ public class PacketInsertItem extends ForestryPacket implements IForestryPacketS
 		return PacketIdServer.INSERT_ITEM;
 	}
 
-	public static class Handler implements IForestryPacketHandlerServer{
+	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			boolean single = data.readBoolean();
 			Container container = player.openContainer;
-			if(!(container instanceof ContainerDatabase)){
+			if (!(container instanceof ContainerDatabase)) {
 				return;
 			}
 
 			IItemHandler itemHandler = ((ContainerDatabase) container).getItemHandler();
-			if(itemHandler == null){
+			if (itemHandler == null) {
 				return;
 			}
 			ItemStack playerStack = player.inventory.getItemStack();
 			ItemStack itemStack = playerStack.copy();
 
-			if (single){
+			if (single) {
 				itemStack.setCount(1);
 			}
 			ItemStack remaining = ItemHandlerHelper.insertItemStacked(itemHandler, itemStack, false);
-			if(single && remaining.isEmpty()) {
+			if (single && remaining.isEmpty()) {
 				playerStack.shrink(1);
-				if(playerStack.isEmpty()){
+				if (playerStack.isEmpty()) {
 					player.inventory.setItemStack(ItemStack.EMPTY);
 				}
-			}else{
+			} else {
 				player.inventory.setItemStack(remaining);
 			}
 
-			if(container instanceof ContainerDatabase){
+			if (container instanceof ContainerDatabase) {
 				((ContainerDatabase) container).sendContainerToListeners();
 			}
 		}

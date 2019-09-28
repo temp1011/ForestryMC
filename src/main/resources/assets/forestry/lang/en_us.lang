@@ -37,14 +37,14 @@ for.circuit.dampener.1=Fire Dampener
 for.circuit.dampener.1.description.1=Reduces maximum output to 10 RF/t
 for.circuit.dampener.1.description.2=Preserves fuel output
 for.circuit.electric.boost.1=Electric Boost I
-for.circuit.electric.boost.1.description.1=Increases output by 20 RF/t
-for.circuit.electric.boost.1.description.2=Increases intake by 7 EU/t
+for.circuit.electric.boost.1.description.1=Increases output by 10 RF/t
+for.circuit.electric.boost.1.description.2=Increases intake by 4 EU/t
 for.circuit.electric.boost.2=Electric Boost II
-for.circuit.electric.boost.2.description.1=Increases output by 40 RF/t
-for.circuit.electric.boost.2.description.2=Increases intake by 15 EU/t
+for.circuit.electric.boost.2.description.1=Increases output by 20 RF/t
+for.circuit.electric.boost.2.description.2=Increases intake by 7 EU/t
 for.circuit.electric.choke.1=Electric Choke
-for.circuit.electric.choke.1.description.1=Reduces output by 10 RF/t
-for.circuit.electric.choke.1.description.2=Reduces intake by 2 EU/t
+for.circuit.electric.choke.1.description.1=Reduces output by 5 RF/t
+for.circuit.electric.choke.1.description.2=Reduces intake by 1 EU/t
 for.circuit.electric.efficiency.1=Electric Efficiency
 for.circuit.electric.efficiency.1.description.1=Reduces intake by 1 EU/t
 for.circuit.machine.speed.boost.1=Speed Boost I
@@ -55,14 +55,6 @@ for.circuit.machine.speed.boost.2.description.1=Increases Speed by 25%
 for.circuit.machine.speed.boost.2.description.2=Increases Power Use by 10%
 for.circuit.machine.efficiency.1=Machine Efficiency
 for.circuit.machine.efficiency.1.description.1=Decreases Power Use by 10%
-for.circuit.climatiser.temperature.1=Temperature Boost I
-for.circuit.climatiser.temperature.1.description.1=Increases Range and Change by 12.5%
-for.circuit.climatiser.temperature.2=Temperature Boost II
-for.circuit.climatiser.temperature.2.description.1=Increases Range and Change by 25%
-for.circuit.climatiser.humidity.1=Humidity Boost I
-for.circuit.climatiser.humidity.1.description.1=Increases Range and Change by 12.5%
-for.circuit.climatiser.humidity.2=Humidity Boost II
-for.circuit.climatiser.humidity.2.description.1=Increases Range and Change by 25%
 
 for.circuit.layout.dummy.name=Not Available
 for.circuit.layout.dummy.usage=Nothing
@@ -78,9 +70,6 @@ for.circuit.layout.farms.manual.usage=Manual Farms
 
 for.circuit.layout.machine.upgrade.name=Machine Upgrade
 for.circuit.layout.machine.upgrade.usage=Socketed Machines
-
-for.circuit.layout.greenhouse.climatiser.name=Climatiser
-for.circuit.layout.greenhouse.climatiser.usage=Climatisers
 
 for.flowers.cacti=Cacti
 for.flowers.end=End
@@ -461,7 +450,10 @@ item.for.apiarist_helmet.name=Apiarist's Hat
 item.for.apiarist_legs.name=Apiarist's Pants
 
 item.for.ash.name=Ash
-tile.for.pile_ash.name=Ash Pile
+tile.for.ash_block_0.name=Ash Block
+tile.for.ash_block_1.name=Ash Block
+tile.for.ash_block_2.name=Ash Block
+tile.for.ash_block_3.name=Ash Block
 
 item.for.habitat_locator.name=Habitat Locator
 
@@ -852,28 +844,20 @@ for.errors.no_fertilizer.help=Farms require fertilizer for function. Compost is 
 for.errors.no_liquid.desc=No Water
 for.errors.no_liquid.help=Depending on rainfall, temperature and humidity farms need to be supplied with varying amounts of water.
 
-# GREENHOUSE
-for.errors.not_closed.desc=Roof Not Closed
-for.errors.not_closed.help=The roof of the greenhouse is not closed.
-for.errors.not_loaded.desc=Not Loaded
-for.errors.not_loaded.help=One chunk of the greenhouse is not loaded.
-for.errors.too_large.desc=Too Large
-for.errors.too_large.help=The greenhouse is too large for its controller or it is not closed at a position.
-
 ####################
 # APICULTURE
 ####################
 
 entity.Villager.apiarist=Apiarist
 
-death.bee.aggressive.player=%1$s encountered a swarm of bees. %2$s stole his apiarist's suit.
+death.bee.aggressive.player=%1$s encountered a swarm of bees. %2$s stole their apiarist's suit.
 death.bee.aggressive=%1$s encountered a swarm of bees. That had to sting.
-death.bee.hive.player=%1$s was killed by wild bees. %2$s stole his apiarist's suit.
+death.bee.hive.player=%1$s was killed by wild bees. %2$s stole their apiarist's suit.
 death.bee.hive=%1$s was killed by wild bees. They should have used a Smoker.
 death.bee.end.player=%1$s was ended by an unfriendly sting while fighting %2$s.
 death.bee.end=%1$s was ended by an unfriendly sting.
-death.bee.radioactive.player=%1$s walked into Chernobyl without his helmet on. %2$s watched and cackled.
-death.bee.radioactive=%1$s walked into Chernobyl without his helmet on.
+death.bee.radioactive.player=%1$s walked into Chernobyl without their helmet on. %2$s watched and cackled.
+death.bee.radioactive=%1$s walked into Chernobyl without their helmet on.
 death.bee.heroic.player=%1$s was slain by heroic bees! %2$s is forever in their debt.
 death.bee.heroic=%1$s was slain by heroic bees!
 
@@ -1122,7 +1106,7 @@ for.gui.book.categories=Categories
 for.gui.book.category.core.title=Core
 for.gui.book.category.lepidopterology.title=Lepidopterology
 for.gui.book.category.mail.title=Mail
-for.gui.book.category.greenhouse.title=Greenhouse (WIP)
+for.gui.book.category.habitat_former.title=Habitat Former
 for.gui.book.category.beekeeping.title=Beekeeping
 for.gui.book.category.arboriculture.title=Arboriculture
 for.gui.book.category.farming.title=Farming
@@ -1152,15 +1136,8 @@ for.multiblock.farm.error.needPlainBand=The Farm must have plain farm blocks for
 for.multiblock.farm.error.needPlainInterior=The Farm must have plain farm blocks for the interior.
 for.multiblock.farm.error.needGearbox=The farm must have a gearbox to accept power and do work.
 
-for.multiblock.greenhouse.error.needPlainOnTop=The Greenhouse must have plain greenhouse blocks for the top level.
-for.multiblock.greenhouse.error.needPlainInterior=The Greenhouse must have plain greenhouse blocks for the interior.
-for.multiblock.greenhouse.error.space.notclosed=The Greenhouse must be closed. Some blocks are missing or they are not a valid wall block.
-for.multiblock.greenhouse.error.space.unloaded=A part of the Greenhouse is in an unloaded chunk. All chunks around the greenhouse must to be loaded.
-for.multiblock.greenhouse.error.needSpace=The Greenhouse must not stand in the range of an other Greenhouse.
-
 for.multiblock.alveary.type=Alveary
 for.multiblock.farm.type=Farm
-for.multiblock.greenhouse.type=Greenhouse
 
 ####################
 # ARBORICULTURE
@@ -1416,7 +1393,7 @@ tile.for.farm_mushroom.name=Mushroom Farm
 tile.for.farm_nether.name=Infernal Farm
 tile.for.farm_nether.tooltip=Netherwart Farm
 tile.for.farm_gourd.name=Gourd Farm
-tile.for.farm_gourd.tooltip=Melon and Pumkin Farm
+tile.for.farm_gourd.tooltip=Melon and Pumpkin Farm
 tile.for.farm_ender.name=Ender Farm
 tile.for.farm_ender.tooltip=Chorus Flower and Ender Lily Farm
 tile.for.peat_bog.name=Peat Bog
@@ -1436,11 +1413,8 @@ for.gui.planter.west=W
 ####################
 # GREENHOUSE
 ####################
-for.gui.greenhouse.title=Greenhouse
-for.gui.greenhouse.hygroregulator.title=Greenhouse Hygroregulator
-
-tile.for.greenhouse.tooltip=Multi-Block: 3x2x3 - 5x5x5
-tile.for.greenhouse.camouflage.tooltip=This block can be camouflaged, that means that you can customise the model of this block.
+tile.for.greenhouse.deprecated1=This item has been deprecated
+tile.for.greenhouse.deprecated2=Place in crafting grid to get some resources back
 tile.for.greenhouse.plain.name=Greenhouse Block
 tile.for.greenhouse.gearbox.name=Greenhouse Energy Distributor
 tile.for.greenhouse.control.name=Greenhouse Control
@@ -1453,38 +1427,49 @@ tile.for.climatiser.dehumidifier.name=Greenhouse Dehumidifier
 tile.for.climatiser.humidifier.name=Greenhouse Humidifier
 tile.for.climatiser.hygro.name=Greenhouse Hygroregulator
 
-item.for.greenhouse_screen.name=Portable Greenhouse Screen
+####################
+# CLIMATOLAGY
+####################
+tile.for.habitat_former.name=Habitat Former
 
-for.gui.modifier.sources.range.up=Range Up: %s
-for.gui.modifier.sources.range.down=Range Down: %s
-for.gui.modifier.sources.change=Change: %s
-for.gui.modifier.rain=Rain: %s
-for.gui.modifier.time=Time: %s
-for.gui.modifier.altitude=Altitude: %s
-for.gui.modifier.title=Modifiers
-for.gui.sources=Climate Sources: %s
-for.gui.modifier.weather.title=Weather
-for.gui.modifier.time.title=Time
-for.gui.modifier.altitude.title=Altitude
-for.gui.modifier.sources.title=Climate Sources
+item.for.habitat_screen.name=Habitat Screen
 
-for.message.greenhouse_screen.fail=You only can use this item if it is linked to a greenhouse
-for.message.greenhouse_screen.position=This item is now linked to a greenhouse
-for.message.greenhouse_screen.preview.active=Switched preview mod to active
-for.message.greenhouse_screen.preview.inactive=Switched preview mod to inactive
-for.message.greenhouse_screen.center=You have set the center of the greenhouse to the coordinates
-for.message.greenhouse_screen.away=You are too far away from the greenhouse to use this item
-for.message.greenhouse_screen.notassembled=You only can link this item to the an assembled greenhouse
+for.gui.habitat_former.climate.target=Targeted: %s
+for.gui.habitat_former.climate.value=Value: %s
+for.gui.habitat_former.climate.default=Default: %s
+for.gui.habitat_former.climate.temperature=Temperature
+for.gui.habitat_former.climate.humidity=Humidity
+for.gui.habitat_former.climate.habitats=Habitats
+for.gui.habitat_former.climate.selection=Selection
+for.gui.habitat_former.climate.range=Range
+for.gui.habitat_former.climate.range.blocks=%s Blocks
+for.gui.habitat_former.climate.circle.enabled=Circular Mode Enabled
+for.gui.habitat_former.climate.circle.disabled=Circular Mode Disabled
+for.gui.habitat_former.climate.preview.enabled=Preview Mode Enabled
+for.gui.habitat_former.climate.preview.disabled=Preview Mode Disabled
+for.gui.habitat_former=Habitat Former
+for.gui.habitat_former.range=Range
+for.gui.habitat_former.resources=Resources
+for.gui.habitat_former.speed=Speed
 
-for.greenhouse_screen.mode=Preview Mode: %s
-for.greenhouse_screen.mode.active=Active
-for.greenhouse_screen.mode.inactive=Inactive
-for.greenhouse_screen.state=State: %s
-for.greenhouse_screen.state.linked=Linked to the position (%s, %s, %s)
-for.greenhouse_screen.state.fail=Not Linked
-for.greenhouse_screen.temperature=Temperature: %s
-for.greenhouse_screen.humidity=Humidity: %s
+for.habitat_screen.mode.active=Preview Mode: Active
+for.habitat_screen.mode.inactive=Preview Mode: Inactive
+for.habitat_screen.state.linked=Position '%s, %s, %s', Dimension '%s'
+for.habitat_screen.state.fail=Not Linked
+for.habitat_screen.temperature=Temperature: %s
+for.habitat_screen.humidity=Humidity: %s
+for.habitat_screen.status.state=Temperature: %s, Humidity: %s
+for.habitat_screen.status.nostate=No State Found
 
+for.hints.formergui.tag=Click and done!
+for.hints.formergui.desc=You can use the habitat buttons, the two climate bars in the upper center or the two text fields to change the targeted climate.
+for.hints.formerresources.tag=What do you need?
+for.hints.formerresources.desc=The habitat former uses energy to alter its temperature. And fluids like lava, water or crushed ice to alter its humidity and a small amount of its temperature.
+for.hints.formersettings.tag=Everything you want
+for.hints.formersettings.desc=Additional to the other options you can use the slot next to the habitat buttons to change the targeted climate to the preferred climate of a bee. Simply click with a bee on it.
+
+for.errors.wrong_resource.desc=Wrong Resource
+for.errors.wrong_resource.help=The habitat former cannot reach the targeted humidity with the inserted fluid.
 ####################
 # LEPIDOPTEROLOGY
 ####################
@@ -1496,6 +1481,7 @@ for.chat.command.forestry.butterfly.format=Format: /%s <sub-command>
 for.chat.command.forestry.butterfly.kill.desc=- %s : Kills all Butterflies
 for.chat.command.forestry.butterfly.kill.help=Kills all Butterflies in loaded chunks
 for.chat.command.forestry.butterfly.kill.format=Format: /%s [<dimension#>]
+for.chat.command.forestry.butterfly.kill.response=Killed %d butterflies
 
 for.butterflies.hybrid=Hybrid: %PRIMARY-%SECONDARY
 
@@ -1641,49 +1627,39 @@ for.gui.filter.forestry.lepidopterology.cocoon=Cocoon
 ####################
 # MODULES
 ####################
-for.module.core.description=Core mechanics for Forestry. Required by all other modules.
-for.module.fluids.description=Adds fluids, fluid blocks, and fluid containers.
 for.module.apiculture.description=Adds bees, beekeeping and bee products. Affects world generation.
 for.module.arboriculture.description=Adds additional tree species and products.
+for.module.backpacks.description=Adds backpacks.
+for.module.book.description=Adds a guide book that contains information about all other modules.
 for.module.charcoal.description=Adds wood piles, loam and a charcoal production.
+for.module.core.description=Core mechanics for Forestry. Required by all other modules.
+for.module.crates.description=Adds crates.
+for.module.cultivation.description=Adds automatic farms for a wide variety of products.
+for.module.database.description=Adds a new storage block for bees / trees and butterflies.
 for.module.energy.description=Adds several RF engines.
 for.module.factory.description=Adds a wide variety of machines to craft, produce and process products.
-for.module.worktable.description=Adds a crafting table that can save 8 recipes.
 for.module.farming.description=Adds automatic multiblock farm for a wide variety of products.
+for.module.fluids.description=Adds fluids, fluid blocks, and fluid containers.
 for.module.food.description=Adds food.
+for.module.greenhouse.description=Adds a greenhouse multiblock.
 for.module.lepidopterology.description=Butterflies. Shiny.
 for.module.mail.description=Adds Forestry's mail and trade system.
-for.module.backpacks.description=Adds backpacks.
-for.module.crates.description=Adds crates.
-for.module.greenhouse.description=Adds a greenhouse multiblock.
-for.module.database.description=Adds a new storage block for bees / trees and butterflies.
-for.module.cultivation.description=Adds automatic farms for a wide variety of products.
-for.module.book.description=Adds a guide book that contains information about all other modules.
+for.module.sorting.description=Adds a filter for sorting items with genetic material
+for.module.worktable.description=Adds a crafting table that can save 8 recipes.
 
-for.module.buildcraft6.description=Compatibility module for BuildCraft 6.
-for.module.pipes.description=Adds the apiarist's pipe for beekeeping if apiculture is enabled and BuildCraft 6 is present.
-for.module.ic2.description=Compatibility module for IC2. Adds electrical engine and generator for power conversion.
-for.module.natura.description=Compatibility module for Natura. Enables farming Natura saplings.
-for.module.ee2.description=Compatibility module for Equivalent Exchange 2. Enables the Omega branch of bees. Requires Apiculture to be enabled.
-for.module.ee3.description=Compatibility module for Equivalent Exchange 3.
-for.module.farmcraftory.description=Enables compatibility with FarmCraftory. Adds crops and vegetables to farms.
+for.module.actuallyadditions.description=Compatibility module for Actually Additions.
+for.module.betterwithmods.description=Compatibility module for Better With Mods. Enables farming hemp.
+for.module.buildcraft6.description=Compatibility module for BuildCraft. Currently version 7.99.
 for.module.biomesoplenty.description=Compatibility module for Biomes O Plenty. Enables farming BoP saplings.
+for.module.enderIO.description=Compatibility module for EnderIO.
 for.module.extrautilities.description=Compatibility module for Extra Utilities. Enables farming ender lilies and red orchid.
 for.module.harvestcraft.description=Compatibility module for HarvestCraft. Enables farming HarvestCraft plants and trees.
-for.module.magicalcrops.description=Compatibility module for Magical Crops.
-for.module.chisel.description=Compatibility module for Chisel. Adds worldgen blocks to Backpacks.
-for.module.plantmegapack.description=Compatibility module for Plant Mega Pack.
-for.module.witchery.description=Compatibility module for Witchery.
-for.module.agricraft.description=Compatibility module for AgriCraft.
-for.module.enderIO.description=Compatibility module for EnderIO.
+for.module.ic2.description=Compatibility module for IC2. Adds electrical engine and generator for power conversion.
 for.module.immersiveengineering.description=Compatibility module for Immersive Engineering.
-for.module.growthcraft.description=Compatibility module for GrowthCraft.
-for.module.erebus.description=Compatibility module for Erebus.
-for.module.rotarycraft.description=Compatibility module for RotaryCraft.
-for.module.actuallyadditions.description=Compatibility module for Actually Additions.
+for.module.mysticalagriculture.description=Compatibility module for Mystical Agriculture. Enables farming Mystical Agriculture crops.
+for.module.natura.description=Compatibility module for Natura. Enables farming Natura saplings.
 for.module.roots.description=Compatibility module for Roots.
 for.module.rustic.description=Compatibility module for Rustic.
-for.module.mysticalagriculture.description=Compatibility module for Mystical Agriculture. Enables farming Mystical Agriculture crops.
 for.module.techreborn.description=Compatibility module for Tech reborn. Enables harvesting rubber from rubber trees.
 
 ####################
@@ -1722,13 +1698,6 @@ for.config.world.generate.beehives.blacklist.category_comment=Disables the gener
 
 for.config.world.generate.villagers=Generate Villagers
 for.config.world.generate.villagers.comment=Generates Forestry villagers and their houses.
-
-for.config.world.generate.trees=Whether forestry should generate forestry trees in the world.
-for.config.world.generate.trees.dimBlacklist=Tree Generation Dimension Blacklist
-for.config.world.generate.trees.dimBlacklist.comment=Disables the generation of all trees in the specified dimensions. Enter one dimension id per line.
-for.config.world.generate.trees.treeFrequency=Tree Generation Frequency
-for.config.world.generate.trees.treeFrequency.comment=How Frequently forestry generates it's trees in the world
-for.config.world.generate.trees.biomeblacklist.comment=This will blacklist a biome or biome type for all tree generation. See the hive biome blacklist for more information.
 
 for.config.crafting=Crafting
 for.config.crafting.bronze=Craft Bronze
@@ -1790,12 +1759,10 @@ for.config.tweaks.capsule.capsulePickup.comment=Enables the function that cans a
 for.config.tweaks.capsule.capsuleReuseable=Reuseable Capsules
 for.config.tweaks.capsule.capsuleReuseable.comment=Capsules are no longer consumed after being emptied.
 
-for.config.tweaks.greenhouse.range=Greenhouse Range
-for.config.tweaks.greenhouse.range.comment=Set the range divisor of the climatiser of the greenhouse.
-for.config.tweaks.greenhouse.size=Greenhouse Size
-for.config.tweaks.greenhouse.size.comment=Set the size multiplier of the climated blocks.
-for.config.tweaks.greenhouse.energy=Greenhouse Energy Modifier
-for.config.tweaks.greenhouse.energy.comment=Modifies the energy that is used by the greenhouse climatisers.
+for.config.tweaks.charcoal.amount.base=Amount Base
+for.config.tweaks.charcoal.amount.base.comment=The base amount that the wood pile will drop if the wall blocks are no registered pile waal blocks.
+for.config.tweaks.charcoal.check.range=Wall Check Range
+for.config.tweaks.charcoal.check.range.comment=Sets the amount of blocks that the wood pile will check if it is a valid charcoal pile wall block.
 
 for.config.tweaks.book.spawn=Forester's Manual
 for.config.tweaks.book.spawn.comment=Players who enter the world for the first time get a Forester's Manual.
@@ -1803,7 +1770,8 @@ for.config.tweaks.book.spawn.comment=Players who enter the world for the first t
 for.config.genetics=Genetics
 for.config.genetics.pollinate.vanilla.trees=Pollinate Vanilla Trees
 for.config.genetics.pollinate.vanilla.trees.comment=Allow bees to pollinate vanilla tree leaves. When disabled, vanilla trees must be analyzed before they can be pollinated.
-for.config.genetics.analyzerblock.energy.use=Energy use of Analyzer Block per work cycle.
+for.config.genetics.analyzerblock.energy.use=Analyzer Block Energy Usage
+for.config.genetics.analyzerblock.energy.use.comment=Energy use of Analyzer Block per work cycle.
 for.config.genetics.research.boost.multiplier=Research Mutation Multiplier
 for.config.genetics.research.boost.multiplier.comment=Multiplies the chance of a mutation when it has been discovered in the Escritoire.
 for.config.genetics.research.boost.max.percent=Research Mutation Max
@@ -1843,11 +1811,16 @@ for.config.beekeeping.ticks.work=Ticks per Cycle
 for.config.beekeeping.ticks.work.comment=The number of ticks per bee work cycle.
 for.config.beekeeping.hivedamage.peaceful=Peaceful Hive Damage
 for.config.beekeeping.hivedamage.peaceful.comment=Whether bees can damage a player playing on peaceful mode.
+for.config.beekeeping.hivedamage.underwater=Underwater Hive Damage
+for.config.beekeeping.hivedamage.underwater.comment=Whether bees can damage a player while they are underwater.
+for.config.beekeeping.hivedamage.onlyAfterAttack=Defend Hive Damage
+for.config.beekeeping.hivedamage.onlyAfterAttack.comment=The bees only attack the player if he starts to destroy the hive.
+for.config.beekeeping.hivedamage.onlyPlayers=Player Hive Damage
+for.config.beekeeping.hivedamage.onlyPlayers.comment=Whether bees can damage other entities than the player.
 for.config.beekeeping.self.pollination=Leaf Self Pollination
 for.config.beekeeping.self.pollination.comment=If true bees will pollinate leaves with themselves to speed up getting a homozgous genome.
 for.config.beekeeping.ignoble.decay=Ignoble Decay
 for.config.beekeeping.ignoble.decay.comment=Whether ignoble bees will eventually die out.
-
 
 for.config.species.blacklist=Species Blacklist
 for.config.species.blacklist.comment=Add species to blacklist identified by their uid, one per line.
@@ -1855,12 +1828,23 @@ for.config.species.blacklist.comment=Add species to blacklist identified by thei
 for.config.butterfly.alleles.rarity=Get the butterfly spawn rarity by their uid, one per line.
 for.config.butterfly.entities.spawn.limit=Butterfly Spawn Limit
 for.config.butterfly.entities.spawn.limit.comment=Butterflies will stop natural spawning once this limit is reached.
+for.config.butterfly.entities.spawn.leaves=Spawn Butterflies From Leaves
+for.config.butterfly.entities.spawn.leaves.comment=Whether butterflies should spawn from the leaves of trees.
 for.config.butterfly.entities.maximum=Butterfly Maximum
 for.config.butterfly.entities.maximum.comment=New butterflies will stay in item form and will not take flight once this limit is reached.
 for.config.butterfly.entities.maxDistance=Maximum Distance To Home
 for.config.butterfly.entities.maxDistance.comment=Butterflies will fly home if they are too far away from it.
 for.config.butterfly.entities.pollination=Butterfly Pollination
 for.config.butterfly.entities.pollination.comment=Allow butterflies to pollinate leaves.
+for.config.butterfly.cocoons.generate=Generate Butterfly Cocoons
+for.config.butterfly.cocoons.generate.comment=Whether cocoons containing butterfiles should generate in the world
+for.config.butterfly.cocoons.amount=Butterfly Cocoon Frequency
+for.config.butterfly.cocoons.amount.comment=How often butterfly cocoons should generate
+for.config.butterfly.cocoons.serum=Serum Drop Chance
+for.config.butterfly.cocoons.serum.comment=How often cocoons should drop a serum
+for.config.butterfly.cocoons.second.serum=Second Serum Drop Chance
+for.config.butterfly.cocoons.second.serum.comment=How often cocoons should drop a second serum
+for.config.butterfly.alleles.loot=Loot drops from cocoons. Format is modid:name:meta;chance
 
 for.config.backpacks.item.stacks.format=Add itemStacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
 for.config.backpacks.ore.dict.format=Add ore dictionary names for the %s's backpack here in the format 'oreDictName'. Regular expressions may also be used.
@@ -1907,6 +1891,19 @@ for.config.gamemode.squeezer.liquid.apple.comment=modifies the amount of juice s
 for.config.gamemode.squeezer.mulch.apple.comment=modifies the chance of mulch per squeezed apple.
 
 for.config.gamemode.energy.engine.clockwork.comment=Enable the clockwork engine.
+
+for.config.power.types.rf=Redstone Flux
+for.config.power.types.rf.comment=Enable Redstone Flux power support.
+for.config.power.types.mj=MJ
+for.config.power.types.mj.comment=Enable MJ power support.
+for.config.power.types.tesla=Tesla
+for.config.power.types.tesla.comment=Enable Tesla power support.
+for.config.power.display.mode=Power Display Mode
+for.config.power.display.mode.comment=The format power will be displayed in in engine/machine interfaces.
+
+for.config.machines.enabled=Enabled machines.
+for.config.machines.enabled.comment=List of enabled machines. Note that some things may be impossible to do if you change this!
+
 
 ###################################
 # CUSTOM BEE AND TREE SPECIES NAMES
@@ -2019,6 +2016,10 @@ for.jei.rainmaker.causes.rain=Causes Rain
 for.jei.rainmaker.stops.rain=Stops Rain
 for.jei.rainmaker.speed=Speed: %s
 for.jei.rainmaker.duration=Duration: %s ticks
-tile.for.charcoal.pile.wall.name=Charcoal Pile
+for.jei.farming.name=Farming
+for.jei.farming.soil=Soil
+for.jei.farming.germlings=Germlings
+for.jei.farming.products=Products
+for.jei.charcoal.pile.name=Charcoal Pile
 for.jei.chance=Chance: %s
 for.jei.fortune=The amount of this item is affected by the fortune enchantment.

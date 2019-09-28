@@ -68,6 +68,16 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	@Override
+	public IFarmProperties getProperties() {
+		return properties;
+	}
+
+	@Override
+	public boolean isManual() {
+		return isManual;
+	}
+
+	@Override
 	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
@@ -98,7 +108,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	public abstract boolean isAcceptedWindfall(ItemStack stack);
 
 	protected final boolean isWaterSourceBlock(World world, BlockPos position) {
-		if(!world.isBlockLoaded(position)){
+		if (!world.isBlockLoaded(position)) {
 			return false;
 		}
 		IBlockState blockState = world.getBlockState(position);

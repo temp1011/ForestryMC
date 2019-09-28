@@ -4,14 +4,18 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.Tabs;
 import forestry.api.modules.ForestryModule;
 import forestry.arboriculture.blocks.BlockRegistryCharcoal;
-import forestry.arboriculture.charcoal.CharcoalPileWall;
+import forestry.arboriculture.charcoal.CharcoalManager;
+import forestry.core.CreativeTabForestry;
 import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.items.ItemRegistryCore;
@@ -19,6 +23,7 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CHARCOAL, name = "Charcoal", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.charcoal.description")
 public class ModuleCharcoal extends BlankForestryModule {
@@ -26,10 +31,14 @@ public class ModuleCharcoal extends BlankForestryModule {
 	private static BlockRegistryCharcoal blocks;
 
 	public static BlockRegistryCharcoal getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
+	@Override
+	public void setupAPI() {
+		TreeManager.charcoalManager = new CharcoalManager();
+	}
 
 	@Override
 	public void registerItemsAndBlocks() {
@@ -38,14 +47,17 @@ public class ModuleCharcoal extends BlankForestryModule {
 
 	@Override
 	public void postInit() {
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.CLAY, 3));
-		TreeManager.pileWalls.add(new CharcoalPileWall(getBlocks().loam, 4));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.END_STONE, 6));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.END_BRICKS, 6));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.DIRT, 2));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.GRAVEL, 1));
-		TreeManager.pileWalls.add(new CharcoalPileWall(Blocks.NETHERRACK, 3));
-		TreeManager.pileWalls.add(new CharcoalPileWall(ModuleCore.getBlocks().ashBrick, 5));
+		ICharcoalManager manager = TreeManager.charcoalManager;
+		if (manager != null) {
+			manager.registerWall(Blocks.CLAY, 3);
+			manager.registerWall(getBlocks().loam, 4);
+			manager.registerWall(Blocks.END_STONE, 6);
+			manager.registerWall(Blocks.END_BRICKS, 6);
+			manager.registerWall(Blocks.DIRT, 2);
+			manager.registerWall(Blocks.GRAVEL, 1);
+			manager.registerWall(Blocks.NETHERRACK, 3);
+			manager.registerWall(ModuleCore.getBlocks().ashBrick, 5);
+		}
 	}
 
 	@Override
@@ -59,13 +71,17 @@ public class ModuleCharcoal extends BlankForestryModule {
 
 		//Charcoal
 		RecipeUtil.addRecipe("charcoal_block", blocks.charcoal,
-				"###",
-				"###",
-				"###",
-				'#', new ItemStack(Items.COAL, 1, 1));
+			"###",
+			"###",
+			"###",
+			'#', new ItemStack(Items.COAL, 1, 1));
 		RecipeUtil.addShapelessRecipe("charcoal", new ItemStack(Items.COAL, 9, 1), blocks.charcoal);
 
 		//Dirt Pile Block
 		RecipeUtil.addShapelessRecipe("loam", new ItemStack(blocks.loam, 4), Items.CLAY_BALL, coreItems.compost, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, OreDictUtil.SAND, Items.CLAY_BALL, coreItems.compost, Items.CLAY_BALL);
+	}
+
+	public static CreativeTabs getTag() {
+		return ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) ? Tabs.tabArboriculture : CreativeTabForestry.tabForestry;
 	}
 }

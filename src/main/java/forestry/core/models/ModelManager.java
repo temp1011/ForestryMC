@@ -50,7 +50,6 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.config.Constants;
 import forestry.core.items.IColoredItem;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.ModelUtil;
 
 @SideOnly(Side.CLIENT)
@@ -67,7 +66,9 @@ public class ModelManager implements IModelManager {
 	private final Set<IColoredBlock> blockColorList = new HashSet<>();
 	private final Set<IColoredItem> itemColorList = new HashSet<>();
 	/* DEFAULT ITEM AND BLOCK MODEL STATES*/
+	@Nullable
 	private IModelState defaultBlockState;
+	@Nullable
 	private IModelState defaultItemState;
 
 	static {
@@ -100,9 +101,9 @@ public class ModelManager implements IModelManager {
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item) {
-		ResourceLocation resourceLocation = ItemStackUtil.getItemNameFromRegistry(item);
+		ResourceLocation resourceLocation = item.getRegistryName();
 		Preconditions.checkNotNull(resourceLocation);
-		String itemName = resourceLocation.getResourcePath();
+		String itemName = resourceLocation.getPath();
 		return getModelLocation(itemName);
 	}
 
@@ -177,15 +178,21 @@ public class ModelManager implements IModelManager {
 			}
 		}
 	}
-	
+
 	public IModelState getDefaultBlockState() {
+		if (defaultBlockState == null) {
+			defaultBlockState = ModelUtil.loadModelState(new ResourceLocation("minecraft:models/block/block"));
+		}
 		return defaultBlockState;
 	}
-	
+
 	public IModelState getDefaultItemState() {
+		if (defaultItemState == null) {
+			defaultItemState = ModelUtil.loadModelState(new ResourceLocation("minecraft:models/item/generated"));
+		}
 		return defaultItemState;
 	}
-	
+
 	public void registerCustomBlockModel(BlockModelEntry index) {
 		customBlockModels.add(index);
 		if (index.addStateMapper) {
@@ -197,7 +204,7 @@ public class ModelManager implements IModelManager {
 	public void registerCustomModel(ModelEntry index) {
 		customModels.add(index);
 	}
-	
+
 	public void onBakeModels(ModelBakeEvent event) {
 		//register custom models
 		IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
@@ -211,10 +218,6 @@ public class ModelManager implements IModelManager {
 		for (final ModelEntry entry : customModels) {
 			registry.putObject(entry.modelLocation, entry.model);
 		}
-		
-		//load default item and block model states
-		defaultItemState = ModelUtil.loadModelState(new ResourceLocation("minecraft:models/item/generated"));
-		defaultBlockState = ModelUtil.loadModelState(new ResourceLocation("minecraft:models/block/block"));
 	}
 
 	@SideOnly(Side.CLIENT)

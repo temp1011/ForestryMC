@@ -12,6 +12,7 @@ package forestry.energy.gui;
 
 import net.minecraft.inventory.Container;
 
+import forestry.core.config.Config;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.render.TextureManagerForestry;
@@ -49,10 +50,10 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 			drawHeader(Translator.translateToLocal("for.gui.energy"), x + 22, y + 8);
 
 			drawSubheader(Translator.translateToLocal("for.gui.currentOutput") + ':', x + 22, y + 20);
-			drawText(tile.getCurrentOutput() + " RF/t", x + 22, y + 32);
+			drawText(Config.energyDisplayMode.formatRate(tile.getCurrentOutput()), x + 22, y + 32);
 
 			drawSubheader(Translator.translateToLocal("for.gui.stored") + ':', x + 22, y + 44);
-			drawText(tile.getEnergyManager().getEnergyStored() + " RF", x + 22, y + 56);
+			drawText(Config.energyDisplayMode.formatEnergyValue(tile.getEnergyManager().getEnergyStored()), x + 22, y + 56);
 
 			drawSubheader(Translator.translateToLocal("for.gui.heat") + ':', x + 22, y + 68);
 			drawText((double) tile.getHeat() / (double) 10 + 20.0 + " C", x + 22, y + 80);
@@ -60,7 +61,7 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 
 		@Override
 		public String getTooltip() {
-			return tile.getCurrentOutput() + " RF/t";
+			return Config.energyDisplayMode.formatRate(tile.getCurrentOutput());
 		}
 	}
 

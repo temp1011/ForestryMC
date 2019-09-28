@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
@@ -61,7 +59,8 @@ public class PacketActiveUpdate extends ForestryPacket implements IForestryPacke
 			TileEntity tile = TileUtil.getTile(world, pos);
 			if (tile instanceof IActivatable) {
 				((IActivatable) tile).setActive(active);
-			} else if (tile instanceof IMultiblockComponent) {
+			}
+			if (tile instanceof IMultiblockComponent) {
 				IMultiblockComponent component = (IMultiblockComponent) tile;
 				if (component.getMultiblockLogic().isConnected() && component.getMultiblockLogic().getController() instanceof IActivatable) {
 					((IActivatable) component.getMultiblockLogic().getController()).setActive(active);

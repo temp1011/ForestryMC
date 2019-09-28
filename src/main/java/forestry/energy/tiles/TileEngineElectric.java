@@ -70,7 +70,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		super("engine.tin", Constants.ENGINE_ELECTRIC_HEAT_MAX, 100000);
 
 		setInternalInventory(new InventoryEngineElectric(this));
-		
+
 		if (ModuleHelper.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.INDUSTRIALCRAFT2)) {
 			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 4);
 		}
@@ -167,7 +167,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	public void updateServerSide() {
 		IErrorLogic errorLogic = getErrorLogic();
 
-		 //No work to be done if IC2 is unavailable.
+		//No work to be done if IC2 is unavailable.
 		if (errorLogic.setCondition(ic2EnergySink == null, EnumErrorCode.NO_ENERGY_NET)) {
 			return;
 		}
@@ -180,7 +180,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return;
 		}
 
-		if (getStackInSlot(InventoryEngineElectric.SLOT_BATTERY) != null) {
+		if (!getStackInSlot(InventoryEngineElectric.SLOT_BATTERY).isEmpty()) {
 			replenishFromBattery(InventoryEngineElectric.SLOT_BATTERY);
 		}
 

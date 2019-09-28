@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.NetworkUtil;
 import forestry.farming.logic.crops.CropDestroy;
@@ -28,7 +29,7 @@ public class FarmableRusticSapling implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		IBlockState blockState = germlingBlock.getStateFromMeta(germling.getItemDamage());	//TODO - stop using meta here
+		IBlockState blockState = germlingBlock.getStateFromMeta(germling.getItemDamage());    //TODO - stop using meta here
 		if (world.setBlockState(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
@@ -55,6 +56,12 @@ public class FarmableRusticSapling implements IFarmable {
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
 		return germling == itemstack.getItem();
+	}
+
+	@Override
+	public void addInformation(IFarmableInfo info) {
+		info.addGermlings(new ItemStack(germling));
+		info.addProducts(windfall);
 	}
 
 	@Override

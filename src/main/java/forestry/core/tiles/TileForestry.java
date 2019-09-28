@@ -12,8 +12,10 @@ package forestry.core.tiles;
 
 import com.google.common.base.Preconditions;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Collection;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -33,12 +35,14 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.ILocatable;
+import forestry.core.config.Constants;
 import forestry.core.errors.ErrorLogic;
 import forestry.core.gui.IGuiHandlerTile;
 import forestry.core.inventory.FakeInventoryAdapter;
@@ -50,8 +54,14 @@ import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
 
-//@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, IGuiHandlerTile, ITickable {
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.ITriggerExternal;
+import buildcraft.api.statements.ITriggerInternal;
+import buildcraft.api.statements.ITriggerInternalSided;
+import buildcraft.api.statements.ITriggerProvider;
+
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
+public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, IGuiHandlerTile, ITickable, ITriggerProvider {
 	private final ErrorLogic errorHandler = new ErrorLogic();
 	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 
@@ -170,22 +180,23 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	/* ITriggerProvider */
-	// TODO: buildcraft for 1.9
-	//	@Optional.Method(modid = "BuildCraftAPI|statements")
-	//	@Override
-	//	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
-	//		return null;
-	//	}
-	//
-	//	@Optional.Method(modid = "BuildCraftAPI|statements")
-	//	@Override
-	//	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-	//		return null;
-	//	}
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
+	}
+
+	@Override
+	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) {
+	}
+
+	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	@Override
+	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
+	}
 
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {
-		return world.isBlockIndirectlyGettingPowered(getPos()) > 0;
+		return world.getRedstonePowerFromNeighbors(getPos()) > 0;
 	}
 
 	protected final void setNeedsNetworkUpdate() {
@@ -204,7 +215,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	 */
 	@Override
 	public String getUnlocalizedTitle() {
-		String blockUnlocalizedName = getBlockType().getUnlocalizedName();
+		String blockUnlocalizedName = getBlockType().getTranslationKey();
 		return blockUnlocalizedName + '.' + getBlockMetadata() + ".name";
 	}
 
@@ -343,10 +354,10 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing != null) {
-				SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(inventory, facing);
+				SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(getInternalInventory(), facing);
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);
 			} else {
-				InvWrapper invWrapper = new InvWrapper(inventory);
+				InvWrapper invWrapper = new InvWrapper(getInternalInventory());
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(invWrapper);
 			}
 
@@ -357,6 +368,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
-				super.hasCapability(capability, facing);
+			super.hasCapability(capability, facing);
 	}
 }

@@ -38,22 +38,26 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.worktable.inventory.InventoryCraftingForestry;
 
 public abstract class RecipeUtil {
-	
+
 	// TODO use json recipes
 
 	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
 		}
+		FluidStack outputStack = output.getFluid(1);
+		if (outputStack == null) {
+			return;
+		}
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, output.getFluid(1), new FluidStack(FluidRegistry.WATER, 1));
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(FluidRegistry.WATER, 1));
 
 		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.JUICE.getFluid(1));
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.JUICE.getFluid(1));
 		}
 
 		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.FOR_HONEY.getFluid(1));
 		}
 	}
 
@@ -61,15 +65,19 @@ public abstract class RecipeUtil {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
 		}
+		FluidStack outputStack = output.getFluid(1);
+		if (outputStack == null) {
+			return;
+		}
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, output.getFluid(1), new FluidStack(FluidRegistry.WATER, 1));
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(FluidRegistry.WATER, 1));
 
 		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.JUICE.getFluid(1));
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.JUICE.getFluid(1));
 		}
 
 		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.FOR_HONEY.getFluid(1));
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.FOR_HONEY.getFluid(1));
 		}
 	}
 
@@ -78,12 +86,12 @@ public abstract class RecipeUtil {
 		if (!recipe.matches(originalCrafting, world)) {
 			return null;
 		}
-		
+
 		ItemStack expectedOutput = recipe.getCraftingResult(originalCrafting);
 		if (expectedOutput.isEmpty()) {
 			return null;
 		}
-		
+
 		InventoryCraftingForestry crafting = new InventoryCraftingForestry();
 		NonNullList<ItemStack> stockCopy = ItemStackUtil.condenseStacks(availableItems);
 
@@ -98,7 +106,7 @@ public abstract class RecipeUtil {
 				}
 			}
 		}
-		
+
 		if (recipe.matches(crafting, world)) {
 			ItemStack output = recipe.getCraftingResult(crafting);
 			if (ItemStack.areItemStacksEqual(output, expectedOutput)) {
@@ -108,7 +116,7 @@ public abstract class RecipeUtil {
 
 		return null;
 	}
-	
+
 	private static ItemStack getCraftingEquivalent(NonNullList<ItemStack> stockCopy, InventoryCrafting crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput) {
 		ItemStack originalStack = crafting.getStackInSlot(slot);
 		for (ItemStack stockStack : stockCopy) {
@@ -129,7 +137,7 @@ public abstract class RecipeUtil {
 	}
 
 	public static List<IRecipe> findMatchingRecipes(InventoryCrafting inventory, World world) {
-		return ForgeRegistries.RECIPES.getValues().stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
+		return ForgeRegistries.RECIPES.getValuesCollection().stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
 	}
 
 	public static void addRecipe(String recipeName, Block block, Object... obj) {

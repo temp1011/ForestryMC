@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmableInfo;
 import forestry.core.utils.BlockUtil;
 import forestry.farming.logic.crops.CropDestroy;
 
@@ -40,9 +41,14 @@ public class FarmableVanillaMushroom extends FarmableBase {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		if(!plantedState.getBlock().canPlaceBlockAt(world, pos)) {
+		if (!plantedState.getBlock().canPlaceBlockAt(world, pos)) {
 			return false;
 		}
 		return BlockUtil.setBlockWithPlaceSound(world, pos, plantedState);
+	}
+
+	@Override
+	public void addInformation(IFarmableInfo info) {
+		info.addProducts(germling);
 	}
 }

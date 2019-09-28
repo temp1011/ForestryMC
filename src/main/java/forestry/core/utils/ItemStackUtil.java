@@ -29,13 +29,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.registries.IForgeRegistry;
 
 public abstract class ItemStackUtil {
-
-	public static final ItemStack[] EMPTY_STACK_ARRAY = new ItemStack[0];
 
 	/**
 	 * Compares item id, damage and NBT. Accepts wildcard damage.
@@ -62,55 +58,16 @@ public abstract class ItemStackUtil {
 		return ItemStack.areItemStackTagsEqual(lhs, rhs);
 	}
 
-	/**
-	 * @return The registry name of the item as {@link ResourceLocation}
-	 */
-	@Nullable
-	public static ResourceLocation getItemNameFromRegistry(Item item) {
-		IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
-		if (itemRegistry.containsValue(item)) {
-			return itemRegistry.getKey(item);
-		} else {
-			return null;
-		}
-	}
-	
-	/**
-	 * @return The registry name of the block as {@link ResourceLocation}
-	 */
-	@Nullable
-	public static String getBlockNameFromRegistryAsString(Block block) {
-		IForgeRegistry<Block> itemRegistry = ForgeRegistries.BLOCKS;
-		if (itemRegistry.containsValue(block)) {
-			return itemRegistry.getKey(block).toString();
-		} else {
-			return null;
-		}
-	}
-	
-	/**
-	 * @return The registry name of the block as {@link ResourceLocation}
-	 */
-	@Nullable
-	public static ResourceLocation getBlockNameFromRegistry(Block block) {
-		IForgeRegistry<Block> itemRegistry = ForgeRegistries.BLOCKS;
-		if (itemRegistry.containsValue(block)) {
-			return itemRegistry.getKey(block);
-		} else {
-			return null;
-		}
-	}
+
+	//TODO - move towards resourcelocations anyway as they are safer in some ways
 
 	/**
 	 * @return The registry name of the item as {@link String}
 	 */
 	@Nullable
 	public static String getItemNameFromRegistryAsString(Item item) {
-		ResourceLocation itemNameFromRegistry = getItemNameFromRegistry(item);
-		if (itemNameFromRegistry == null) {
-			return null;
-		}
-		return itemNameFromRegistry.toString();
+		ResourceLocation rl = item.getRegistryName();
+		return rl == null ? null : rl.toString();
 	}
 
 	@Nullable
@@ -131,50 +88,6 @@ public abstract class ItemStackUtil {
 		} else {
 			return itemStackString;
 		}
-	}
-
-	/**
-	 * @param itemName The registry name from the item as {@link String}
-	 * @return The item from the item registry
-	 */
-	@Nullable
-	public static Item getItemFromRegistry(String itemName) {
-		return getItemFromRegistry(new ResourceLocation(itemName));
-	}
-
-	/**
-	 * @param itemName The registry name from the item as {@link ResourceLocation}
-	 * @return The item from the item registry
-	 */
-	@Nullable
-	public static Item getItemFromRegistry(ResourceLocation itemName) {
-		IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
-		if (!itemRegistry.containsKey(itemName)) {
-			return null;
-		}
-		return itemRegistry.getValue(itemName);
-	}
-
-	/**
-	 * @param itemName The registry name from the block as {@link String}
-	 * @return The block from the block registry
-	 */
-	@Nullable
-	public static Block getBlockFromRegistry(String itemName) {
-		return getBlockFromRegistry(new ResourceLocation(itemName));
-	}
-
-	/**
-	 * @param itemName The registry name from the block as {@link ResourceLocation}
-	 * @return The block from the block registry
-	 */
-	@Nullable
-	public static Block getBlockFromRegistry(ResourceLocation itemName) {
-		IForgeRegistry<Block> blockRegistry = ForgeRegistries.BLOCKS;
-		if (!blockRegistry.containsKey(itemName)) {
-			return null;
-		}
-		return blockRegistry.getValue(itemName);
 	}
 
 	/**
@@ -236,12 +149,12 @@ public abstract class ItemStackUtil {
 
 		return condensed;
 	}
-	
+
 	public static Pair<NonNullList<ItemStack>, NonNullList<String>> condenseStacks(NonNullList<ItemStack> stacks, NonNullList<String> dicts) {
 		NonNullList<ItemStack> condensed = NonNullList.create();
 		NonNullList<String> condensedDicts = NonNullList.create();
 
-		for (int i = 0;i < stacks.size();i++) {
+		for (int i = 0; i < stacks.size(); i++) {
 			ItemStack stack = stacks.get(i);
 			if (stack.isEmpty()) {
 				continue;
@@ -312,7 +225,7 @@ public abstract class ItemStackUtil {
 
 		return totalSets;
 	}
-	
+
 	/**
 	 * Counts how many full sets are contained in the passed stock
 	 */
@@ -320,11 +233,11 @@ public abstract class ItemStackUtil {
 		int totalSets = 0;
 
 		Pair<NonNullList<ItemStack>, NonNullList<String>> condensedRequired = ItemStackUtil.condenseStacks(set, oreDicts);
-		NonNullList<String> condensedRequiredDicts= condensedRequired.getRight();
+		NonNullList<String> condensedRequiredDicts = condensedRequired.getRight();
 		NonNullList<ItemStack> condensedRequiredStacks = condensedRequired.getLeft();
 		NonNullList<ItemStack> condensedOfferedStacks = ItemStackUtil.condenseStacks(stock);
 
-		for (int y = 0;y < condensedRequiredStacks.size();y++) {
+		for (int y = 0; y < condensedRequiredStacks.size(); y++) {
 			ItemStack req = condensedRequiredStacks.get(y);
 			String offerDict = condensedRequiredDicts.get(y);
 			int reqCount = 0;
@@ -384,13 +297,13 @@ public abstract class ItemStackUtil {
 		}
 
 		// When the base stackTagCompound is null or empty, treat it as a wildcard for crafting
-		if (base.getTagCompound() == null || base.getTagCompound().hasNoTags()) {
+		if (base.getTagCompound() == null || base.getTagCompound().isEmpty()) {
 			return true;
 		} else {
 			return ItemStack.areItemStackTagsEqual(base, comparison);
 		}
 	}
-	
+
 	/**
 	 * Compare two item stacks for crafting equivalency.
 	 */
@@ -422,12 +335,12 @@ public abstract class ItemStackUtil {
 
 		return false;
 	}
-	
+
 	/**
 	 * Compare two item stacks for crafting equivalency.
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, @Nullable String oreDict, boolean craftingTools) {
-		if(isCraftingEquivalent(base, comparison, craftingTools)){
+		if (isCraftingEquivalent(base, comparison, craftingTools)) {
 			return true;
 		}
 
@@ -435,7 +348,7 @@ public abstract class ItemStackUtil {
 			int[] validIds = OreDictionary.getOreIDs(comparison);
 			int validID = OreDictionary.getOreID(oreDict);
 
-			for(int id : validIds){
+			for (int id : validIds) {
 				if (id == validID) {
 					return true;
 				}
@@ -444,7 +357,7 @@ public abstract class ItemStackUtil {
 
 		return false;
 	}
-	
+
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean craftingTools) {
 		if (base.isEmpty() || comparison.isEmpty()) {
 			return false;
@@ -454,17 +367,8 @@ public abstract class ItemStackUtil {
 			return true;
 		}
 
-		if (isCraftingEquivalent(base, comparison)) {
-			return true;
-		}
+		return isCraftingEquivalent(base, comparison);
 
-		if (base.getTagCompound() != null && !base.getTagCompound().hasNoTags()) {
-			if (!ItemStack.areItemStacksEqual(base, comparison)) {
-				return false;
-			}
-		}
-
-		return false;
 	}
 
 	public static boolean isCraftingToolEquivalent(ItemStack base, ItemStack comparison) {
@@ -478,7 +382,7 @@ public abstract class ItemStackUtil {
 			return false;
 		}
 
-		if (base.getTagCompound() == null || base.getTagCompound().hasNoTags()) {
+		if (base.getTagCompound() == null || base.getTagCompound().isEmpty()) {
 			// tool uses meta for damage
 			return true;
 		} else {
@@ -515,16 +419,8 @@ public abstract class ItemStackUtil {
 
 
 	public static ItemStack copyWithRandomSize(ItemStack template, int max, Random rand) {
-		int size = max <= 0 ? 0 : rand.nextInt(max);
-		ItemStack created = template.copy();
-		if (size <= 0) {
-			created.setCount(1);
-		} else if (size > created.getMaxStackSize()) {
-			created.setCount(created.getMaxStackSize());
-		} else {
-			created.setCount(size);
-		}
-		return created;
+		int size = max <= 0 ? 1 : rand.nextInt(max);
+		return createCopyWithCount(template, Math.min(size, template.getMaxStackSize()));
 	}
 
 	@Nullable
@@ -593,7 +489,8 @@ public abstract class ItemStackUtil {
 		}
 		return null;
 	}
-	
+
+	//TODO - just use a copy and set the count to make code simpler?
 	/**
 	 * Checks like {@link ItemStack#areItemStacksEqual(ItemStack, ItemStack)}
 	 * but ignores stack size (count).

@@ -16,6 +16,7 @@ import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 
 public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPileWallWrapper> {
 
@@ -24,10 +25,10 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 	private final IDrawableAnimated arrowAnimated;
 	private final IDrawableStatic flame;
 	private final IDrawableAnimated flameAnimated;
-	
+
 	public CharcoalPileWallCategory(IGuiHelper helper) {
-		super(helper.createBlankDrawable(120, 38), "tile.for.charcoal.pile.wall.name");
-		ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, "textures/gui/jei/charcoal_pile_wall.png");
+		super(helper.createBlankDrawable(120, 38), "for.jei.charcoal.pile.name");
+		ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, "textures/gui/jei/recipes.png");
 		arrow = helper.createDrawable(resourceLocation, 0, 14, 22, 16);
 		IDrawableStatic arrowAnimated = helper.createDrawable(resourceLocation, 22, 14, 22, 16);
 		this.arrowAnimated = helper.createAnimatedDrawable(arrowAnimated, 160, StartDirection.LEFT, false);
@@ -53,7 +54,7 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 		slot.draw(minecraft, 84, 16);
 		slot.draw(minecraft, 104, 16);
 	}
-	
+
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, CharcoalPileWallWrapper recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();
@@ -62,10 +63,10 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 		itemStackGroup.init(2, false, 84, 16);
 		itemStackGroup.init(3, false, 104, 16);
 
-		itemStackGroup.set(0, ingredients.getInputs(ItemStack.class).get(0));
+		itemStackGroup.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
 		itemStackGroup.set(1, new ItemStack(ModuleCharcoal.getBlocks().woodPile));
-		itemStackGroup.set(2, ingredients.getOutputs(ItemStack.class).get(0));
-		itemStackGroup.set(3, ingredients.getOutputs(ItemStack.class).get(1));
+		itemStackGroup.set(2, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+		itemStackGroup.set(3, ingredients.getOutputs(VanillaTypes.ITEM).get(1));
 
 		ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
 		tooltip.addFortuneTooltip(2);

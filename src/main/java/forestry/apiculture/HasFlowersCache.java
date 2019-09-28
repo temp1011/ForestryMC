@@ -11,7 +11,6 @@
 package forestry.apiculture;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -44,14 +43,14 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 	public HasFlowersCache() {
 		this.flowerCheckInterval = 200;
 	}
-	
+
 	public HasFlowersCache(int checkInterval) {
 		flowerCheckInterval = checkInterval;
 	}
 
 	@Nullable
 	private FlowerData flowerData;
-	private final List<BlockPos> flowerCoords = new ArrayList<>();
+	private final ArrayList<BlockPos> flowerCoords = new ArrayList<>();
 	private final List<IBlockState> flowers = new ArrayList<>();
 
 	private boolean needsSync = false;
@@ -126,7 +125,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 			IBeeGenome genome = queen.getGenome();
 			String flowerType = genome.getFlowerProvider().getFlowerType();
 			if (!this.flowerData.flowerType.equals(flowerType)
-					|| !this.flowerData.territory.equals(genome.getTerritory())) {
+				|| !this.flowerData.territory.equals(genome.getTerritory())) {
 				flowerData = new FlowerData(queen, housing);
 				flowerCoords.clear();
 				flowers.clear();
@@ -177,13 +176,17 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 		}
 
 		NBTTagCompound hasFlowerCacheNBT = nbttagcompound.getCompoundTag(NBT_KEY);
-
+		flowerCoords.clear();
 		if (hasFlowerCacheNBT.hasKey(NBT_KEY_FLOWERS)) {
 			int[] flowersList = hasFlowerCacheNBT.getIntArray(NBT_KEY_FLOWERS);
 			if (flowersList.length % 3 == 0) {
 				int flowerCount = flowersList.length / 3;
+
+				flowerCoords.ensureCapacity(flowerCount);
+
 				for (int i = 0; i < flowerCount; i++) {
-					BlockPos flowerPos = new BlockPos(flowersList[i], flowersList[i + 1], flowersList[i + 2]);
+					int index = i * 3;
+					BlockPos flowerPos = new BlockPos(flowersList[index], flowersList[index + 1], flowersList[index + 2]);
 					flowerCoords.add(flowerPos);
 				}
 				needsSync = true;
@@ -203,7 +206,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 				flowersList[i] = flowerPos.getX();
 				flowersList[i + 1] = flowerPos.getY();
 				flowersList[i + 2] = flowerPos.getZ();
-				i++;
+				i += 3;
 			}
 
 			hasFlowerCacheNBT.setIntArray(NBT_KEY_FLOWERS, flowersList);

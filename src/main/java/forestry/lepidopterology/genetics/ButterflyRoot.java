@@ -108,7 +108,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		}
 
 		ItemRegistryLepidopterology butterflyItems = ModuleLepidopterology.getItems();
-		Preconditions.checkState(butterflyItems != null);
+		Preconditions.checkNotNull(butterflyItems);
 
 		Item item = stack.getItem();
 		if (butterflyItems.butterflyGE == item) {
@@ -162,7 +162,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	public ItemStack getMemberStack(IIndividual butterfly, ISpeciesType type) {
 		Preconditions.checkArgument(type instanceof EnumFlutterType);
 		ItemRegistryLepidopterology items = ModuleLepidopterology.getItems();
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 
 		Item butterflyItem;
 		switch ((EnumFlutterType) type) {
@@ -185,7 +185,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		butterfly.writeToNBT(nbttagcompound);
 		ItemStack stack = new ItemStack(butterflyItem);
 		stack.setTagCompound(nbttagcompound);
-		if(type == EnumFlutterType.CATERPILLAR){
+		if (type == EnumFlutterType.CATERPILLAR) {
 			ItemButterflyGE.setAge(stack, 0);
 		}
 		return stack;
@@ -206,7 +206,7 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 		BlockRegistryLepidopterology blocks = ModuleLepidopterology.getBlocks();
 
 		BlockPos pos = getValidCocoonPos(world, coordinates, caterpillar, owner, createNursery);
-		if(pos == BlockPos.ORIGIN){
+		if (pos == BlockPos.ORIGIN) {
 			return pos;
 		}
 		IBlockState state = blocks.cocoon.getDefaultState();
@@ -234,13 +234,13 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	private BlockPos getValidCocoonPos(World world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
-		if(isPositionValid(world, pos.down(), caterpillar, gameProfile, createNursery)){
+		if (isPositionValid(world, pos.down(), caterpillar, gameProfile, createNursery)) {
 			return pos.down();
 		}
-		for(int tries = 0;tries < 3;tries++){
-			for(int y = 1;y < world.rand.nextInt(5);y++){
-				BlockPos coordinate = pos.add(world.rand.nextInt(6)-3, -y, world.rand.nextInt(6)-3);
-				if(isPositionValid(world, coordinate, caterpillar, gameProfile, createNursery)){
+		for (int tries = 0; tries < 3; tries++) {
+			for (int y = 1; y < world.rand.nextInt(5); y++) {
+				BlockPos coordinate = pos.add(world.rand.nextInt(6) - 3, -y, world.rand.nextInt(6) - 3);
+				if (isPositionValid(world, coordinate, caterpillar, gameProfile, createNursery)) {
 					return coordinate;
 				}
 			}
@@ -248,22 +248,22 @@ public class ButterflyRoot extends SpeciesRoot implements IButterflyRoot {
 
 		return BlockPos.ORIGIN;
 	}
-	
-	public boolean isPositionValid(World world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery){
+
+	public boolean isPositionValid(World world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
 		IBlockState blockState = world.getBlockState(pos);
-		if(BlockUtil.canReplace(blockState, world, pos)){
+		if (BlockUtil.canReplace(blockState, world, pos)) {
 			BlockPos nurseryPos = pos.up();
 			IButterflyNursery nursery = GeneticsUtil.getNursery(world, nurseryPos);
-			if(isNurseryValid(nursery, caterpillar, gameProfile)){
+			if (isNurseryValid(nursery, caterpillar, gameProfile)) {
 				return true;
-			}else if(createNursery && GeneticsUtil.canCreateNursery(world, nurseryPos)){
+			} else if (createNursery && GeneticsUtil.canCreateNursery(world, nurseryPos)) {
 				nursery = GeneticsUtil.getOrCreateNursery(gameProfile, world, nurseryPos, false);
 				return isNurseryValid(nursery, caterpillar, gameProfile);
 			}
 		}
 		return false;
 	}
-	
+
 	private boolean isNurseryValid(@Nullable IButterflyNursery nursery, IButterfly caterpillar, GameProfile gameProfile) {
 		return nursery != null && nursery.canNurse(caterpillar);
 	}

@@ -13,7 +13,16 @@ package forestry.core.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+
+import net.minecraftforge.common.capabilities.Capability;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.core.IErrorLogic;
+import forestry.core.capabilities.HasWorkWrapper;
 import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.IStreamableGui;
@@ -22,14 +31,11 @@ import forestry.core.render.TankRenderInfo;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-//@Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
+import static forestry.core.capabilities.HasWorkWrapper.CAPABILITY_HAS_WORK;
+
 public abstract class TilePowered extends TileBase implements IRenderableTile, ISpeedUpgradable, IStreamableGui {
+
 	private static final int WORK_TICK_INTERVAL = 5; // one Forestry work tick happens every WORK_TICK_INTERVAL game ticks
 
 	private final EnergyManager energyManager;
@@ -88,8 +94,6 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 		return false;
 	}
 
-	// TODO: buildcraft for 1.9
-//	@Override
 	public abstract boolean hasWork();
 
 	@Override
@@ -197,12 +201,18 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	/* IPowerHandler */
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+		if (capability == CAPABILITY_HAS_WORK) {
+			return true;
+		}
 		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@Nullable
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+		if (capability == CAPABILITY_HAS_WORK) {
+			return CAPABILITY_HAS_WORK.cast(new HasWorkWrapper(this));
+		}
 		T energyCapability = energyManager.getCapability(capability);
 		if (energyCapability != null) {
 			return energyCapability;

@@ -30,6 +30,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.climate.ClimateManager;
+import forestry.api.climate.IClimateListener;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
@@ -54,7 +56,6 @@ import forestry.core.owner.OwnerHandler;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
-import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.VectUtil;
 import forestry.cultivation.gui.ContainerPlanter;
@@ -82,6 +83,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	private final TankManager tankManager;
 	private final StandardTank resourceTank;
 	private final OwnerHandler ownerHandler = new OwnerHandler();
+	private final IClimateListener listener;
 
 	private int platformHeight = -1;
 	private Stage stage = Stage.CULTIVATE;
@@ -108,6 +110,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
 
 		this.tankManager = new TankManager(this, resourceTank);
+		this.listener = ClimateManager.climateFactory.createListener(this);
 		setEnergyPerWorkCycle(10);
 		setTicksPerWorkCycle(2);
 	}
@@ -247,9 +250,9 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		int size = 1;
 		int extend = Config.planterExtend;
 
-		if(Config.ringFarms){
+		if (Config.ringFarms) {
 			int ringSize = Config.ringSize;
-			minPos = pos.add(-ringSize, 0 , -ringSize);
+			minPos = pos.add(-ringSize, 0, -ringSize);
 			maxPos = pos.add(ringSize, 0, ringSize);
 			size = 1 + ringSize * 2;
 			extend--;
@@ -355,7 +358,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	public Vec3i getArea() {
 		if (area == null) {
 			int basisArea = 5;
-			if(Config.ringFarms){
+			if (Config.ringFarms) {
 				basisArea = basisArea + 1 + Config.ringSize * 2;
 			}
 			area = new Vec3i(basisArea + Config.planterExtend, 13, basisArea + Config.planterExtend);
@@ -493,14 +496,12 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 	@Override
 	public float getExactTemperature() {
-		BlockPos coords = getCoordinates();
-		return ClimateUtil.getTemperature(getWorldObj(), coords);
+		return listener.getExactTemperature();
 	}
 
 	@Override
 	public float getExactHumidity() {
-		BlockPos coords = getCoordinates();
-		return ClimateUtil.getHumidity(getWorldObj(), coords);
+		return listener.getExactHumidity();
 	}
 
 	@Override
@@ -523,7 +524,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		return super.getCapability(capability, facing);
 	}
 
-	protected NonNullList<ItemStack> createList(ItemStack... stacks){
+	protected NonNullList<ItemStack> createList(ItemStack... stacks) {
 		return NonNullList.from(ItemStack.EMPTY, stacks);
 	}
 

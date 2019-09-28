@@ -5,22 +5,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.render.ForestryResource;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+import mezz.jei.api.ingredients.VanillaTypes;
 
 public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorRecipeWrapper> {
 
@@ -81,13 +85,13 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 			guiItemStacks.set(smeltingInputSlot, smeltingInput);
 		}
 
-		List<List<ItemStack>> itemOutputs = ingredients.getOutputs(ItemStack.class);
+		List<List<ItemStack>> itemOutputs = ingredients.getOutputs(VanillaTypes.ITEM);
 		guiItemStacks.set(craftOutputSlot, itemOutputs.get(0));
 
-		List<List<ItemStack>> itemStackInputs = ingredients.getInputs(ItemStack.class);
+		List<List<ItemStack>> itemStackInputs = ingredients.getInputs(VanillaTypes.ITEM);
 		craftingGridHelper.setInputs(guiItemStacks, itemStackInputs, recipe.getWidth(), recipe.getHeight());
 
-		List<List<FluidStack>> fluidInputs = ingredients.getInputs(FluidStack.class);
+		List<List<FluidStack>> fluidInputs = ingredients.getInputs(VanillaTypes.FLUID);
 		if (!fluidInputs.isEmpty()) {
 			guiFluidStacks.set(inputTank, fluidInputs.get(0));
 		}

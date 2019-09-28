@@ -35,11 +35,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ForestryEvent;
 import forestry.core.EventHandlerCore;
 import forestry.core.advancements.AdvancementManager;
-import forestry.core.climate.ClimateStates;
+import forestry.core.climate.ClimateFactory;
+import forestry.core.climate.ClimateRoot;
+import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
@@ -49,10 +52,12 @@ import forestry.core.gui.GuiHandler;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.PacketHandler;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.MigrationHelper;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
 import forestry.plugins.ForestryCompatPlugins;
+import forestry.plugins.PluginBuildCraftFuels;
 import forestry.plugins.PluginIC2;
 import forestry.plugins.PluginNatura;
 import forestry.plugins.PluginTechReborn;
@@ -63,17 +68,19 @@ import forestry.plugins.PluginTechReborn;
  * @author SirSengir
  */
 @Mod(
-		modid = Constants.MOD_ID,
-		name = Constants.MOD_NAME,
-		version = Constants.VERSION,
-		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		acceptedMinecraftVersions = "[1.12.2,1.13.0)",
-		dependencies = "required-after:forge@[14.23.2.2643,);"
-				+ "after:jei@[4.7.8.91,);"
-				+ "after:" + PluginIC2.MOD_ID + ";"
-				+ "after:" + PluginNatura.MOD_ID + ";"
-				+ "after:toughasnails;"
-				+ "after:" + PluginTechReborn.MOD_ID + ";")
+	modid = Constants.MOD_ID,
+	name = Constants.MOD_NAME,
+	version = Constants.VERSION,
+	guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
+	acceptedMinecraftVersions = "[1.12.2,1.13.0)",
+	dependencies = "required-after:forge@[14.23.4.2749,);"
+		+ "after:jei@[4.12.0.0,);"
+		+ "after:" + PluginIC2.MOD_ID + ";"
+		+ "after:" + PluginNatura.MOD_ID + ";"
+		+ "after:toughasnails;"
+		+ "after:" + PluginTechReborn.MOD_ID + ";"
+		+ "after:" + PluginBuildCraftFuels.MOD_ID + ";"
+		+ "before:binniecore@[2.5.1.184,)")
 public class Forestry {
 
 	@SuppressWarnings("NullableProblems")
@@ -86,7 +93,9 @@ public class Forestry {
 		ForestryAPI.instance = this;
 		ForestryAPI.forestryConstants = new Constants();
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
-		ForestryAPI.states = ClimateStates.INSTANCE;
+		ClimateManager.climateRoot = ForestryAPI.climateManager = ClimateRoot.getInstance();
+		ClimateManager.climateFactory = ClimateFactory.INSTANCE;
+		ClimateManager.stateHelper = ClimateStateHelper.INSTANCE;
 		EnumErrorCode.init();
 		FluidRegistry.enableUniversalBucket();
 		MinecraftForge.EVENT_BUS.register(this);
@@ -99,7 +108,7 @@ public class Forestry {
 	private static PacketHandler packetHandler;
 
 	public static PacketHandler getPacketHandler() {
-		Preconditions.checkState(packetHandler != null);
+		Preconditions.checkNotNull(packetHandler);
 		return packetHandler;
 	}
 
@@ -123,8 +132,10 @@ public class Forestry {
 		ModuleManager.getInternalHandler().runSetup();
 
 		String gameMode = Config.gameMode;
-		Preconditions.checkState(gameMode != null);
+		Preconditions.checkNotNull(gameMode);
 		ForestryAPI.activeMode = new GameMode(gameMode);
+
+		MigrationHelper.registerFixable();
 
 		ModuleManager.getInternalHandler().runPreInit(event.getSide());
 	}

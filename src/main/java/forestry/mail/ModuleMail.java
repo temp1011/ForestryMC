@@ -45,6 +45,7 @@ import forestry.mail.commands.CommandMail;
 import forestry.mail.items.EnumStampDefinition;
 import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
+import forestry.mail.triggers.MailTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -57,12 +58,12 @@ public class ModuleMail extends BlankForestryModule {
 	private static BlockRegistryMail blocks;
 
 	public static ItemRegistryMail getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 
 	public static BlockRegistryMail getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
@@ -88,11 +89,10 @@ public class ModuleMail extends BlankForestryModule {
 		}
 	}
 
-	// TODO: Buildcraft for 1.9
-//	@Override
-//	public void registerTriggers() {
-//		MailTriggers.initialize();
-//	}
+	@Override
+	public void registerTriggers() {
+		MailTriggers.initialize();
+	}
 
 	@Override
 	public void doInit() {
@@ -136,17 +136,17 @@ public class ModuleMail extends BlankForestryModule {
 				ItemStack stamps = items.stamps.get(stampDefinition, 9);
 
 				RecipeUtil.addRecipe("stamps_" + stampDefinition.getUid(), stamps,
-						"XXX",
-						"###",
-						"ZZZ",
-						'X', stampDefinition.getCraftingIngredient(),
-						'#', Items.PAPER,
-						'Z', stampGlue);
+					"XXX",
+					"###",
+					"ZZZ",
+					'X', stampDefinition.getCraftingIngredient(),
+					'#', Items.PAPER,
+					'Z', stampGlue);
 				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEED_OIL.getFluid(300), ItemStack.EMPTY, stamps,
-						"XXX",
-						"###",
-						'X', stampDefinition.getCraftingIngredient(),
-						'#', Items.PAPER);
+					"XXX",
+					"###",
+					'X', stampDefinition.getCraftingIngredient(),
+					'#', Items.PAPER);
 			}
 		}
 
@@ -159,22 +159,22 @@ public class ModuleMail extends BlankForestryModule {
 		RecipeUtil.addShapelessRecipe("catalogue", items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.BOOK));
 
 		RecipeUtil.addRecipe("mailbox", new ItemStack(blocks.mailbox),
-				" # ",
-				"#Y#",
-				"XXX",
-				'#', "ingotTin",
-				'X', "chestWood",
-				'Y', coreItems.sturdyCasing);
+			" # ",
+			"#Y#",
+			"XXX",
+			'#', "ingotTin",
+			'X', "chestWood",
+			'Y', coreItems.sturdyCasing);
 
 		RecipeUtil.addRecipe("trade_station", new ItemStack(blocks.tradeStation),
-				"Z#Z",
-				"#Y#",
-				"XWX",
-				'#', coreItems.tubes.get(EnumElectronTube.BRONZE, 1),
-				'X', "chestWood",
-				'Y', coreItems.sturdyCasing,
-				'Z', coreItems.tubes.get(EnumElectronTube.IRON, 1),
-				'W', ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
+			"Z#Z",
+			"#Y#",
+			"XWX",
+			'#', coreItems.tubes.get(EnumElectronTube.BRONZE, 1),
+			'X', "chestWood",
+			'Y', coreItems.sturdyCasing,
+			'Z', coreItems.tubes.get(EnumElectronTube.IRON, 1),
+			'W', ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{}));
 	}
 
 	@Override

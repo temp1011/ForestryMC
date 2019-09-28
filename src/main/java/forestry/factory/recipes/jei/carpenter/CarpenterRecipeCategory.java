@@ -2,11 +2,18 @@ package forestry.factory.recipes.jei.carpenter;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.render.ForestryResource;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -16,10 +23,7 @@ import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
+import mezz.jei.api.ingredients.VanillaTypes;
 
 public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRecipeWrapper> {
 
@@ -77,7 +81,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 			guiItemStacks.set(boxSlot, box);
 		}
 
-		List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
+		List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 		guiItemStacks.set(craftOutputSlot, outputs.get(0));
 
 		IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
@@ -85,7 +89,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 		List<List<ItemStack>> craftingInputs = recipeWrapper.getInputStacks();
 		craftingGridHelper.setInputs(guiItemStacks, craftingInputs, craftingGridRecipe.getWidth(), craftingGridRecipe.getHeight());
 
-		List<List<FluidStack>> fluidInputs = ingredients.getInputs(FluidStack.class);
+		List<List<FluidStack>> fluidInputs = ingredients.getInputs(VanillaTypes.FLUID);
 		if (!fluidInputs.isEmpty()) {
 			guiFluidStacks.set(inputTank, fluidInputs.get(0));
 		}

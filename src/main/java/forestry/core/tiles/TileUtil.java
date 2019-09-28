@@ -19,6 +19,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
@@ -31,15 +32,25 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import forestry.core.config.Constants;
+import forestry.core.utils.MigrationHelper;
+
 public abstract class TileUtil {
+
+	public static void registerTile(Class<? extends TileEntity> tileClass, String key) {
+		GameRegistry.registerTileEntity(tileClass, new ResourceLocation(Constants.MOD_ID, key));
+		MigrationHelper.addTileName(key);
+	}
 
 	public static boolean isUsableByPlayer(EntityPlayer player, TileEntity tile) {
 		BlockPos pos = tile.getPos();
 		World world = tile.getWorld();
 
 		return !tile.isInvalid() &&
-				getTile(world, pos) == tile &&
-				player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
+			getTile(world, pos) == tile &&
+			player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	/**
@@ -72,7 +83,7 @@ public abstract class TileUtil {
 		}
 	}
 
-	public interface ITileGetResult<T, R>  {
+	public interface ITileGetResult<T, R> {
 		@Nullable
 		R getResult(T tile);
 	}
@@ -89,7 +100,7 @@ public abstract class TileUtil {
 		return null;
 	}
 
-	public interface ITileAction<T>  {
+	public interface ITileAction<T> {
 		void actOnTile(T tile);
 	}
 
@@ -125,9 +136,9 @@ public abstract class TileUtil {
 	}
 
 	@Nullable
-	public static <T> T getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable EnumFacing facing){
+	public static <T> T getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable EnumFacing facing) {
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if(tileEntity == null || !tileEntity.hasCapability(capability, facing)){
+		if (tileEntity == null || !tileEntity.hasCapability(capability, facing)) {
 			return null;
 		}
 		return tileEntity.getCapability(capability, facing);

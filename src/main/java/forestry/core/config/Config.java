@@ -25,16 +25,11 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Property;
 
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 
 import forestry.Forestry;
@@ -42,6 +37,7 @@ import forestry.apiculture.HiveConfig;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
+import forestry.factory.ModuleFactory;
 import forestry.mail.gui.GuiMailboxInfo;
 
 public class Config {
@@ -66,13 +62,13 @@ public class Config {
 	// Graphics
 	public static boolean enableParticleFX = true;
 
-	//Humus
+	// Humus
 	public static int humusDegradeDelimiter = 3;
 
-	//Greenhouse
-	public static int climateSourceRange = 36;
-	public static float climateSourceEnergyModifier = 1.5F;
-	public static int greenhouseSize = 4;
+	// Climatology
+	public static int habitatformerRange = 10;
+	public static float habitatformerAreaCostModifier = 0.5F;
+	public static float habitatformerAreaSpeedModifier = 0.5F;
 
 	// Genetics
 	public static boolean pollinateVanillaTrees = true;
@@ -90,12 +86,6 @@ public class Config {
 	public static boolean generateBeehivesDebug = false;
 	public static boolean logHivePlacement = false;
 	public static boolean enableVillagers = true;
-	public static boolean generateTrees = true;
-	public static float generateTreesAmount = 1.0F;
-	public static Set<Integer> blacklistedTreeDims = new HashSet<>();
-	public static Set<Integer> whitelistedTreeDims = new HashSet<>();
-	public static Set<BiomeDictionary.Type> blacklistedTreeTypes = new HashSet<>();
-	public static Set<Biome> blacklistedTreeBiomes = new HashSet<>();
 
 	// Retrogen
 	public static boolean doRetrogen = false;
@@ -143,6 +133,17 @@ public class Config {
 	public static final LinkedListMultimap<String, String> hints = LinkedListMultimap.create();
 	public static boolean enableEnergyStat = true;
 
+	// Energy
+	public static boolean enableRF = true;
+	public static boolean enableMJ = true;
+	public static boolean enableTesla = true;
+	public static EnergyDisplayMode energyDisplayMode = EnergyDisplayMode.RF;
+
+	// Charcoal
+	public static int charcoalAmountBase = 8;
+	public static int charcoalWallCheckRange = 16;
+
+
 	public static boolean isStructureEnabled(String uid) {
 		return !Config.disabledStructures.contains(uid);
 	}
@@ -175,14 +176,6 @@ public class Config {
 		return enableMagicalCropsSupport;
 	}
 
-	public static void blacklistTreeDim(int dimID) {
-		blacklistedTreeDims.add(dimID);
-	}
-
-	public static void whitelistTreeDim(int dimID) {
-		whitelistedTreeDims.add(dimID);
-	}
-
 	public static void blacklistOreDim(int dimID) {
 		blacklistedOreDims.add(dimID);
 	}
@@ -198,23 +191,9 @@ public class Config {
 		return false;
 	}
 
-	public static boolean isValidTreeDim(int dimID) {        //blacklist has priority
-		if (blacklistedTreeDims.isEmpty() || !blacklistedTreeDims.contains(dimID)) {
-			return whitelistedTreeDims.isEmpty() || whitelistedTreeDims.contains(dimID);
-		}
-		return false;
-	}
-
-	public static boolean isValidTreeBiome(Biome biome) {
-		if (blacklistedTreeBiomes.contains(biome)) {
-			return true;
-		}
-		return BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTreeTypes::contains);
-	}
-
 	public static void load(Side side) {
 		File configCommonFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_COMMON + ".cfg");
-		configCommon = new LocalizedConfiguration(configCommonFile, "1.2.0");
+		configCommon = new LocalizedConfiguration(configCommonFile, "1.3.0");
 		loadConfigCommon(side);
 
 		File configFluidsFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_FLUIDS + ".cfg");
@@ -235,26 +214,22 @@ public class Config {
 
 	private static void loadConfigCommon(Side side) {
 
-		gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", new String[]{"OP, EASY, NORMAL, HARD"});
+		String[] gameModes = new String[]{"EASY", "NORMAL", "HARD", "OP"};
+		gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", gameModes);
 
-		boolean recreate = configCommon.getBooleanLocalized("difficulty", "recreate.definitions", true);
+		boolean recreate = configCommon.getBooleanLocalized("difficulty", "recreate.definitions", false);
 		if (recreate) {
 			Log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
-
 			String recreateDefinitionsComment = Translator.translateToLocal("for.config.difficulty.recreate.definitions.comment");
 			Property property = configCommon.get("difficulty", "recreate.definitions", true, recreateDefinitionsComment);
 			property.set(false);
+		}
 
-			// Make sure the default mode files are there.
-
-			File opMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/OP.cfg");
-			CopyFileToFS(opMode, "/config/forestry/gamemodes/OP.cfg");
-
-			File normalMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/NORMAL.cfg");
-			CopyFileToFS(normalMode, "/config/forestry/gamemodes/NORMAL.cfg");
-
-			File hardMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/HARD.cfg");
-			CopyFileToFS(hardMode, "/config/forestry/gamemodes/HARD.cfg");
+		for (String gameMode : gameModes) {
+			File modeFile = new File(Forestry.instance.getConfigFolder(), String.format("gamemodes/%s.cfg", gameMode));
+			if (!modeFile.exists() || recreate) {
+				copyFileToFS(modeFile, String.format("/config/forestry/gamemodes/%s.cfg", gameMode));
+			}
 		}
 
 		// RetroGen
@@ -288,27 +263,6 @@ public class Config {
 		}
 
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
-
-		generateTrees = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
-
-		generateTreesAmount = configCommon.getFloatLocalized("world.generate.trees", "treeFrequency", generateTreesAmount, 0.0F, 10.0F);
-
-		for (int dimId : configCommon.get("world.generate.trees", "dimBlacklist", new int[0]).getIntList()) {
-			blacklistedTreeDims.add(dimId);
-		}
-		for (int dimId : configCommon.get("world.generate.trees", "dimWhitelist", new int[0]).getIntList()) {
-			whitelistedTreeDims.add(dimId);
-		}
-		for (String entry : configCommon.get("world.generate.trees", "biomeblacklist", new String[0]).getStringList()) {
-			BiomeDictionary.Type type = BiomeDictionary.Type.getType(entry);
-			Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(entry));
-			if (type != null) {
-				blacklistedTreeTypes.add(type);
-			} else if (biome != null) {
-				blacklistedTreeBiomes.add(biome);
-			}
-		}
-
 
 		craftingBronzeEnabled = configCommon.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);
 		craftingStampsEnabled = configCommon.getBooleanLocalized("crafting.stamps", "enabled", true);
@@ -360,9 +314,12 @@ public class Config {
 		CapsuleFluidPickup = configCommon.getBooleanLocalized("tweaks.capsule", "capsulePickup", CapsuleFluidPickup);
 		nonConsumableCapsules = configCommon.getBooleanLocalized("tweaks.capsule", "capsuleReuseable", nonConsumableCapsules);
 
-		climateSourceRange = configCommon.getIntLocalized("tweaks.greenhouse", "range", climateSourceRange, 9, 270);
-		climateSourceEnergyModifier = configCommon.getFloatLocalized("tweaks.greenhouse", "energy", climateSourceEnergyModifier, 0.0F, 15.0F);
-		greenhouseSize = configCommon.getIntLocalized("tweaks.greenhouse", "size", greenhouseSize, 1, 5);
+		habitatformerRange = configCommon.getIntLocalized("tweaks.habitatformer", "range", habitatformerRange, 1, 100);
+		habitatformerAreaCostModifier = configCommon.getFloatLocalized("tweaks.habitatformer.area", "resources", habitatformerAreaCostModifier, 0F, 5.0F);
+		habitatformerAreaSpeedModifier = configCommon.getFloatLocalized("tweaks.habitatformer.area", "speed", habitatformerAreaSpeedModifier, 0F, 5.0F);
+
+		charcoalAmountBase = configCommon.getIntLocalized("tweaks.charcoal", "amount.base", charcoalAmountBase, 0, 63);
+		charcoalWallCheckRange = configCommon.getIntLocalized("tweaks.charcoal", "check.range", charcoalWallCheckRange, 1, 32);
 
 		String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
 		String[] disabledStructureArray = disabledStructures.toArray(new String[disabledStructures.size()]);
@@ -370,12 +327,20 @@ public class Config {
 
 		disabledStructures.addAll(Arrays.asList(disabledStructureArray));
 		for (String str : disabledStructures) {
-			Log.debug("Disabled structure '%s'.", str);
+			Log.debug("Disabled structure '{}'.", str);
 		}
 
 		isDebug = configCommon.getBooleanLocalized("debug", "enabled", isDebug);
 
 		spawnWithBook = configCommon.getBooleanLocalized("tweaks.book", "spawn", spawnWithBook);
+
+		enableRF = configCommon.getBooleanLocalized("power.types", "rf", true);
+		enableMJ = configCommon.getBooleanLocalized("power.types", "mj", true);
+		enableTesla = configCommon.getBooleanLocalized("power.types", "tesla", true);
+
+		energyDisplayMode = configCommon.getEnumLocalized("power.display", "mode", EnergyDisplayMode.RF, EnergyDisplayMode.values());
+
+		ModuleFactory.loadMachineConfig(configCommon);
 
 		configCommon.save();
 	}
@@ -402,7 +367,7 @@ public class Config {
 		configFluid.save();
 	}
 
-	private static void CopyFileToFS(File destination, String resourcePath) {
+	private static void copyFileToFS(File destination, String resourcePath) {
 		InputStream stream = Config.class.getResourceAsStream(resourcePath);
 		OutputStream outstream;
 		int readBytes;

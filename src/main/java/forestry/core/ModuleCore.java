@@ -42,6 +42,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.modules.ForestryModule;
 import forestry.api.multiblock.MultiblockManager;
+import forestry.api.recipes.IHygroregulatorManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
@@ -50,14 +51,13 @@ import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
-import forestry.core.climate.ClimateManager;
+import forestry.core.commands.CommandListAlleles;
 import forestry.core.commands.CommandModules;
 import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AlleleFactory;
-import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
@@ -69,12 +69,12 @@ import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
 import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
+import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.OreDictUtil;
-import forestry.core.utils.World2ObjectMap;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -88,12 +88,12 @@ public class ModuleCore extends BlankForestryModule {
 	private static BlockRegistryCore blocks;
 
 	public static ItemRegistryCore getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 
 	public static BlockRegistryCore getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
@@ -122,9 +122,8 @@ public class ModuleCore extends BlankForestryModule {
 		LootFunctionManager.registerFunction(new SetSpeciesNBT.Serializer());
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
-		ForestryAPI.climateManager = ClimateManager.getInstance();
-		//TODO: Greenhouse Api
-		//ForestryAPI.climateFactory = new ClimateFactory();
+
+		RecipeManagers.hygroregulatorManager = new HygroregulatorManager();
 	}
 
 	@Override
@@ -139,23 +138,21 @@ public class ModuleCore extends BlankForestryModule {
 		GameProfileDataSerializer.register();
 
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(World2ObjectMap.class);
+		MinecraftForge.EVENT_BUS.register(new ClimateHandlerServer());
 
 		rootCommand.addChildCommand(new CommandModules());
+		rootCommand.addChildCommand(new CommandListAlleles());
 	}
 
 	@Override
 	public void doInit() {
 
-		AlleleHelper alleleHelper = AlleleHelper.getInstance();
 		BlockRegistryCore blocks = getBlocks();
 
 		blocks.analyzer.init();
 		blocks.escritoire.init();
 
 		ForestryModEnvWarningCallable.register();
-
-		alleleHelper.init();
 
 		Proxies.render.initRendering();
 	}
@@ -260,10 +257,23 @@ public class ModuleCore extends BlankForestryModule {
 		/* STURDY MACHINE */
 		RecipeUtil.addRecipe("sturdy_casing", items.sturdyCasing, "###", "# #", "###", '#', OreDictUtil.INGOT_BRONZE);
 
-		// / EMPTY CANS
+		// / CONTAINERS
 		int canAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.can");
 		ItemStack canOutput = fluidItems.canEmpty.getItemStack(canAmount);
 		RecipeUtil.addRecipe("tin_can", canOutput, " # ", "# #", '#', OreDictUtil.INGOT_TIN);
+
+		// / CAPSULES
+		int outputCapsuleAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.capsule");
+		if (outputCapsuleAmount > 0) {
+			ItemStack capsule = fluidItems.waxCapsuleEmpty.getItemStack(outputCapsuleAmount);
+			RecipeUtil.addRecipe("wax_capsule", capsule, "###", '#', items.beeswax);
+		}
+
+		int outputRefractoryAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.refractory");
+		if (outputRefractoryAmount > 0) {
+			ItemStack capsule = fluidItems.refractoryEmpty.getItemStack(outputRefractoryAmount);
+			RecipeUtil.addRecipe("refractory_capsule", capsule, "###", '#', items.refractoryWax);
+		}
 
 		// / GEARS
 		List<ItemStack> stoneGear = OreDictionary.getOres(OreDictUtil.GEAR_STONE);
@@ -288,7 +298,7 @@ public class ModuleCore extends BlankForestryModule {
 
 		// / WRENCH
 		RecipeUtil.addRecipe("wrench", items.wrench, "# #", " # ", " # ", '#', OreDictUtil.INGOT_BRONZE);
-		
+
 		// / WEB
 		RecipeUtil.addRecipe("silk_wisp_to_web", new ItemStack(Blocks.WEB, 4), "# #", " # ", "# #", '#', items.craftingMaterial.getSilkWisp());
 
@@ -296,49 +306,40 @@ public class ModuleCore extends BlankForestryModule {
 			// / CARPENTER
 			// Portable ANALYZER
 			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), ItemStack.EMPTY, items.portableAlyzer.getItemStack(),
-					"X#X", "X#X", "RDR",
-					'#', OreDictUtil.PANE_GLASS,
-					'X', OreDictUtil.INGOT_TIN,
-					'R', OreDictUtil.DUST_REDSTONE,
-					'D', OreDictUtil.GEM_DIAMOND);
+				"X#X", "X#X", "RDR",
+				'#', OreDictUtil.PANE_GLASS,
+				'X', OreDictUtil.INGOT_TIN,
+				'R', OreDictUtil.DUST_REDSTONE,
+				'D', OreDictUtil.GEM_DIAMOND);
 			// Camouflaged Paneling
-			RecipeManagers.carpenterManager.addRecipe(50, Fluids.BIOMASS.getFluid(500), ItemStack.EMPTY, items.craftingMaterial.getCamouflagedPaneling(8),
-					"Y#R", "BPB", "R#Y",
-					'#', OreDictUtil.PLANK_WOOD,
-					'R', OreDictUtil.DUST_REDSTONE,
-					'P', OreDictUtil.PULP_WOOD,
-					'R', OreDictUtil.DYE_RED,
-					'B', OreDictUtil.DYE_BLUE,
-					'Y', OreDictUtil.DYE_YELLOW);
+			FluidStack biomass = Fluids.BIOMASS.getFluid(150);
+			if (biomass != null) {
+				RecipeManagers.squeezerManager.addRecipe(8, items.craftingMaterial.getCamouflagedPaneling(1), biomass);
+			}
 		} else {
 			// Portable ANALYZER
 			RecipeUtil.addRecipe("portable_alyzer", items.portableAlyzer.getItemStack(),
-					"X#X",
-					"X#X",
-					"RDR",
-					'#', OreDictUtil.PANE_GLASS,
-					'X', OreDictUtil.INGOT_TIN,
-					'R', OreDictUtil.DUST_REDSTONE,
-					'D', OreDictUtil.GEM_DIAMOND);
-			// Camouflaged Paneling
-			RecipeUtil.addRecipe("camoflaged_paneling", items.craftingMaterial.getCamouflagedPaneling(8),
-					"WWW",
-					"YBR",
-					"WWW",
-					'W', OreDictUtil.PLANK_WOOD,
-					'Y', OreDictUtil.DYE_YELLOW,
-					'B', OreDictUtil.DYE_BLUE,
-					'R', OreDictUtil.DYE_RED);
+				"X#X",
+				"X#X",
+				"RDR",
+				'#', OreDictUtil.PANE_GLASS,
+				'X', OreDictUtil.INGOT_TIN,
+				'R', OreDictUtil.DUST_REDSTONE,
+				'D', OreDictUtil.GEM_DIAMOND);
+			if (Fluids.BIOMASS.getFluid() != null) {
+				RecipeUtil.addShapelessRecipe("camouflaged_paneling", ModuleFluids.getItems().getContainer(EnumContainerType.CAPSULE, Fluids.BIOMASS),
+					items.craftingMaterial.getCamouflagedPaneling(1));
+			}
 		}
 
 		// ANALYZER
 		RecipeUtil.addRecipe("analyzer", blocks.analyzer,
-				"XTX",
-				" Y ",
-				"X X",
-				'Y', items.sturdyCasing,
-				'T', items.portableAlyzer,
-				'X', OreDictUtil.INGOT_BRONZE);
+			"XTX",
+			" Y ",
+			"X X",
+			'Y', items.sturdyCasing,
+			'T', items.portableAlyzer,
+			'X', OreDictUtil.INGOT_BRONZE);
 
 		// Manure and Fertilizer
 		int compostWheatAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.wheat");
@@ -433,7 +434,7 @@ public class ModuleCore extends BlankForestryModule {
 			RecipeUtil.addShapelessRecipe("block_to_bronze", ingotBronze, OreDictUtil.BLOCK_BRONZE);
 		}
 
-		if(!ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)){
+		if (!ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)) {
 			RecipeUtil.addSmelting(new ItemStack(items.ash, 2), new ItemStack(Items.COAL, 1, 1), 0.15F);
 		}
 
@@ -453,8 +454,17 @@ public class ModuleCore extends BlankForestryModule {
 		// alternate recipes
 		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(
-					items.craftingMaterial.getSilkWisp(), 0.15f
+				items.craftingMaterial.getSilkWisp(), 0.15f
 			));
+		}
+
+		IHygroregulatorManager hygroManager = RecipeManagers.hygroregulatorManager;
+		if (hygroManager != null) {
+			hygroManager.addRecipe(new FluidStack(FluidRegistry.WATER, 1), 1, -0.005f, 0.01f);
+			hygroManager.addRecipe(new FluidStack(FluidRegistry.LAVA, 1), 10, 0.005f, -0.01f);
+			if (Fluids.ICE.getFluid() != null) {
+				hygroManager.addRecipe(Fluids.ICE.getFluid(1), 10, -0.01f, 0.02f);
+			}
 		}
 	}
 
@@ -467,14 +477,14 @@ public class ModuleCore extends BlankForestryModule {
 	public boolean processIMCMessage(IMCMessage message) {
 		if (message.key.equals("blacklist-ores-dimension")) {
 			int[] dims = message.getNBTValue().getIntArray("dimensions");
-			for(int dim : dims) {
+			for (int dim : dims) {
 				Config.blacklistOreDim(dim);
 			}
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public IPickupHandler getPickupHandler() {
 		return new PickupHandlerCore();

@@ -187,11 +187,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
 		if (keyCode == 1 || (keyCode == this.mc.gameSettings.keyBindInventory.getKeyCode() && this.window.getFocusedElement() == null)) {
-			this.mc.displayGuiScreen(null);
-
-			if (this.mc.currentScreen == null) {
-				this.mc.setIngameFocus();
-			}
+			this.mc.player.closeScreen();
 		}
 		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
 		window.postEvent(new GuiEvent.KeyEvent(origin, typedChar, keyCode), GuiEventDestination.ALL);
@@ -226,6 +222,11 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 
 	private boolean isMouseOverSlot(Slot par1Slot, int mouseX, int mouseY) {
 		return isPointInRegion(par1Slot.xPos, par1Slot.yPos, 16, 16, mouseX, mouseY);
+	}
+
+	@Override
+	protected boolean hasClickedOutside(int mouseX, int mouseY, int guiLeft, int guiTop) {
+		return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop);
 	}
 
 	@Override
@@ -265,7 +266,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 		bindTexture(textureFile);
 	}
 
-	protected void drawBackground(){
+	protected void drawBackground() {
 		bindTexture(textureFile);
 
 		//int x = (width - xSize) / 2;

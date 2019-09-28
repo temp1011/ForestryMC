@@ -10,10 +10,13 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -30,7 +33,7 @@ public abstract class TileBase extends TileForestry {
 	public String getUnlocalizedTitle() {
 		Block block = getBlockType();
 		if (block instanceof BlockBase) {
-			return block.getUnlocalizedName() + ".name";
+			return block.getTranslationKey() + ".name";
 		}
 		return super.getUnlocalizedTitle();
 	}
@@ -41,4 +44,15 @@ public abstract class TileBase extends TileForestry {
 		Block newBlock = newState.getBlock();
 		return oldBlock != newBlock || !(oldBlock instanceof BlockBase) || !(newBlock instanceof BlockBase);
 	}
+
+	@Nonnull
+	public EnumFacing getFacing() {
+		IBlockState state = getWorld().getBlockState(getPos());
+		// This test is needed if the save gets corrupted a bug occurs that the tile still exists even if the block isn't a forestry block anymore
+		if (!(state.getBlock() instanceof BlockBase)) {
+			return EnumFacing.DOWN;
+		}
+		return state.getValue(BlockBase.FACING);
+	}
+
 }

@@ -34,13 +34,13 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -57,6 +57,7 @@ import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -105,12 +106,12 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	private static BlockRegistryLepidopterology blocks;
 
 	public static ItemRegistryLepidopterology getItems() {
-		Preconditions.checkState(items != null);
+		Preconditions.checkNotNull(items);
 		return items;
 	}
 
 	public static BlockRegistryLepidopterology getBlocks() {
-		Preconditions.checkState(blocks != null);
+		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
@@ -134,14 +135,14 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		MinecraftForge.EVENT_BUS.register(this);
 		ButterflyBranchDefinition.createAlleles();
 		ButterflyAlleles.registerEffectAlleles();
-		
+
 		ButterflyDefinition.preInit();
 		MothDefinition.preInit();
 		MinecraftForge.EVENT_BUS.post(new AlleleSpeciesRegisterEvent<>(ButterflyManager.butterflyRoot, IAlleleButterflySpecies.class));
 
 		proxy.preInitializeRendering();
 
-		if(ModuleHelper.isEnabled(ForestryModuleUids.SORTING)){
+		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			LepidopterologyFilterRule.init();
 			LepidopterologyFilterRuleType.init();
 		}
@@ -159,7 +160,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	public void doInit() {
 		BlockRegistryLepidopterology blocks = getBlocks();
 
-		GameRegistry.registerTileEntity(TileCocoon.class, "forestry.Cocoon");
+		TileUtil.registerTile(TileCocoon.class, "cocoon");
 
 		ModuleCore.rootCommand.addChildCommand(new CommandButterfly());
 
@@ -280,7 +281,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 			lootList.add(itemStackString + ";" + entry.getValue());
 		}
 		Collections.sort(lootList);
-		String[] defaultLoot = lootList.toArray(new String[lootList.size()]);
+		String[] defaultLoot = lootList.toArray(new String[0]);
 
 		Property lootConf = config.get("butterfly.cocoons.alleles.loot", cocoon.getUID(), defaultLoot);
 		lootConf.setComment(Translator.translateToLocal("for.config.butterfly.alleles.loot"));
@@ -300,7 +301,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 			}
 		}
 		cocoon.clearLoot();
-		for (Entry<ItemStack, Float> entry : cocoon.getCocoonLoot().entrySet()) {
+		for (Entry<ItemStack, Float> entry : cooconLoot.entrySet()) {
 			cocoon.addLoot(entry.getKey(), entry.getValue());
 		}
 	}
@@ -347,6 +348,13 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 	public static float getSecondSerumChance() {
 		return secondSerumChance;
+	}
+
+	@SubscribeEvent
+	public void onEntityTravelToDimension(EntityTravelToDimensionEvent event) {
+		if (event.getEntity() instanceof EntityButterfly) {
+			event.setCanceled(true);
+		}
 	}
 
 	@SubscribeEvent

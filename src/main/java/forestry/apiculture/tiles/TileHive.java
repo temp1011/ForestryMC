@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -68,7 +69,6 @@ import forestry.core.config.Config;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.packets.PacketActiveUpdate;
 import forestry.core.tiles.IActivatable;
-import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -126,13 +126,15 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 			if (tickHelper.updateOnInterval(angry ? 10 : 200)) {
 				if (calmTime == 0) {
 					if (canWork) {
-						if(world.getWorldInfo().getDifficulty() != EnumDifficulty.PEACEFUL || ModuleApiculture.hivesDamageOnPeaceful) {
+						if (angry && ModuleApiculture.hiveDamageOnAttack && (world.getWorldInfo().getDifficulty() != EnumDifficulty.PEACEFUL || ModuleApiculture.hivesDamageOnPeaceful)) {
 							AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
 							List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, boundingBox, beeTargetPredicate);
 							if (!entities.isEmpty()) {
 								Collections.shuffle(entities);
 								EntityLivingBase entity = entities.get(0);
-								attack(entity, 2);
+								if ((entity instanceof EntityPlayer || !ModuleApiculture.hivesDamageOnlyPlayers) && (!entity.isInsideOfMaterial(Material.WATER) || ModuleApiculture.hivesDamageUnderwater)) {
+									attack(entity, 2);
+								}
 							}
 						}
 						beeLogic.doWork();
@@ -322,12 +324,12 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(getBiome(), getWorld(), getPos());
+		return EnumTemperature.getFromBiome(getBiome(), getPos());
 	}
 
 	@Override
 	public EnumHumidity getHumidity() {
-		float humidity = ClimateUtil.getHumidity(getWorld(), getPos());
+		float humidity = getBiome().getRainfall();
 		return EnumHumidity.getFromValue(humidity);
 	}
 

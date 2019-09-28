@@ -64,6 +64,11 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 		energyManager = new EnergyManager(2000, maxEnergy);
 
 		energyManager.setExternalMode(EnergyTransferMode.EXTRACT);
+		energyManager.setChangeHandler((energy) -> {
+			if (world != null) {
+				world.updateComparatorOutputLevel(pos, getBlockType());
+			}
+		});
 	}
 
 	public String getHintKey() {
@@ -164,6 +169,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 			burn();
 		} else {
 			energyManager.drainEnergy(20);
+			world.updateComparatorOutputLevel(pos, getBlockType());
 		}
 	}
 
@@ -303,15 +309,17 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
+		return (facing == getFacing() && energyManager.hasCapability(capability)) || super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@Nullable
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		T energyCapability = energyManager.getCapability(capability);
-		if (energyCapability != null) {
-			return energyCapability;
+		if (facing == getFacing()) {
+			T energyCapability = energyManager.getCapability(capability);
+			if (energyCapability != null) {
+				return energyCapability;
+			}
 		}
 		return super.getCapability(capability, facing);
 	}
